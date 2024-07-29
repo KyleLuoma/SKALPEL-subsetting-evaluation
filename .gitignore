@@ -1,0 +1,13 @@
+venv/
+venv_linux/
+.venv/
+.venv_win/
+.vscode/
+.local/*
+.cache/*
+~*
+__pycache__/
+*.pickle
+*.profile
+temp_data/
+bin/
