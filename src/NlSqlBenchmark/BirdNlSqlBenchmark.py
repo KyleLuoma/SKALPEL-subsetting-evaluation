@@ -27,9 +27,10 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
     def __next__(self):
         if self.active_question_no >= len(self.active_database_questions):
             self.active_database += 1
-            if self.active_database >= len(self.databases):
-                raise StopIteration
             self.active_question_no = 0
+            if self.active_database >= len(self.databases):
+                self.__init__()
+                raise StopIteration
             self.active_database_questions = self.__load_active_database_questions()
         question = self.get_active_question()
         self.active_question_no += 1
