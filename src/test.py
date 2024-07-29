@@ -1,5 +1,12 @@
+"""
+This program runs all tests from the 'tests' module and displays the results.
+Test functions in the test module must contain the sequence '_test' in their name.
+Try to name test files to correspond to target modules, e.g. NlSqlBenchmarkTest.py for NlSqlBenchmark.py.
+"""
+
 import tests
 from tests import NlSqlBenchmarkTest
+from tests import BirdNlSqlBenchmarkTest
 
 
 test_functions = []
@@ -33,4 +40,4 @@ for test in test_functions:
             False: f"{style.RED}FAIL"
         }[test()],
         f"{style.RESET}"
-        )
+    )

@@ -15,22 +15,38 @@ class NlSqlBenchmark:
         return self
 
     def __next__(self):
-        if self.active_question_no < len(self.active_database_questions):
-            self.active_question_no += 1
-            return self.get_active_question()
-        else:
+        if self.active_question_no >= len(self.active_database_questions):
             self.active_database += 1
-        if self.active_database < len(self.databases):
+            if self.active_database >= len(self.databases):
+                raise StopIteration
             self.active_question_no = 0
-            return self.get_active_question()
-        else:
-            raise StopIteration
+            self.active_database_questions = self.__load_active_database_questions()
+        question = self.get_active_question()
+        self.active_question_no += 1
+        return question
+        
+
 
     def get_active_question(self) -> dict:
         return {
             "question": "",
             "database": self.databases[self.active_database],
             "question_number": self.active_question_no
+        }
+    
+    def get_active_schema(self, database: str = None) -> dict:
+        return {
+            "tables": [
+                {
+                    "name": "table1",
+                    "columns": [
+                        {
+                            "name": "column1",
+                            "type": "int"
+                        }
+                    ]
+                }
+            ]
         }
     
     def execute_query(
@@ -46,9 +62,9 @@ class NlSqlBenchmark:
             "question": question,
             "error_message": ""
         }
-
+    
     def __load_active_database_questions(self) -> list:
-        return []
+        return self.active_database_questions
     
     def __get_db_connection(self):
         pass

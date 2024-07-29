@@ -1,5 +1,6 @@
 print(__name__)
 from NlSqlBenchmark.SnailsNlSqlBenchmark import SnailsNlSqlBenchmark
+from NlSqlBenchmark.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 
 class NlSqlBenchmarkFactory:
     
@@ -19,4 +20,4 @@ class NlSqlBenchmarkFactory:
         elif benchmark_name == "spider":
             return None
         elif benchmark_name == "bird":
-            return None
+            return BirdNlSqlBenchmark()

@@ -7,9 +7,9 @@ def iter_test():
     results = []
     for i in bm:
         results.append((i["database"], i["question_number"]))
-    return results == [("one", 1), ("one", 2), ("one", 3), 
-                       ("two", 0), ("two", 1), ("two", 2), ("two", 3), 
-                       ("three", 0), ("three", 1), ("three", 2), ("three", 3)]
+    return results == [("one", 0), ("one", 1), ("one", 2), 
+                       ("two", 0), ("two", 1), ("two", 2), 
+                       ("three", 0), ("three", 1), ("three", 2)]
 
 
 def execute_query_test():

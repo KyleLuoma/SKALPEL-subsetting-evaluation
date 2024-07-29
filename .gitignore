@@ -11,3 +11,4 @@ __pycache__/
 *.profile
 temp_data/
 bin/
+benchmarks/
