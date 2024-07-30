@@ -96,10 +96,10 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
             "question": question,
             "error_message": ""
         }   
+    
 
 
     def __load_tables_dict(self) -> dict:
-        parent_dir = dirname(dirname(dirname(abspath(__file__))))
         with open(f"{self.benchmark_folder}/dev_tables.json") as f:
             dev_tables = json.load(f)
         return dev_tables
@@ -107,7 +107,6 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
 
 
     def __load_questions_dict(self) -> dict:
-        parent_dir = dirname(dirname(dirname(abspath(__file__))))
         with open(f"{self.benchmark_folder}/dev.json") as f:
             dev_questions = json.load(f)
         return dev_questions

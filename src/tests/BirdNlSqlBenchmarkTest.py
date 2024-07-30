@@ -57,7 +57,7 @@ def execute_query_syntax_error_test():
 
 
 
-def get_active_schema_test():
+def set_and_get_active_schema_test():
     bird = BirdNlSqlBenchmark()
     bird.set_active_schema("california_schools")
     s_data = bird.get_active_schema()
