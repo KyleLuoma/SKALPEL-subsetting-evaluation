@@ -16,5 +16,5 @@ def execute_query_test():
     bm = NlSqlBenchmark()
     bm.databases = ["one", "two", "three"]
     bm.active_database_questions = ["a", "b", "c"]
-    result = bm.execute_query()
+    result = bm.execute_query(query="")
     return result == {"result_set": {}, "database": "one", "question": "a", "error_message": ""}

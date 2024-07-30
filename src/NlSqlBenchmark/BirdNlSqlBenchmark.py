@@ -1,15 +1,18 @@
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 import json
+import sqlite3
 from os.path import dirname, abspath
 
 class BirdNlSqlBenchmark(NlSqlBenchmark):
     
     def __init__(self):
         super().__init__()
+        self.benchmark_folder = dirname(dirname(dirname(abspath(__file__)))) + "/benchmarks/bird/dev_20240627"
         self.tables_dict = self.__load_tables_dict()
         self.questions_dict = self.__load_questions_dict()
         self.databases = [t["db_id"] for t in self.tables_dict]
         self.active_database_questions = self.__load_active_database_questions()
+        
 
 
     def get_active_question(self) -> dict:
@@ -57,9 +60,47 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
     
 
 
+    def set_active_schema(self, database_name: str) -> None:
+        schema_lookup = {k: v for v, k in enumerate(self.databases)}
+        self.active_database = schema_lookup[database_name]
+    
+
+
+    def execute_query(self, query: str, database: str = None, question: int = None) -> dict:
+        if database == None:
+            database = self.databases[self.active_database]
+        if question == None:
+            question = self.active_question_no
+        con = sqlite3.connect(
+            f"{self.benchmark_folder}/dev_databases/dev_databases/{database}/{database}.sqlite"
+            )
+        cur = con.cursor()
+        try:
+            res = cur.execute(query)
+        except sqlite3.OperationalError as e:
+            return {
+                "result_set": None,
+                "database": None,
+                "question": None,
+                "error_message": str(e)
+            }
+        result_list = res.fetchall()
+        columns = [d[0] for d in res.description]
+        result_set_dict = {}
+        for i, c in enumerate(columns):
+            values = [t[i] for t in result_list]
+            result_set_dict[c] = values
+        return {
+            "result_set": result_set_dict,
+            "database": database,
+            "question": question,
+            "error_message": ""
+        }   
+
+
     def __load_tables_dict(self) -> dict:
         parent_dir = dirname(dirname(dirname(abspath(__file__))))
-        with open(f"{parent_dir}/benchmarks/bird/dev_20240627/dev_tables.json") as f:
+        with open(f"{self.benchmark_folder}/dev_tables.json") as f:
             dev_tables = json.load(f)
         return dev_tables
     
@@ -67,7 +108,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
 
     def __load_questions_dict(self) -> dict:
         parent_dir = dirname(dirname(dirname(abspath(__file__))))
-        with open(f"{parent_dir}/benchmarks/bird/dev_20240627/dev.json") as f:
+        with open(f"{self.benchmark_folder}/dev.json") as f:
             dev_questions = json.load(f)
         return dev_questions
     

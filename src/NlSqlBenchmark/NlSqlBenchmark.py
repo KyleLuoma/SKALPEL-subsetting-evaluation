@@ -18,6 +18,7 @@ class NlSqlBenchmark:
         if self.active_question_no >= len(self.active_database_questions):
             self.active_database += 1
             if self.active_database >= len(self.databases):
+                self.__init__()
                 raise StopIteration
             self.active_question_no = 0
             self.active_database_questions = self.__load_active_database_questions()
@@ -50,7 +51,7 @@ class NlSqlBenchmark:
         }
     
     def execute_query(
-            self, database: str = None, question: int = None
+            self, query: str, database: str = None, question: int = None
             ) -> dict:
         if database == None:
             database = self.databases[self.active_database]
