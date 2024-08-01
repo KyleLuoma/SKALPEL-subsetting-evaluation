@@ -7,6 +7,7 @@ class NlSqlBenchmark:
         self.databases = []
         self.active_database = 0
         self.active_database_questions = []
+        self.active_database_queries = []
         self.active_question_no = 0
         self.db_connection = None
 
@@ -30,7 +31,8 @@ class NlSqlBenchmark:
 
     def get_active_question(self) -> dict:
         return {
-            "question": "",
+            "question": self.active_database_questions[self.active_question_no],
+            "query": self.active_database_queries[self.active_question_no],
             "database": self.databases[self.active_database],
             "question_number": self.active_question_no
         }
@@ -66,6 +68,9 @@ class NlSqlBenchmark:
     
     def __load_active_database_questions(self) -> list:
         return self.active_database_questions
+    
+    def __load_active_database_queries(self) -> list:
+        return self.active_database_queries
     
     def __get_db_connection(self):
         pass

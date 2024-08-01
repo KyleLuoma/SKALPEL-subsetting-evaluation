@@ -12,6 +12,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         self.questions_dict = self.__load_questions_dict()
         self.databases = [t["db_id"] for t in self.tables_dict]
         self.active_database_questions = self.__load_active_database_questions()
+        self.active_database_queries = self.__load_active_database_queries()
         
 
 
@@ -119,3 +120,13 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
             if q["db_id"] == self.databases[self.active_database]:
                 questions.append(q["question"])
         return questions
+    
+
+
+    def __load_active_database_queries(self) -> list:
+        queries = []
+        for q in self.questions_dict:
+            if q["db_id"] == self.databases[self.active_database]:
+                queries.append(q["SQL"])
+    
+

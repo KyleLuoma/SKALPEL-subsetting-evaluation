@@ -184,7 +184,7 @@ class QueryProfiler:
         query = query.upper() 
         query = query.replace('"', '\\"')
         response = subprocess.run(
-            'java -jar {j} --schematagger "{q}"'.format(
+            'java -jar "{j}" --schematagger "{q}"'.format(
                 j = self.__jar_path,
                 q = query
             ),
@@ -257,7 +257,6 @@ class QueryProfiler:
         response = response.replace("\\r", "")
         response = response.replace("\\t", "")
         response = response.replace('""', '"')
-        print(response)
 
         try:
             tree_string = response.split('@BEGINPARSETREE')[1]
@@ -328,9 +327,18 @@ FROM [TBLFIELDDATATURTLEMEASUREMENTS]
 GROUP BY [SPECIES CODE], [SEX]
 ORDER BY [SPECIES CODE], [SEX]
 """
+    correct_output = [
+        ('select element', '1'), 
+        ('column', '[SPECIES CODE]'), 
+        ('select element', '1'), 
+        ('column', '[SEX]'), 
+        ('select element', '1'), 
+        ('function', 'AVG'), 
+        ('column', '[CARAPACE LENGTH]')
+        ]
     qp = QueryProfiler()
     result = qp.profile_query(test_query.upper())
-    print("TEST: QueryProfiler.profile_query():", result)
+    print("TEST: QueryProfiler.profile_query():", result["stats"] == correct_output)
 
 def print_tagged_query():
     test_query = """
@@ -359,5 +367,5 @@ def all_tests():
     profile_query_test()
 
 if __name__ == "__main__":
-    # all_tests()
-    print_tagged_query()
+    all_tests()
+    # print_tagged_query()
