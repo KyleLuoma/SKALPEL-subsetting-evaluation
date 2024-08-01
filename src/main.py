@@ -1,6 +1,7 @@
 from NlSqlBenchmark.NlSqlBenchmarkFactory import NlSqlBenchmarkFactory
 import SchemaSubsetter
 import SubsetEvaluator
+import QueryProfiler
 
 def main():
     bm_factory = NlSqlBenchmarkFactory()
@@ -9,7 +10,10 @@ def main():
     benchmark.set_active_schema("california_schools")
 
     res = benchmark.get_active_schema(database="california_schools")
-    print(res)
+
+    qp = QueryProfiler.QueryProfiler()
+    qp_res = qp.profile_query("SELECT A FROM ONE")
+    print(qp_res)
         
 
 if __name__ == "__main__":
