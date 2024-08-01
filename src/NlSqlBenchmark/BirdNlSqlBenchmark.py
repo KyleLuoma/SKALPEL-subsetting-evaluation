@@ -13,17 +13,6 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         self.databases = [t["db_id"] for t in self.tables_dict]
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
-        
-
-
-    def get_active_question(self) -> dict:
-        return {
-            "question": self.active_database_questions[self.active_question_no],
-            "database": self.databases[self.active_database],
-            "question_number": self.active_question_no
-        }
-    
-
 
     def __iter__(self):
         return self
@@ -36,9 +25,15 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
                 self.__init__()
                 raise StopIteration
             self.active_database_questions = self.__load_active_database_questions()
+            self.active_database_queries = self.__load_active_database_queries()
         question = self.get_active_question()
         self.active_question_no += 1
         return question
+
+
+
+    def get_active_question(self) -> dict:
+        return super().get_active_question()
 
 
 
@@ -128,5 +123,6 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         for q in self.questions_dict:
             if q["db_id"] == self.databases[self.active_database]:
                 queries.append(q["SQL"])
+        return queries
     
 

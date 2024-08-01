@@ -67,3 +67,14 @@ def set_and_get_active_schema_test():
         pass_test = (set(t.keys()) == {"name", "columns"})
     return pass_test
     
+
+
+def get_active_question_test():
+    bird = BirdNlSqlBenchmark()
+    result = bird.get_active_question()
+    return result == {
+        "question": "How many gas stations in CZE has Premium gas?", 
+        "query": "SELECT COUNT(GasStationID) FROM gasstations WHERE Country = 'CZE' AND Segment = 'Premium'", 
+        "database": "debit_card_specializing", 
+        "question_number": 0
+        }
