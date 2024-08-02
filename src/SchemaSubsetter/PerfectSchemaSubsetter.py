@@ -19,7 +19,7 @@ class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
 
     def get_schema_subset(self, question: str, full_schema: dict) -> dict:
         question_number = self.question_lookup[question]
-        correct_query = self.benchmark.get_active_question()["query"]
+        correct_query = self.benchmark.active_database_queries[question_number]
         query_identifiers = self.query_profiler.get_identifiers_and_labels(correct_query)
         query_tables = query_identifiers["tables"]
         query_columns = query_identifiers["columns"]

@@ -46,8 +46,8 @@ class QueryProfiler:
         pass
 
 
-    def profile_query(self, query: str) -> dict:
-        stats = self.__parse_query(query)
+    def profile_query(self, query: str, dialect: str = "sqlite") -> dict:
+        stats = self.__parse_query(query, syntax=dialect)
         self.query = query
         self.tree = stats['tree']
         self.stats = stats['stats']
@@ -184,9 +184,10 @@ class QueryProfiler:
         query = query.upper() 
         query = query.replace('"', '\\"')
         response = subprocess.run(
-            'java -jar "{j}" --schematagger "{q}"'.format(
+            'java -jar "{j}" --schematagger "{q}" --dialect {s}'.format(
                 j = self.__jar_path,
-                q = query
+                q = query,
+                s = syntax
             ),
             capture_output=True
         )
@@ -246,9 +247,10 @@ class QueryProfiler:
         query_to_parse = query.upper()
         query_to_parse = query_to_parse.replace('"', '\\"')
         response = subprocess.run(
-            'java -jar "{j}" --query "{q}"'.format(
+            'java -jar "{j}" --query "{q}" --dialect{s}'.format(
                 j = self.__jar_path,
-                q = query_to_parse
+                q = query_to_parse,
+                s = syntax
             ),
             capture_output=True
         )
@@ -342,19 +344,11 @@ ORDER BY [SPECIES CODE], [SEX]
 
 def print_tagged_query():
     test_query = """
-SELECT
-  LP.POINTID,
-  FD.SNAKEID,
-  FD.\"BOARD #\",
-  LP.UTMX,
-  LP.UTMY
-FROM TBLLOCATIONSPOINTS AS LP
-JOIN TBLFIELDDATACOVERBOARD AS FD
-  ON LP.LOCATIONID = FD.LOCATIONID
-JOIN TBLLOCATIONS AS L
-  ON LP.LOCATIONID = L.LOCATIONID
-WHERE
-  L.SITEID = '18CB1';
+SELECT NumTstTakr 
+FROM satscores 
+WHERE cds = ( 
+    SELECT CDSCode FROM frpm ORDER BY `FRPM Count (K-12)` DESC LIMIT 1 
+    )
     """
     qp = QueryProfiler()
     result = qp.tag_query(test_query)
@@ -367,5 +361,5 @@ def all_tests():
     profile_query_test()
 
 if __name__ == "__main__":
-    all_tests()
-    # print_tagged_query()
+    # all_tests()
+    print_tagged_query()

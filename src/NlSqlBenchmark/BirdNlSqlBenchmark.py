@@ -59,6 +59,8 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
     def set_active_schema(self, database_name: str) -> None:
         schema_lookup = {k: v for v, k in enumerate(self.databases)}
         self.active_database = schema_lookup[database_name]
+        self.active_database_questions = self.__load_active_database_questions()
+        self.active_database_queries = self.__load_active_database_queries()
     
 
 
