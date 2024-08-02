@@ -23,6 +23,7 @@ class NlSqlBenchmark:
                 raise StopIteration
             self.active_question_no = 0
             self.active_database_questions = self.__load_active_database_questions()
+            self.active_database_queries = self.__load_active_database_queries()
         question = self.get_active_question()
         self.active_question_no += 1
         return question

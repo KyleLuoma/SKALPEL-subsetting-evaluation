@@ -2,12 +2,21 @@
 Super class for schema subsetting methods we evaluate in the SKALPEL project
 """
 
+from NlSqlBenchmark import NlSqlBenchmark
+
 class SchemaSubsetter:
     
-    def __init__(self):
-        pass
+    def __init__(
+            self,
+            benchmark: NlSqlBenchmark.NlSqlBenchmark
+            ):
+        self.benchmark = benchmark
 
-    def get_schema_subset(self, question: str, full_schema: dict) -> dict:
+    def get_schema_subset(
+            self, 
+            question: str, 
+            full_schema: dict
+            ) -> dict:
         """
         'Abstract' method for subset generation
 

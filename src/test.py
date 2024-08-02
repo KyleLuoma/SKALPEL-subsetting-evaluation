@@ -8,6 +8,8 @@ import tests
 from tests import NlSqlBenchmarkTest
 from tests import BirdNlSqlBenchmarkTest
 from tests import QueryProfilerTest
+from tests import SchemaSubsetterTest
+from tests import PerfectSchemaSubsetterTest
 
 
 test_functions = []

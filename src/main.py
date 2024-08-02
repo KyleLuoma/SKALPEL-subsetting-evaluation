@@ -1,5 +1,5 @@
 from NlSqlBenchmark.NlSqlBenchmarkFactory import NlSqlBenchmarkFactory
-import SchemaSubsetter
+import SchemaSubsetter.SchemaSubsetter as SchemaSubsetter
 import SubsetEvaluator
 import QueryProfiler
 
