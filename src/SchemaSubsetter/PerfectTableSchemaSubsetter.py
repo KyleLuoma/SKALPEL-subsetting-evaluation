@@ -1,14 +1,16 @@
 """
-This class of schema subsetter will return the perfect subset (i.e., recall = precision = 1)
+This class of schema subsetter will return a subset with only required tables, 
+and all columns for each required table
 """
 
 from NlSqlBenchmark import NlSqlBenchmark
 from SchemaSubsetter import SchemaSubsetter
 from QueryProfiler import QueryProfiler
 
-class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
+class PerfectTableSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
     """
-    This class of schema subsetter will return the perfect subset (i.e., recall = precision = 1)
+    This class of schema subsetter will return a subset with only required tables, 
+    and all columns for each required table
     """
     def __init__(self, benchmark: NlSqlBenchmark.NlSqlBenchmark):
         super().__init__(benchmark)
@@ -30,12 +32,8 @@ class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
             if table["name"].upper() in query_tables:
                 add_table = {
                     "name": table["name"],
-                    "columns": []
+                    "columns": table["columns"]
                     }
-                for column in table["columns"]:
-                    if column["name"].upper() in query_columns:
-                        add_table["columns"].append(column)
                 schema_subset["tables"].append(add_table)
         return schema_subset
     
-

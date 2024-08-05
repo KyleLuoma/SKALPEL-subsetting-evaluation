@@ -182,6 +182,8 @@ class QueryProfiler:
         """
         query = str(query)
         query = query.upper() 
+        if syntax == "sqlite":
+            query = query.replace("`", "\"")
         query = query.replace('"', '\\"')
         response = subprocess.run(
             'java -jar "{j}" --schematagger "{q}" --dialect {s}'.format(
@@ -245,6 +247,8 @@ class QueryProfiler:
             about the query (e.g. tables, columns, functions, etc.)
         """
         query_to_parse = query.upper()
+        if syntax == "sqlite":
+            query_to_parse = query_to_parse.replace("`", "\"")
         query_to_parse = query_to_parse.replace('"', '\\"')
         response = subprocess.run(
             'java -jar "{j}" --query "{q}" --dialect{s}'.format(
@@ -351,9 +355,9 @@ WHERE cds = (
     )
     """
     qp = QueryProfiler()
-    result = qp.tag_query(test_query)
+    result = qp.tag_query(test_query, syntax="sqlite")
     print(result["tagged_query"])
-    result = qp.profile_query(test_query)
+    result = qp.profile_query(test_query, dialect="sqlite")
     print(result["stats"])
 
 def all_tests():
