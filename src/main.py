@@ -1,6 +1,6 @@
 from NlSqlBenchmark.NlSqlBenchmarkFactory import NlSqlBenchmarkFactory
 import SchemaSubsetter.SchemaSubsetter as SchemaSubsetter
-import SubsetEvaluator
+import SchemaSubsetEvaluator
 import QueryProfiler
 
 def main():
