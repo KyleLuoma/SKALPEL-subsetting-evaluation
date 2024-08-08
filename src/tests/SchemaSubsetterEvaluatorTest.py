@@ -7,18 +7,38 @@ def evaluate_schema_subset_test():
     benchmark = BirdNlSqlBenchmark()
 
     predicted_subset = {
-        'tables': [
+        "tables": [
             {
-                'name': 'gasstations', 
-                'columns': [
-                    {'name': 'GasStationID', 'type': 'integer'}, 
-                    {'name': 'Country', 'type': 'text'}, 
-                    {'name': 'Segment', 'type': 'text'}
-                    ]}]}
+                "name": "gasstations", 
+                "columns": [
+                    {"name": "GasStationID", "type": "integer"}, 
+                    {"name": "Country", "type": "text"}, 
+                    {"name": "FalsePositive1", "type": "text"},
+                    {"name": "FalsePositive2", "type": "text"}
+                    ]
+            },
+            {
+                "name": "FalseTable1",
+                "columns": [
+                    {"name": "FalsePositive3", "type": "text"}
+                ]
+            }
+        ]}
+
+    correct_scores = {
+        'total_recall': 0.75, 
+        'total_precision': 0.42857142857142855, 
+        'total_f1': 0.5454545454545454, 
+        'table_recall': 1.0, 
+        'table_precision': 0.5, 
+        'table_f1': 0.6666666666666666, 
+        'column_recall': 0.6666666666666666, 
+        'column_precision': 0.4, 
+        'column_f1': 0.5
+        }
 
     scores = sse.evaluate_schema_subset(predicted_subset, benchmark)
-    print(scores)
-    return False
+    return scores == correct_scores
 
 
 
@@ -43,3 +63,5 @@ def f1_test():
     correct = {"A", "B"}
     predicted = {"A", "C", "D", "E"}
     return sse.f1(correct, predicted) == 2 * ((0.25 * 0.5) / (0.25 + 0.5))
+
+

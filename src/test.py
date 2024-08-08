@@ -5,13 +5,15 @@ Try to name test files to correspond to target modules, e.g. NlSqlBenchmarkTest.
 """
 
 import tests
-# from tests import NlSqlBenchmarkTest
-# from tests import BirdNlSqlBenchmarkTest
-# from tests import QueryProfilerTest
-# from tests import SchemaSubsetterTest
-# from tests import PerfectSchemaSubsetterTest
-# from tests import PerfectTableSchemaSubsetter
+from tests import NlSqlBenchmarkTest
+from tests import BirdNlSqlBenchmarkTest
+from tests import QueryProfilerTest
+from tests import SchemaSubsetterTest
+from tests import PerfectSchemaSubsetterTest
+from tests import PerfectTableSchemaSubsetter
+from tests import DinSqlSubsetterTest
 from tests import SchemaSubsetterEvaluatorTest
+
 
 
 test_functions = []

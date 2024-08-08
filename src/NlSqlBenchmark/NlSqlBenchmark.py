@@ -48,6 +48,10 @@ class NlSqlBenchmark:
                             "name": "column1",
                             "type": "int"
                         }
+                    ],
+                    "primary_keys": ["column1"],
+                    "foreign_keys": [
+                        {"columns": ["column1"], "references": ("table1", ["column1"])}
                     ]
                 }
             ]
