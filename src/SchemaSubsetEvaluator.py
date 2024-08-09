@@ -83,11 +83,15 @@ class SchemaSubsetEvaluator:
 
 
     def recall(self, correct: set, predicted: set):
+        if len(correct) == 0:
+            return 0
         return len(predicted.intersection(correct)) / len(correct)
     
 
 
     def precision(self, correct: set, predicted: set):
+        if len(predicted) == 0:
+            return 0
         return len(predicted.intersection(correct)) / len(predicted)
     
 
@@ -95,4 +99,6 @@ class SchemaSubsetEvaluator:
     def f1(self, correct: set, predicted: set):
         precision = self.precision(correct, predicted)
         recall = self.recall(correct, predicted)
+        if precision + recall == 0:
+            return 0
         return 2 * ((precision * recall) / (precision + recall))

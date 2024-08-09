@@ -1,19 +1,28 @@
 from NlSqlBenchmark.NlSqlBenchmarkFactory import NlSqlBenchmarkFactory
-import SchemaSubsetter.SchemaSubsetter as SchemaSubsetter
-import SchemaSubsetEvaluator
+from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
+from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
+from SchemaSubsetEvaluator import SchemaSubsetEvaluator
 import QueryProfiler
 
 def main():
     bm_factory = NlSqlBenchmarkFactory()
     benchmark = bm_factory.build_benchmark("bird")
-
-    benchmark.set_active_schema("california_schools")
-
-    res = benchmark.get_active_schema(database="california_schools")
-
-    qp = QueryProfiler.QueryProfiler()
-    qp_res = qp.profile_query("SELECT A FROM ONE")
-    print(qp_res)
+    subsetter = DinSqlSubsetter(benchmark=benchmark)
+    evaluator = SchemaSubsetEvaluator()
+    for question in benchmark:
+        print(benchmark.active_question_no)
+        subset = subsetter.get_schema_subset(
+            question=question["question"],
+            full_schema=benchmark.get_active_schema()
+        )
+        print(benchmark.active_question_no)
+        scores = evaluator.evaluate_schema_subset(
+            subset,
+            benchmark
+        )
+        print(benchmark.active_question_no)
+        print(scores)
+        break
         
 
 if __name__ == "__main__":

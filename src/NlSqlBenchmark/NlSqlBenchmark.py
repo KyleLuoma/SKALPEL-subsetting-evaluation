@@ -71,6 +71,10 @@ class NlSqlBenchmark:
             "error_message": ""
         }
     
+    def set_active_question_number(self, number: int = 0):
+        self.active_question_no = number
+        return self
+    
     def __load_active_database_questions(self) -> list:
         return self.active_database_questions
     
