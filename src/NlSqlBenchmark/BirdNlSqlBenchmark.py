@@ -46,12 +46,60 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
                 break
         active_schema = {"tables": []}
         for i in range(0, len(schema_dict["table_names_original"])):
+            # Get table names
             active_schema["tables"].append({"name": schema_dict["table_names_original"][i]})
             columns = []
+            # get column names
             for (c, t) in zip(schema_dict["column_names_original"], schema_dict["column_types"]):
                 if c[0] == i:
                     columns.append({"name": c[1], "type": t})
             active_schema["tables"][i]["columns"] = columns
+            active_schema["tables"][i]["primary_keys"] = []
+            active_schema["tables"][i]["foreign_keys"] = []
+            # Get primary keys
+            for composite_key in schema_dict["primary_keys"]:
+                if type(composite_key) != list:
+                    composite_key = [composite_key]
+                composit_col_names = []
+                for key in composite_key:
+                    key_table_name = schema_dict["table_names_original"][
+                        schema_dict["column_names_original"][key][0]
+                    ]
+                    if key_table_name != schema_dict["table_names_original"][i]:
+                        continue
+                    key_column_name = schema_dict["column_names_original"][key][1]
+                    composit_col_names.append(key_column_name)
+                if len(composit_col_names) > 0:
+                    active_schema["tables"][i]["primary_keys"].append(composit_col_names)
+            # Get foreign keys
+            for fk_reference in schema_dict["foreign_keys"]:
+                fk_dict = {"columns": [], "references": None}
+                fk = fk_reference[0]
+                ref_pk = fk_reference[1]
+                if type(ref_pk) != list:
+                    ref_pk = [ref_pk]
+                if type(fk) != list:
+                    fk = [fk]                
+                for key_column in fk:
+                    key_table_name = schema_dict["table_names_original"][
+                        schema_dict["column_names_original"][key_column][0]
+                    ]
+                    if key_table_name != schema_dict["table_names_original"][i]:
+                        continue
+                    fk_dict["columns"].append(
+                        schema_dict["column_names_original"][key_column][1]
+                    )
+                referenced_table_name = schema_dict["table_names_original"][
+                        schema_dict["column_names_original"][ref_pk[0]][0]
+                    ]
+                referenced_columns = []
+                for key_column in ref_pk:
+                        referenced_columns.append(schema_dict["column_names_original"][key_column][1])
+                fk_dict["references"] = (referenced_table_name, referenced_columns)
+                if len(fk_dict["columns"]) > 0:
+                    active_schema["tables"][i]["foreign_keys"].append(fk_dict)
+
+
         return active_schema
     
 

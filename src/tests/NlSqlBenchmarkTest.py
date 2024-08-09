@@ -40,3 +40,24 @@ def get_active_question_test():
         "query": "SELECT A FROM ONE", 
         "database": "one", "question_number": 0
         }
+
+
+def get_active_schema_test():
+    bm = NlSqlBenchmark()
+    return bm.get_active_schema() == {
+            "tables": [
+                {
+                    "name": "table1",
+                    "columns": [
+                        {
+                            "name": "column1",
+                            "type": "int"
+                        }
+                    ],
+                    "primary_keys": ["column1"],
+                    "foreign_keys": [
+                        {"columns": ["column1"], "references": ("table1", ["column1"])}
+                    ]
+                }
+            ]
+        }

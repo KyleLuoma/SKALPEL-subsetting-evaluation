@@ -18,7 +18,7 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
             full_schema: dict
     ) -> dict:
         din_schema = self.transform_schema_to_dinsql_format(full_schema)
-        print(din_schema)
+        return din_schema
         
 
 

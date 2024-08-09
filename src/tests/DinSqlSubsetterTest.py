@@ -4,8 +4,9 @@ from NlSqlBenchmark.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 
 def get_schema_subset_test():
     din_ss = DinSqlSubsetter(benchmark=BirdNlSqlBenchmark())
-    din_ss.get_schema_subset("question", din_ss.benchmark.get_active_schema())
-    return False
+    subset = din_ss.get_schema_subset("question", din_ss.benchmark.get_active_schema())
+    print(subset)
+    return subset == {}
 
 
 def transform_schema_to_din_sql_format_test():

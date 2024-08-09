@@ -39,7 +39,7 @@ class SchemaSubsetEvaluator:
                     table_column = f"{table["name"]}.{column["name"]}"
                     subset_identifiers[subset[0]]["columns"].add(table_column)
 
-        print(subset_identifiers)
+        # print(subset_identifiers)
 
         return {
             "total_recall": self.recall(

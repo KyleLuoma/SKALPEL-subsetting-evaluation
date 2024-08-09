@@ -61,10 +61,13 @@ def set_and_get_active_schema_test():
     bird = BirdNlSqlBenchmark()
     bird.set_active_schema("california_schools")
     s_data = bird.get_active_schema()
+    # for t in s_data["tables"]:
+    #     for k in t:
+    #         print(k, ":", t[k])
     pass_test = True
     pass_test = (len(s_data["tables"]) == 3)
     for t in s_data["tables"]:
-        pass_test = (set(t.keys()) == {"name", "columns"})
+        pass_test = (set(t.keys()) == {"name", "columns", "primary_keys", "foreign_keys"})
     return pass_test
     
 
