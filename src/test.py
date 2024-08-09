@@ -11,7 +11,7 @@ from tests import BirdNlSqlBenchmarkTest
 # from tests import SchemaSubsetterTest
 # from tests import PerfectSchemaSubsetterTest
 # from tests import PerfectTableSchemaSubsetter
-# from tests import DinSqlSubsetterTest
+from tests import DinSqlSubsetterTest
 # from tests import SchemaSubsetterEvaluatorTest
 
 
