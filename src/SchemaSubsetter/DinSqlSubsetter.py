@@ -1,6 +1,11 @@
 from SchemaSubsetter import SchemaSubsetter
 from SchemaSubsetter.DINSQL import DINSQL
 from NlSqlBenchmark import NlSqlBenchmark
+import openai
+import json
+import os
+import time
+from collections import defaultdict
 
 
 class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
@@ -10,6 +15,10 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
             benchmark: NlSqlBenchmark.NlSqlBenchmark
             ):
         self.benchmark = benchmark
+        with open("./.local/openai.json", "r") as openai_file:
+            openai_info = json.loads(openai_file.read())
+        self.openai_key = openai_info["api_key"]
+        openai.api_key = self.openai_key
         # self.schema_linking_prompt = DINSQL.schema_linking_prompt
 
     def get_schema_subset(
@@ -21,9 +30,59 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
             question=question,
             schema=full_schema
         )
-        print(prompt)
-        din_schema = self.transform_schema_to_dinsql_format(full_schema)
-        return din_schema
+        schema_links = None
+        while schema_links is None:
+            try:
+                schema_links = self.GPT4_generation(prompt=prompt)
+            except openai.InvalidRequestError:
+                time.sleep(3)
+                pass
+        try:
+            schema_links = schema_links.split("Schema_links: ")[1]
+        except:
+            print("Slicing error for the schema_linking module")
+            schema_links = "[]"
+        schema_links = schema_links.replace("[", "").replace("]", "")
+        schema_links = schema_links.split(",")
+        schema_subset = {"tables": []}
+        added_table_names = set()
+        added_column_names = set()
+
+        table_column_pairs = []
+        for link in schema_links:
+            if "." in link and "=" not in link: #indicates table.column pair
+                table_column_pairs.append(
+                    (link.split(".")[0], link.split(".")[1])
+                )
+            elif "=" in link: #indicates dependency constraint
+                left = link.split("=")[0].strip()
+                right = link.split("=")[1].strip()
+                table_column_pairs += [
+                    (left.split(".")[0], left.split(".")[1]),
+                    (right.split(".")[0], right.split(".")[1])
+                ]
+        for pair in table_column_pairs:
+                table = pair[0]
+                column = pair[1]
+                if table not in added_table_names:
+                    added_table_names.add(table)
+                    added_column_names.add((table, column))
+                    schema_subset["tables"].append(
+                        {
+                            "name": table, 
+                            "columns": [{"name": column, "type": None}], 
+                            "primary_keys": [], 
+                            "foreign_keys": []
+                        }
+                    )
+                else:
+                    for ix, subset_table in enumerate(schema_subset["tables"]):
+                        if table == subset_table["name"] and (table, column) not in added_column_names:
+                            added_column_names.add((table, column))
+                            schema_subset["tables"][ix]["columns"].append(
+                                {"name": column, "type": None}
+                            )
+        return schema_subset
         
 
 
@@ -57,3 +116,21 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
         prompt = instruction + DINSQL.schema_linking_prompt + fields + foreign_keys
         prompt += "\nQ: \"" + question + """"\nA: Let’s think step by step."""
         return prompt
+    
+
+
+    def GPT4_generation(self, prompt):
+
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": prompt}],
+            n = 1,
+            stream = False,
+            temperature=0.0,
+            max_tokens=600,
+            top_p = 1.0,
+            frequency_penalty=0.0,
+            presence_penalty=0.0,
+            stop = ["Q:"]
+        )
+        return response['choices'][0]['message']['content']
