@@ -15,14 +15,16 @@ class SchemaSubsetEvaluator:
     def evaluate_schema_subset(
             self,
             predicted_schema_subset: dict,
+            question: str,
+            full_schema: dict,
             benchmark: NlSqlBenchmark
             ) -> dict:
         
         subsetter = PerfectSchemaSubsetter(benchmark)
         
         correct_schema_subset = subsetter.get_schema_subset(
-            benchmark.get_active_question()["question"],
-            benchmark.get_active_schema()
+            question=question,
+            schema=full_schema
         )
 
         all_correct_tables = {table["name"] for table in correct_schema_subset["tables"]}

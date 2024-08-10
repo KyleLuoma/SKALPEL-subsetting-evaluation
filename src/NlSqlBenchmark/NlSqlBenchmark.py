@@ -35,7 +35,8 @@ class NlSqlBenchmark:
             "question": self.active_database_questions[self.active_question_no],
             "query": self.active_database_queries[self.active_question_no],
             "database": self.databases[self.active_database],
-            "question_number": self.active_question_no
+            "question_number": self.active_question_no,
+            "schema": self.get_active_schema()
         }
     
     def get_active_schema(self, database: str = None) -> dict:

@@ -13,11 +13,13 @@ def main():
         print(benchmark.active_question_no)
         subset = subsetter.get_schema_subset(
             question=question["question"],
-            full_schema=benchmark.get_active_schema()
+            full_schema=question["schema"]
         )
         print(benchmark.active_question_no)
         scores = evaluator.evaluate_schema_subset(
             subset,
+            question["question"],
+            question["schema"],
             benchmark
         )
         print(benchmark.active_question_no)
