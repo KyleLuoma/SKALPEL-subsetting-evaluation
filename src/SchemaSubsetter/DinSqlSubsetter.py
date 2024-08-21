@@ -34,8 +34,9 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
         while schema_links is None:
             try:
                 schema_links = self.GPT4_generation(prompt=prompt)
-            except openai.InvalidRequestError:
+            except IndexError:
                 time.sleep(3)
+                print(".")
                 pass
         try:
             schema_links = schema_links.split("Schema_links: ")[1]
@@ -102,7 +103,7 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
         output = "["
         for table in schema["tables"]:
             for fk in table["foreign_keys"]:
-                output += f"{table["name"]}.{fk["columns"][0]} = {fk["references"][0]}.{fk["references"][1][0]},"
+                output += f"{table['name']}.{fk['columns'][0]} = {fk['references'][0]}.{fk['references'][1][0]},"
         output = output[:-1] + "]"
         return output
     

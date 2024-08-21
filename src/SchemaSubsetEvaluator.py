@@ -24,7 +24,7 @@ class SchemaSubsetEvaluator:
         
         correct_schema_subset = subsetter.get_schema_subset(
             question=question,
-            schema=full_schema
+            full_schema=full_schema
         )
 
         all_correct_tables = {table["name"] for table in correct_schema_subset["tables"]}
@@ -38,7 +38,7 @@ class SchemaSubsetEvaluator:
         for subset in [["correct", correct_schema_subset], ["predicted", predicted_schema_subset]]:
             for table in subset[1]["tables"]:
                 for column in table["columns"]:
-                    table_column = f"{table["name"]}.{column["name"]}"
+                    table_column = f"{table['name']}.{column['name']}"
                     subset_identifiers[subset[0]]["columns"].add(table_column)
 
         # print(subset_identifiers)
@@ -79,7 +79,31 @@ class SchemaSubsetEvaluator:
             "column_f1": self.f1(
                 correct=subset_identifiers["correct"]["columns"],
                 predicted=subset_identifiers["predicted"]["columns"]
-                )
+                ),
+            "correct_tables": self.correct_identifiers(
+                correct=subset_identifiers["correct"]["tables"],
+                predicted=subset_identifiers["predicted"]["tables"]
+            ),
+            "missing_tables": self.missing_identifiers(
+                correct=subset_identifiers["correct"]["tables"],
+                predicted=subset_identifiers["predicted"]["tables"]
+            ),
+            "extra_tables": self.extra_identifiers(
+                correct=subset_identifiers["correct"]["tables"],
+                predicted=subset_identifiers["predicted"]["tables"]
+            ),
+            "correct_columns": self.correct_identifiers(
+                correct=subset_identifiers["correct"]["columns"],
+                predicted=subset_identifiers["predicted"]["columns"]
+            ),
+            "missing_columns": self.missing_identifiers(
+                correct=subset_identifiers["correct"]["columns"],
+                predicted=subset_identifiers["predicted"]["columns"]
+            ),
+            "extra_columns": self.extra_identifiers(
+                correct=subset_identifiers["correct"]["columns"],
+                predicted=subset_identifiers["predicted"]["columns"]
+            )
         }
     
 
@@ -104,3 +128,18 @@ class SchemaSubsetEvaluator:
         if precision + recall == 0:
             return 0
         return 2 * ((precision * recall) / (precision + recall))
+    
+
+
+    def missing_identifiers(self, correct: set, predicted: set):
+        return correct.difference(predicted)
+    
+
+
+    def correct_identifiers(self, correct: set, predicted: set):
+        return correct.intersection(predicted)
+    
+
+
+    def extra_identifiers(self, correct: set, predicted: set):
+        return predicted.difference(correct)

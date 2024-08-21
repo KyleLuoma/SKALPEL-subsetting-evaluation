@@ -10,19 +10,20 @@ def main():
     subsetter = DinSqlSubsetter(benchmark=benchmark)
     evaluator = SchemaSubsetEvaluator()
     for question in benchmark:
-        print(benchmark.active_question_no)
+        print(question["query"])
+        print("--- Running subsetter ---")
         subset = subsetter.get_schema_subset(
             question=question["question"],
             full_schema=question["schema"]
         )
-        print(benchmark.active_question_no)
+        print(subset)
+        print("--- Running evaluator ---")
         scores = evaluator.evaluate_schema_subset(
             subset,
             question["question"],
             question["schema"],
             benchmark
         )
-        print(benchmark.active_question_no)
         print(scores)
         break
         

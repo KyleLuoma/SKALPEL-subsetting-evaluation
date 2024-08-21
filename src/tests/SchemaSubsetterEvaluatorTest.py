@@ -37,7 +37,13 @@ def evaluate_schema_subset_test():
         'column_f1': 0.5
         }
 
-    scores = sse.evaluate_schema_subset(predicted_subset, benchmark)
+    question = benchmark.get_active_question()
+    scores = sse.evaluate_schema_subset(
+        predicted_subset, 
+        question["question"],
+        full_schema=question["schema"],
+        benchmark=benchmark
+        )
     return scores == correct_scores
 
 
