@@ -79,5 +79,65 @@ def get_active_question_test():
         "question": "How many gas stations in CZE has Premium gas?", 
         "query": "SELECT COUNT(GasStationID) FROM gasstations WHERE Country = 'CZE' AND Segment = 'Premium'", 
         "database": "debit_card_specializing", 
-        "question_number": 0
+        "question_number": 0,
+        'schema': {
+            'tables': [
+                {
+                    'name': 'customers', 
+                    'columns': [
+                        {'name': 'CustomerID', 'type': 'integer'}, 
+                        {'name': 'Segment', 'type': 'text'}, 
+                        {'name': 'Currency', 'type': 'text'}
+                        ], 
+                    'primary_keys': [['CustomerID']], 
+                    'foreign_keys': []
+                    }, 
+                {
+                    'name': 'gasstations', 
+                    'columns': [
+                        {'name': 'GasStationID', 'type': 'integer'}, 
+                        {'name': 'ChainID', 'type': 'integer'}, 
+                        {'name': 'Country', 'type': 'text'}, 
+                        {'name': 'Segment', 'type': 'text'}
+                        ], 
+                    'primary_keys': [['GasStationID']], 
+                    'foreign_keys': []
+                    }, 
+                {
+                    'name': 'products', 
+                    'columns': [
+                        {'name': 'ProductID', 'type': 'integer'}, 
+                        {'name': 'Description', 'type': 'text'}
+                        ], 
+                    'primary_keys': [['ProductID']], 
+                    'foreign_keys': []
+                    }, 
+                {
+                    'name': 'transactions_1k', 
+                    'columns': [
+                        {'name': 'TransactionID', 'type': 'integer'}, 
+                        {'name': 'Date', 'type': 'date'}, 
+                        {'name': 'Time', 'type': 'text'}, 
+                        {'name': 'CustomerID', 'type': 'integer'}, 
+                        {'name': 'CardID', 'type': 'integer'}, 
+                        {'name': 'GasStationID', 'type': 'integer'}, 
+                        {'name': 'ProductID', 'type': 'integer'}, 
+                        {'name': 'Amount', 'type': 'integer'}, 
+                        {'name': 'Price', 'type': 'real'}
+                        ], 
+                    'primary_keys': [['TransactionID']], 
+                    'foreign_keys': []
+                    }, 
+                {
+                    'name': 'yearmonth', 
+                    'columns': [
+                        {'name': 'CustomerID', 'type': 'integer'}, 
+                        {'name': 'Date', 'type': 'text'}, 
+                        {'name': 'Consumption', 'type': 'real'}
+                        ], 
+                    'primary_keys': [['CustomerID', 'Date']], 
+                    'foreign_keys': [{'columns': ['CustomerID'], 'references': ('customers', ['CustomerID'])}]
+                    }
+                ]
+            }
         }

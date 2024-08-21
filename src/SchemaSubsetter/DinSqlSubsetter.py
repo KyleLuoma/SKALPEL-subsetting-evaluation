@@ -24,12 +24,17 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
     def get_schema_subset(
             self,
             question: str,
-            full_schema: dict
+            full_schema: dict,
+            print_prompt: bool = False
     ) -> dict:
         prompt = self.schema_linking_prompt_maker(
             question=question,
             schema=full_schema
         )
+        if print_prompt:
+            print("---- Subsetting prompt ----")
+            print(prompt)
+            print("---- Subsetting prompt ----")
         schema_links = None
         while schema_links is None:
             try:

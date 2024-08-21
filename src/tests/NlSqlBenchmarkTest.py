@@ -38,7 +38,21 @@ def get_active_question_test():
     return result == {
         "question": "a", 
         "query": "SELECT A FROM ONE", 
-        "database": "one", "question_number": 0
+        "database": "one", 
+        "question_number": 0,
+        "schema": {
+            "tables": [
+                {
+                    "name": "table1", 
+                    "columns": [{"name": "column1", "type": "int"}], 
+                    "primary_keys": ["column1"], 
+                    "foreign_keys": [{
+                        "columns": ["column1"], 
+                        "references": ("table1", ["column1"])
+                        }]
+                    }
+                ]
+            }
         }
 
 

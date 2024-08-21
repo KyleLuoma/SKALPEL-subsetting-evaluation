@@ -26,15 +26,25 @@ def evaluate_schema_subset_test():
         ]}
 
     correct_scores = {
-        'total_recall': 0.75, 
-        'total_precision': 0.42857142857142855, 
-        'total_f1': 0.5454545454545454, 
-        'table_recall': 1.0, 
-        'table_precision': 0.5, 
-        'table_f1': 0.6666666666666666, 
-        'column_recall': 0.6666666666666666, 
-        'column_precision': 0.4, 
-        'column_f1': 0.5
+        "total_recall": 0.75, 
+        "total_precision": 0.42857142857142855, 
+        "total_f1": 0.5454545454545454, 
+        "table_recall": 1.0, 
+        "table_precision": 0.5, 
+        "table_f1": 0.6666666666666666, 
+        "column_recall": 0.6666666666666666, 
+        "column_precision": 0.4, 
+        "column_f1": 0.5,
+        "correct_tables": {"gasstations"}, 
+        "missing_tables": set(), 
+        "extra_tables": {"FalseTable1"}, 
+        "correct_columns": {"gasstations.GasStationID", "gasstations.Country"}, 
+        "missing_columns": {"gasstations.Segment"}, 
+        "extra_columns": {
+            "FalseTable1.FalsePositive3", 
+            "gasstations.FalsePositive1", 
+            "gasstations.FalsePositive2"
+            }
         }
 
     question = benchmark.get_active_question()

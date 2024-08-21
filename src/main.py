@@ -14,7 +14,8 @@ def main():
         print("--- Running subsetter ---")
         subset = subsetter.get_schema_subset(
             question=question["question"],
-            full_schema=question["schema"]
+            full_schema=question["schema"],
+            print_prompt=False
         )
         print(subset)
         print("--- Running evaluator ---")
