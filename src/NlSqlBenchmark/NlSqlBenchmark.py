@@ -10,6 +10,7 @@ class NlSqlBenchmark:
         self.active_database_queries = []
         self.active_question_no = 0
         self.db_connection = None
+        self.name = "abstract"
 
 
     def __iter__(self):

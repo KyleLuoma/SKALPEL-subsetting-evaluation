@@ -13,6 +13,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         self.databases = [t["db_id"] for t in self.tables_dict]
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
+        self.name = "bird"
 
     def __iter__(self):
         return self

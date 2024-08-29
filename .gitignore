@@ -12,3 +12,4 @@ __pycache__/
 temp_data/
 bin/
 benchmarks/
+src/SchemaSubsetter/CodeS/sic_ckpts/
