@@ -59,6 +59,9 @@ class NlSqlBenchmark:
             ]
         }
     
+    def set_active_schema(self, database_name: str) -> None:
+        pass
+    
     def execute_query(
             self, query: str, database: str = None, question: int = None
             ) -> dict:
@@ -72,6 +75,18 @@ class NlSqlBenchmark:
             "question": question,
             "error_message": ""
         }
+    
+
+    def get_sample_values(
+            self, table_name: str, column_name: str, num_values: int = 2
+        ) -> list:
+        sample_values = []
+        query_params = [column_name, table_name, num_values]
+        query = """
+SELECT ? FROM ? LIMIT ?
+"""
+        return sample_values
+
     
     def set_active_question_number(self, number: int = 0):
         self.active_question_no = number

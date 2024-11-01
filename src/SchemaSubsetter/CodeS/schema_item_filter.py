@@ -258,7 +258,7 @@ class SchemaItemClassifierInference():
         # initialize model
         self.model = SchemaItemClassifier(model_save_path, "test")
         # load fine-tuned params
-        self.model.load_state_dict(torch.load(model_save_path + "/dense_classifier.pt", map_location=torch.device('cpu')), strict=False)
+        self.model.load_state_dict(torch.load(model_save_path + "/dense_classifier.pt", map_location=torch.device(0), weights_only=True), strict=False)
         if torch.cuda.is_available():
             self.model = self.model.cuda()
         self.model.eval()

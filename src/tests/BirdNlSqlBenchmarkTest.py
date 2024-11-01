@@ -141,3 +141,14 @@ def get_active_question_test():
                 ]
             }
         }
+
+
+
+def get_sample_values_test():
+    bird = BirdNlSqlBenchmark()
+    sample_values = bird.get_sample_values(
+        database="debit_card_specializing",
+        table_name="products",
+        column_name="Description"
+    )
+    return sample_values == ['Rucní zadání', 'Nafta']
