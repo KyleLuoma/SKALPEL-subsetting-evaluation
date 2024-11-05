@@ -7,7 +7,8 @@ from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 
 class SchemaSubsetEvaluator:
 
-    def __init__(self):
+    def __init__(self, benchmark: NlSqlBenchmark = NlSqlBenchmark()):
+        self.benchmark = benchmark
         pass
 
 
@@ -16,11 +17,10 @@ class SchemaSubsetEvaluator:
             self,
             predicted_schema_subset: dict,
             question: str,
-            full_schema: dict,
-            benchmark: NlSqlBenchmark
+            full_schema: dict
             ) -> dict:
         
-        subsetter = PerfectSchemaSubsetter(benchmark)
+        subsetter = PerfectSchemaSubsetter(self.benchmark)
         
         correct_schema_subset = subsetter.get_schema_subset(
             question=question,
@@ -103,8 +103,32 @@ class SchemaSubsetEvaluator:
             "extra_columns": self.extra_identifiers(
                 correct=subset_identifiers["correct"]["columns"],
                 predicted=subset_identifiers["predicted"]["columns"]
+            ),
+            "subset_table_proportion": self.table_proportion(
+                predicted_schema=predicted_schema_subset, full_schema=full_schema
+            ),
+            "subset_column_proportion": self.column_proportion(
+                predicted_schema=predicted_schema_subset, full_schema=full_schema
             )
         }
+    
+
+
+    def table_proportion(self, predicted_schema: dict, full_schema: dict) -> float:
+        num_tables_full = len(full_schema["tables"])
+        num_tables_predicted = len(predicted_schema["tables"])
+        return num_tables_predicted / num_tables_full
+    
+
+
+    def column_proportion(self, predicted_schema: dict, full_schema: dict) -> float:
+        full_schema_count = 0
+        for table in full_schema["tables"]:
+            full_schema_count += len(table["columns"])
+        predicted_schema_count = 0
+        for table in predicted_schema["tables"]:
+            predicted_schema_count += len(table["columns"])
+        return predicted_schema_count / full_schema_count
     
 
 

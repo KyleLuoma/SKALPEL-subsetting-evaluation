@@ -5,6 +5,8 @@ Super class for schema subsetting methods we evaluate in the SKALPEL project
 from NlSqlBenchmark import NlSqlBenchmark
 
 class SchemaSubsetter:
+
+    name = "abstract"
     
     def __init__(
             self,
@@ -26,12 +28,15 @@ class SchemaSubsetter:
             The NL question to use for determining the required identifiers
         full_schema: dict
             Full schema representation comforing to the format:
-                {"tables[{
+                {
+                "database": "",
+                "tables[{
                     "name": "", 
                     "columns": [{"name": "", "type": ""}, ...]
                     }], ...}
         """
         return {
+            "database": "database1",
             "tables": [
                 {
                     "name": "table1",

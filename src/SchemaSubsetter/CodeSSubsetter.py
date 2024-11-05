@@ -6,6 +6,8 @@ from SchemaSubsetter.CodeS.schema_item_filter import SchemaItemClassifierInferen
 
 class CodeSSubsetter(SchemaSubsetter):
 
+    name = "CodeS"
+
     def __init__(
             self,
             benchmark: NlSqlBenchmark
@@ -18,7 +20,7 @@ class CodeSSubsetter(SchemaSubsetter):
 
 
     def get_schema_subset(self, question: str, full_schema: dict) -> dict:
-        codes_compat_dataset = self.adapt_benchmark_schema(full_schema)
+        codes_compat_dataset = self.adapt_benchmark_schema(full_schema, question)
         codes_compat_dataset[0]["text"] = question
         codes_filtered = self.filter_schema(
             dataset=codes_compat_dataset,
@@ -41,22 +43,27 @@ class CodeSSubsetter(SchemaSubsetter):
 
 
 
-    def adapt_benchmark_schema(self, schema: dict) -> dict:
+    def adapt_benchmark_schema(self, schema: dict, question: str) -> dict:
         schema_dict = {
             "schema": {"foreign_keys": []},
-            "text": self.benchmark.get_active_question()["question"],
+            "text": question,
             "matched_contents": {}
             }
         schema_dict["schema"]["schema_items"] = []
         for table in schema["tables"]:
+            if len(table["primary_keys"]) > 0:
+                pk_indicators = [1 if c["name"] in table["primary_keys"][0] else 0 for c in table["columns"]]
+            else:
+                pk_indicators = [0 for c in table["columns"]]
+            
             schema_dict["schema"]["schema_items"].append({
                 "table_name": table["name"],
                 "table_comment": "",
                 "column_names": [c["name"] for c in table["columns"]],
                 "column_types": [c["type"] for c in table["columns"]],
                 "column_comments": ["" for c in table["columns"]],
-                "column_contents": [self.benchmark.get_sample_values(table["name"], c["name"], database=self.benchmark.get_active_question()["database"]) for c in table["columns"]],
-                "pk_indicators": [1 if c["name"] in table["primary_keys"][0] else 0 for c in table["columns"]],
+                "column_contents": [self.benchmark.get_sample_values(table["name"], c["name"], database=schema["database"]) for c in table["columns"]],
+                "pk_indicators": pk_indicators,
             })
             if len(table["foreign_keys"]) > 0:
                 for fk_dict in table["foreign_keys"]:

@@ -3,7 +3,7 @@ from NlSqlBenchmark.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 
 
 def evaluate_schema_subset_test():
-    sse = SchemaSubsetEvaluator()
+    sse = SchemaSubsetEvaluator(BirdNlSqlBenchmark())
     benchmark = BirdNlSqlBenchmark()
 
     predicted_subset = {
@@ -24,7 +24,7 @@ def evaluate_schema_subset_test():
                 ]
             }
         ]}
-
+    
     correct_scores = {
         "total_recall": 0.75, 
         "total_precision": 0.42857142857142855, 
@@ -44,16 +44,18 @@ def evaluate_schema_subset_test():
             "FalseTable1.FalsePositive3", 
             "gasstations.FalsePositive1", 
             "gasstations.FalsePositive2"
-            }
+            },
+        "subset_table_proportion": 0.4, 
+        "subset_column_proportion": 0.23809523809523808
         }
 
     question = benchmark.get_active_question()
     scores = sse.evaluate_schema_subset(
         predicted_subset, 
         question["question"],
-        full_schema=question["schema"],
-        benchmark=benchmark
+        full_schema=question["schema"]
         )
+    print(scores)
     return scores == correct_scores
 
 

@@ -11,7 +11,8 @@ def iter_test():
     ]
     results = []
     for i in bm:
-        results.append((i["database"], i["question_number"]))
+        results.append((i["schema"]["database"], i["question_number"]))
+    print(results)
     return results == [("one", 0), ("one", 1), ("one", 2), 
                        ("two", 0), ("two", 1), ("two", 2), 
                        ("three", 0), ("three", 1), ("three", 2)]
@@ -38,9 +39,9 @@ def get_active_question_test():
     return result == {
         "question": "a", 
         "query": "SELECT A FROM ONE", 
-        "database": "one", 
         "question_number": 0,
         "schema": {
+            "database": "one",
             "tables": [
                 {
                     "name": "table1", 
@@ -59,6 +60,7 @@ def get_active_question_test():
 def get_active_schema_test():
     bm = NlSqlBenchmark()
     return bm.get_active_schema() == {
+            "database": "database1",
             "tables": [
                 {
                     "name": "table1",

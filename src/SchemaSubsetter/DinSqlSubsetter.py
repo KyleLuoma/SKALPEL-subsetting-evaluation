@@ -10,6 +10,8 @@ from collections import defaultdict
 
 class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
 
+    name = "DINSQL"
+
     def __init__(
             self,
             benchmark: NlSqlBenchmark.NlSqlBenchmark

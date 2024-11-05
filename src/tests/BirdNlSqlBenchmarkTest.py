@@ -19,7 +19,7 @@ def iter_test():
     found_databases = set()
     questions = []
     for q in bird:
-        found_databases.add(q["database"])
+        found_databases.add(q["schema"]["database"])
         questions.append(1)
     return found_databases == bird_databases and len(questions) == 1534
 
@@ -78,9 +78,9 @@ def get_active_question_test():
     return result == {
         "question": "How many gas stations in CZE has Premium gas?", 
         "query": "SELECT COUNT(GasStationID) FROM gasstations WHERE Country = 'CZE' AND Segment = 'Premium'", 
-        "database": "debit_card_specializing", 
         "question_number": 0,
         'schema': {
+            'database': "debit_card_specializing",
             'tables': [
                 {
                     'name': 'customers', 

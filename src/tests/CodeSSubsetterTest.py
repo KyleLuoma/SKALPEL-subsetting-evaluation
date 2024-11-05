@@ -4,7 +4,7 @@ from NlSqlBenchmark.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 def adapt_benchmark_schema_test():
     benchmark = BirdNlSqlBenchmark()
     subsetter = CodeSSubsetter(benchmark)
-    adapted_schema = subsetter.adapt_benchmark_schema(benchmark.get_active_schema())
+    adapted_schema = subsetter.adapt_benchmark_schema(benchmark.get_active_schema(), question="test question")
     return adapted_schema[0]["schema"]["schema_items"][0] == {
         'table_name': 'customers', 
         'table_comment': '', 
@@ -20,7 +20,10 @@ def adapt_benchmark_schema_test():
 def filter_schema_test():
     benchmark = BirdNlSqlBenchmark()
     subsetter = CodeSSubsetter(benchmark)
-    full_dataset = subsetter.adapt_benchmark_schema(benchmark.get_active_schema())
+    full_dataset = subsetter.adapt_benchmark_schema(
+        schema=benchmark.get_active_schema(), 
+        question=benchmark.get_active_question()["question"]
+        )
     all_tables = set([t["table_name"] for t in full_dataset[0]["schema"]["schema_items"]])
     filtered = subsetter.filter_schema(
         dataset=full_dataset,

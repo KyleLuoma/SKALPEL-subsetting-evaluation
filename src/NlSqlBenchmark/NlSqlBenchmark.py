@@ -3,8 +3,10 @@ Super class for all the benchmarks we use in the SKALPEL project to evaluate sch
 """
 class NlSqlBenchmark:
 
+    name = "abstract"
+
     def __init__(self):
-        self.databases = []
+        self.databases = ["database1"]
         self.active_database = 0
         self.active_database_questions = []
         self.active_database_queries = []
@@ -28,6 +30,11 @@ class NlSqlBenchmark:
         question = self.get_active_question()
         self.active_question_no += 1
         return question
+    
+
+
+    def __len__(self):
+        return 0
         
 
 
@@ -35,13 +42,13 @@ class NlSqlBenchmark:
         return {
             "question": self.active_database_questions[self.active_question_no],
             "query": self.active_database_queries[self.active_question_no],
-            "database": self.databases[self.active_database],
             "question_number": self.active_question_no,
             "schema": self.get_active_schema()
         }
     
     def get_active_schema(self, database: str = None) -> dict:
         return {
+            "database": self.databases[self.active_database],
             "tables": [
                 {
                     "name": "table1",

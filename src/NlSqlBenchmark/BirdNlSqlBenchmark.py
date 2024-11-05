@@ -4,12 +4,14 @@ import sqlite3
 from os.path import dirname, abspath
 
 class BirdNlSqlBenchmark(NlSqlBenchmark):
+
+    name = "BIRD"
     
     def __init__(self):
         super().__init__()
         self.benchmark_folder = dirname(dirname(dirname(abspath(__file__)))) + "/benchmarks/bird/dev_20240627"
         self.tables_dict = self.__load_tables_dict()
-        self.questions_dict = self.__load_questions_dict()
+        self.questions_list = self.__load_questions_list()
         self.databases = [t["db_id"] for t in self.tables_dict]
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
@@ -30,6 +32,11 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         question = self.get_active_question()
         self.active_question_no += 1
         return question
+    
+
+
+    def __len__(self):
+        return len(self.questions_list)
 
 
 
@@ -45,7 +52,10 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
             if s["db_id"] == database:
                 schema_dict = s
                 break
-        active_schema = {"tables": []}
+        active_schema = {
+            "database": database,
+            "tables": []
+            }
         for i in range(0, len(schema_dict["table_names_original"])):
             # Get table names
             active_schema["tables"].append({"name": schema_dict["table_names_original"][i]})
@@ -100,7 +110,6 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
                 if len(fk_dict["columns"]) > 0:
                     active_schema["tables"][i]["foreign_keys"].append(fk_dict)
 
-
         return active_schema
     
 
@@ -152,7 +161,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
             f"{self.benchmark_folder}/dev_databases/dev_databases/{database}/{database}.sqlite"
             )
         cur = con.cursor()
-        query = f"select {column_name} from {table_name} limit {num_values}"
+        query = f"select `{column_name}` from `{table_name}` limit {num_values}"
         res = cur.execute(query)
         sample_values = res.fetchall()
         return [s[0] for s in sample_values]
@@ -165,7 +174,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
     
 
 
-    def __load_questions_dict(self) -> dict:
+    def __load_questions_list(self) -> list:
         with open(f"{self.benchmark_folder}/dev.json") as f:
             dev_questions = json.load(f)
         return dev_questions
@@ -174,7 +183,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
 
     def __load_active_database_questions(self) -> list:
         questions = []
-        for q in self.questions_dict:
+        for q in self.questions_list:
             if q["db_id"] == self.databases[self.active_database]:
                 questions.append(q["question"])
         return questions
@@ -183,7 +192,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
 
     def __load_active_database_queries(self) -> list:
         queries = []
-        for q in self.questions_dict:
+        for q in self.questions_list:
             if q["db_id"] == self.databases[self.active_database]:
                 queries.append(q["SQL"])
         return queries

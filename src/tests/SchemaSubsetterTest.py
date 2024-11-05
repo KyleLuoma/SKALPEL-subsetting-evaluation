@@ -7,6 +7,7 @@ def get_schema_subset_test():
         full_schema={}
     )
     return result == {
+            "database": "database1",
             "tables": [
                 {
                     "name": "table1",
