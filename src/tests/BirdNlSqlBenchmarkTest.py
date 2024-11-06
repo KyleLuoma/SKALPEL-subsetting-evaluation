@@ -1,4 +1,4 @@
-from NlSqlBenchmark.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 
 bird_databases = {
     "debit_card_specializing", 

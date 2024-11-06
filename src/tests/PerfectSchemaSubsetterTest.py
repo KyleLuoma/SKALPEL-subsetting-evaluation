@@ -1,5 +1,5 @@
 from SchemaSubsetter.PerfectSchemaSubsetter import PerfectSchemaSubsetter
-from NlSqlBenchmark.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 
 
 def get_schema_subset_test():

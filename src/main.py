@@ -61,7 +61,8 @@ def main():
     results_df = pd.DataFrame(results)
     filename_comments = "NVIDIA_RTX_2000"
     results_df.to_excel(
-        f"./subsetting_results/subsetting-{subsetter.name}-{benchmark.name}-{filename_comments}.xlsx"
+        f"./subsetting_results/subsetting-{subsetter.name}-{benchmark.name}-{filename_comments}.xlsx",
+        index=False
     )
         
 

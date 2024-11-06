@@ -1,5 +1,5 @@
 from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
-from NlSqlBenchmark.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 
 
 test_schema = {

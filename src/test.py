@@ -10,7 +10,7 @@ from tests import BirdNlSqlBenchmarkTest
 from tests import QueryProfilerTest
 from tests import SchemaSubsetterTest
 from tests import PerfectSchemaSubsetterTest
-from tests import PerfectTableSchemaSubsetter
+from tests import PerfectTableSchemaSubsetterTest
 from tests import DinSqlSubsetterTest
 from tests import CodeSSubsetterTest
 from tests import SchemaSubsetterEvaluatorTest

@@ -1,5 +1,5 @@
 from SchemaSubsetEvaluator import SchemaSubsetEvaluator
-from NlSqlBenchmark.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 
 
 def evaluate_schema_subset_test():
@@ -55,7 +55,6 @@ def evaluate_schema_subset_test():
         question["question"],
         full_schema=question["schema"]
         )
-    print(scores)
     return scores == correct_scores
 
 

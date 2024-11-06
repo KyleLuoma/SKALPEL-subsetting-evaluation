@@ -9,7 +9,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
     
     def __init__(self):
         super().__init__()
-        self.benchmark_folder = dirname(dirname(dirname(abspath(__file__)))) + "/benchmarks/bird/dev_20240627"
+        self.benchmark_folder = dirname(dirname(dirname(dirname(abspath(__file__))))) + "/benchmarks/bird/dev_20240627"
         self.tables_dict = self.__load_tables_dict()
         self.questions_list = self.__load_questions_list()
         self.databases = [t["db_id"] for t in self.tables_dict]

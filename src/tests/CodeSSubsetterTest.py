@@ -1,5 +1,5 @@
 from SchemaSubsetter.CodeSSubsetter import CodeSSubsetter
-from NlSqlBenchmark.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 
 def adapt_benchmark_schema_test():
     benchmark = BirdNlSqlBenchmark()

@@ -1,6 +1,6 @@
 print(__name__)
-from NlSqlBenchmark.SnailsNlSqlBenchmark import SnailsNlSqlBenchmark
-from NlSqlBenchmark.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.snails.SnailsNlSqlBenchmark import SnailsNlSqlBenchmark
+from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 
 class NlSqlBenchmarkFactory:
     
