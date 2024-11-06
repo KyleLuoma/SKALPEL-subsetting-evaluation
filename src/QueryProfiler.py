@@ -251,7 +251,7 @@ class QueryProfiler:
             query_to_parse = query_to_parse.replace("`", "\"")
         query_to_parse = query_to_parse.replace('"', '\\"')
         response = subprocess.run(
-            'java -jar "{j}" --query "{q}" --dialect{s}'.format(
+            'java -jar "{j}" --query "{q}" --dialect {s}'.format(
                 j = self.__jar_path,
                 q = query_to_parse,
                 s = syntax
@@ -262,6 +262,7 @@ class QueryProfiler:
         response = response.replace("\\n", "")
         response = response.replace("\\r", "")
         response = response.replace("\\t", "")
+        response = response.replace("\\'", "'")
         response = response.replace('""', '"')
 
         try:
@@ -282,8 +283,8 @@ class QueryProfiler:
                 'tree': tree_string
             }
         except Exception as e:
-            print("WARNING: Encountered exception while parsing query:")
-            print(query)
+            print("WARNING: Encountered exception while parsing query analyzer output:")
+            print(query, json_string)
             print("Exception", e)
             return {
                 'stats': [],
