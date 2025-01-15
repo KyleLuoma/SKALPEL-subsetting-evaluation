@@ -96,8 +96,6 @@ Schema_links: [gasstations.GasStationID,gasstations.Country,products.Description
         din_ss.benchmark.get_active_question()["question"], 
         din_ss.benchmark.get_active_schema()
         )
-    print(subset)
-    print(correct_subset)
     return subset == correct_subset
 
 

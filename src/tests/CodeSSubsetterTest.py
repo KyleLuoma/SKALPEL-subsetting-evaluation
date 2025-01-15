@@ -1,5 +1,11 @@
 from SchemaSubsetter.CodeSSubsetter import CodeSSubsetter
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn,
+    ForeignKey
+)
 
 def adapt_benchmark_schema_test():
     benchmark = BirdNlSqlBenchmark()
@@ -42,4 +48,7 @@ def get_schema_subset_test():
         question=benchmark.get_active_question()["question"],
         full_schema=benchmark.get_active_schema()
     )
-    return "tables" in subset.keys()
+    return (
+        subset.database == "debit_card_specializing"
+        and len(subset.tables) == 5
+    )

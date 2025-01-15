@@ -1,6 +1,12 @@
 from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
 from SchemaSubsetter.CodeS import schema_item_filter as sif
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn,
+    ForeignKey
+)
 from SchemaSubsetter.CodeS.schema_item_filter import SchemaItemClassifierInference
 
 
@@ -19,7 +25,7 @@ class CodeSSubsetter(SchemaSubsetter):
 
 
 
-    def get_schema_subset(self, question: str, full_schema: dict) -> dict:
+    def get_schema_subset(self, question: str, full_schema: Schema) -> Schema:
         codes_compat_dataset = self.adapt_benchmark_schema(full_schema, question)
         codes_compat_dataset[0]["text"] = question
         codes_filtered = self.filter_schema(
@@ -27,23 +33,25 @@ class CodeSSubsetter(SchemaSubsetter):
             dataset_type="eval",
             sic=self.sic
         )
-        schema_subset = {"tables":[]}
+        schema_subset = Schema(database=full_schema.database, tables=[])
         for table in codes_filtered[0]["schema"]["schema_items"]:
-            table_dict = {
-                "name": table["table_name"],
-                "columns": []
-                }
+            new_table = SchemaTable(
+                name=table["table_name"],
+                columns=[],
+                primary_keys=[],
+                foreign_keys=[]
+            )
             for i, c in enumerate(table["column_names"]):
-                table_dict["columns"].append({
-                    "name": c,
-                    "type": table["column_types"][i]
-                })
-            schema_subset["tables"].append(table_dict)
+                new_table.columns.append(TableColumn(
+                    name=c,
+                    data_type=table["column_types"][i]
+                ))
+            schema_subset.tables.append(new_table)
         return schema_subset
 
 
 
-    def adapt_benchmark_schema(self, schema: dict, question: str) -> dict:
+    def adapt_benchmark_schema(self, schema: Schema, question: str) -> dict:
         schema_dict = {
             "schema": {"foreign_keys": []},
             "text": question,
