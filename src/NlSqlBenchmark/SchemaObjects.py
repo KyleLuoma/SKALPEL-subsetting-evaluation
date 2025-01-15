@@ -25,6 +25,11 @@ class Schema:
         if item_key == "tables":
             return self.tables    
         raise KeyError(item_key)
+    
+
+    def __str__(self):
+        tables_str = "\n  ".join(str(table) for table in self.tables)
+        return f"Schema(database={self.database}, tables=[\n  {tables_str}\n])"
 
 
 
@@ -64,6 +69,14 @@ class SchemaTable:
         if item_key == "foreign_keys":
             return self.foreign_keys
         raise KeyError(item_key)
+    
+
+    def __str__(self):
+        columns_str = ", ".join(str(column) for column in self.columns)
+        primary_keys_str = ", ".join(self.primary_keys)
+        foreign_keys_str = ", ".join(str(fk) for fk in self.foreign_keys)
+        return (f"SchemaTable(name={self.name}, columns=[{columns_str}], "
+                f"primary_keys=[{primary_keys_str}], foreign_keys=[{foreign_keys_str}])")
 
 
 
@@ -96,6 +109,10 @@ class TableColumn:
         if item_key == "type": 
             return self.data_type
         raise KeyError(item_key)
+    
+
+    def __str__(self):
+        return f"TableColumn(name={self.name}, data_type={self.data_type})"
 
 
 
@@ -125,3 +142,7 @@ class ForeignKey:
         if item_key == "references":
             return self.references
         raise KeyError(item_key)
+    
+
+    def __str__(self):
+        return f"ForeignKey(columns={self.columns}, references={self.references})"

@@ -1,21 +1,35 @@
 from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn,
+    ForeignKey
+)
 
 
-test_schema = {
-        "tables": [
-            {
-                "name": "t1", "columns": [{"name": "c1", "type": "int"}],
-                "primary_keys": ["c1"],
-                "foreign_keys": [{"columns": ["c1"], "references": ("t2", ["c2"])}]                
-                },
-            {
-                "name": "t2", "columns": [{"name": "c2", "type": "int"}],
-                "primary_keys": ["c2"],
-                "foreign_keys": []
-                }
+test_schema = Schema(
+        database="test_schema",
+        tables=[
+            SchemaTable(
+                name="t1",
+                columns=[TableColumn(name="c1", data_type="int")],
+                primary_keys=["c1"],
+                foreign_keys=[
+                    ForeignKey(
+                        columns=["c1"],
+                        references=("t2", ["c2"])
+                    )
+                ]
+            ),
+            SchemaTable(
+                name="t2",
+                columns=[TableColumn(name="c2", data_type="int")],
+                primary_keys=["c2"],
+                foreign_keys=[]
+            )
         ]
-    }
+    )
 
 
 din_prompt = """Table customers, columns = [*,CustomerID,Segment,Currency]
@@ -41,33 +55,38 @@ Based on the tables, columns, and Foreign_keys, The set of possible cell values 
 Schema_links: [gasstations.GasStationID,gasstations.Country,products.Description,transactions_1k.GasStationID = gasstations.GasStationID, transactions_1k.ProductID = products.ProductID,'CZE', 'Premium']
 """
 
-    correct_subset = {
-        'tables': [
-            {
-                'name': 'gasstations', 
-                'columns': [
-                    {'name': 'GasStationID', 'type': None}, 
-                    {'name': 'Country', 'type': None}
-                    ], 
-                'primary_keys': [], 
-                'foreign_keys': []
-            }, {
-                'name': 'products', 
-                'columns': [
-                    {'name': 'Description', 'type': None}, 
-                    {'name': 'ProductID', 'type': None}
-                    ], 
-                'primary_keys': [], 
-                'foreign_keys': []
-            }, {
-                'name': 'transactions_1k', 
-                'columns': [
-                    {'name': 'GasStationID', 'type': None}, 
-                    {'name': 'ProductID', 'type': None}
-                    ], 
-                'primary_keys': [], 
-                'foreign_keys': []
-            }]}
+    correct_subset = Schema(
+        database="debit_card_specializing",
+        tables=[
+            SchemaTable(
+                name="gasstations",
+                columns=[
+                    TableColumn(name="GasStationID", data_type=None),
+                    TableColumn(name="Country", data_type=None)
+                ],
+                primary_keys=[],
+                foreign_keys=[]
+            ),
+            SchemaTable(
+                name="products",
+                columns=[
+                    TableColumn(name="Description", data_type=None),
+                    TableColumn(name="ProductID", data_type=None)
+                ],
+                primary_keys=[],
+                foreign_keys=[]
+            ),
+            SchemaTable(
+                name="transactions_1k",
+                columns=[
+                    TableColumn(name="GasStationID", data_type=None),
+                    TableColumn(name="ProductID", data_type=None)
+                ],
+                primary_keys=[],
+                foreign_keys=[]
+            )
+        ]
+    )
 
     din_ss = DinSqlSubsetter(benchmark=BirdNlSqlBenchmark())
 
@@ -77,6 +96,8 @@ Schema_links: [gasstations.GasStationID,gasstations.Country,products.Description
         din_ss.benchmark.get_active_question()["question"], 
         din_ss.benchmark.get_active_schema()
         )
+    print(subset)
+    print(correct_subset)
     return subset == correct_subset
 
 

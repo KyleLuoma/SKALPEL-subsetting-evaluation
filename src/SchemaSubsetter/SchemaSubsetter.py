@@ -3,6 +3,11 @@ Super class for schema subsetting methods we evaluate in the SKALPEL project
 """
 
 from NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn
+)
 
 class SchemaSubsetter:
 
@@ -17,8 +22,8 @@ class SchemaSubsetter:
     def get_schema_subset(
             self, 
             question: str, 
-            full_schema: dict
-            ) -> dict:
+            full_schema: Schema
+            ) -> Schema:
         """
         'Abstract' method for subset generation
 
@@ -26,26 +31,19 @@ class SchemaSubsetter:
         ----------
         question: str
             The NL question to use for determining the required identifiers
-        full_schema: dict
-            Full schema representation comforing to the format:
-                {
-                "database": "",
-                "tables[{
-                    "name": "", 
-                    "columns": [{"name": "", "type": ""}, ...]
-                    }], ...}
+        full_schema: Schema
+            Full schema representation
         """
-        return {
-            "database": "database1",
-            "tables": [
-                {
-                    "name": "table1",
-                    "columns": [
-                        {
-                            "name": "column1",
-                            "type": "int"
-                        }
-                    ]
-                }
+        return Schema(
+            database="database1",
+            tables=[
+                SchemaTable(
+                    name="table1",
+                    columns=[
+                        TableColumn(name="column1", data_type="int")
+                    ],
+                    primary_keys=[],
+                    foreign_keys=[]
+                )
             ]
-        }
+        )

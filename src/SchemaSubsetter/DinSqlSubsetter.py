@@ -1,6 +1,12 @@
 from SchemaSubsetter import SchemaSubsetter
 from SchemaSubsetter.DINSQL import DINSQL
 from NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn,
+    ForeignKey
+)
 import openai
 import json
 import os
@@ -26,9 +32,9 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
     def get_schema_subset(
             self,
             question: str,
-            full_schema: dict,
+            full_schema: Schema,
             print_prompt: bool = False
-    ) -> dict:
+    ) -> Schema:
         prompt = self.schema_linking_prompt_maker(
             question=question,
             schema=full_schema
@@ -52,7 +58,7 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
             schema_links = "[]"
         schema_links = schema_links.replace("[", "").replace("]", "")
         schema_links = schema_links.split(",")
-        schema_subset = {"tables": []}
+        schema_subset = Schema(database=full_schema.database, tables=[])
         added_table_names = set()
         added_column_names = set()
 
@@ -75,26 +81,26 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
                 if table not in added_table_names:
                     added_table_names.add(table)
                     added_column_names.add((table, column))
-                    schema_subset["tables"].append(
-                        {
-                            "name": table, 
-                            "columns": [{"name": column, "type": None}], 
-                            "primary_keys": [], 
-                            "foreign_keys": []
-                        }
+                    schema_subset.tables.append(
+                        SchemaTable(
+                            name=table, 
+                            columns=[TableColumn(name=column, data_type=None)], 
+                            primary_keys=[], 
+                            foreign_keys=[]
+                        )
                     )
                 else:
-                    for ix, subset_table in enumerate(schema_subset["tables"]):
-                        if table == subset_table["name"] and (table, column) not in added_column_names:
+                    for ix, subset_table in enumerate(schema_subset.tables):
+                        if table == subset_table.name and (table, column) not in added_column_names:
                             added_column_names.add((table, column))
                             schema_subset["tables"][ix]["columns"].append(
-                                {"name": column, "type": None}
+                                TableColumn(name=column, data_type=None)
                             )
         return schema_subset
         
 
 
-    def transform_schema_to_dinsql_format(self, schema: dict):
+    def transform_schema_to_dinsql_format(self, schema: Schema) -> str:
         output = ""
         for table in schema["tables"]:
             output += "Table " + table["name"] + ", columns = [*,"
@@ -106,7 +112,7 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
     
 
 
-    def transform_dependencies_to_dinsql_format(self, schema: dict):
+    def transform_dependencies_to_dinsql_format(self, schema: Schema) -> str:
         output = "["
         for table in schema["tables"]:
             for fk in table["foreign_keys"]:
@@ -116,7 +122,7 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
     
 
 
-    def schema_linking_prompt_maker(self, question: str, schema: dict):
+    def schema_linking_prompt_maker(self, question: str, schema: Schema):
         instruction = "# Find the schema_links for generating SQL queries for each question based on the database schema and Foreign keys.\n"
         fields = self.transform_schema_to_dinsql_format(schema=schema)
         foreign_keys = "Foreign_keys = " + "\n"
