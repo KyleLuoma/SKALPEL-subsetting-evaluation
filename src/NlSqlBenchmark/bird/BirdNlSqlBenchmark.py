@@ -1,7 +1,9 @@
-from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 import json
 import sqlite3
 from os.path import dirname, abspath
+
+from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.QueryResult import QueryResult
 
 class BirdNlSqlBenchmark(NlSqlBenchmark):
 
@@ -122,7 +124,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
     
 
 
-    def execute_query(self, query: str, database: str = None, question: int = None) -> dict:
+    def execute_query(self, query: str, database: str = None, question: int = None) -> QueryResult:
         if database == None:
             database = self.databases[self.active_database]
         if question == None:
@@ -146,12 +148,12 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         for i, c in enumerate(columns):
             values = [t[i] for t in result_list]
             result_set_dict[c] = values
-        return {
-            "result_set": result_set_dict,
-            "database": database,
-            "question": question,
-            "error_message": ""
-        }   
+        return QueryResult(
+            result_set=result_set_dict,
+            database=database,
+            question=question,
+            error_message=None
+        )
     
 
     def get_sample_values(self,  table_name: str, column_name: str, database: str = None, num_values: int = 2) -> list:

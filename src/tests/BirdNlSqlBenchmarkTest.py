@@ -1,4 +1,5 @@
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.QueryResult import QueryResult
 
 bird_databases = {
     "debit_card_specializing", 
@@ -28,16 +29,16 @@ def iter_test():
 def execute_query_valid_query_test():
     bird = BirdNlSqlBenchmark()
     query = "SELECT CharterNum, AvgScrWrite, RANK() OVER (ORDER BY AvgScrWrite DESC) AS WritingScoreRank FROM schools AS T1  INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrWrite > 499 AND CharterNum is not null LIMIT 3"
-    correct_result = {
-        "result_set": {
+    correct_result = QueryResult(
+        result_set={
             "CharterNum": ["0210", "0890", "0290"], 
             "AvgScrWrite": [630, 593, 582],
             "WritingScoreRank": [1, 2, 3]
             }, 
-        "database": "california_schools", 
-        "question": 0, 
-        "error_message": ""
-        }
+        database="california_schools", 
+        question=0, 
+        error_message=None
+    )
     res = bird.execute_query(query=query, database="california_schools")
     return res == correct_result
 

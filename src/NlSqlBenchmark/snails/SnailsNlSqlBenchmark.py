@@ -6,6 +6,7 @@ import docker.models
 import docker.models.containers
 
 from NlSqlBenchmark.snails.util import db_util
+from NlSqlBenchmark.QueryResult import QueryResult
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 
 
@@ -112,15 +113,14 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
     
 
 
-    def execute_query(self, query: str, database: str = None, question: int = None) -> dict:
+    def execute_query(self, query: str, database: str = None, question: int = None) -> QueryResult:
         result_set_dict = db_util.do_query(
             query=query,
             database_name=database,
             db_list_file=self.db_info_file
         )
-        return {
-            "result_set": result_set_dict,
-            "database": database,
-            "question": question,
-            "error_message": ""
-        }
+        return QueryResult(
+            result_set = result_set_dict,
+            database = database,
+            question = question
+        )

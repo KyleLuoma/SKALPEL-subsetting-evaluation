@@ -1,3 +1,5 @@
+from NlSqlBenchmark.QueryResult import QueryResult
+
 """
 Super class for all the benchmarks we use in the SKALPEL project to evaluate schema subsetting
 """
@@ -71,7 +73,7 @@ class NlSqlBenchmark:
     
     def execute_query(
             self, query: str, database: str = None, question: int = None
-            ) -> dict:
+            ) -> QueryResult:
         if database == None:
             database = self.databases[self.active_database]
         if question == None:
