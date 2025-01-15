@@ -1,4 +1,5 @@
 from os.path import dirname, abspath
+import time
 
 import docker
 import docker.models
@@ -16,7 +17,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
     def __init__(
             self, 
             db_host_profile="docker",
-            kill_container_on_exit=False
+            kill_container_on_exit=True
             ):
         super().__init__()
         self.benchmark_folder = dirname(dirname(dirname(dirname(abspath(__file__))))) + "/benchmarks/snails"
@@ -69,6 +70,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
         except docker.errors.NotFound:
             print("Container not found, running container for the first time on port 1433.")
             container = client.containers.run("snails-db", ports={1433:1433}, name="skalpel-running-snails", detach=True)
+        time.sleep(3)
         return container
     
 
