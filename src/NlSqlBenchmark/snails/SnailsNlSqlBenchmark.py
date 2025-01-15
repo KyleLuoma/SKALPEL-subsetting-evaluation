@@ -1,16 +1,47 @@
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+import platform
+from os.path import dirname, abspath
+import docker
+
 
 class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
     name = "SNAILS"
     
-    def __init__(self):
+    def __init__(
+            self, 
+            db_host_profile="docker"
+            ):
         super().__init__()
+        self.benchmark_folder = dirname(dirname(dirname(dirname(abspath(__file__))))) + "/benchmarks/snails"
+        if db_host_profile == "docker":
+
+            try:
+                client = docker.from_env()
+                client.images.get('snails-db')
+            except docker.errors.ImageNotFound:
+                print("The 'snails-db' image is not available locally. Please run the install script in the benchmark folder before running the benchmark.")
+                raise
+
+            try:
+                print("Loading Docker container 'skaplel-running-snails'")
+                container = client.containers.get("skalpel-running-snails")
+                container.start()
+            except docker.errors.NotFound:
+                print("Container not found, running container for the first time on port 1433.")
+                client.containers.run("snails-db", ports={1433:1433}, name="skalpel-running-snails", detach=True)
+            self.container = container
+            db_info_file = self.benchmark_folder + "/ms_sql/dbinfo.json"
+
         self.name = "SNAILS"
         self.naturalness = "Native"
         self.syntax = "tsql"
         pass
 
+
+    def __del__(self):
+        print("SnailsNlSqlBenchmark is stopping Docker container 'skalpel-running-snails'")
+        self.container.kill()
 
 
     def __iter__(self):
