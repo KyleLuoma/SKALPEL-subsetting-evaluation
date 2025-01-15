@@ -1,4 +1,11 @@
 from NlSqlBenchmark.QueryResult import QueryResult
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn,
+    ForeignKey
+)
 
 """
 Super class for all the benchmarks we use in the SKALPEL project to evaluate schema subsetting
@@ -38,35 +45,58 @@ class NlSqlBenchmark:
     def __len__(self):
         return 0
         
+        
+    def get_active_question(self) -> BenchmarkQuestion:
+        return BenchmarkQuestion(
+            question=self.active_database_questions[self.active_question_no],
+            query=self.active_database_queries[self.active_question_no],
+            question_number=self.active_question_no,
+            schema=self.get_active_schema()
+        )
 
-
-    def get_active_question(self) -> dict:
-        return {
-            "question": self.active_database_questions[self.active_question_no],
-            "query": self.active_database_queries[self.active_question_no],
-            "question_number": self.active_question_no,
-            "schema": self.get_active_schema()
-        }
     
-    def get_active_schema(self, database: str = None) -> dict:
-        return {
-            "database": self.databases[self.active_database],
-            "tables": [
-                {
-                    "name": "table1",
-                    "columns": [
-                        {
-                            "name": "column1",
-                            "type": "int"
-                        }
+    def get_active_schema(self, database: str = None) -> Schema:
+
+        return Schema(
+            database=self.databases[self.active_database],
+            tables=[
+                SchemaTable(
+                    name="table1",
+                    columns=[
+                        TableColumn(
+                            name="column1",
+                            data_type="int"
+                        )
                     ],
-                    "primary_keys": ["column1"],
-                    "foreign_keys": [
-                        {"columns": ["column1"], "references": ("table1", ["column1"])}
+                    primary_keys=["column1"],
+                    foreign_keys=[
+                        ForeignKey(
+                            columns=["column1"],
+                            references=("table1", ["column1"])
+                        )
                     ]
-                }
+                )
             ]
-        }
+        )
+
+        # return {
+        #     "database": self.databases[self.active_database],
+        #     "tables": [
+        #         {
+        #             "name": "table1",
+        #             "columns": [
+        #                 {
+        #                     "name": "column1",
+        #                     "type": "int"
+        #                 }
+        #             ],
+        #             "primary_keys": ["column1"],
+        #             "foreign_keys": [
+        #                 {"columns": ["column1"], "references": ("table1", ["column1"])}
+        #             ]
+        #         }
+        #     ]
+        # }
     
     def set_active_schema(self, database_name: str) -> None:
         pass

@@ -16,6 +16,8 @@ class QueryResult:
         self.error_message = error_message
 
     def __eq__(self, other):
+        if type(self) != type(other):
+            return False
         return (
             self.result_set == other.result_set
             and self.database == other.database
@@ -32,3 +34,4 @@ class QueryResult:
             return self.question
         if item_key == "error_message":
             return self.error_message
+        raise KeyError(item_key)

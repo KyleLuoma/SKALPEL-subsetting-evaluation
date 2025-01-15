@@ -6,6 +6,11 @@ and all columns for each required table
 from NlSqlBenchmark import NlSqlBenchmark
 from SchemaSubsetter import SchemaSubsetter
 from QueryProfiler import QueryProfiler
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn
+)
 
 class PerfectTableSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
     """
@@ -21,19 +26,20 @@ class PerfectTableSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
 
 
 
-    def get_schema_subset(self, question: str, full_schema: dict) -> dict:
+    def get_schema_subset(self, question: str, full_schema: Schema) -> Schema:
         question_number = self.question_lookup[question]
         correct_query = self.benchmark.active_database_queries[question_number]
         query_identifiers = self.query_profiler.get_identifiers_and_labels(correct_query)
         query_tables = query_identifiers["tables"]
-        query_columns = query_identifiers["columns"]
-        schema_subset = {"tables":[]}
-        for table in full_schema["tables"]:
-            if table["name"].upper() in query_tables:
-                add_table = {
-                    "name": table["name"],
-                    "columns": table["columns"]
-                    }
-                schema_subset["tables"].append(add_table)
+        schema_subset = Schema(database=full_schema.database, tables=[])
+        for table in full_schema.tables:
+            if table.name.upper() in query_tables:
+                add_table = SchemaTable(
+                    name=table.name,
+                    columns=table.columns,
+                    primary_keys=[],
+                    foreign_keys=[]
+                )
+                schema_subset.tables.append(add_table)
         return schema_subset
     

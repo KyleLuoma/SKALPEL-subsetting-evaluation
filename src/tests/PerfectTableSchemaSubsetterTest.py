@@ -1,59 +1,69 @@
 from SchemaSubsetter.PerfectTableSchemaSubsetter import PerfectTableSchemaSubsetter
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn
+)
 
 
 def get_schema_subset_test():
     pss = PerfectTableSchemaSubsetter(benchmark=BirdNlSqlBenchmark())
     pss.benchmark.set_active_schema("california_schools")
-    correct_result = {
-        'tables': [
-        {'name': 'frpm', 
-         'columns': [
-             {'name': 'CDSCode', 'type': 'text'}, 
-             {'name': 'Academic Year', 'type': 'text'}, 
-             {'name': 'County Code', 'type': 'text'}, 
-             {'name': 'District Code', 'type': 'integer'}, 
-             {'name': 'School Code', 'type': 'text'}, 
-             {'name': 'County Name', 'type': 'text'}, 
-             {'name': 'District Name', 'type': 'text'}, 
-             {'name': 'School Name', 'type': 'text'}, 
-             {'name': 'District Type', 'type': 'text'}, 
-             {'name': 'School Type', 'type': 'text'}, 
-             {'name': 'Educational Option Type', 'type': 'text'}, 
-             {'name': 'NSLP Provision Status', 'type': 'text'}, 
-             {'name': 'Charter School (Y/N)', 'type': 'integer'}, 
-             {'name': 'Charter School Number', 'type': 'text'}, 
-             {'name': 'Charter Funding Type', 'type': 'text'}, 
-             {'name': 'IRC', 'type': 'integer'}, 
-             {'name': 'Low Grade', 'type': 'text'}, 
-             {'name': 'High Grade', 'type': 'text'}, 
-             {'name': 'Enrollment (K-12)', 'type': 'real'}, 
-             {'name': 'Free Meal Count (K-12)', 'type': 'real'}, 
-             {'name': 'Percent (%) Eligible Free (K-12)', 'type': 'real'}, 
-             {'name': 'FRPM Count (K-12)', 'type': 'real'}, 
-             {'name': 'Percent (%) Eligible FRPM (K-12)', 'type': 'real'}, 
-             {'name': 'Enrollment (Ages 5-17)', 'type': 'real'}, 
-             {'name': 'Free Meal Count (Ages 5-17)', 'type': 'real'}, 
-             {'name': 'Percent (%) Eligible Free (Ages 5-17)', 'type': 'real'}, 
-             {'name': 'FRPM Count (Ages 5-17)', 'type': 'real'}, 
-             {'name': 'Percent (%) Eligible FRPM (Ages 5-17)', 'type': 'real'}, 
-             {'name': '2013-14 CALPADS Fall 1 Certification Status', 'type': 'integer'}
-            ]
-        }, {
-            'name': 'satscores', 
-            'columns': [
-                {'name': 'cds', 'type': 'text'}, 
-                {'name': 'rtype', 'type': 'text'}, 
-                {'name': 'sname', 'type': 'text'}, 
-                {'name': 'dname', 'type': 'text'}, 
-                {'name': 'cname', 'type': 'text'}, 
-                {'name': 'enroll12', 'type': 'integer'}, 
-                {'name': 'NumTstTakr', 'type': 'integer'}, 
-                {'name': 'AvgScrRead', 'type': 'integer'}, 
-                {'name': 'AvgScrMath', 'type': 'integer'}, 
-                {'name': 'AvgScrWrite', 'type': 'integer'}, 
-                {'name': 'NumGE1500', 'type': 'integer'}
-    ]}]}
+    correct_result = Schema(
+        database="california_schools",
+        tables=[
+            SchemaTable(name='frpm', columns=[
+                TableColumn(name='CDSCode', data_type='text'),
+                TableColumn(name='Academic Year', data_type='text'),
+                TableColumn(name='County Code', data_type='text'),
+                TableColumn(name='District Code', data_type='integer'),
+                TableColumn(name='School Code', data_type='text'),
+                TableColumn(name='County Name', data_type='text'),
+                TableColumn(name='District Name', data_type='text'),
+                TableColumn(name='School Name', data_type='text'),
+                TableColumn(name='District Type', data_type='text'),
+                TableColumn(name='School Type', data_type='text'),
+                TableColumn(name='Educational Option Type', data_type='text'),
+                TableColumn(name='NSLP Provision Status', data_type='text'),
+                TableColumn(name='Charter School (Y/N)', data_type='integer'),
+                TableColumn(name='Charter School Number', data_type='text'),
+                TableColumn(name='Charter Funding Type', data_type='text'),
+                TableColumn(name='IRC', data_type='integer'),
+                TableColumn(name='Low Grade', data_type='text'),
+                TableColumn(name='High Grade', data_type='text'),
+                TableColumn(name='Enrollment (K-12)', data_type='real'),
+                TableColumn(name='Free Meal Count (K-12)', data_type='real'),
+                TableColumn(name='Percent (%) Eligible Free (K-12)', data_type='real'),
+                TableColumn(name='FRPM Count (K-12)', data_type='real'),
+                TableColumn(name='Percent (%) Eligible FRPM (K-12)', data_type='real'),
+                TableColumn(name='Enrollment (Ages 5-17)', data_type='real'),
+                TableColumn(name='Free Meal Count (Ages 5-17)', data_type='real'),
+                TableColumn(name='Percent (%) Eligible Free (Ages 5-17)', data_type='real'),
+                TableColumn(name='FRPM Count (Ages 5-17)', data_type='real'),
+                TableColumn(name='Percent (%) Eligible FRPM (Ages 5-17)', data_type='real'),
+                TableColumn(name='2013-14 CALPADS Fall 1 Certification Status', data_type='integer')
+                ],
+                primary_keys=[],
+                foreign_keys=[]
+            ),
+            SchemaTable(name='satscores', columns=[
+                TableColumn(name='cds', data_type='text'),
+                TableColumn(name='rtype', data_type='text'),
+                TableColumn(name='sname', data_type='text'),
+                TableColumn(name='dname', data_type='text'),
+                TableColumn(name='cname', data_type='text'),
+                TableColumn(name='enroll12', data_type='integer'),
+                TableColumn(name='NumTstTakr', data_type='integer'),
+                TableColumn(name='AvgScrRead', data_type='integer'),
+                TableColumn(name='AvgScrMath', data_type='integer'),
+                TableColumn(name='AvgScrWrite', data_type='integer'),
+                TableColumn(name='NumGE1500', data_type='integer')
+                ],
+                primary_keys=[],
+                foreign_keys=[]
+            )
+    ])
     result = pss.get_schema_subset(
         question="What is the number of SAT test takers of the schools with the highest FRPM count for K-12 students?",
         full_schema=pss.benchmark.get_active_schema()

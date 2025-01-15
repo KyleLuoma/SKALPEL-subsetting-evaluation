@@ -1,5 +1,12 @@
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 from NlSqlBenchmark.QueryResult import QueryResult
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn,
+    ForeignKey
+)
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 
 bird_databases = {
     "debit_card_specializing", 
@@ -47,12 +54,12 @@ def execute_query_valid_query_test():
 def execute_query_syntax_error_test():
     bird = BirdNlSqlBenchmark()
     query = "SELECT ChartnerNum FORM schools"
-    correct_result = {
-        "result_set": None, 
-        "database": None, 
-        "question": None, 
-        "error_message": 'near "schools": syntax error'
-        }
+    correct_result = QueryResult(
+        result_set=None, 
+        database=None, 
+        question=None, 
+        error_message='near "schools": syntax error'
+    )
     res = bird.execute_query(query=query, database="california_schools")
     return res == correct_result
 
@@ -67,8 +74,6 @@ def set_and_get_active_schema_test():
     #         print(k, ":", t[k])
     pass_test = True
     pass_test = (len(s_data["tables"]) == 3)
-    for t in s_data["tables"]:
-        pass_test = (set(t.keys()) == {"name", "columns", "primary_keys", "foreign_keys"})
     return pass_test
     
 
@@ -76,73 +81,74 @@ def set_and_get_active_schema_test():
 def get_active_question_test():
     bird = BirdNlSqlBenchmark()
     result = bird.get_active_question()
-    return result == {
-        "question": "How many gas stations in CZE has Premium gas?", 
-        "query": "SELECT COUNT(GasStationID) FROM gasstations WHERE Country = 'CZE' AND Segment = 'Premium'", 
-        "question_number": 0,
-        'schema': {
-            'database': "debit_card_specializing",
-            'tables': [
-                {
-                    'name': 'customers', 
-                    'columns': [
-                        {'name': 'CustomerID', 'type': 'integer'}, 
-                        {'name': 'Segment', 'type': 'text'}, 
-                        {'name': 'Currency', 'type': 'text'}
-                        ], 
-                    'primary_keys': [['CustomerID']], 
-                    'foreign_keys': []
-                    }, 
-                {
-                    'name': 'gasstations', 
-                    'columns': [
-                        {'name': 'GasStationID', 'type': 'integer'}, 
-                        {'name': 'ChainID', 'type': 'integer'}, 
-                        {'name': 'Country', 'type': 'text'}, 
-                        {'name': 'Segment', 'type': 'text'}
-                        ], 
-                    'primary_keys': [['GasStationID']], 
-                    'foreign_keys': []
-                    }, 
-                {
-                    'name': 'products', 
-                    'columns': [
-                        {'name': 'ProductID', 'type': 'integer'}, 
-                        {'name': 'Description', 'type': 'text'}
-                        ], 
-                    'primary_keys': [['ProductID']], 
-                    'foreign_keys': []
-                    }, 
-                {
-                    'name': 'transactions_1k', 
-                    'columns': [
-                        {'name': 'TransactionID', 'type': 'integer'}, 
-                        {'name': 'Date', 'type': 'date'}, 
-                        {'name': 'Time', 'type': 'text'}, 
-                        {'name': 'CustomerID', 'type': 'integer'}, 
-                        {'name': 'CardID', 'type': 'integer'}, 
-                        {'name': 'GasStationID', 'type': 'integer'}, 
-                        {'name': 'ProductID', 'type': 'integer'}, 
-                        {'name': 'Amount', 'type': 'integer'}, 
-                        {'name': 'Price', 'type': 'real'}
-                        ], 
-                    'primary_keys': [['TransactionID']], 
-                    'foreign_keys': []
-                    }, 
-                {
-                    'name': 'yearmonth', 
-                    'columns': [
-                        {'name': 'CustomerID', 'type': 'integer'}, 
-                        {'name': 'Date', 'type': 'text'}, 
-                        {'name': 'Consumption', 'type': 'real'}
-                        ], 
-                    'primary_keys': [['CustomerID', 'Date']], 
-                    'foreign_keys': [{'columns': ['CustomerID'], 'references': ('customers', ['CustomerID'])}]
-                    }
-                ]
-            }
-        }
-
+    return result == BenchmarkQuestion(
+        question="How many gas stations in CZE has Premium gas?",
+        query="SELECT COUNT(GasStationID) FROM gasstations WHERE Country = 'CZE' AND Segment = 'Premium'",
+        question_number=0,
+        schema=Schema(
+            database="debit_card_specializing",
+            tables=[
+                SchemaTable(
+                    name="customers",
+                    columns=[
+                        TableColumn(name="CustomerID", data_type="integer"),
+                        TableColumn(name="Segment", data_type="text"),
+                        TableColumn(name="Currency", data_type="text")
+                    ],
+                    primary_keys=[["CustomerID"]],
+                    foreign_keys=[]
+                ),
+                SchemaTable(
+                    name="gasstations",
+                    columns=[
+                        TableColumn(name="GasStationID", data_type="integer"),
+                        TableColumn(name="ChainID", data_type="integer"),
+                        TableColumn(name="Country", data_type="text"),
+                        TableColumn(name="Segment", data_type="text")
+                    ],
+                    primary_keys=[["GasStationID"]],
+                    foreign_keys=[]
+                ),
+                SchemaTable(
+                    name="products",
+                    columns=[
+                        TableColumn(name="ProductID", data_type="integer"),
+                        TableColumn(name="Description", data_type="text")
+                    ],
+                    primary_keys=[["ProductID"]],
+                    foreign_keys=[]
+                ),
+                SchemaTable(
+                    name="transactions_1k",
+                    columns=[
+                        TableColumn(name="TransactionID", data_type="integer"),
+                        TableColumn(name="Date", data_type="date"),
+                        TableColumn(name="Time", data_type="text"),
+                        TableColumn(name="CustomerID", data_type="integer"),
+                        TableColumn(name="CardID", data_type="integer"),
+                        TableColumn(name="GasStationID", data_type="integer"),
+                        TableColumn(name="ProductID", data_type="integer"),
+                        TableColumn(name="Amount", data_type="integer"),
+                        TableColumn(name="Price", data_type="real")
+                    ],
+                    primary_keys=[["TransactionID"]],
+                    foreign_keys=[]
+                ),
+                SchemaTable(
+                    name="yearmonth",
+                    columns=[
+                        TableColumn(name="CustomerID", data_type="integer"),
+                        TableColumn(name="Date", data_type="text"),
+                        TableColumn(name="Consumption", data_type="real")
+                    ],
+                    primary_keys=[["CustomerID", "Date"]],
+                    foreign_keys=[
+                        ForeignKey(columns=["CustomerID"], references=("customers", ["CustomerID"]))
+                    ]
+                )
+            ]
+        )
+    )
 
 
 def get_sample_values_test():

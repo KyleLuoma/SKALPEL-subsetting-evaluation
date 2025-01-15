@@ -3,6 +3,11 @@ This class of schema subsetter will return the perfect subset (i.e., recall = pr
 """
 
 from NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn
+)
 from SchemaSubsetter import SchemaSubsetter
 from QueryProfiler import QueryProfiler
 
@@ -21,24 +26,26 @@ class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
 
 
 
-    def get_schema_subset(self, question: str, full_schema: dict) -> dict:
+    def get_schema_subset(self, question: str, full_schema: Schema) -> Schema:
         question_number = self.question_lookup[question]
         self.benchmark.set_active_schema(full_schema["database"])
         correct_query = self.benchmark.active_database_queries[question_number]
         query_identifiers = self.query_profiler.get_identifiers_and_labels(correct_query)
         query_tables = query_identifiers["tables"]
         query_columns = query_identifiers["columns"]
-        schema_subset = {"tables":[]}
-        for table in full_schema["tables"]:
-            if table["name"].upper() in query_tables:
-                add_table = {
-                    "name": table["name"],
-                    "columns": []
-                    }
-                for column in table["columns"]:
-                    if column["name"].upper() in query_columns:
-                        add_table["columns"].append(column)
-                schema_subset["tables"].append(add_table)
+        schema_subset = Schema(database=full_schema.database, tables=[])
+        for table in full_schema.tables:
+            if table.name.upper() in query_tables:
+                add_table = SchemaTable(
+                    name=table.name,
+                    columns=[],
+                    primary_keys=[],
+                    foreign_keys=[]
+                )
+                for column in table.columns:
+                    if column.name.upper() in query_columns:
+                        add_table.columns.append(column)
+                schema_subset.tables.append(add_table)
         return schema_subset
     
 

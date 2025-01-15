@@ -1,4 +1,11 @@
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn,
+    ForeignKey
+)
 
 def iter_test():
     bm = NlSqlBenchmark()
@@ -35,44 +42,45 @@ def get_active_question_test():
         "SELECT C FROM THREE"
     ]
     result = bm.get_active_question()
-    return result == {
-        "question": "a", 
-        "query": "SELECT A FROM ONE", 
-        "question_number": 0,
-        "schema": {
-            "database": "one",
-            "tables": [
-                {
-                    "name": "table1", 
-                    "columns": [{"name": "column1", "type": "int"}], 
-                    "primary_keys": ["column1"], 
-                    "foreign_keys": [{
-                        "columns": ["column1"], 
-                        "references": ("table1", ["column1"])
-                        }]
-                    }
-                ]
-            }
-        }
+    return result == BenchmarkQuestion(
+        question="a", 
+        query="SELECT A FROM ONE", 
+        question_number=0,
+        schema=Schema(
+            database="one",
+            tables=[
+                SchemaTable(
+                    name="table1", 
+                    columns=[TableColumn(name="column1", data_type="int")], 
+                    primary_keys=["column1"], 
+                    foreign_keys=[ForeignKey(columns=["column1"], references=("table1", ["column1"]))]
+                )
+            ]
+        )
+    )
 
 
 def get_active_schema_test():
     bm = NlSqlBenchmark()
-    return bm.get_active_schema() == {
-            "database": "database1",
-            "tables": [
-                {
-                    "name": "table1",
-                    "columns": [
-                        {
-                            "name": "column1",
-                            "type": "int"
-                        }
+    return bm.get_active_schema() == Schema(
+            database="database1",
+            tables=[
+                SchemaTable(
+                    name="table1",
+                    columns=[
+                        TableColumn(
+                            name="column1",
+                            data_type="int"
+                        )
                     ],
-                    "primary_keys": ["column1"],
-                    "foreign_keys": [
-                        {"columns": ["column1"], "references": ("table1", ["column1"])}
+                    primary_keys=["column1"],
+                    foreign_keys=[
+                        ForeignKey(
+                            columns=["column1"],
+                            references=("table1", ["column1"])
+                        )
                     ]
-                }
+                )
             ]
-        }
+        )
+
