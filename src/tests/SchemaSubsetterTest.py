@@ -4,13 +4,17 @@ from NlSqlBenchmark.SchemaObjects import (
     SchemaTable,
     TableColumn
 )
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+
 
 def get_schema_subset_test():
     ss = SchemaSubsetter.SchemaSubsetter(benchmark=None)
-    result = ss.get_schema_subset(
-        question="why foo bar?",
-        full_schema={}
-    )
+    result = ss.get_schema_subset(BenchmarkQuestion(
+        question="Why foo bar?",
+        schema=Schema(database="foo", tables=[]),
+        question_number=0,
+        query=""
+    ))
     return result == Schema(
             database="database1",
             tables=[
