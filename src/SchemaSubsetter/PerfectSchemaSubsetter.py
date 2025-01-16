@@ -8,6 +8,7 @@ from NlSqlBenchmark.SchemaObjects import (
     SchemaTable,
     TableColumn
 )
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 from SchemaSubsetter import SchemaSubsetter
 from QueryProfiler import QueryProfiler
 
@@ -26,7 +27,10 @@ class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
 
 
 
-    def get_schema_subset(self, question: str, full_schema: Schema) -> Schema:
+    def get_schema_subset(self, benchmark_question: BenchmarkQuestion) -> Schema:
+        question = benchmark_question.question
+        full_schema = benchmark_question.schema
+        
         question_number = self.question_lookup[question]
         self.benchmark.set_active_schema(full_schema["database"])
         correct_query = self.benchmark.active_database_queries[question_number]

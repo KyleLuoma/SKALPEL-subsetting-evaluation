@@ -4,6 +4,7 @@ from os.path import dirname, abspath
 
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from NlSqlBenchmark.QueryResult import QueryResult
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
     SchemaTable,
@@ -48,7 +49,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
 
 
 
-    def get_active_question(self) -> dict:
+    def get_active_question(self) -> BenchmarkQuestion:
         return super().get_active_question()
 
 

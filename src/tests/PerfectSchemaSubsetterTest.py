@@ -5,6 +5,7 @@ from NlSqlBenchmark.SchemaObjects import (
     SchemaTable,
     TableColumn
 )
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 
 
 def get_schema_subset_test():
@@ -25,10 +26,12 @@ def get_schema_subset_test():
                 )
         ]
     )
-    result = pss.get_schema_subset(
+    result = pss.get_schema_subset(BenchmarkQuestion(
         question="What is the highest eligible free rate for K-12 students in the schools in Alameda County?",
-        full_schema=pss.benchmark.get_active_schema()
-        )
+        query="SELECT...",
+        question_number=0,
+        schema=pss.benchmark.get_active_schema()
+    ))
     return result == correct_result
 
 

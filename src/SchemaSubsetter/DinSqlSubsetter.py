@@ -7,6 +7,8 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn,
     ForeignKey
 )
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+
 import openai
 import json
 import os
@@ -31,13 +33,12 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
 
     def get_schema_subset(
             self,
-            question: str,
-            full_schema: Schema,
+            benchmark_question: BenchmarkQuestion,
             print_prompt: bool = False
     ) -> Schema:
         prompt = self.schema_linking_prompt_maker(
-            question=question,
-            schema=full_schema
+            question=benchmark_question.question,
+            schema=benchmark_question.schema
         )
         if print_prompt:
             print("---- Subsetting prompt ----")
@@ -58,7 +59,7 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
             schema_links = "[]"
         schema_links = schema_links.replace("[", "").replace("]", "")
         schema_links = schema_links.split(",")
-        schema_subset = Schema(database=full_schema.database, tables=[])
+        schema_subset = Schema(database=benchmark_question.schema.database, tables=[])
         added_table_names = set()
         added_column_names = set()
 

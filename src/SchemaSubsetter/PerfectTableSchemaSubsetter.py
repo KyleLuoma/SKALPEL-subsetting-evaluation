@@ -11,6 +11,8 @@ from NlSqlBenchmark.SchemaObjects import (
     SchemaTable,
     TableColumn
 )
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+
 
 class PerfectTableSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
     """
@@ -26,13 +28,13 @@ class PerfectTableSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
 
 
 
-    def get_schema_subset(self, question: str, full_schema: Schema) -> Schema:
-        question_number = self.question_lookup[question]
+    def get_schema_subset(self, benchmark_question: BenchmarkQuestion) -> Schema:
+        question_number = self.question_lookup[benchmark_question.question]
         correct_query = self.benchmark.active_database_queries[question_number]
         query_identifiers = self.query_profiler.get_identifiers_and_labels(correct_query)
         query_tables = query_identifiers["tables"]
-        schema_subset = Schema(database=full_schema.database, tables=[])
-        for table in full_schema.tables:
+        schema_subset = Schema(database=benchmark_question.schema.database, tables=[])
+        for table in benchmark_question.schema.tables:
             if table.name.upper() in query_tables:
                 add_table = SchemaTable(
                     name=table.name,

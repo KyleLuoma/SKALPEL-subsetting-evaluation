@@ -4,6 +4,14 @@ Class for evaluating a schema subset against the schema identifiers required for
 
 from SchemaSubsetter.PerfectSchemaSubsetter import PerfectSchemaSubsetter
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+from SubsetEvaluation import SubsetEvaluation
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn,
+    ForeignKey
+)
 
 class SchemaSubsetEvaluator:
 
@@ -15,17 +23,13 @@ class SchemaSubsetEvaluator:
 
     def evaluate_schema_subset(
             self,
-            predicted_schema_subset: dict,
-            question: str,
-            full_schema: dict
-            ) -> dict:
+            predicted_schema_subset: Schema,
+            question: BenchmarkQuestion
+            ) -> SubsetEvaluation:
         
         subsetter = PerfectSchemaSubsetter(self.benchmark)
-        
-        correct_schema_subset = subsetter.get_schema_subset(
-            question=question,
-            full_schema=full_schema
-        )
+                
+        correct_schema_subset = subsetter.get_schema_subset(benchmark_question=question)
 
         all_correct_tables = {table["name"] for table in correct_schema_subset["tables"]}
         all_predicted_tables = {table["name"] for table in predicted_schema_subset["tables"]}
@@ -43,85 +47,85 @@ class SchemaSubsetEvaluator:
 
         # print(subset_identifiers)
 
-        return {
-            "total_recall": self.recall(
+        return SubsetEvaluation(
+            total_recall=self.recall(
                 correct=subset_identifiers["correct"]["tables"].union(subset_identifiers["correct"]["columns"]),
                 predicted=subset_identifiers["predicted"]["tables"].union(subset_identifiers["predicted"]["columns"])
                 ),
-            "total_precision": self.precision(
+            total_precision=self.precision(
                 correct=subset_identifiers["correct"]["tables"].union(subset_identifiers["correct"]["columns"]),
                 predicted=subset_identifiers["predicted"]["tables"].union(subset_identifiers["predicted"]["columns"])
                 ),
-            "total_f1": self.f1(
+            total_f1=self.f1(
                 correct=subset_identifiers["correct"]["tables"].union(subset_identifiers["correct"]["columns"]),
                 predicted=subset_identifiers["predicted"]["tables"].union(subset_identifiers["predicted"]["columns"])
                 ),
-            "table_recall": self.recall(
+            table_recall=self.recall(
                 correct=subset_identifiers["correct"]["tables"],
                 predicted=subset_identifiers["predicted"]["tables"]
                 ),
-            "table_precision": self.precision(
+            table_precision=self.precision(
                 correct=subset_identifiers["correct"]["tables"],
                 predicted=subset_identifiers["predicted"]["tables"]
                 ),
-            "table_f1": self.f1(
+            table_f1=self.f1(
                 correct=subset_identifiers["correct"]["tables"],
                 predicted=subset_identifiers["predicted"]["tables"]
                 ),
-            "column_recall": self.recall(
+            column_recall=self.recall(
                 correct=subset_identifiers["correct"]["columns"],
                 predicted=subset_identifiers["predicted"]["columns"]
                 ),
-            "column_precision": self.precision(
+            column_precision=self.precision(
                 correct=subset_identifiers["correct"]["columns"],
                 predicted=subset_identifiers["predicted"]["columns"]
                 ),
-            "column_f1": self.f1(
+            column_f1=self.f1(
                 correct=subset_identifiers["correct"]["columns"],
                 predicted=subset_identifiers["predicted"]["columns"]
                 ),
-            "correct_tables": self.correct_identifiers(
+            correct_tables=self.correct_identifiers(
                 correct=subset_identifiers["correct"]["tables"],
                 predicted=subset_identifiers["predicted"]["tables"]
             ),
-            "missing_tables": self.missing_identifiers(
+            missing_tables=self.missing_identifiers(
                 correct=subset_identifiers["correct"]["tables"],
                 predicted=subset_identifiers["predicted"]["tables"]
             ),
-            "extra_tables": self.extra_identifiers(
+            extra_tables=self.extra_identifiers(
                 correct=subset_identifiers["correct"]["tables"],
                 predicted=subset_identifiers["predicted"]["tables"]
             ),
-            "correct_columns": self.correct_identifiers(
+            correct_columns=self.correct_identifiers(
                 correct=subset_identifiers["correct"]["columns"],
                 predicted=subset_identifiers["predicted"]["columns"]
             ),
-            "missing_columns": self.missing_identifiers(
+            missing_columns=self.missing_identifiers(
                 correct=subset_identifiers["correct"]["columns"],
                 predicted=subset_identifiers["predicted"]["columns"]
             ),
-            "extra_columns": self.extra_identifiers(
+            extra_columns=self.extra_identifiers(
                 correct=subset_identifiers["correct"]["columns"],
                 predicted=subset_identifiers["predicted"]["columns"]
             ),
-            "subset_table_proportion": self.table_proportion(
-                predicted_schema=predicted_schema_subset, full_schema=full_schema
+            subset_table_proportion=self.table_proportion(
+                predicted_schema=predicted_schema_subset, full_schema=question.schema
             ),
-            "subset_column_proportion": self.column_proportion(
-                predicted_schema=predicted_schema_subset, full_schema=full_schema
+            subset_column_proportion=self.column_proportion(
+                predicted_schema=predicted_schema_subset, full_schema=question.schema
             )
-        }
+        )
     
 
 
-    def table_proportion(self, predicted_schema: dict, full_schema: dict) -> float:
+    def table_proportion(self, predicted_schema: Schema, full_schema: Schema) -> float:
         num_tables_full = len(full_schema["tables"])
         num_tables_predicted = len(predicted_schema["tables"])
         return num_tables_predicted / num_tables_full
     
 
 
-    def column_proportion(self, predicted_schema: dict, full_schema: dict) -> float:
+    def column_proportion(self, predicted_schema: Schema, full_schema: Schema) -> float:
         full_schema_count = 0
         for table in full_schema["tables"]:
             full_schema_count += len(table["columns"])

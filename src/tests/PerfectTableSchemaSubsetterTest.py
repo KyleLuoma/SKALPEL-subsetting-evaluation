@@ -5,6 +5,7 @@ from NlSqlBenchmark.SchemaObjects import (
     SchemaTable,
     TableColumn
 )
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 
 
 def get_schema_subset_test():
@@ -64,8 +65,10 @@ def get_schema_subset_test():
                 foreign_keys=[]
             )
     ])
-    result = pss.get_schema_subset(
+    result = pss.get_schema_subset(BenchmarkQuestion(
         question="What is the number of SAT test takers of the schools with the highest FRPM count for K-12 students?",
-        full_schema=pss.benchmark.get_active_schema()
-        )
+        query="SELECT...",
+        question_number=0,
+        schema=pss.benchmark.get_active_schema()
+    ))
     return result == correct_result

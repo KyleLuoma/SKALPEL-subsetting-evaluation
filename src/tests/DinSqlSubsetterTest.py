@@ -6,6 +6,8 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn,
     ForeignKey
 )
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+
 
 
 test_schema = Schema(
@@ -93,8 +95,7 @@ Schema_links: [gasstations.GasStationID,gasstations.Country,products.Description
     din_ss.GPT4_generation = mock_GPT4_generation
 
     subset = din_ss.get_schema_subset(
-        din_ss.benchmark.get_active_question()["question"], 
-        din_ss.benchmark.get_active_schema()
+        benchmark_question=din_ss.benchmark.get_active_question()
         )
     return subset == correct_subset
 

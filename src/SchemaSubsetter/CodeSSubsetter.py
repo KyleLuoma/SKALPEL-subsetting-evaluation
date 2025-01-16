@@ -7,6 +7,7 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn,
     ForeignKey
 )
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 from SchemaSubsetter.CodeS.schema_item_filter import SchemaItemClassifierInference
 
 
@@ -25,15 +26,15 @@ class CodeSSubsetter(SchemaSubsetter):
 
 
 
-    def get_schema_subset(self, question: str, full_schema: Schema) -> Schema:
-        codes_compat_dataset = self.adapt_benchmark_schema(full_schema, question)
-        codes_compat_dataset[0]["text"] = question
+    def get_schema_subset(self, benchmark_question: BenchmarkQuestion) -> Schema:
+        codes_compat_dataset = self.adapt_benchmark_schema(benchmark_question.schema, benchmark_question.question)
+        codes_compat_dataset[0]["text"] = benchmark_question.question
         codes_filtered = self.filter_schema(
             dataset=codes_compat_dataset,
             dataset_type="eval",
             sic=self.sic
         )
-        schema_subset = Schema(database=full_schema.database, tables=[])
+        schema_subset = Schema(database=benchmark_question.schema.database, tables=[])
         for table in codes_filtered[0]["schema"]["schema_items"]:
             new_table = SchemaTable(
                 name=table["table_name"],
