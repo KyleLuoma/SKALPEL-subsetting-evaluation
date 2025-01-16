@@ -6,6 +6,8 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn,
     ForeignKey
 )
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+
 
 """
 Super class for all the benchmarks we use in the SKALPEL project to evaluate schema subsetting
@@ -27,7 +29,7 @@ class NlSqlBenchmark:
     def __iter__(self):
         return self
 
-    def __next__(self):
+    def __next__(self) -> BenchmarkQuestion:
         if self.active_question_no >= len(self.active_database_questions):
             self.active_database += 1
             if self.active_database >= len(self.databases):

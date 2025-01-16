@@ -124,3 +124,25 @@ class SubsetEvaluation:
             "subset_table_proportion": self.subset_table_proportion,
             "subset_column_proportion": self.subset_column_proportion
         })
+    
+
+    def keys(self):
+        return [
+            "total_recall",
+            "total_precision",
+            "total_f1",
+            "table_recall",
+            "table_precision",
+            "table_f1",
+            "column_recall",
+            "column_precision",
+            "column_f1",
+            "correct_tables",
+            "missing_tables",
+            "extra_tables",
+            "correct_columns",
+            "missing_columns",
+            "extra_columns",
+            "subset_table_proportion",
+            "subset_column_proportion"
+        ]

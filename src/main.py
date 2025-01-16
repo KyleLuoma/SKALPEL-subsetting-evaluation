@@ -36,8 +36,7 @@ def main():
         print("--- Running subsetter ---")
         t_start = time.perf_counter()
         subset = subsetter.get_schema_subset(
-            question=question["question"],
-            full_schema=question["schema"]
+            benchmark_question=question
         )
         t_end = time.perf_counter()
         results["database"].append(question["schema"]["database"])
@@ -47,9 +46,8 @@ def main():
         print(subset)
         print("--- Running evaluator ---")
         scores = evaluator.evaluate_schema_subset(
-            subset,
-            question["question"],
-            question["schema"]
+            predicted_schema_subset=subset,
+            question=question
         )
         for k in scores.keys():
             if k not in results.keys():
@@ -59,7 +57,7 @@ def main():
         if test and test_counter > 5:
             break
     results_df = pd.DataFrame(results)
-    filename_comments = "NVIDIA_RTX_2000"
+    filename_comments = "NVIDIA_RTX_2000-new_objects_test"
     results_df.to_excel(
         f"./subsetting_results/subsetting-{subsetter.name}-{benchmark.name}-{filename_comments}.xlsx",
         index=False
