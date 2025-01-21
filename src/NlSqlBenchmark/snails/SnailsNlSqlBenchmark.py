@@ -5,9 +5,17 @@ import docker
 import docker.models
 import docker.models.containers
 
-from NlSqlBenchmark.snails.util import db_util
+from NlSqlBenchmark.snails.util import db_util, load_nl_questions
 from NlSqlBenchmark.QueryResult import QueryResult
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn,
+    ForeignKey
+)
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+
 
 
 
@@ -27,12 +35,28 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
         if db_host_profile == "docker":
             self.container = self._init_docker()
             self.db_info_file = self.benchmark_folder + "/ms_sql/dbinfo.json"
-            
-        
         self.name = "SNAILS"
         self.naturalness = "Native"
         self.syntax = "tsql"
-        pass
+        self.databases = [
+            "ASIS_20161108_HerpInv_Database",
+            "ATBI",
+            "CratersWildlifeObservations",
+            "KlamathInvasiveSpecies",
+            "NorthernPlainsFireManagement",
+            "NTSB",
+            "NYSED_SRC2022",
+            "PacificIslandLandbirds",
+            "SBODemoUS"
+        ]
+        self.schema_cache = {}
+        for db in self.databases:
+            self.schema_cache[db] = self._load_schema(database_name=db)
+        self.active_database_questions = self.__load_active_database_questions()
+        self.active_database_queries = self.__load_active_database_queries()
+        
+
+        
 
 
     def __del__(self):
@@ -47,6 +71,14 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
 
     def __next__(self):
+        if self.active_question_no >= len(self.active_database_questions):
+            self.active_database += 1
+            self.active_question_no = 0
+            if self.active_database >= len(self.databases):
+                self.__init__()
+                raise StopIteration
+            self.active_database_questions = self.__load_active_database_questions()
+            self.active_database_queries = self.__load_active_database_queries()
         question = self.get_active_question()
         self.active_question_no += 1
         return question
@@ -55,6 +87,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
     def __len__(self):
         return 0
+
     
 
     def _init_docker(self) -> docker.models.containers.Container:    
@@ -74,6 +107,135 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
         time.sleep(3)
         return container
     
+
+
+    def _load_schema(
+            self, 
+            database_name: str
+            ) -> Schema:
+        schema_name = "dbo"
+        if self.naturalness == "Regular":
+            schema_name = "Regular_Naturalness"
+        elif self.naturalness == "Low":
+            schema_name = "Low_Naturalness"
+        elif self.naturalness == "Least":
+            schema_name = "Least_Naturalness"
+
+        schema = Schema(database=database_name, tables=[])
+            
+        tables_and_columns = db_util.get_tables_and_columns_from_sql_server_db(
+            db_name=database_name,
+            schema=schema_name,
+            db_list_file=self.db_info_file
+            )
+
+        pk_lookup, fk_lookup = self._make_pk_fk_lookups(database_name=database_name)
+
+        for table in tables_and_columns:
+            if table in pk_lookup:
+                pk_list = pk_lookup[table]
+            else:
+                pk_list = []
+            if table in fk_lookup:
+                fk_list = fk_lookup[table]
+            else:
+                fk_list = []
+            schema_table = SchemaTable(
+                name=table,
+                columns=[],
+                primary_keys=pk_list,
+                foreign_keys=fk_list
+            )
+            for column in tables_and_columns[table]:
+                schema_table.columns.append(
+                    TableColumn(name=column.split(" ")[0], data_type=column.split(" ")[1])
+                )
+            schema.tables.append(schema_table)
+        return schema
+
+
+
+    def _make_pk_fk_lookups(self, database_name: str) -> (dict, dict):
+        with open(f"./src/NlSqlBenchmark/snails/util/get_fk_pk_from_mssql.sql", "r") as f:
+            pk_fk_query = f.read()
+
+        pk_fk = db_util.do_query(
+            query=pk_fk_query,
+            database_name=database_name,
+            db_list_file=self.db_info_file
+        )
+
+        pk_lookup = {}
+        fk_lookup = {}
+
+        for i in range(0, len(pk_fk["pk_table"])):
+            pk_table = pk_fk["pk_table"][i]
+            if pk_table not in pk_lookup:
+                pk_lookup[pk_table] = [pk_fk["pk_column"][i]]
+            elif pk_fk["pk_column"][i] not in pk_lookup[pk_table]:
+                pk_lookup[pk_table].append(pk_fk["pk_column"][i])
+            fk_table = pk_fk["fk_table"][i]
+            if fk_table not in fk_lookup:
+                fk_lookup[fk_table] = [ForeignKey(
+                    columns=[pk_fk["fk_column"][i]], references=(pk_fk["pk_table"][i], pk_fk["pk_column"][i])
+                    )]
+            else:
+                fk_lookup[fk_table].append(ForeignKey(
+                    columns=[pk_fk["fk_column"][i]], references=(pk_fk["pk_table"][i], pk_fk["pk_column"][i])
+                    ))
+
+        return pk_lookup, fk_lookup
+
+
+    def __load_active_database_questions(self) -> list:
+        db_name = self.databases[self.active_database]
+        if "SBODemoUS" not in db_name:
+            qnl_dict = load_nl_questions.load_nlq_into_df(
+                filename=f"{self.databases[self.active_database]}_{self.naturalness}.sql",
+                filepath=self.benchmark_folder + "/nlq_sql/tsql/"
+                )
+            return qnl_dict["question"]
+        else:
+            questions, queries = self._load_and_consolidate_sbodemo()
+            return questions
+    
+
+    def __load_active_database_queries(self) -> list:
+        db_name = self.databases[self.active_database]
+        if "SBODemoUS" not in db_name:
+            qnl_dict = load_nl_questions.load_nlq_into_df(
+                filename=f"{self.databases[self.active_database]}_{self.naturalness}.sql",
+                filepath=self.benchmark_folder + "/nlq_sql/tsql/"
+                )
+            return qnl_dict["query_gold"]
+        else:
+            questions, queries = self._load_and_consolidate_sbodemo()
+            return queries
+
+
+    def _load_and_consolidate_sbodemo(self) -> (list, list):
+        modules = [
+            "SBODemoUS-Banking",
+            "SBODemoUS-Business Partners",
+            "SBODemoUS-Finance",
+            "SBODemoUS-General",
+            "SBODemoUS-Human Resources",
+            "SBODemoUS-Inventory and Production",
+            "SBODemoUS-Reports",
+            "SBODemoUS-Sales Opportunities",
+            "SBODemoUS-Service"
+        ]
+        questions = []
+        queries = []
+        for module in modules:
+            qnl_dict = load_nl_questions.load_nlq_into_df(
+                filename=f"{module}_{self.naturalness}.sql",
+                filepath=self.benchmark_folder + "/nlq_sql/tsql/"
+            )
+            questions += qnl_dict["question"]
+            queries += qnl_dict["query_gold"]
+        return questions, queries
+
 
     def set_naturalness(self, naturalness: str) -> None:
         """
@@ -103,22 +265,32 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
     
 
 
-    def get_active_question(self) -> dict:
+    def get_active_question(self) -> BenchmarkQuestion:
         return super().get_active_question()
     
 
 
-    def get_active_schema(self, database: str = None) -> dict:
-        return super().get_active_schema(database)
-    
+    def get_active_schema(self, database: str = None) -> Schema:
+        if database != None:
+            return self.schema_cache[database]
+        else:
+            return self.schema_cache[self.databases[self.active_database]]
 
 
     def execute_query(self, query: str, database: str = None, question: int = None) -> QueryResult:
-        result_set_dict = db_util.do_query(
-            query=query,
-            database_name=database,
-            db_list_file=self.db_info_file
-        )
+        try:
+            result_set_dict = db_util.do_query(
+                query=query,
+                database_name=database,
+                db_list_file=self.db_info_file
+            )
+        except db_util.pyodbc.ProgrammingError as e:
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message=str(e)
+            )
         return QueryResult(
             result_set = result_set_dict,
             database = database,

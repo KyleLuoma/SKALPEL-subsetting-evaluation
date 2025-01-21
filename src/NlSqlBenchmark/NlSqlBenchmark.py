@@ -6,7 +6,6 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn,
     ForeignKey
 )
-from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 
 
 """

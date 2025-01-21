@@ -111,7 +111,8 @@ def get_tables_and_columns_from_sql_server_db(
         append_col_types: bool = True,
         table_list: list = None,
         uppercase: bool = False,
-        schema: str = "dbo"
+        schema: str = "dbo",
+        db_list_file: str = '.local/dbinfo.json'
         ) -> dict:
     """
     Returns a dictionary of tables and columns from a SQL Server database.
@@ -130,7 +131,7 @@ def get_tables_and_columns_from_sql_server_db(
     if table_list != None:
         table_list = [t.upper() for t in table_list]
 
-    conn = connect_to_db(db_name)
+    conn = connect_to_db(db_name, db_list_file=db_list_file)
     cursor = conn.cursor()
     schema = schema
     table_type = "BASE TABLE"
