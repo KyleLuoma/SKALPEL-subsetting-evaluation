@@ -35,3 +35,15 @@ class QueryResult:
         if item_key == "error_message":
             return self.error_message
         raise KeyError(item_key)
+    
+
+    def __str__(self):
+        s = f"##### QueryResult #####\nDatabase: {self.database}\n"
+        s += f"Question: {self.question}\n"
+        if self.result_set == None:
+            s += f"Error: {self.error_message}"
+            return s
+        s += "Result Set Dict:\n"
+        s += str(self.result_set)
+        return s
+

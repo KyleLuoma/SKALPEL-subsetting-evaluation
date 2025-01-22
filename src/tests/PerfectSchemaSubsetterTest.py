@@ -1,5 +1,6 @@
 from SchemaSubsetter.PerfectSchemaSubsetter import PerfectSchemaSubsetter
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.snails.SnailsNlSqlBenchmark import SnailsNlSqlBenchmark
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
     SchemaTable,
@@ -9,8 +10,9 @@ from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 
 
 def get_schema_subset_test():
-    pss = PerfectSchemaSubsetter(benchmark=BirdNlSqlBenchmark())
-    pss.benchmark.set_active_schema("california_schools")
+    pss = PerfectSchemaSubsetter()
+    benchmark = BirdNlSqlBenchmark()
+    benchmark.set_active_schema("california_schools")
     correct_result = Schema(
         database="california_schools",
         tables=[
@@ -28,10 +30,11 @@ def get_schema_subset_test():
     )
     result = pss.get_schema_subset(BenchmarkQuestion(
         question="What is the highest eligible free rate for K-12 students in the schools in Alameda County?",
-        query="SELECT...",
+        query="SELECT `Free Meal Count (K-12)` / `Enrollment (K-12)` FROM frpm WHERE `County Name` = 'Alameda' ORDER BY (CAST(`Free Meal Count (K-12)` AS REAL) / `Enrollment (K-12)`) DESC LIMIT 1",
         question_number=0,
-        schema=pss.benchmark.get_active_schema()
+        schema=benchmark.get_active_schema()
     ))
+    print(result)
     return result == correct_result
 
 

@@ -20,7 +20,7 @@ class CodeSSubsetter(SchemaSubsetter):
             benchmark: NlSqlBenchmark
             ):
         self.benchmark = benchmark
-        if self.benchmark.name == "bird":
+        if self.benchmark.name == "bird" or self.benchmark.name == "snails":
             self.sic = SchemaItemClassifierInference(model_save_path="src/SchemaSubsetter/CodeS/sic_ckpts/sic_bird")
         self.filter_schema = sif.filter_schema
 

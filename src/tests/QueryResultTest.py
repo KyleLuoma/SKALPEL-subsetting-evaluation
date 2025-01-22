@@ -45,3 +45,19 @@ def raise_key_error_test():
     except KeyError as e:
         return True
     return False
+
+
+def str_test():
+    result = QueryResult(
+        result_set={"A": "B"},
+        database="C",
+        question=1,
+        error_message="D"
+    )
+    result_str = """##### QueryResult #####
+Database: C
+Question: 1
+Result Set Dict:
+{'A': 'B'}"""
+    print(result)
+    return str(result) == result_str

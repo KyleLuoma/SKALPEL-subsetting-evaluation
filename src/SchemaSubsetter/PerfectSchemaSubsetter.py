@@ -11,30 +11,24 @@ from NlSqlBenchmark.SchemaObjects import (
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 from SchemaSubsetter import SchemaSubsetter
 from QueryProfiler import QueryProfiler
+import time
 
 class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
     """
     This class of schema subsetter will return the perfect subset (i.e., recall = precision = 1)
     """
-    def __init__(self, benchmark: NlSqlBenchmark.NlSqlBenchmark):
-        super().__init__(benchmark)
-        question_number = self.benchmark.active_question_no
-        self.question_lookup = {
-            q["question"]: q["question_number"] for q in self.benchmark.set_active_question_number(0)
-        }
-        self.benchmark.set_active_question_number(question_number)
+
+    name = "perferct_subsetter"
+
+    def __init__(self):
+        super().__init__()
         self.query_profiler = QueryProfiler()
 
 
 
     def get_schema_subset(self, benchmark_question: BenchmarkQuestion) -> Schema:
-        question = benchmark_question.question
         full_schema = benchmark_question.schema
-        
-        question_number = self.question_lookup[question]
-        self.benchmark.set_active_schema(full_schema["database"])
-        correct_query = self.benchmark.active_database_queries[question_number]
-        query_identifiers = self.query_profiler.get_identifiers_and_labels(correct_query)
+        query_identifiers = self.query_profiler.get_identifiers_and_labels(benchmark_question.query)
         query_tables = query_identifiers["tables"]
         query_columns = query_identifiers["columns"]
         schema_subset = Schema(database=full_schema.database, tables=[])

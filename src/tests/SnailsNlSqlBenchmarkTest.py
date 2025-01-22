@@ -16,9 +16,9 @@ snails_databases = {
     "SBODemoUS"
 }
 
-# def docker_init_test():
-#     snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
-#     return snails.container != None and type(snails.container) == docker.models.containers.Container
+def docker_init_test():
+    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    return snails.container != None and type(snails.container) == docker.models.containers.Container
 
 
 def docker_db_query_test():
@@ -47,21 +47,21 @@ def execute_query_syntax_error_test():
 
 
 
-# def make_pk_fk_lookups_test():
-#     snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
-#     pk, fk = snails._make_pk_fk_lookups("ATBI")
-#     return (
-#         len(pk) == 15
-#         and len(fk) == 10
-#     )
+def make_pk_fk_lookups_test():
+    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    pk, fk = snails._make_pk_fk_lookups("ATBI")
+    return (
+        len(pk) == 15
+        and len(fk) == 10
+    )
 
-# def load_schema_test():
-#     snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
-#     schema = snails._load_schema("ATBI")
-#     return (
-#         len(schema.tables) == 28
-#         and len(schema.tables[0].columns) == 10
-#     )
+def load_schema_test():
+    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    schema = snails._load_schema("ATBI")
+    return (
+        len(schema.tables) == 28
+        and len(schema.tables[0].columns) == 10
+    )
 
 
 def set_and_get_active_schema_test():
@@ -79,3 +79,14 @@ def iter_test():
         found_databases.add(q.schema.database)
         questions.append(1)
     return found_databases == snails_databases and len(questions) == 503
+
+
+def get_sample_values_test():
+    correct_result = ['1', '2']
+    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    result = snails.get_sample_values(
+        table_name="tlu_DecayStage", 
+        column_name="DecayStage_ID", 
+        database="ATBI"
+        )
+    return len(result) == len(correct_result) and set(result) == set(correct_result)

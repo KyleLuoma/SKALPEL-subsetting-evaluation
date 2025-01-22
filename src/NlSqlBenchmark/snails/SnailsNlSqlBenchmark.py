@@ -2,6 +2,7 @@ from os.path import dirname, abspath
 import time
 
 import docker
+import docker.errors
 import docker.models
 import docker.models.containers
 
@@ -21,21 +22,23 @@ from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 
 class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
-    name = "SNAILS"
+    name = "snails"
     
     def __init__(
             self, 
-            db_host_profile="docker",
-            kill_container_on_exit=True
+            db_host_profile: str = "docker",
+            kill_container_on_exit: bool = True,
+            verbose: bool = False
             ):
         super().__init__()
+        self.verbose = verbose
         self.benchmark_folder = dirname(dirname(dirname(dirname(abspath(__file__))))) + "/benchmarks/snails"
         self.kill_container_on_exit = kill_container_on_exit
         self.container = None
         if db_host_profile == "docker":
-            self.container = self._init_docker()
             self.db_info_file = self.benchmark_folder + "/ms_sql/dbinfo.json"
-        self.name = "SNAILS"
+            self.container = self._init_docker()
+        self.name = "snails"
         self.naturalness = "Native"
         self.syntax = "tsql"
         self.databases = [
@@ -50,8 +53,6 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
             "SBODemoUS"
         ]
         self.schema_cache = {}
-        for db in self.databases:
-            self.schema_cache[db] = self._load_schema(database_name=db)
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
         
@@ -60,9 +61,12 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
 
     def __del__(self):
-        if self.kill_container_on_exit:
+        if self.kill_container_on_exit and self.container != None:
             print("SnailsNlSqlBenchmark is stopping Docker container 'skalpel-running-snails'")
-            self.container.kill()
+            try:
+                self.container.kill()
+            except docker.errors.APIError as e:
+                pass
 
 
     def __iter__(self):
@@ -86,25 +90,53 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
 
     def __len__(self):
-        return 0
+        return 503
 
     
 
-    def _init_docker(self) -> docker.models.containers.Container:    
+    def _init_docker(self, retry_attempts: int = 5) -> docker.models.containers.Container:
+
+        database_running = True
+        client = docker.from_env()
         try:
-            client = docker.from_env()
-            client.images.get('snails-db')
-        except docker.errors.ImageNotFound:
-            print("The 'snails-db' Docker image is not available locally. Run the install script /benchmarks/snails/ms_sql/install_snails_db.sh before running the SNAILS benchmark.")
-            raise
-        try:
-            print("Loading Docker container 'skaplel-running-snails'")
+            self.execute_query("select 1", database="ATBI")
             container = client.containers.get("skalpel-running-snails")
-            container.start()
-        except docker.errors.NotFound:
-            print("Container not found, running container for the first time on port 1433.")
-            container = client.containers.run("snails-db", ports={1433:1433}, name="skalpel-running-snails", detach=True)
-        time.sleep(3)
+        except db_util.pyodbc.OperationalError as e:
+            if self.verbose:
+                time.sleep(1)
+                print(e)
+            database_running = False
+
+        retry_counts = 0
+
+        while not database_running and retry_counts < retry_attempts:    
+            retry_counts += 1
+            try:
+                client.images.get('snails-db')
+            except docker.errors.ImageNotFound:
+                if self.verbose:
+                    print("The 'snails-db' Docker image is not available locally. Run the install script /benchmarks/snails/ms_sql/install_snails_db.sh before running the SNAILS benchmark.")
+                raise
+            try:
+                if self.verbose:
+                    print("Loading Docker container 'skaplel-running-snails'")
+                container = client.containers.get("skalpel-running-snails")
+                container.start()
+            except docker.errors.NotFound:
+                if self.verbose:
+                    print("Container not found, running container for the first time on port 1433.")
+                container = client.containers.run("snails-db", ports={1433:1433}, name="skalpel-running-snails", detach=True)
+                
+
+            database_running = True
+            try:
+                self.execute_query("select 1", database="ATBI")
+            except db_util.pyodbc.OperationalError as e:
+                if self.verbose:
+                    print(e)
+                time.sleep(1)
+                database_running = False
+            
         return container
     
 
@@ -271,13 +303,19 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
 
     def get_active_schema(self, database: str = None) -> Schema:
-        if database != None:
+        if not database:
+            database = self.databases[self.active_database]
+        if database in self.schema_cache.keys():
             return self.schema_cache[database]
-        else:
-            return self.schema_cache[self.databases[self.active_database]]
+        else: 
+            schema = self._load_schema(database_name=database)
+            self.schema_cache[database] = schema
+            return schema 
 
 
     def execute_query(self, query: str, database: str = None, question: int = None) -> QueryResult:
+        if database == None:
+            database = self.databases[self.active_database]
         try:
             result_set_dict = db_util.do_query(
                 query=query,
@@ -296,3 +334,9 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
             database = database,
             question = question
         )
+    
+
+    def get_sample_values(self, table_name: str, column_name: str, num_values: int = 2, database: str = None):
+        query = f"select top {num_values} [{column_name}] from [{table_name}]"
+        result = self.execute_query(query=query, database=database)
+        return result.result_set[column_name]

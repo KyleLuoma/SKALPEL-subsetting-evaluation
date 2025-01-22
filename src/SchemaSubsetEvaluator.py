@@ -12,11 +12,13 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn,
     ForeignKey
 )
+import time
 
 class SchemaSubsetEvaluator:
 
     def __init__(self, benchmark: NlSqlBenchmark = NlSqlBenchmark()):
         self.benchmark = benchmark
+        self.subsetter = PerfectSchemaSubsetter()
         pass
 
 
@@ -27,9 +29,12 @@ class SchemaSubsetEvaluator:
             question: BenchmarkQuestion
             ) -> SubsetEvaluation:
         
-        subsetter = PerfectSchemaSubsetter(self.benchmark)
-                
-        correct_schema_subset = subsetter.get_schema_subset(benchmark_question=question)
+        s_time = time.perf_counter()
+        # subsetter = PerfectSchemaSubsetter(self.benchmark)
+
+        s_time = time.perf_counter()
+        correct_schema_subset = self.subsetter.get_schema_subset(benchmark_question=question)
+        print("FROM EVALUATOR:", correct_schema_subset)
 
         all_correct_tables = {table["name"] for table in correct_schema_subset["tables"]}
         all_predicted_tables = {table["name"] for table in predicted_schema_subset["tables"]}
