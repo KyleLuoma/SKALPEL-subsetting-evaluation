@@ -16,8 +16,7 @@ import time
 
 class SchemaSubsetEvaluator:
 
-    def __init__(self, benchmark: NlSqlBenchmark = NlSqlBenchmark()):
-        self.benchmark = benchmark
+    def __init__(self):
         self.subsetter = PerfectSchemaSubsetter()
         pass
 
@@ -34,7 +33,6 @@ class SchemaSubsetEvaluator:
 
         s_time = time.perf_counter()
         correct_schema_subset = self.subsetter.get_schema_subset(benchmark_question=question)
-        print("FROM EVALUATOR:", correct_schema_subset)
 
         all_correct_tables = {table["name"] for table in correct_schema_subset["tables"]}
         all_predicted_tables = {table["name"] for table in predicted_schema_subset["tables"]}

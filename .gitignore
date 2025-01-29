@@ -13,3 +13,4 @@ temp_data/
 bin/
 benchmarks/
 src/SchemaSubsetter/CodeS/sic_ckpts/
+src/BenchmarkEmbedding/pgvector/pgdata/*

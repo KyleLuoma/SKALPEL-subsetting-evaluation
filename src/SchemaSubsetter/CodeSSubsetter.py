@@ -15,14 +15,10 @@ class CodeSSubsetter(SchemaSubsetter):
 
     name = "CodeS"
 
-    def __init__(
-            self,
-            benchmark: NlSqlBenchmark
-            ):
-        self.benchmark = benchmark
-        if self.benchmark.name == "bird" or self.benchmark.name == "snails":
-            self.sic = SchemaItemClassifierInference(model_save_path="src/SchemaSubsetter/CodeS/sic_ckpts/sic_bird")
+    def __init__(self, benchmark: NlSqlBenchmark = None):
+        self.sic = SchemaItemClassifierInference(model_save_path="src/SchemaSubsetter/CodeS/sic_ckpts/sic_bird")
         self.filter_schema = sif.filter_schema
+        self.benchmark = benchmark
 
 
 

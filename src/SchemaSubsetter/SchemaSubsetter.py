@@ -15,9 +15,10 @@ class SchemaSubsetter:
 
     name = "abstract"
     
-    def __init__(self):
+    def __init__(self, benchmark: NlSqlBenchmark = None):
+        self.benchmark = benchmark
         pass
-    
+
 
     def get_schema_subset(
             self, 

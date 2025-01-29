@@ -3,14 +3,14 @@ from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
 from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
 from SchemaSubsetter.CodeSSubsetter import CodeSSubsetter
 from SchemaSubsetter.PerfectSchemaSubsetter import PerfectSchemaSubsetter
-from SchemaSubsetEvaluator import SchemaSubsetEvaluator
-import QueryProfiler
+from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
+from SubsetEvaluator import QueryProfiler
 import time
 import pandas as pd
 from tqdm import tqdm
 
 test = False
-verbose = True
+verbose = False
 
 def main():
     if verbose:
@@ -22,9 +22,9 @@ def main():
 
     bm_factory = NlSqlBenchmarkFactory()
     benchmark = bm_factory.build_benchmark("snails")
-    # subsetter = CodeSSubsetter(benchmark=benchmark)
-    subsetter = PerfectSchemaSubsetter()
-    evaluator = SchemaSubsetEvaluator(benchmark=bm_factory.build_benchmark("snails"))
+    subsetter = CodeSSubsetter(benchmark)
+    # subsetter = PerfectSchemaSubsetter()
+    evaluator = SchemaSubsetEvaluator()
     results = {
         "database": [],
         "question_number": [],

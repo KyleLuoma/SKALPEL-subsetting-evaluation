@@ -10,7 +10,7 @@ from NlSqlBenchmark.SchemaObjects import (
 )
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 from SchemaSubsetter import SchemaSubsetter
-from QueryProfiler import QueryProfiler
+from SubsetEvaluator.QueryProfiler import QueryProfiler
 import time
 
 class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
@@ -21,7 +21,7 @@ class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
     name = "perferct_subsetter"
 
     def __init__(self):
-        super().__init__()
+        super().__init__()                                                                                                                                                                                                                                                                                                                                          
         self.query_profiler = QueryProfiler()
 
 

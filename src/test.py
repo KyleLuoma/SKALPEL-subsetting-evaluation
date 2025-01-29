@@ -11,11 +11,12 @@ import tests
 # from tests import QueryResultTest
 # from tests import QueryProfilerTest
 # from tests import SchemaSubsetterTest
-from tests import PerfectSchemaSubsetterTest
+# from tests import PerfectSchemaSubsetterTest
 # from tests import PerfectTableSchemaSubsetterTest
 # from tests import DinSqlSubsetterTest
 # from tests import CodeSSubsetterTest
 # from tests import SchemaSubsetterEvaluatorTest
+from tests import BenchmarkEmbeddingTest
 
 
 
