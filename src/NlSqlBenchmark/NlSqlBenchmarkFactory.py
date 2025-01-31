@@ -16,7 +16,7 @@ class NlSqlBenchmarkFactory:
     def build_benchmark(self, benchmark_name):
         assert benchmark_name in NlSqlBenchmarkFactory.benchmark_register
         if benchmark_name == "snails":
-            return SnailsNlSqlBenchmark()
+            return SnailsNlSqlBenchmark(kill_container_on_exit=False)
         elif benchmark_name == "spider":
             return None
         elif benchmark_name == "bird":
