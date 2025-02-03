@@ -24,6 +24,7 @@ class NlSqlBenchmark:
         self.db_connection = None
         self.name = "abstract"
         self.sql_dialect = "mssql"
+        self.naturalness = "Native"
 
 
     def __iter__(self):
@@ -54,7 +55,8 @@ class NlSqlBenchmark:
             query=self.active_database_queries[self.active_question_no],
             query_dialect=self.sql_dialect,
             question_number=self.active_question_no,
-            schema=self.get_active_schema()
+            schema=self.get_active_schema(),
+            schema_naturalness=self.naturalness
         )
 
     

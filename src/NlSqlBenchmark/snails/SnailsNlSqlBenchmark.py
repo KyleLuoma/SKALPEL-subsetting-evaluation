@@ -75,7 +75,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
     
 
 
-    def __next__(self):
+    def __next__(self) -> BenchmarkQuestion:
         if self.active_question_no >= len(self.active_database_questions):
             self.active_database += 1
             self.active_question_no = 0

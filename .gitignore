@@ -8,9 +8,11 @@ venv_linux/
 ~*
 __pycache__/
 *.pickle
+*.pkl
 *.profile
 temp_data/
 bin/
 benchmarks/
 src/SchemaSubsetter/CodeS/sic_ckpts/
 src/BenchmarkEmbedding/pgvector/pgdata/*
+src/SubsetEvaluator/correct_subsets/*

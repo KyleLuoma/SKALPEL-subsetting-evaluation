@@ -1,10 +1,18 @@
 from NlSqlBenchmark.NlSqlBenchmarkFactory import NlSqlBenchmarkFactory
+from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.SchemaObjects import (
+    Schema,
+    SchemaTable,
+    TableColumn,
+    ForeignKey
+)
 from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
 from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
 from SchemaSubsetter.CodeSSubsetter import CodeSSubsetter
 from SchemaSubsetter.PerfectSchemaSubsetter import PerfectSchemaSubsetter
 from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
 from SubsetEvaluator import QueryProfiler
+from util.StringObjectParser import StringObjectParser
 import time
 import pandas as pd
 from tqdm import tqdm
@@ -12,19 +20,40 @@ from tqdm import tqdm
 test = False
 verbose = False
 
-def main():
-    if verbose:
-        v_print = print
-    else:
-        def dummy(*values, **kwargs) -> None:
-            pass
-        v_print = dummy
+results_filename = "./subsetting_results/subsetting-CodeS-snails-NVIDIA_RTX_2000.xlsx"
+results_filename = None
 
+if verbose:
+    v_print = print
+else:
+    def dummy(*values, **kwargs) -> None:
+        pass
+    v_print = dummy
+
+def main():
     bm_factory = NlSqlBenchmarkFactory()
-    benchmark = bm_factory.build_benchmark("snails")
+    benchmark = bm_factory.build_benchmark("bird")
     subsetter = CodeSSubsetter(benchmark)
     # subsetter = PerfectSchemaSubsetter()
-    evaluator = SchemaSubsetEvaluator()
+
+    if results_filename == None:
+        results, subsets_questions = generate_subsets(subsetter=subsetter, benchmark=benchmark)
+    else:
+        results, subsets_questions = load_subsets_from_results(
+            results_filename=results_filename, 
+            benchmark=benchmark
+            )
+    results = evaluate_subsets(subsets=subsets_questions, results=results)
+    results_df = pd.DataFrame(results)
+
+    filename_comments = "NVIDIA_RTX_2000"
+    results_df.to_excel(
+        f"./subsetting_results/subsetting-{subsetter.name}-{benchmark.name}-{benchmark.naturalness}-{filename_comments}.xlsx",
+        index=False
+    )
+
+
+def generate_subsets(subsetter: SchemaSubsetter, benchmark: NlSqlBenchmark) -> (dict, list):
     results = {
         "database": [],
         "question_number": [],
@@ -32,6 +61,7 @@ def main():
         "prompt_tokens": []
     }
     test_counter = 0
+    subsets_questions = []
     for question in tqdm(benchmark, total=len(benchmark), desc=f"Running {subsetter.name} subsetter over {benchmark.name} benchmark."):
         test_counter += 1
         v_print(question["query"])
@@ -42,11 +72,23 @@ def main():
         )
         t_end = time.perf_counter()
         v_print("Subsetting time:", str(t_end - t_start))
+        subsets_questions.append((subset, question))
         results["database"].append(question["schema"]["database"])
         results["question_number"].append(question["question_number"])
         results["inference_time"].append(t_end - t_start)
         results["prompt_tokens"].append(0)
         v_print(subset)
+        if test and test_counter > 5:
+            break
+    return results, subsets_questions
+
+
+
+def evaluate_subsets(subsets: list, results: dict) -> dict:
+    evaluator = SchemaSubsetEvaluator()
+    for s_q_pair in tqdm(subsets, desc=f"Evaluating the subsets"):
+        subset = s_q_pair[0]
+        question = s_q_pair[1]
         v_print("--- Running evaluator ---")
         ev_t_start = time.perf_counter()
         scores = evaluator.evaluate_schema_subset(
@@ -60,14 +102,56 @@ def main():
                 results[k] = []
             results[k].append(scores[k])
         v_print(scores)
-        if test and test_counter > 5:
-            break
-    results_df = pd.DataFrame(results)
-    filename_comments = "NVIDIA_RTX_2000-new_objects_test"
-    results_df.to_excel(
-        f"./subsetting_results/subsetting-{subsetter.name}-{benchmark.name}-{filename_comments}.xlsx",
-        index=False
-    )
+    return results
+
+
+
+def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) -> (dict, list):
+    results_df = pd.read_excel(results_filename)
+    results = {
+        "database": [],
+        "question_number": [],
+        "inference_time": [],
+        "prompt_tokens": []
+    }
+    subsets_questions = []
+    for row in results_df.itertuples():
+        if benchmark.get_active_schema().database != row.database:
+            benchmark.set_active_schema(row.database)
+        benchmark.set_active_question_number(row.question_number)
+        question = benchmark.get_active_question()
+        results["database"].append(row.database)
+        results["question_number"].append(row.question_number)
+        results["inference_time"].append(row.inference_time)
+        results["prompt_tokens"].append(row.prompt_tokens)
+        correct_tables = StringObjectParser.string_to_python_object(row.correct_tables)
+        correct_columns = StringObjectParser.string_to_python_object(row.correct_columns)
+        extra_tables = StringObjectParser.string_to_python_object(row.extra_tables)
+        extra_columns = StringObjectParser.string_to_python_object(row.extra_columns)
+
+        table_items = []
+        for table_name in correct_tables.union(extra_tables):
+            column_items = []
+            for table_column in correct_columns.union(extra_columns):
+                column_table = table_column.split(".")[0]
+                column_name = table_column.split(".")[1]
+                if column_table != table_name:
+                    continue
+                table_column = TableColumn(name=column_name, data_type="")
+                column_items.append(table_column)
+            table_items.append(SchemaTable(
+                name=table_name,
+                columns=column_items,
+                primary_keys=[],
+                foreign_keys=[]
+                ))
+        schema_subset = Schema(database=row.database, tables=table_items)
+        subsets_questions.append((schema_subset, question))
+    return results, subsets_questions
+
+
+
+    
         
 
 if __name__ == "__main__":

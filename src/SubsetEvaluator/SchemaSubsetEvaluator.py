@@ -32,7 +32,7 @@ class SchemaSubsetEvaluator:
         if self.use_result_cache:
             try:
                 with open(
-                    f"./src/SubsetEvaluator/correct_subsets/{question.schema.database}-{question.question_number}-subset.pkl",
+                    f"./src/SubsetEvaluator/correct_subsets/{question.schema.database}-{question.schema_naturalness}-{question.question_number}-subset.pkl",
                     "rb"
                     ) as f:
                     correct_subset = pickle.load(f)
@@ -44,7 +44,7 @@ class SchemaSubsetEvaluator:
 
         if self.use_result_cache:
             with open(
-                f"./src/SubsetEvaluator/correct_subsets/{question.schema.database}-{question.question_number}-subset.pkl",
+                f"./src/SubsetEvaluator/correct_subsets/{question.schema.database}-{question.schema_naturalness}-{question.question_number}-subset.pkl",
                 "wb"
                 ) as f:
                 pickle.dump(correct_subset, f)
