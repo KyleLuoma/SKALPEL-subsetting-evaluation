@@ -13,13 +13,43 @@ from NlSqlBenchmark.SchemaObjects import (
     ForeignKey
 )
 import time
+import pickle
 
 class SchemaSubsetEvaluator:
 
-    def __init__(self):
+    def __init__(
+            self,
+            use_result_cache: bool = True
+            ):
         self.subsetter = PerfectSchemaSubsetter()
-        pass
+        self.use_result_cache = use_result_cache
 
+
+    def get_correct_subset(
+            self,
+            question: BenchmarkQuestion
+            ) -> Schema:
+        if self.use_result_cache:
+            try:
+                with open(
+                    f"./src/SubsetEvaluator/correct_subsets/{question.schema.database}-{question.question_number}-subset.pkl",
+                    "rb"
+                    ) as f:
+                    correct_subset = pickle.load(f)
+                    return correct_subset
+            except FileNotFoundError as e:
+                pass
+        
+        correct_subset = self.subsetter.get_schema_subset(benchmark_question=question)
+
+        if self.use_result_cache:
+            with open(
+                f"./src/SubsetEvaluator/correct_subsets/{question.schema.database}-{question.question_number}-subset.pkl",
+                "wb"
+                ) as f:
+                pickle.dump(correct_subset, f)
+                
+        return correct_subset
 
 
     def evaluate_schema_subset(
@@ -32,7 +62,7 @@ class SchemaSubsetEvaluator:
         # subsetter = PerfectSchemaSubsetter(self.benchmark)
 
         s_time = time.perf_counter()
-        correct_schema_subset = self.subsetter.get_schema_subset(benchmark_question=question)
+        correct_schema_subset = self.get_correct_subset(question=question)
 
         all_correct_tables = {table["name"] for table in correct_schema_subset["tables"]}
         all_predicted_tables = {table["name"] for table in predicted_schema_subset["tables"]}

@@ -117,6 +117,25 @@ class TableColumn:
 
 
 class ForeignKey:
+    """
+    A class to represent a foreign key in a database schema.
+    Attributes:
+    -----------
+    columns : list
+        A list of columns that make up the foreign key.
+    references : tuple
+        A tuple containing the table name and a list of columns that the foreign key references.
+    Methods:
+    --------
+    __init__(self, columns: list, references: tuple):
+        Initializes the ForeignKey with the specified columns and references.
+    __eq__(self, other):
+        Checks if this ForeignKey is equal to another ForeignKey.
+    __getitem__(self, item_key):
+        Allows access to columns or references using a key.
+    __str__(self):
+        Returns a string representation of the ForeignKey.
+    """
 
     def __init__(
             self,
