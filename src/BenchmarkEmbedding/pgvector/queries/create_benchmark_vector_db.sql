@@ -53,6 +53,35 @@ CREATE TABLE IF NOT EXISTS benchmark_question_natural_language_question_word_emb
 )
 ;
 
+CREATE TABLE IF NOT EXISTS benchmark_gold_query_tables(
+    benchmark_name text,
+    naturalness text,
+    database_name text,
+    question_number integer,
+    schema_identifier text,
+    embedding_model text,
+    embedding vector(__VECTORLENGTH__),
+    CONSTRAINT no_duplicate_query_table_identifiers UNIQUE (
+        benchmark_name, naturalness, database_name, question_number, schema_identifier, embedding_model
+        )
+)
+;
+
+CREATE TABLE IF NOT EXISTS benchmark_gold_query_columns(
+    benchmark_name text,
+    naturalness text,
+    database_name text,
+    question_number integer,
+    table_name text,
+    schema_identifier text,
+    embedding_model text,
+    embedding vector(__VECTORLENGTH__),
+    CONSTRAINT no_duplicate_query_column_identifiers UNIQUE (
+        benchmark_name, naturalness, database_name, question_number, table_name, schema_identifier, embedding_model
+        )
+)
+;
+
 CREATE INDEX ON database_column_word_embeddings USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX ON database_table_word_embeddings USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX ON database_text_value_embeddings USING hnsw (embedding vector_cosine_ops);

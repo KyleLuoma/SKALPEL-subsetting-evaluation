@@ -10,7 +10,7 @@ from util.StringObjectParser import StringObjectParser as sop
 def main():
     print(os.getcwd())
     results_folder = "./subsetting_results"
-    results_filename = "subsetting-CodeS-snails-NVIDIA_RTX_2000.xlsx"
+    results_filename = "subsetting-CodeS-snails-Native-NVIDIA_RTX_2000.xlsx"
     results_df = pd.read_excel(f"{results_folder}/{results_filename}")
     filename_params = results_filename.split("-")
     subsetter_name = filename_params[1]
@@ -21,7 +21,8 @@ def main():
 
     benchmark_embedding = BenchmarkEmbedding(benchmark_name=benchmark_name)
     # benchmark_embedding.encode_benchmark(benchmark)
-    benchmark_embedding.encode_benchmark_questions(benchmark)
+    # benchmark_embedding.encode_benchmark_questions(benchmark)
+    benchmark_embedding.encode_benchmark_gold_query_identifiers(benchmark=benchmark)
 
     similarity_threshold = 0.7
 

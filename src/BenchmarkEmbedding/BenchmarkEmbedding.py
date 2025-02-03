@@ -11,6 +11,7 @@ from NlSqlBenchmark.SchemaObjects import (
     ForeignKey
 )
 from BenchmarkEmbedding.VectorSearchResults import VectorSearchResults, WordIdentifierDistance
+from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
 
 import docker
 import docker.errors
@@ -229,6 +230,92 @@ INSERT INTO benchmark_question_natural_language_question_word_embeddings(
                         pass
                     self.db_conn.commit()
 
+
+
+    def encode_benchmark_gold_query_identifiers(self, benchmark: NlSqlBenchmark) -> None:
+
+        insert_table_query = """
+INSERT INTO benchmark_gold_query_tables(
+    benchmark_name,
+    naturalness,
+    database_name,
+    question_number,
+    schema_identifier,
+    embedding_model,
+    embedding
+) VALUES (
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    (%s)
+)
+"""
+
+        insert_column_query = """
+INSERT INTO benchmark_gold_query_columns(
+    benchmark_name,
+    naturalness,
+    database_name,
+    question_number,
+    table_name,
+    schema_identifier,
+    embedding_model,
+    embedding
+) VALUES (
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    (%s)
+)
+"""
+        cursor = self.db_conn.cursor()
+        evaluator = SchemaSubsetEvaluator(use_result_cache=True)
+        for question in tqdm(benchmark, total=len(benchmark), desc="Encoding benchmark Gold Query identifiers."):
+            correct_subset = evaluator.get_correct_subset(question)
+            for table in correct_subset.tables:
+                table_embedding = self.get_embedding(table.name)
+                try:
+                    cursor.execute(
+                        query=insert_table_query,
+                        params=[
+                            benchmark.name,
+                            benchmark.naturalness,
+                            question.schema.database,
+                            question.question_number,
+                            table.name,
+                            self.model_name,
+                            table_embedding
+                        ]
+                    )
+                except psycopg.errors.UniqueViolation as e:
+                        pass
+                self.db_conn.commit()
+                for column in table.columns:
+                    column_embedding = self.get_embedding(column.name)
+                    try:
+                        cursor.execute(
+                            query=insert_column_query,
+                            params=[
+                                benchmark.name,
+                                benchmark.naturalness,
+                                question.schema.database,
+                                question.question_number,
+                                table.name,
+                                column.name,
+                                self.model_name,
+                                column_embedding
+                            ]
+                        )
+                    except psycopg.errors.UniqueViolation as e:
+                        pass
+                    self.db_conn.commit()
 
     
 
