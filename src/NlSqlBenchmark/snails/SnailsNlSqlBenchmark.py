@@ -52,6 +52,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
             "PacificIslandLandbirds",
             "SBODemoUS"
         ]
+        self.sql_dialect = "mssql"
         self.schema_cache = {}
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()

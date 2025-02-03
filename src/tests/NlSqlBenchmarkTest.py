@@ -45,6 +45,7 @@ def get_active_question_test():
     return result == BenchmarkQuestion(
         question="a", 
         query="SELECT A FROM ONE", 
+        query_dialect=bm.sql_dialect,
         question_number=0,
         schema=Schema(
             database="one",

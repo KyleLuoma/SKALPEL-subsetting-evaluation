@@ -25,6 +25,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
         self.name = "bird"
+        self.sql_dialect = "sqlite"
 
     def __iter__(self):
         return self

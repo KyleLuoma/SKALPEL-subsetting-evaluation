@@ -84,6 +84,7 @@ def get_active_question_test():
     return result == BenchmarkQuestion(
         question="How many gas stations in CZE has Premium gas?",
         query="SELECT COUNT(GasStationID) FROM gasstations WHERE Country = 'CZE' AND Segment = 'Premium'",
+        query_dialect=bird.sql_dialect,
         question_number=0,
         schema=Schema(
             database="debit_card_specializing",

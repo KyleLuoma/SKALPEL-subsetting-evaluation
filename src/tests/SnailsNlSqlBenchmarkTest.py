@@ -68,7 +68,7 @@ def set_and_get_active_schema_test():
     snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
     snails.set_active_schema("NTSB")
     schema = snails.get_active_schema()
-    return len(schema.tables) == 36
+    return len(schema.tables) == 40
 
 
 def iter_test():

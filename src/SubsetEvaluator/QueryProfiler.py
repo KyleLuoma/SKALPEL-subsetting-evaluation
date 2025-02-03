@@ -38,7 +38,7 @@ class QueryProfiler:
     """
 
     def __init__(self):
-        self.bin_folder = dirname(dirname(abspath(__file__))) + "/bin"
+        self.bin_folder = dirname(dirname(dirname(abspath(__file__)))) + "/bin"
         self.__jar_path = self.bin_folder + "/SQLParserQueryAnalyzer_jar/SQLParserQueryAnalyzer.jar"
         self.query = None
         self.tree = None
@@ -55,11 +55,15 @@ class QueryProfiler:
     
 
     def get_identifiers_and_labels(
-            self, query=None, distinct=True, include_brackets=True
+            self, 
+            query: str = None, 
+            distinct: bool = True, 
+            include_brackets: bool = True, 
+            dialect: str = "sqlite"
             ) -> dict:
         if query is None:
             query = self.query
-        stats = self.profile_query(query)['stats']
+        stats = self.profile_query(query=query, dialect=dialect)['stats']
         tables = []
         columns = []
         logical_operators = []
@@ -194,7 +198,7 @@ class QueryProfiler:
             capture_output=True
         )
         response = str(response)
-        # print("\nDEBUG:", response)
+        # print("\ntag_query DEBUG:", response)
         tagged_query = ''
         aliases = ''
         if '@BEGINTAGGEDQUERY' in response and '@ENDTAGGEDQUERY' in response:
@@ -238,7 +242,7 @@ class QueryProfiler:
             the query to be parsed
         syntax : str
             the syntax of the query (default is "mssql") 
-            Available syntax types: mssql
+            Available syntax types: mssql, sqlite
 
         Returns
         -------
@@ -259,6 +263,7 @@ class QueryProfiler:
             capture_output=True
         )
         response = str(response)
+        # print("__parse_query DEBUG:", response)
         response = response.replace("\\n", "")
         response = response.replace("\\r", "")
         response = response.replace("\\t", "")

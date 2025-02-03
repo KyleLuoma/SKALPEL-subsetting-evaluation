@@ -5,7 +5,7 @@ and all columns for each required table
 
 from NlSqlBenchmark import NlSqlBenchmark
 from SchemaSubsetter import SchemaSubsetter
-from QueryProfiler import QueryProfiler
+from SubsetEvaluator.QueryProfiler import QueryProfiler
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
     SchemaTable,

@@ -9,8 +9,9 @@ from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 
 
 def get_schema_subset_test():
-    pss = PerfectTableSchemaSubsetter(benchmark=BirdNlSqlBenchmark())
-    pss.benchmark.set_active_schema("california_schools")
+    pss = PerfectTableSchemaSubsetter()
+    benchmark = BirdNlSqlBenchmark()
+    benchmark.set_active_schema("california_schools")
     correct_result = Schema(
         database="california_schools",
         tables=[
@@ -67,8 +68,9 @@ def get_schema_subset_test():
     ])
     result = pss.get_schema_subset(BenchmarkQuestion(
         question="What is the number of SAT test takers of the schools with the highest FRPM count for K-12 students?",
-        query="SELECT...",
-        question_number=0,
-        schema=pss.benchmark.get_active_schema()
+        query="SELECT NumTstTakr FROM satscores WHERE cds = ( SELECT CDSCode FROM frpm ORDER BY `FRPM Count (K-12)` DESC LIMIT 1 )",
+        query_dialect="sqlite",
+        question_number=8,
+        schema=benchmark.get_active_schema()
     ))
     return result == correct_result

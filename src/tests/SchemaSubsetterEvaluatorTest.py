@@ -1,4 +1,4 @@
-from SchemaSubsetEvaluator import SchemaSubsetEvaluator
+from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
@@ -6,11 +6,11 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn,
     ForeignKey
 )
-from SubsetEvaluation import SubsetEvaluation
+from SubsetEvaluator.SubsetEvaluation import SubsetEvaluation
 
 
 def evaluate_schema_subset_test():
-    sse = SchemaSubsetEvaluator(BirdNlSqlBenchmark())
+    sse = SchemaSubsetEvaluator()
     benchmark = BirdNlSqlBenchmark()
     
     predicted_subset = Schema(

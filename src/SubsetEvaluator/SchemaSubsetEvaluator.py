@@ -4,7 +4,7 @@ Class for evaluating a schema subset against the schema identifiers required for
 
 from SchemaSubsetter.PerfectSchemaSubsetter import PerfectSchemaSubsetter
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
-from SubsetEvaluation import SubsetEvaluation
+from SubsetEvaluator.SubsetEvaluation import SubsetEvaluation
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 from NlSqlBenchmark.SchemaObjects import (
     Schema,

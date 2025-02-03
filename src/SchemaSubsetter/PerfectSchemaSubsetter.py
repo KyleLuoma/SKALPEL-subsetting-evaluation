@@ -28,7 +28,12 @@ class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
 
     def get_schema_subset(self, benchmark_question: BenchmarkQuestion) -> Schema:
         full_schema = benchmark_question.schema
-        query_identifiers = self.query_profiler.get_identifiers_and_labels(benchmark_question.query)
+        query_identifiers = self.query_profiler.get_identifiers_and_labels(
+            query=benchmark_question.query,
+            dialect=benchmark_question.query_dialect,
+            include_brackets=False
+            )
+        # print("DEBUG get_schema_subset query_identifiers:", query_identifiers)
         query_tables = query_identifiers["tables"]
         query_columns = query_identifiers["columns"]
         schema_subset = Schema(database=full_schema.database, tables=[])

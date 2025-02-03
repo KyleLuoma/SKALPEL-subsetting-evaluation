@@ -1,6 +1,6 @@
-from QueryProfiler import QueryProfiler
+from SubsetEvaluator.QueryProfiler import QueryProfiler
 
-def tag_query_test():
+def tag_ntsb_query_test():
     test_query = """
 SELECT COUNT(DISTINCT CRASH.VEHICLE_NUMBER)
 FROM NTSB.dbo.CRASH

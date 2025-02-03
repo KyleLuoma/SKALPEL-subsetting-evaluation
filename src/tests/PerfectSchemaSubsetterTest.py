@@ -31,10 +31,15 @@ def get_schema_subset_test():
     result = pss.get_schema_subset(BenchmarkQuestion(
         question="What is the highest eligible free rate for K-12 students in the schools in Alameda County?",
         query="SELECT `Free Meal Count (K-12)` / `Enrollment (K-12)` FROM frpm WHERE `County Name` = 'Alameda' ORDER BY (CAST(`Free Meal Count (K-12)` AS REAL) / `Enrollment (K-12)`) DESC LIMIT 1",
+        query_dialect=benchmark.sql_dialect,
         question_number=0,
         schema=benchmark.get_active_schema()
     ))
     print(result)
     return result == correct_result
+
+
+
+
 
 

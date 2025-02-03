@@ -13,7 +13,8 @@ def get_schema_subset_test():
         question="Why foo bar?",
         schema=Schema(database="foo", tables=[]),
         question_number=0,
-        query=""
+        query="",
+        query_dialect="mssql"
     ))
     return result == Schema(
             database="database1",
