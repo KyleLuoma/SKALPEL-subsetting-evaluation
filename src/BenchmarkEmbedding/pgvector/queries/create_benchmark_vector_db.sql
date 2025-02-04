@@ -21,27 +21,6 @@ CREATE TABLE IF NOT EXISTS database_column_word_embeddings(
 )
 ;
 
-CREATE TABLE IF NOT EXISTS database_text_value_embeddings(
-    benchmark_name text,
-    database_name text,
-    value text,
-    embedding_model text,
-    embedding vector(__VECTORLENGTH__),
-    PRIMARY KEY(benchmark_name, database_name, value, embedding_model),
-    CONSTRAINT no_duplicate_text_value_embeddings UNIQUE (benchmark_name, database_name, value, embedding_model)
-)
-;
-
-CREATE TABLE IF NOT EXISTS database_text_value_columns(
-    benchmark_name text,
-    database_name text,
-    value text,
-    table_name text,
-    column_name text,
-    CONSTRAINT no_duplicate_text_value_columns UNIQUE (benchmark_name, database_name, value, table_name, column_name)
-)
-;
-
 CREATE TABLE IF NOT EXISTS benchmark_question_natural_language_question_word_embeddings(
     benchmark_name text,
     database_name text,
@@ -82,7 +61,32 @@ CREATE TABLE IF NOT EXISTS benchmark_gold_query_columns(
 )
 ;
 
+CREATE TABLE IF NOT EXISTS text_value_embeddings(
+    text_value text,
+    embedding_model text,
+    embedding vector(__VECTORLENGTH__),
+    CONSTRAINT no_duplicate_text_value_embeddings UNIQUE (
+        text_value, embedding_model
+    ),
+    PRIMARY KEY(text_value, embedding_model)
+)
+;
+
+CREATE TABLE IF NOT EXISTS benchmark_text_values(
+    benchmark_name text,
+    database_name text,
+    table_name text,
+    column_name text,
+    text_value text,
+    CONSTRAINT no_duplicate_benchmark_text_values UNIQUE (
+        benchmark_name, database_name, table_name, column_name, text_value 
+    )
+)
+;
+
+CREATE INDEX ON text_value_embeddings (text_value);
+CREATE INDEX ON benchmark_text_values (text_value);
+CREATE INDEX ON text_value_embeddings USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX ON database_column_word_embeddings USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX ON database_table_word_embeddings USING hnsw (embedding vector_cosine_ops);
-CREATE INDEX ON database_text_value_embeddings USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX ON benchmark_question_natural_language_question_word_embeddings USING hnsw (embedding vector_cosine_ops);

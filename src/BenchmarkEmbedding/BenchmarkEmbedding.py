@@ -10,6 +10,7 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn,
     ForeignKey
 )
+from NlSqlBenchmark.QueryResult import QueryResult
 from BenchmarkEmbedding.VectorSearchResults import VectorSearchResults, WordIdentifierDistance
 from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
 
@@ -317,6 +318,98 @@ INSERT INTO benchmark_gold_query_columns(
                         pass
                     self.db_conn.commit()
 
+
+
+
+    def encode_benchmark_values(self, benchmark: NlSqlBenchmark) -> None:
+
+        text_types = [
+            "CHAR", "VARCHAR", "TEXT", "NCHAR", "NVARCHAR", "NTEXT",  # SQL Server
+            "CHARACTER", "CHARACTER VARYING", "CLOB", "TEXT"  # SQLite
+        ]
+
+        get_encoded_query = """
+SELECT text_value
+FROM text_value_embeddings
+"""
+
+        insert_value_embedding_query = """
+INSERT INTO text_value_embeddings(
+    text_value,
+    embedding_model,
+    embedding
+) VALUES (
+    %s,
+    %s,
+    (%s)
+)
+"""
+
+        insert_benchmark_text_value_query = """
+INSERT INTO benchmark_text_values(
+    benchmark_name,
+    database_name,
+    table_name,
+    column_name,
+    text_value
+) VALUES (
+    %s,
+    %s,
+    %s,
+    %s,
+    %s
+)
+"""
+
+        cursor = self.db_conn.cursor()
+        result = cursor.execute(get_encoded_query)
+        already_encoded = [row[0].upper() for row in result.fetchall()]
+
+        for db in benchmark.databases:
+            schema = benchmark.get_active_schema(database=db)
+            for table in schema.tables:
+                for column in table.columns:
+                    # Ignore non-text columns:
+                    if column.data_type.upper() not in text_types:
+                        continue
+                    # Ignore columns that end with ID (i.e., text-based ID values)
+                    if column.name[-2:].upper() == "ID":
+                        continue
+                    query_result = benchmark.execute_query(
+                        f"SELECT DISTINCT {column.name} FROM {table.name}",
+                        database=db
+                    )
+                    if query_result.result_set == None:
+                        continue
+                    col_values = query_result.result_set[column.name]
+                    for v in tqdm(col_values, desc=f"Encoding values in {db}.{table.name}.{column.name}"):
+                        if v == None:
+                            continue
+                        try:
+                            cursor.execute(
+                                query=insert_benchmark_text_value_query,
+                                params=[benchmark.name, db, table.name, column.name, v]
+                            )
+                        except psycopg.errors.UniqueViolation as e:
+                            pass
+                        except psycopg.DataError as e:
+                            continue
+                        if v.upper() in already_encoded:
+                            self.db_conn.commit()
+                            continue
+                        # print("\nDEBUG v", v)
+                        v_emb = self.get_embedding(v, try_from_db=False)[0]
+                        # print("DEBUG type(v_emb)", type(v_emb))
+                        try:
+                            cursor.execute(
+                                query=insert_value_embedding_query,
+                                params=[v, self.model_name, v_emb]
+                            )
+                        except psycopg.errors.UniqueViolation as e:
+                            pass
+                        self.db_conn.commit()
+
+
     
 
     def encode_benchmark(self, benchmark: NlSqlBenchmark) -> (int, int):
@@ -492,6 +585,30 @@ WHERE
                 ) for row in results.fetchall()
                 ]
         return search_results
+    
+
+
+    def get_hidden_relations(
+            self,
+            database_name: str,
+            question_number: int,
+            naturalness: str = "Native"
+            ) -> set:
+        query_file = "./src/BenchmarkEmbedding/pgvector/queries/find_hidden_relations.sql"
+        query = open(query_file, "r").read()
+        replacements = {
+            "__BENCHMARK_NAME__": self.benchmark_name,
+            "__DATABASE_NAME__": database_name,
+            "__EMBEDDING_MODEL__": self.model_name,
+            "__NATURALNESS__": naturalness,
+            "__QUESTION_NUMBER__": str(question_number)
+        }
+        for k in replacements:
+            query = query.replace(k, replacements[k])
+        cursor = self.db_conn.cursor()
+        result = cursor.execute(query)
+        self.db_conn.commit()
+        return set([row[4] for row in result.fetchall()])
 
 
 
