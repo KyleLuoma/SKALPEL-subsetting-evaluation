@@ -15,10 +15,11 @@ import tests
 # from tests import PerfectTableSchemaSubsetterTest
 # from tests import DinSqlSubsetterTest
 # from tests import CodeSSubsetterTest
-from tests import SchemaSubsetterEvaluatorTest
-# from tests import BenchmarkEmbeddingTest
+# from tests import SchemaSubsetterEvaluatorTest
+from tests import BenchmarkEmbeddingTest
 # from tests import StringObjectParserTest
 # from tests import SchemaObjectsTest
+# from tests import ValueReferenceProblemResultsTests
 
 
 

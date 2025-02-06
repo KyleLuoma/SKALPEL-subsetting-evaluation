@@ -63,3 +63,5 @@ class VectorSearchResults:
         for wid in self.columns:
             string += f"\n    {wid.database_identifier}: {str(wid.distance)}"
         return string
+    
+

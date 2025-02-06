@@ -1,4 +1,5 @@
 from BenchmarkEmbedding.BenchmarkEmbedding import BenchmarkEmbedding
+from BenchmarkEmbedding.ValueReferenceProblemResults import ValueReferenceProblemResults, ValueReferenceProblemItem
 from BenchmarkEmbedding.VectorSearchResults import VectorSearchResults
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 import time
@@ -70,3 +71,13 @@ def get_identifiers_from_semantic_search_test():
         results.tables[0].database_identifier == "table1" 
         and results.columns[0].database_identifier == "table1.column1" 
         )
+
+
+def get_value_reference_problem_results_test():
+    bm_embed = BenchmarkEmbedding(benchmark_name="snails", instantiate_embedding_model=False)
+    results = bm_embed.get_value_reference_problem_results(
+        database_name="NTSB",
+        question_number=33,
+        naturalness="Native"
+    )
+    return len(results.problem_tables) == 14

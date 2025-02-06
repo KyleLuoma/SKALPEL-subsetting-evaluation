@@ -12,6 +12,7 @@ from NlSqlBenchmark.SchemaObjects import (
 )
 from NlSqlBenchmark.QueryResult import QueryResult
 from BenchmarkEmbedding.VectorSearchResults import VectorSearchResults, WordIdentifierDistance
+from BenchmarkEmbedding.ValueReferenceProblemResults import ValueReferenceProblemItem, ValueReferenceProblemResults
 from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
 
 import docker
@@ -33,9 +34,12 @@ class BenchmarkEmbedding:
             model_name: str = None,
             vector_length: int = 1024,
             kill_container_on_exit: bool = False,
-            verbose: bool = False
+            verbose: bool = False,
+            build_database_on_init: bool = False,
+            instantiate_embedding_model: bool = True
             ):
         self.verbose = verbose
+        self.build_database_on_init = build_database_on_init
         self.current_working_directory = os.path.abspath(os.getcwd())
         if self.verbose:
             print("Current working directory:", self.current_working_directory)
@@ -50,10 +54,13 @@ class BenchmarkEmbedding:
         else:
             self.model_name = "dunzhang/stella_en_1.5B_v5"
         self.benchmark_name = benchmark_name
-        self.embedding_model = SentenceTransformer(self.model_name, trust_remote_code=True)
-        self.embedding_model.max_seq_length = 512
-        self.embedding_model.tokenizer.padding_side="right"
-        self.embedding_model.to("cuda")
+        if instantiate_embedding_model:
+            self.embedding_model = SentenceTransformer(self.model_name, trust_remote_code=True)
+            self.embedding_model.max_seq_length = 512
+            self.embedding_model.tokenizer.padding_side="right"
+            self.embedding_model.to("cuda")
+        else:
+            self.embedding_model = None
 
 
     def __del__(self):
@@ -167,17 +174,19 @@ class BenchmarkEmbedding:
             pass
         db_conn.execute('CREATE EXTENSION IF NOT EXISTS vector')
         db_conn.commit()
-        db_conn.close()
-
-        db_creation_sql = open(f".\\src\\BenchmarkEmbedding\\pgvector\\queries\\create_benchmark_vector_db.sql").read()
-        db_creation_sql = db_creation_sql.replace("__VECTORLENGTH__", str(self.vector_length))       
+        db_conn.close()      
         db_conn = psycopg.connect(
             "user=postgres dbname=benchmark_vector_db host=localhost port=5432 password=skalpel"
         )
         db_conn.execute('CREATE EXTENSION IF NOT EXISTS vector')
         register_vector(db_conn)
-        cur = db_conn.cursor()
-        cur.execute(db_creation_sql)
+        if self.build_database_on_init:
+            db_creation_sql = open(
+                f".\\src\\BenchmarkEmbedding\\pgvector\\queries\\create_benchmark_vector_db.sql"
+                ).read()
+            db_creation_sql = db_creation_sql.replace("__VECTORLENGTH__", str(self.vector_length)) 
+            cur = db_conn.cursor()
+            cur.execute(db_creation_sql)
         db_conn.commit()
         return db_conn
     
@@ -380,6 +389,8 @@ INSERT INTO benchmark_text_values(
                         database=db
                     )
                     if query_result.result_set == None:
+                        continue
+                    if column.name not in query_result.result_set.keys():
                         continue
                     col_values = query_result.result_set[column.name]
                     for v in tqdm(col_values, desc=f"Encoding values in {db}.{table.name}.{column.name}"):
@@ -587,15 +598,13 @@ WHERE
         return search_results
     
 
-
-    def get_hidden_relations(
-            self,
-            database_name: str,
-            question_number: int,
-            naturalness: str = "Native"
-            ) -> set:
-        query_file = "./src/BenchmarkEmbedding/pgvector/queries/find_hidden_relations.sql"
-        query = open(query_file, "r").read()
+    def _replace_strings_in_query_template(
+            self, 
+            query: str,
+            database_name: str, 
+            naturalness: str, 
+            question_number: str
+            ) -> str:
         replacements = {
             "__BENCHMARK_NAME__": self.benchmark_name,
             "__DATABASE_NAME__": database_name,
@@ -605,10 +614,71 @@ WHERE
         }
         for k in replacements:
             query = query.replace(k, replacements[k])
+        return query
+
+
+    def get_hidden_relations(
+            self,
+            database_name: str,
+            question_number: int,
+            naturalness: str = "Native"
+            ) -> set:
+        query_file = "./src/BenchmarkEmbedding/pgvector/queries/find_hidden_relations.sql"
+        query = open(query_file, "r").read()
+        query = self._replace_strings_in_query_template(
+            query=query,
+            database_name=database_name,
+            question_number=question_number,
+            naturalness=naturalness
+            )
         cursor = self.db_conn.cursor()
         result = cursor.execute(query)
         self.db_conn.commit()
         return set([row[4] for row in result.fetchall()])
+
+
+
+    def get_value_reference_problem_results(
+                self,
+                database_name: str,
+                question_number: int,
+                naturalness: str = "Native"
+                ) -> ValueReferenceProblemResults:
+        problem_results = ValueReferenceProblemResults(
+            problem_tables=[],
+            problem_columns=[]
+        )
+        for item_matched in ["table", "column"]:
+            query_file = f'src/BenchmarkEmbedding/pgvector/queries/find_value_reference_problem_{item_matched}s.sql'
+            query = open(query_file, "r").read()
+            query = self._replace_strings_in_query_template(
+                query=query,
+                database_name=database_name,
+                question_number=question_number,
+                naturalness=naturalness
+                )
+            cursor = self.db_conn.cursor()
+            result = cursor.execute(query)
+            self.db_conn.commit()
+            for row in result.fetchall():
+                #columns: table_name, column_name, text_value, ngram, distance, match
+                problem_item = ValueReferenceProblemItem(
+                    item_matched="table",
+                    table_name=row[0],
+                    column_name=row[1],
+                    db_text_value=row[2],
+                    nlq_ngram=row[3],
+                    nlq_ngram_db_text_value_distance=row[4],
+                    item_name_matched_nlq_ngram={"FALSE": False, "TRUE": True}[row[5]]
+                )
+                if item_matched == "table":
+                    problem_results.problem_tables.append(problem_item)
+                else:
+                    problem_results.problem_columns.append(problem_item)                
+        return problem_results
+
+
+
 
 
 
