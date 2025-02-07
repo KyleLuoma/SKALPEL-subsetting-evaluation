@@ -95,7 +95,8 @@ def main():
             value_reference_problem_results_dict[column] += question_vrp_items_dict[column]
 
         unmatched_attributes = value_reference_problems.get_unmatched_column_names_as_set()
-        unmatched_attributes = unmatched_attributes - correct_attributes
+        correct_attributes_upper = set([a.upper() for a in correct_attributes])
+        unmatched_attributes = unmatched_attributes - correct_attributes_upper
         if len(unmatched_attributes) > 0:
             results_dict["value_reference_problem_attributes"].append(unmatched_attributes)
         else:
