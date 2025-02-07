@@ -61,6 +61,22 @@ CREATE TABLE IF NOT EXISTS benchmark_gold_query_columns(
 )
 ;
 
+CREATE TABLE IF NOT EXISTS benchmark_gold_query_predicates(
+    benchmark_name text,
+    naturalness text,
+    database_name text,
+    question_number integer,
+    column_name text,
+    literal_value text,
+    embedding_model text,
+    column_embedding vector(__VECTORLENGTH__),
+    literal_embedding vector(__VECTORLENGTH__),
+    CONSTRAINT no_duplicate_query_predicates UNIQUE (
+        benchmark_name, naturalness, database_name, question_number, column_name, literal_value, embedding_model
+    )
+)
+;
+
 CREATE TABLE IF NOT EXISTS text_value_embeddings(
     text_value text,
     embedding_model text,
@@ -86,6 +102,8 @@ CREATE TABLE IF NOT EXISTS benchmark_text_values(
 
 CREATE INDEX ON text_value_embeddings (text_value);
 CREATE INDEX ON benchmark_text_values (text_value);
+CREATE INDEX ON benchmark_gold_query_predicates USING hnsw (column_embedding vector_cosine_ops);
+CREATE INDEX ON benchmark_gold_query_predicates USING hnsw (literal_embedding vector_cosine_ops);
 CREATE INDEX ON text_value_embeddings USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX ON database_column_word_embeddings USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX ON database_table_word_embeddings USING hnsw (embedding vector_cosine_ops);

@@ -14,6 +14,7 @@ from NlSqlBenchmark.QueryResult import QueryResult
 from BenchmarkEmbedding.VectorSearchResults import VectorSearchResults, WordIdentifierDistance
 from BenchmarkEmbedding.ValueReferenceProblemResults import ValueReferenceProblemItem, ValueReferenceProblemResults
 from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
+from SubsetEvaluator.QueryProfiler import QueryProfiler
 
 import docker
 import docker.errors
@@ -99,7 +100,7 @@ class BenchmarkEmbedding:
                 vector = results[0][0]
                 return vector
         # emb = self.embedding_model.encode([sequence], prompt_name="s2s_query")
-        emb = self.embedding_model.encode([sequence])
+        emb = self.embedding_model.encode(sequence)
         return emb
     
 
@@ -327,6 +328,69 @@ INSERT INTO benchmark_gold_query_columns(
                         pass
                     self.db_conn.commit()
 
+
+
+    def encode_benchmark_gold_query_predicates(self, benchmark: NlSqlBenchmark) -> None:
+
+        insert_predicate_query = """
+INSERT INTO benchmark_gold_query_predicates(
+    benchmark_name,
+    naturalness,
+    database_name,
+    question_number,
+    column_name,
+    literal_value,
+    embedding_model,
+    column_embedding,
+    literal_embedding
+) VALUES (
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    (%s),
+    (%s)
+)
+"""
+        cursor = self.db_conn.cursor()
+        profiler = QueryProfiler()
+        for question in tqdm(benchmark, total=len(benchmark), desc="Encoding benchmark Gold Query predicates."):
+            query_items = profiler.profile_query(query=question.query, dialect=question.query_dialect)
+            for key, value in query_items["stats"]:
+                if "predicatecolumn" not in key:
+                    continue
+                column = key.split(" ")[1].replace("[", "").replace("]", "")
+                column = column.replace("`", "")
+                literal_value = value.split(" ")[1].replace("'", "")
+                if literal_value[0] == "%":
+                    literal_value = literal_value[1:]
+                if literal_value[-1] == "%":
+                    literal_value = literal_value[:-1]
+                if literal_value.isnumeric():
+                    continue
+                column_embedding = self.get_embedding(column)
+                literal_embedding = self.get_embedding(literal_value)
+                try:
+                    cursor.execute(
+                        query=insert_predicate_query,
+                        params=[
+                            benchmark.name,
+                            benchmark.naturalness,
+                            question.schema.database,
+                            question.question_number,
+                            column,
+                            literal_value,
+                            self.model_name,
+                            column_embedding,
+                            literal_embedding
+                        ]
+                    )
+                except psycopg.errors.UniqueViolation as e:
+                    pass
+                self.db_conn.commit()
 
 
 
@@ -645,37 +709,34 @@ WHERE
                 naturalness: str = "Native"
                 ) -> ValueReferenceProblemResults:
         problem_results = ValueReferenceProblemResults(
-            problem_tables=[],
             problem_columns=[]
         )
-        for item_matched in ["table", "column"]:
-            query_file = f'src/BenchmarkEmbedding/pgvector/queries/find_value_reference_problem_{item_matched}s.sql'
-            query = open(query_file, "r").read()
-            query = self._replace_strings_in_query_template(
-                query=query,
-                database_name=database_name,
-                question_number=question_number,
-                naturalness=naturalness
-                )
-            cursor = self.db_conn.cursor()
-            result = cursor.execute(query)
-            self.db_conn.commit()
-            for row in result.fetchall():
-                #columns: table_name, column_name, text_value, ngram, distance, match
-                problem_item = ValueReferenceProblemItem(
-                    item_matched="table",
-                    table_name=row[0],
-                    column_name=row[1],
-                    db_text_value=row[2],
-                    nlq_ngram=row[3],
-                    nlq_ngram_db_text_value_distance=row[4],
-                    item_name_matched_nlq_ngram={"FALSE": False, "TRUE": True}[row[5]]
-                )
-                if item_matched == "table":
-                    problem_results.problem_tables.append(problem_item)
-                else:
-                    problem_results.problem_columns.append(problem_item)                
+        query_file = f'src/BenchmarkEmbedding/pgvector/queries/find_value_reference_problem_predicates.sql'
+        query = open(query_file, "r").read()
+        query = self._replace_strings_in_query_template(
+            query=query,
+            database_name=database_name,
+            question_number=question_number,
+            naturalness=naturalness
+            )
+        cursor = self.db_conn.cursor()
+        result = cursor.execute(query)
+        self.db_conn.commit()
+        for row in result.fetchall():
+            #columns: table_name, column_name, text_value, ngram
+            problem_item = ValueReferenceProblemItem(
+                table_name=row[0],
+                column_name=row[1],
+                db_text_value=row[2],
+                nlq_ngram=row[3],
+            )
+            problem_results.problem_columns.append(problem_item)                
         return problem_results
+    
+
+
+
+
 
 
 

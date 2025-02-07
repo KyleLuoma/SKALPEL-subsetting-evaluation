@@ -20,7 +20,7 @@ def main():
     benchmark_factory = NlSqlBenchmarkFactory()
     benchmark = benchmark_factory.build_benchmark(benchmark_name=benchmark_name)
 
-    benchmark_embedding = BenchmarkEmbedding(benchmark_name=benchmark_name)
+    benchmark_embedding = BenchmarkEmbedding(benchmark_name=benchmark_name, build_database_on_init=False)
 
     ### Benchmark encoding tasks, uncomment as-needed ###
 
@@ -28,6 +28,7 @@ def main():
     # benchmark_embedding.encode_benchmark_questions(benchmark)
     # benchmark_embedding.encode_benchmark_gold_query_identifiers(benchmark=benchmark)
     # benchmark_embedding.encode_benchmark_values(benchmark=benchmark)
+    # benchmark_embedding.encode_benchmark_gold_query_predicates(benchmark=benchmark)
     # return
 
     results_dict = {
@@ -36,22 +37,17 @@ def main():
         "gold_query_tables": [],
         "missing_tables": [],
         "hidden_relations": [],
-        "value_reference_problem_relations": [],
         "gold_query_attributes": [],
         "missing_attributes": [],
         "value_reference_problem_attributes": []
     }
     value_reference_problem_results_dict = {
-        "item_matched": [],
         "table_name": [],
         "column_name": [],
         "text_value": [],
-        "nlq_ngram": [],
-        "nlq_ngram_db_text_value_distance": [],
-        "item_name_matched_nlq_ngram": []
+        "nlq_ngram": []
     }
 
-    break_count = 0
     for row in tqdm(results_df.itertuples(), total=results_df.shape[0]):
 
         correct_tables = set(sop.string_to_python_object(row.correct_tables))
@@ -98,23 +94,13 @@ def main():
         for column in question_vrp_items_dict:
             value_reference_problem_results_dict[column] += question_vrp_items_dict[column]
 
-        unmatched_tables = value_reference_problems.get_unmatched_table_names_as_set()
-        unmatched_tables = unmatched_tables - correct_tables
-        if len(unmatched_tables) > 0:
-            results_dict["value_reference_problem_relations"].append(unmatched_tables)
-        else:
-            results_dict["value_reference_problem_relations"].append("{}")
-
         unmatched_attributes = value_reference_problems.get_unmatched_column_names_as_set()
         unmatched_attributes = unmatched_attributes - correct_attributes
         if len(unmatched_attributes) > 0:
             results_dict["value_reference_problem_attributes"].append(unmatched_attributes)
         else:
             results_dict["value_reference_problem_attributes"].append("{}")
-        if break_count > 100:
-            break
-        else:
-            break_count += 1
+
         
 
     pd.DataFrame(results_dict).to_excel(
