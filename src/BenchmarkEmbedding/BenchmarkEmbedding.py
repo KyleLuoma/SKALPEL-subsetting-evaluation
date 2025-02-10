@@ -13,6 +13,7 @@ from NlSqlBenchmark.SchemaObjects import (
 from NlSqlBenchmark.QueryResult import QueryResult
 from BenchmarkEmbedding.VectorSearchResults import VectorSearchResults, WordIdentifierDistance
 from BenchmarkEmbedding.ValueReferenceProblemResults import ValueReferenceProblemItem, ValueReferenceProblemResults
+from BenchmarkEmbedding.IdentifierAmbiguityProblemResults import IdentifierAmbiguityProblemItem, IdentifierAmbiguityProblemResults
 from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
 from SubsetEvaluator.QueryProfiler import QueryProfiler
 
@@ -733,6 +734,57 @@ WHERE
             problem_results.problem_columns.append(problem_item)                
         return problem_results
     
+
+
+
+    def get_identifier_ambiguity_problem_results(
+            self,
+            database_name: str,
+            question_number: int,
+            naturalness: str= "Native"
+            ) -> IdentifierAmbiguityProblemResults: 
+        ambiguity_results = IdentifierAmbiguityProblemResults()
+        relation_query_file = "src/BenchmarkEmbedding/pgvector/queries/find_ambiguous_relations.sql"
+        attribute_query_file = "src/BenchmarkEmbedding/pgvector/queries/find_ambiguous_attributes.sql"
+        query = open(relation_query_file, "r").read()
+        query = self._replace_strings_in_query_template(
+            query=query,
+            database_name=database_name,
+            question_number=question_number,
+            naturalness=naturalness
+        )
+        cursor = self.db_conn.cursor()
+        result = cursor.execute(query)
+        self.db_conn.commit()
+        for row in result.fetchall():
+            #columns: ngram, schema_identifier, distance
+            ambiguity_results.associate_table_with_word_nl(
+                word_nl=row[0],
+                table=SchemaTable(
+                    name=row[1],
+                    columns=[],
+                    primary_keys=[],
+                    foreign_keys=[]
+                )
+            )
+        query = open(attribute_query_file, "r").read()
+        query = self._replace_strings_in_query_template(
+            query=query,
+            database_name=database_name,
+            question_number=question_number,
+            naturalness=naturalness
+        )
+        result = cursor.execute(query)
+        self.db_conn.commit()
+        for row in result.fetchall():
+            #columns: ngram, table_name, schema_identifier, distance
+            ambiguity_results.associate_column_with_word_nl(
+                word_nl=row[0],
+                column=TableColumn(
+                    name=row[2], data_type="", table_name=row[1]
+                )
+            )            
+        return ambiguity_results
 
 
 

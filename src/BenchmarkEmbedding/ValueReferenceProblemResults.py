@@ -57,7 +57,7 @@ class ValueReferenceProblemResults:
         self.problem_columns = problem_columns
    
 
-    def get_unmatched_column_names_as_set(self) -> set:
+    def get_unmatched_column_names_as_set(self) -> set[str]:
         column_names = set()
         for column in self.problem_columns:
             column_names.add(f"{column.table_name}.{column.column_name}")

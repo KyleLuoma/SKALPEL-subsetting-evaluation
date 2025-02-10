@@ -251,8 +251,6 @@ class QueryProfiler:
             about the query (e.g. tables, columns, functions, etc.)
         """
         query_to_parse = query.upper()
-        if syntax == "sqlite":
-            query_to_parse = query_to_parse.replace("`", "\"")
         query_to_parse = query_to_parse.replace('"', '\\"')
         response = subprocess.run(
             'java -jar "{j}" --query "{q}" --dialect {s}'.format(
@@ -263,13 +261,13 @@ class QueryProfiler:
             capture_output=True
         )
         response = str(response)
-        # print("__parse_query DEBUG:", response)
+        print("__parse_query DEBUG:", response)
         response = response.replace("\\n", "")
         response = response.replace("\\r", "")
         response = response.replace("\\t", "")
         response = response.replace("\\'", "'")
         response = response.replace('""', '"')
-
+        
         try:
             tree_string = response.split('@BEGINPARSETREE')[1]
             tree_string = tree_string.split('@ENDPARSETREE')[0]
@@ -282,6 +280,9 @@ class QueryProfiler:
             stat_list = []
             for stat in json.loads(json_string):
                 stat_list.append(self.__single_obj_dict_to_tuple(stat))
+            
+            if syntax == "sqlite":
+                stat_list = [(t[0], t[1].replace("`", "")) for t in stat_list]                
 
             return {
                 'stats': stat_list,
@@ -289,6 +290,7 @@ class QueryProfiler:
             }
         except Exception as e:
             print("WARNING: Encountered exception while parsing query analyzer output:")
+            print(e)
             print(query, json_string)
             print("Exception", e)
             return {
@@ -371,5 +373,5 @@ def all_tests():
     profile_query_test()
 
 if __name__ == "__main__":
-    # all_tests()
+    all_tests()
     print_tagged_query()

@@ -15,7 +15,7 @@ question_identifiers as(
 		and gqc.naturalness = 'Native'
 		and gqc.question_number = 33
 )
-select qnl.benchmark_name, qnl.database_name, qnl.question_number, ngram, qi.table_name, gqp.column_name, literal_value 
+select qi.table_name, gqp.column_name, qnl.benchmark_name, literal_value, ngram
 from benchmark_question_natural_language_question_word_embeddings qnl
 join benchmark_gold_query_predicates gqp on qnl.embedding <=> gqp.literal_embedding  <= 0.35
 	and gqp.question_number = qnl.question_number 
