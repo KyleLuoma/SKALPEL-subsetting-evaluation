@@ -58,6 +58,16 @@ class IdentifierAmbiguityProblemResults:
 
 
 
+    def __eq__(self, other) -> bool:
+        if len(self.word_nl_matches) != len(other.word_nl_matches):
+            return False
+        for match in self.word_nl_matches:
+            if match not in other.word_nl_matches:
+                return False
+        return True
+
+
+
     def add_item(self, item: IdentifierAmbiguityProblemItem) -> None:
         self.word_nl_matches.append(item)
         return

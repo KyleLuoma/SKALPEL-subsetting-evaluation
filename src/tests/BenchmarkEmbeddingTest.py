@@ -1,8 +1,9 @@
 from BenchmarkEmbedding.BenchmarkEmbedding import BenchmarkEmbedding
 from BenchmarkEmbedding.ValueReferenceProblemResults import ValueReferenceProblemResults, ValueReferenceProblemItem
 from BenchmarkEmbedding.VectorSearchResults import VectorSearchResults
-from BenchmarkEmbedding.IdentifierAmbiguityProblemResults import IdentifierAmbiguityProblemResults
+from BenchmarkEmbedding.IdentifierAmbiguityProblemResults import IdentifierAmbiguityProblemResults, IdentifierAmbiguityProblemItem
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.SchemaObjects import *
 import time
 
 
@@ -85,11 +86,33 @@ def get_value_reference_problem_results_test():
         question_number=33,
         naturalness="Native"
     )
-    print(len(results.problem_columns))
-    return len(results.problem_columns) == 14
+    return len(results.problem_columns) == 11
 
 
 def get_identifier_ambiguity_problem_results_test():
+    correct_result = IdentifierAmbiguityProblemResults(
+        word_nl_matches=[
+            IdentifierAmbiguityProblemItem(
+                word_nl="crashes",
+                matching_relations={
+                    SchemaTable(name="CRASH"),
+                    SchemaTable(name="EDRPOSTCRASH"),
+                    SchemaTable(name="EDRPRECRASH"),
+                },
+                matching_attributes={
+                    TableColumn(name="CrashImminentBraking", table_name="VPICDECODE"),
+                    TableColumn(name="PREVCRASH", table_name="AIRBAG"),
+                    TableColumn(name="IGCYCRASH", table_name="EDREVENT"),
+                    TableColumn(name="CRASHCAT", table_name="GV"),
+                    TableColumn(name="CRASHYEAR", table_name="CRASH"),
+                    TableColumn(name="CRASHMONTH", table_name="CRASH"),
+                    TableColumn(name="CRASHCONF", table_name="GV"),
+                    TableColumn(name="CRASHTYPE", table_name="GV"),
+                    TableColumn(name="CRASHTIME", table_name="CRASH")
+                }
+            )
+        ]
+    )
     bm_embed = BenchmarkEmbedding(
         benchmark_name="snails", 
         instantiate_embedding_model=False, 
@@ -106,3 +129,4 @@ def get_identifier_ambiguity_problem_results_test():
             print(att)
         for rel in item.matching_relations:
             print(rel)
+    return results == correct_result

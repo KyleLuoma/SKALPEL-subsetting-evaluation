@@ -761,10 +761,7 @@ WHERE
             ambiguity_results.associate_table_with_word_nl(
                 word_nl=row[0],
                 table=SchemaTable(
-                    name=row[1],
-                    columns=[],
-                    primary_keys=[],
-                    foreign_keys=[]
+                    name=row[1]
                 )
             )
         query = open(attribute_query_file, "r").read()
@@ -781,7 +778,7 @@ WHERE
             ambiguity_results.associate_column_with_word_nl(
                 word_nl=row[0],
                 column=TableColumn(
-                    name=row[2], data_type="", table_name=row[1]
+                    name=row[2], table_name=row[1]
                 )
             )            
         return ambiguity_results

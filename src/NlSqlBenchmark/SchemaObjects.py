@@ -5,7 +5,7 @@ class TableColumn:
     def __init__(
             self,
             name: str,
-            data_type: str,
+            data_type: str = None,
             table_name: str = None,
             ):
         self.name = name
@@ -14,7 +14,13 @@ class TableColumn:
 
 
     def __hash__(self):
-        return hash((self.name, self.data_type, self.table_name))
+        data_type = self.data_type
+        if data_type == None:
+            data_type = ""
+        table_name = self.table_name
+        if table_name == None:
+            table_name = ""
+        return hash((self.name, data_type, table_name))
 
 
     def __eq__(self, other):
@@ -42,7 +48,10 @@ class TableColumn:
 
     def __str__(self):
         name = self.name_as_string()
-        return f"TableColumn(name={name}, data_type={self.data_type})"
+        data_type_string = ""
+        if self.data_type != None:
+            data_type_string = f", data_type={self.data_type}"
+        return f"TableColumn(name={name}{data_type_string})"
     
 
     def name_as_string(self) -> str:
@@ -109,18 +118,33 @@ class SchemaTable:
     def __init__(
             self,
             name: str,
-            columns: list[TableColumn],
-            primary_keys: list[str],
-            foreign_keys: list[ForeignKey]
+            columns: list[TableColumn] = None,
+            primary_keys: list[str] = None,
+            foreign_keys: list[ForeignKey] = None
             ):
         self.name = name
+        if columns == None:
+            columns = []
         self.columns = columns
+        if primary_keys == None:
+            primary_keys = []
         self.primary_keys = primary_keys
+        if foreign_keys == None:
+            foreign_keys = None
         self.foreign_keys = foreign_keys
 
     
     def __hash__(self):
-        return hash((self.name, tuple(self.columns), tuple(self.primary_keys), tuple(self.foreign_keys)))
+        columns = self.columns
+        if columns == None:
+            columns = []
+        primary_keys = self.primary_keys
+        if primary_keys == None:
+            primary_keys = []
+        foreign_keys = self.foreign_keys
+        if foreign_keys == None:
+            foreign_keys = []
+        return hash((self.name, tuple(columns), tuple(primary_keys), tuple(foreign_keys)))
 
 
     def __eq__(self, other):
@@ -147,11 +171,17 @@ class SchemaTable:
     
 
     def __str__(self):
-        columns_str = ", ".join(str(column) for column in self.columns)
-        primary_keys_str = ", ".join(self.primary_keys)
-        foreign_keys_str = ", ".join(str(fk) for fk in self.foreign_keys)
-        return (f"SchemaTable(name={self.name}, columns=[{columns_str}], "
-                f"primary_keys=[{primary_keys_str}], foreign_keys=[{foreign_keys_str}])")
+        output_strings = [f"name={self.name}"]
+        if self.columns != None and len(self.columns) > 0:
+            columns_str = ", ".join(str(column) for column in self.columns)
+            output_strings.append(f" columns=[{columns_str}]")
+        if self.primary_keys != None and len(self.primary_keys) > 0:
+            primary_keys_str = ", ".join(self.primary_keys)
+            output_strings.append(f" primary_keys=[{primary_keys_str}]")
+        if self.foreign_keys != None and len(self.foreign_keys) != None:
+            foreign_keys_str = ", ".join(str(fk) for fk in self.foreign_keys)
+            output_strings.append(f" foreign_keys=[{foreign_keys_str}]")
+        return (f"SchemaTable({",".join(output_strings)})")
 
 
 

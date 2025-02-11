@@ -1,4 +1,7 @@
-from BenchmarkEmbedding.IdentifierAmbiguityProblemResults import IdentifierAmbiguityProblemResults
+from BenchmarkEmbedding.IdentifierAmbiguityProblemResults import (
+    IdentifierAmbiguityProblemResults,
+    IdentifierAmbiguityProblemItem    
+    )
 from NlSqlBenchmark.SchemaObjects import TableColumn, SchemaTable
 
 def associate_column_with_word_nl_test():
@@ -86,3 +89,79 @@ def get_all_word_nl_test():
     return (
         results.get_all_word_nl() == {"test1", "test2"}
     )
+
+
+
+def results_eq_test():
+    correct_result1 = IdentifierAmbiguityProblemResults(
+        word_nl_matches=[
+            IdentifierAmbiguityProblemItem(
+                word_nl="crashes",
+                matching_relations={
+                    SchemaTable(name="CRASH"),
+                    SchemaTable(name="EDRPOSTCRASH"),
+                    SchemaTable(name="EDRPRECRASH"),
+                },
+                matching_attributes={
+                    TableColumn(name="CrashImminentBraking", table_name="VPICDECODE"),
+                    TableColumn(name="PREVCRASH", table_name="AIRBAG"),
+                    TableColumn(name="IGCYCRASH", table_name="EDREVENT")
+                }
+            )
+        ]
+    )
+    correct_result2 = IdentifierAmbiguityProblemResults(
+        word_nl_matches=[
+            IdentifierAmbiguityProblemItem(
+                word_nl="crashes",
+                matching_relations={
+                    SchemaTable(name="CRASH"),
+                    SchemaTable(name="EDRPOSTCRASH"),
+                    SchemaTable(name="EDRPRECRASH"),
+                },
+                matching_attributes={
+                    TableColumn(name="CrashImminentBraking", table_name="VPICDECODE"),
+                    TableColumn(name="PREVCRASH", table_name="AIRBAG"),
+                    TableColumn(name="IGCYCRASH", table_name="EDREVENT")
+                }
+            )
+        ]
+    )
+    return correct_result1 == correct_result2
+
+
+def results_not_eq_test():
+    correct_result1 = IdentifierAmbiguityProblemResults(
+        word_nl_matches=[
+            IdentifierAmbiguityProblemItem(
+                word_nl="crashes",
+                matching_relations={
+                    SchemaTable(name="CRASH"),
+                    SchemaTable(name="EDRPOSTCRASH"),
+                    SchemaTable(name="EDRPRECRASH"),
+                },
+                matching_attributes={
+                    TableColumn(name="CrashImminentBraking", table_name="VPICDECODE"),
+                    TableColumn(name="PREVCRASH", table_name="AIRBAG"),
+                    TableColumn(name="IGCYCRASH", table_name="EDREVENT")
+                }
+            )
+        ]
+    )
+    correct_result2 = IdentifierAmbiguityProblemResults(
+        word_nl_matches=[
+            IdentifierAmbiguityProblemItem(
+                word_nl="crashes",
+                matching_relations={
+                    SchemaTable(name="CRASH"),
+                    SchemaTable(name="EDRPOSTCRASH"),
+                },
+                matching_attributes={
+                    TableColumn(name="CrashImminentBraking", table_name="VPICDECODE"),
+                    TableColumn(name="PREVCRASH", table_name="AIRBAG"),
+                    TableColumn(name="IGCYCRASH", table_name="EDREVENT")
+                }
+            )
+        ]
+    )
+    return correct_result1 != correct_result2
