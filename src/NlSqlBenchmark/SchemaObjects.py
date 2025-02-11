@@ -1,6 +1,19 @@
 
 
 class TableColumn:
+    """
+    Represents a column in a table with a name, data type, and table name.
+
+    Attributes:
+        name (str): The name of the column.
+        data_type (str, optional): The data type of the column. Defaults to None.
+        table_name (str, optional): The name of the table to which the column belongs. Defaults to None.
+    
+    Methods:
+    --------
+        name_as_string() -> str: Returns the column name as a string, including the table name if available.
+    """
+
 
     def __init__(
             self,
@@ -71,16 +84,6 @@ class ForeignKey:
         A list of columns that make up the foreign key.
     references : tuple
         A tuple containing the table name and a list of columns that the foreign key references.
-    Methods:
-    --------
-    __init__(self, columns: list, references: tuple):
-        Initializes the ForeignKey with the specified columns and references.
-    __eq__(self, other):
-        Checks if this ForeignKey is equal to another ForeignKey.
-    __getitem__(self, item_key):
-        Allows access to columns or references using a key.
-    __str__(self):
-        Returns a string representation of the ForeignKey.
     """
 
     def __init__(
@@ -114,6 +117,20 @@ class ForeignKey:
 
 
 class SchemaTable:
+    """
+    A class to represent a database schema table.
+    Attributes:
+    -----------
+    name : str
+        The name of the table.
+    columns : list[TableColumn], optional
+        A list of columns in the table (default is None).
+    primary_keys : list[str], optional
+        A list of primary key column names (default is None).
+    foreign_keys : list[ForeignKey], optional
+        A list of foreign keys in the table (default is None).
+    """
+
 
     def __init__(
             self,
@@ -187,6 +204,16 @@ class SchemaTable:
 
 
 class Schema:
+    """
+    A class to represent a database schema.
+    Attributes:
+    -----------
+    database : str
+        The name of the database.
+    tables : list[SchemaTable]
+        A list of SchemaTable objects representing the tables in the database.
+    """
+
 
     def __init__(
             self,

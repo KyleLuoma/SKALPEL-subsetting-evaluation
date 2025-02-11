@@ -3,7 +3,7 @@ as (
 	select concat(schema_identifier, nlq.question_number) as id_qn
 	from benchmark_gold_query_tables as gqt
 	join benchmark_question_natural_language_question_word_embeddings nlq
-	on nlq.embedding <=> gqt.embedding <= 0.35
+	on nlq.embedding <=> gqt.embedding <= 0.25
 		and nlq.benchmark_name = gqt.benchmark_name
 		and nlq.database_name = gqt.database_name
 		and nlq.question_number = gqt.question_number
@@ -14,7 +14,7 @@ as (
 	select concat(table_name, nlq.question_number) as id_qn
 	from benchmark_gold_query_columns gqc
 	join benchmark_question_natural_language_question_word_embeddings nlq
-	on nlq.embedding <=> gqc.embedding <= 0.35
+	on nlq.embedding <=> gqc.embedding <= 0.30
 		and nlq.benchmark_name = gqc.benchmark_name
 		and nlq.database_name = gqc.database_name
 		and nlq.question_number = gqc.question_number

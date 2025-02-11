@@ -1,8 +1,70 @@
+import warnings
+
 
 class StringObjectParser:
+    """
+    A utility class for parsing string representations of Python objects into actual Python objects.
+    Methods:
+        string_to_python_object(input_string: str, use_eval: bool = False) -> object:
+        detect_object_type(input_string: str) -> str:
+            Detects the type of Python object represented by the input string.
+        parse_string_string(input_string: str) -> str:
+            Parses a string representation of a string object.
+        parse_float_string(input_string: str) -> float:
+            Parses a string representation of a float object.
+        parse_int_string(input_string: str) -> int:
+            Parses a string representation of an integer object.
+        parse_set_string(input_string: str) -> set:
+            Parses a string representation of a set object.
+        parse_tuple_string(input_string: str) -> tuple:
+            Parses a string representation of a tuple object.
+        parse_list_string(input_string: str) -> list:
+            Parses a string representation of a list object.
+        parse_dict_string(input_string: str) -> dict:
+            Parses a string representation of a dictionary object.
+        recurse_on_list(input_list: list) -> list:
+            Recursively parses elements of a list.
+        recurse_on_set(input_set: set) -> set:
+            Recursively parses elements of a set.
+        recurse_on_tuple(input_tuple: tuple) -> tuple:
+            Recursively parses elements of a tuple.
+        recurse_on_dict(input_dict: dict) -> dict:
+            Recursively parses keys and values of a dictionary.
+    """
 
-    def string_to_python_object(input_string: str) -> object:
 
+    def string_to_python_object(input_string: str, use_eval = False) -> object:
+        """
+        Converts a string representation of a Python object into the actual Python object.
+        Args:
+            input_string (str): The string representation of the Python object.
+            use_eval (bool): If True, uses the eval function to convert the string to a Python object.
+                                The input string must be properly encased with matching symbols (e.g., [], {}, "", '').
+                                Defaults to False.
+        Returns:
+            object: The Python object represented by the input string.
+        Raises:
+            AssertionError: If use_eval is True and the input string is not properly encased with matching symbols.
+        """
+
+        if use_eval:
+            warnings.warn("Using eval can be dangerous. Make sure the input string is from a trusted source.")
+
+        encase_symbols = {
+            "[": "]",
+            "(": ")",
+            "{": "}",
+            '"': "'",
+            "'": '"'
+        }
+
+        if use_eval:
+            assert (
+                input_string[0] in encase_symbols.keys()
+                and input_string[-1] == encase_symbols[input_string[0]]
+                )
+            return eval(input_string)
+        
         object_type = StringObjectParser.detect_object_type(input_string)
         parsed_object = input_string
 
@@ -38,6 +100,9 @@ class StringObjectParser:
 
 
 
+
+
+
     def detect_object_type(input_string: str) -> str:
         input_string = input_string.strip()
         object_type = "object"
@@ -62,6 +127,7 @@ class StringObjectParser:
         # print(input_string, "is a", object_type)
         return object_type
         
+
 
     def parse_string_string(input_string: str) -> str:
         return input_string[1:-1]

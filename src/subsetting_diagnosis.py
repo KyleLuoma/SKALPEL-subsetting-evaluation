@@ -1,6 +1,14 @@
 
 from BenchmarkEmbedding.BenchmarkEmbedding import BenchmarkEmbedding
 from BenchmarkEmbedding.VectorSearchResults import VectorSearchResults, WordIdentifierDistance
+from BenchmarkEmbedding.IdentifierAmbiguityProblemResults import (
+    IdentifierAmbiguityProblemResults,
+    IdentifierAmbiguityProblemItem
+)
+from NlSqlBenchmark.SchemaObjects import (
+    SchemaTable,
+    TableColumn
+)
 from NlSqlBenchmark.NlSqlBenchmarkFactory import NlSqlBenchmarkFactory
 import pandas as pd
 import os
@@ -36,10 +44,12 @@ def main():
         "question_number": [],
         "gold_query_tables": [],
         "missing_tables": [],
-        "hidden_relations": [],
-        "gold_query_attributes": [],
-        "missing_attributes": [],
-        "value_reference_problem_attributes": []
+        "hidden_tables": [],
+        "ambiguous_extra_tables": [],
+        "gold_query_columns": [],
+        "missing_columns": [],
+        "value_reference_problem_columns": [],
+        "ambiguous_extra_columns": []
     }
     value_reference_problem_results_dict = {
         "table_name": [],
@@ -62,16 +72,16 @@ def main():
             results_dict["missing_tables"].append("{}")
         else:
             results_dict["missing_tables"].append(missing_tables)
-        
+
         correct_attributes = set(sop.string_to_python_object(row.correct_columns))
         missing_attributes = set(sop.string_to_python_object(row.missing_columns))
-        results_dict["gold_query_attributes"].append(
+        results_dict["gold_query_columns"].append(
             correct_attributes.union(missing_attributes)
         )
         if len(missing_attributes) == 0:
-            results_dict["missing_attributes"].append("{}")
+            results_dict["missing_columns"].append("{}")
         else:
-            results_dict["missing_attributes"].append(missing_attributes)
+            results_dict["missing_columns"].append(missing_attributes)
 
         ## Discover hidden relation problems ##
         hidden_relations = benchmark_embedding.get_hidden_relations(
@@ -80,9 +90,9 @@ def main():
             naturalness=naturalness
         ).intersection(missing_tables)
         if len(hidden_relations) == 0:
-            results_dict["hidden_relations"].append("{}")
+            results_dict["hidden_tables"].append("{}")
         else:
-            results_dict["hidden_relations"].append(hidden_relations)
+            results_dict["hidden_tables"].append(hidden_relations)
 
         ## Discover value reference problems ##
         value_reference_problems = benchmark_embedding.get_value_reference_problem_results(
@@ -94,15 +104,43 @@ def main():
         for column in question_vrp_items_dict:
             value_reference_problem_results_dict[column] += question_vrp_items_dict[column]
 
-        unmatched_attributes = value_reference_problems.get_unmatched_column_names_as_set()
-        correct_attributes_upper = set([a.upper() for a in correct_attributes])
-        unmatched_attributes = unmatched_attributes - correct_attributes_upper
-        if len(unmatched_attributes) > 0:
-            results_dict["value_reference_problem_attributes"].append(unmatched_attributes)
-        else:
-            results_dict["value_reference_problem_attributes"].append("{}")
+        unmatched_attributes = {}
+        for col in value_reference_problems.problem_columns:
+            if f"{col.table_name}.{col.column_name}" not in unmatched_attributes.keys():
+                unmatched_attributes[f"{col.table_name}.{col.column_name}"] = [(col.nlq_ngram, col.db_text_value)]
+            else:
+                unmatched_attributes[f"{col.table_name}.{col.column_name}"].append((col.nlq_ngram, col.db_text_value))
 
+        if len(unmatched_attributes) > 0:
+            results_dict["value_reference_problem_columns"].append(unmatched_attributes)
+        else:
+            results_dict["value_reference_problem_columns"].append("{}")
+
+
+        ## Discover word NL ~ Identifier ambiguity problems ##
+        ambiguous_items = benchmark_embedding.get_identifier_ambiguity_problem_results(
+            database_name=row.database,
+            question_number=row.question_number,
+            naturalness=naturalness
+        )
         
+        extra_tables = set(sop.string_to_python_object(row.extra_tables))
+        extra_columns = set(sop.string_to_python_object(row.extra_columns))
+
+        ambiguous_columns = {}
+        ambiguous_tables = {}
+
+        for item in ambiguous_items.word_nl_matches:
+            matching_relations = set([r.name for r in item.matching_relations])
+            matching_attributes = set([a.name_as_string() for a in item.matching_attributes])
+            if len(extra_columns.intersection(matching_attributes)) > 0:
+                ambiguous_columns[item.word_nl] = extra_columns.intersection(matching_attributes)
+            if len(extra_tables.intersection(matching_relations)) > 0:
+                ambiguous_tables[item.word_nl] = extra_tables.intersection(matching_relations)
+
+        results_dict["ambiguous_extra_columns"].append(ambiguous_columns)
+
+        results_dict["ambiguous_extra_tables"].append(ambiguous_tables)
 
     pd.DataFrame(results_dict).to_excel(
         f"{results_folder}/diagnosis/{results_filename.replace('subsetting-', 'subsetting-diagnosis-')}", 

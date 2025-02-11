@@ -24,3 +24,15 @@ def parse_list_string_test():
 def parse_dict_string_test():
     result = StringObjectParser.string_to_python_object("{'k': 'v', 1: 2, 3: 'four'}")
     return result == {'k': 'v', 1: 2, 3: 'four'}
+
+def string_to_python_object_test():
+    result = StringObjectParser.string_to_python_object("{1: [1, 2, 3]}", True)
+    return result == {1: [1, 2, 3]}
+
+def string_to_python_malicious_object_eval_test():
+    assert_error = False
+    try:
+        StringObjectParser.string_to_python_object("import os", use_eval=True)
+    except AssertionError as e:
+        assert_error =  True
+    return assert_error
