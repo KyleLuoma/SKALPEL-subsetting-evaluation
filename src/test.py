@@ -8,6 +8,7 @@ import tests
 # from tests import NlSqlBenchmarkTest
 # from tests import BirdNlSqlBenchmarkTest
 # from tests import SnailsNlSqlBenchmarkTest
+from tests import SpiderNlSqlBenchmarkTest
 # from tests import QueryResultTest
 # from tests import QueryProfilerTest
 # from tests import SchemaSubsetterTest
@@ -17,7 +18,7 @@ import tests
 # from tests import CodeSSubsetterTest
 # from tests import SchemaSubsetterEvaluatorTest
 # from tests import BenchmarkEmbeddingTest
-from tests import StringObjectParserTest
+# from tests import StringObjectParserTest
 # from tests import SchemaObjectsTest
 # from tests import ValueReferenceProblemResultsTests
 # from tests import IdentifierAmbiguityProblemResultsTest
