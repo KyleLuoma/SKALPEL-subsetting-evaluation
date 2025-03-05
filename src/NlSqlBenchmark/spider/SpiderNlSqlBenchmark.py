@@ -14,7 +14,7 @@ from NlSqlBenchmark.SchemaObjects import (
 
 class SpiderNlSqlBenchmark(NlSqlBenchmark):
 
-    name = "spider1"
+    name = "spider"
 
 
     def __init__(self):
@@ -23,7 +23,7 @@ class SpiderNlSqlBenchmark(NlSqlBenchmark):
         self.name = "spider"
         self.sql_dialect = "sqlite"
         self.questions_list = self.__load_questions_list()
-        self.databases: str = []
+        self.databases: list[str] = []
         for q in self.questions_list:
             if q["db_id"] not in self.databases:
                 self.databases.append(q["db_id"])
@@ -90,10 +90,7 @@ class SpiderNlSqlBenchmark(NlSqlBenchmark):
 
 
     def set_active_schema(self, database_name) -> None:
-       schema_lookup = {k: v for v, k in enumerate(self.databases)}
-       self.active_database = schema_lookup[database_name]
-       self.active_database_questions = self.__load_active_database_questions()
-       self.active_database_queries = self.__load_active_database_queries()
+       super().set_active_schema(database_name)
 
 
     def execute_query(self, query: str, database: str = None, question: int = None) -> QueryResult:
@@ -142,7 +139,7 @@ class SpiderNlSqlBenchmark(NlSqlBenchmark):
         return [s[0] for s in sample_values]
 
 
-    def __load_questions_list(self) -> list:
+    def __load_questions_list(self) -> list[dict]:
         with open(f"{self.benchmark_folder}/dev.json") as f:
             dev_questions = json.load(f)
         return dev_questions

@@ -20,10 +20,17 @@ class TableColumn:
             name: str,
             data_type: str = None,
             table_name: str = None,
+            description: str = None,
+            sample_values: list = None
             ):
         self.name = name
         self.data_type = data_type
         self.table_name = table_name
+        self.description = description
+        if sample_values == None:
+            self.sample_values = []
+        else:
+            self.sample_values = sample_values
 
 
     def __hash__(self):
@@ -63,8 +70,11 @@ class TableColumn:
         name = self.name_as_string()
         data_type_string = ""
         if self.data_type != None:
-            data_type_string = f", data_type={self.data_type}"
-        return f"TableColumn(name={name}{data_type_string})"
+            data_type_string = f", data_type='{self.data_type}'"
+        description_string = ""
+        if self.description != None:
+            description_string = f", description='{self.description}'"
+        return f"TableColumn(name='{name}'{data_type_string})"
     
 
     def name_as_string(self) -> str:
@@ -188,7 +198,7 @@ class SchemaTable:
     
 
     def __str__(self):
-        output_strings = [f"name={self.name}"]
+        output_strings = [f"name='{self.name}'"]
         if self.columns != None and len(self.columns) > 0:
             columns_str = ", ".join(str(column) for column in self.columns)
             output_strings.append(f" columns=[{columns_str}]")
