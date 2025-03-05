@@ -24,14 +24,14 @@ def get_active_schema_test():
     return len(schema.tables) == 92
 
 
-# def iter_test():
-#     bm = Spider2NlSqlBenchmark()
-#     itercount = 0
-#     iter_questions = set()
-#     for question in bm:
-#         iter_questions.add(question.question)
-#         itercount += 1
-#     return itercount == 256
+def iter_test():
+    bm = Spider2NlSqlBenchmark()
+    itercount = 0
+    iter_questions = set()
+    for question in bm:
+        iter_questions.add(question.question)
+        itercount += 1
+    return itercount == 256
 
 
 def get_sample_values_test():
@@ -47,6 +47,4 @@ def set_and_get_active_schema_test():
     bm = Spider2NlSqlBenchmark()
     bm.set_active_schema("Pagila")
     schema = bm.get_active_schema()
-    for table in schema.tables:
-        print(table)
     return schema.database == "Pagila"
