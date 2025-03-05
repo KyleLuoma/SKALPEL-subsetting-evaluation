@@ -1,5 +1,6 @@
 from NlSqlBenchmark.NlSqlBenchmarkFactory import NlSqlBenchmarkFactory
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
     SchemaTable,
@@ -18,7 +19,7 @@ import pandas as pd
 from tqdm import tqdm
 
 test = False
-verbose = False
+verbose = True
 
 results_filename = "./subsetting_results/subsetting-CodeS-snails-NVIDIA_RTX_2000.xlsx"
 results_filename = None
@@ -31,10 +32,11 @@ else:
     v_print = dummy
 
 def main():
+    benchmark_name = "spider2"
     bm_factory = NlSqlBenchmarkFactory()
-    benchmark = bm_factory.build_benchmark("bird")
-    subsetter = CodeSSubsetter(benchmark)
-    # subsetter = PerfectSchemaSubsetter()
+    benchmark = bm_factory.build_benchmark(benchmark_name)
+    # subsetter = CodeSSubsetter(benchmark)
+    subsetter = PerfectSchemaSubsetter()
 
     if results_filename == None:
         results, subsets_questions = generate_subsets(subsetter=subsetter, benchmark=benchmark)
@@ -53,23 +55,27 @@ def main():
     )
 
 
-def generate_subsets(subsetter: SchemaSubsetter, benchmark: NlSqlBenchmark) -> (dict, list):
+def generate_subsets(subsetter: SchemaSubsetter, benchmark: NlSqlBenchmark) -> tuple[dict, list]:
     results = {
         "database": [],
         "question_number": [],
         "inference_time": [],
         "prompt_tokens": []
     }
+    failures: list[BenchmarkQuestion] = []
     test_counter = 0
     subsets_questions = []
     for question in tqdm(benchmark, total=len(benchmark), desc=f"Running {subsetter.name} subsetter over {benchmark.name} benchmark."):
         test_counter += 1
-        v_print(question["query"])
+        v_print("\n", question["query"])
         v_print("--- Running subsetter ---")
         t_start = time.perf_counter()
-        subset = subsetter.get_schema_subset(
-            benchmark_question=question
-        )
+        try:
+            subset = subsetter.get_schema_subset(
+                benchmark_question=question
+            )
+        except UnboundLocalError as e:
+            failures.append(question)
         t_end = time.perf_counter()
         v_print("Subsetting time:", str(t_end - t_start))
         subsets_questions.append((subset, question))
@@ -80,6 +86,13 @@ def generate_subsets(subsetter: SchemaSubsetter, benchmark: NlSqlBenchmark) -> (
         v_print(subset)
         if test and test_counter > 5:
             break
+    if len(failures) > 0:
+        with open(f"./subset_failures_{subsetter.name}_{benchmark.name}.log", "wt", encoding="utf-8") as f:
+            for failure in failures:
+                f.write(f"##### {failure.schema.database} - {failure.question_number} #####\n")
+                f.write(f"    {failure.question}\n")
+                f.write(f"    {failure.query}\n\n\n")
+
     return results, subsets_questions
 
 
@@ -106,7 +119,7 @@ def evaluate_subsets(subsets: list, results: dict) -> dict:
 
 
 
-def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) -> (dict, list):
+def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) -> tuple[dict, list]:
     results_df = pd.read_excel(results_filename)
     results = {
         "database": [],

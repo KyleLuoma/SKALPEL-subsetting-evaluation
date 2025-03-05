@@ -14,8 +14,11 @@ from NlSqlBenchmark.SchemaObjects import (
 
 class Spider2NlSqlBenchmark(NlSqlBenchmark):
 
+    name = "spider2"
+
     def __init__(self):
         super().__init__()
+        self.name = Spider2NlSqlBenchmark.name
         self.benchmark_folder = dirname(dirname(dirname(dirname(abspath(__file__))))) + "/benchmarks/spider2"
         self.gold_query_instance_ids = self._get_gold_query_instance_ids()
         self.gold_query_lookup = self._make_gold_query_lookup_by_instance_id()
@@ -27,6 +30,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
                 self.databases.append(q["db"])
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
+        self.sql_dialect = "sqlite" #sqlite syntax should cover use cases for bigquery and snowflake as well
 
 
     def _get_gold_query_instance_ids(self) -> list:
@@ -100,6 +104,10 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         question = self.get_active_question()
         self.active_question_no += 1
         return question
+    
+
+    def __len__(self):
+        return len(self.questions_list)
     
 
     def __load_active_database_questions(self):
@@ -183,7 +191,8 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
 
     def get_active_question(self):
         question = super().get_active_question()
-        question.query_dialect = self.database_type_lookup[question.schema.database]
+        # question.query_dialect = self.database_type_lookup[question.schema.database]
+        question.query_dialect = "sqlite"
         return question
     
 
@@ -191,8 +200,11 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         raise NotImplementedError
 
 
-    def get_sample_values(self, table_name, column_name, num_values = 2) -> list[str]:
-        schema = self.get_active_schema()
+    def get_sample_values(self, table_name: str, column_name: str, database: str = None, num_values: int = 2) -> list[str]:
+        if database == None:
+            schema = self.get_active_schema()
+        else:
+            schema = self.get_active_schema(database=database)
         table_object = None
         for table in schema.tables:
             if table_name == table.name:

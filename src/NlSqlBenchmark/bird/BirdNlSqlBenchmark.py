@@ -171,7 +171,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         )
     
 
-    def get_sample_values(self,  table_name: str, column_name: str, database: str = None, num_values: int = 2) -> list:
+    def get_sample_values(self,  table_name: str, column_name: str, database: str = None, num_values: int = 2) -> list[str]:
         if database == None:
             database = self.active_database
         con = sqlite3.connect(
