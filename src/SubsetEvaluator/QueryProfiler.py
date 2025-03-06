@@ -261,7 +261,7 @@ class QueryProfiler:
             capture_output=True
         )
         response = str(response)
-        print("__parse_query DEBUG:", response)
+        # print("__parse_query DEBUG:", response)
         response = response.replace("\\n", "")
         response = response.replace("\\r", "")
         response = response.replace("\\t", "")

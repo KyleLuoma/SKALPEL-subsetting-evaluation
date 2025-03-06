@@ -191,8 +191,9 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
 
     def get_active_question(self):
         question = super().get_active_question()
-        # question.query_dialect = self.database_type_lookup[question.schema.database]
-        question.query_dialect = "sqlite"
+        question.query_dialect = self.database_type_lookup[question.schema.database]
+        if question.query_dialect != "sqlite":
+            question.query_dialect = "postgresql"
         return question
     
 

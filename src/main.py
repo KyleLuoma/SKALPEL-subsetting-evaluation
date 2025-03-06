@@ -10,7 +10,7 @@ from NlSqlBenchmark.SchemaObjects import (
 from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
 from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
 from SchemaSubsetter.CodeSSubsetter import CodeSSubsetter
-from SchemaSubsetter.PerfectSchemaSubsetter import PerfectSchemaSubsetter
+from SchemaSubsetter.Perfect.PerfectSchemaSubsetter import PerfectSchemaSubsetter
 from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
 from SubsetEvaluator import QueryProfiler
 from util.StringObjectParser import StringObjectParser
@@ -75,7 +75,7 @@ def generate_subsets(subsetter: SchemaSubsetter, benchmark: NlSqlBenchmark) -> t
                 benchmark_question=question
             )
         except UnboundLocalError as e:
-            failures.append(question)
+            failures.append((question, str(e)))
         t_end = time.perf_counter()
         v_print("Subsetting time:", str(t_end - t_start))
         subsets_questions.append((subset, question))
@@ -89,16 +89,21 @@ def generate_subsets(subsetter: SchemaSubsetter, benchmark: NlSqlBenchmark) -> t
     if len(failures) > 0:
         with open(f"./subset_failures_{subsetter.name}_{benchmark.name}.log", "wt", encoding="utf-8") as f:
             for failure in failures:
-                f.write(f"##### {failure.schema.database} - {failure.question_number} #####\n")
-                f.write(f"    {failure.question}\n")
-                f.write(f"    {failure.query}\n\n\n")
+                e = failure[1]
+                q: BenchmarkQuestion = failure[0]
+                f.write(f"##### {q.schema.database} - {q.question_number} #####\n")
+                f.write(e)
+                f.write("\n  ## Question:\n")
+                f.write(f"    {q.question}\n")
+                f.write("\n  ## Query:\n")
+                f.write(f"    {q.query}\n\n\n")
 
     return results, subsets_questions
 
 
 
 def evaluate_subsets(subsets: list, results: dict) -> dict:
-    evaluator = SchemaSubsetEvaluator()
+    evaluator = SchemaSubsetEvaluator(use_result_cache=False) 
     for s_q_pair in tqdm(subsets, desc=f"Evaluating the subsets"):
         subset = s_q_pair[0]
         question = s_q_pair[1]

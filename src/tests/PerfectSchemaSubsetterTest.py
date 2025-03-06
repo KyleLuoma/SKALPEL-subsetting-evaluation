@@ -1,6 +1,7 @@
-from SchemaSubsetter.PerfectSchemaSubsetter import PerfectSchemaSubsetter
+from SchemaSubsetter.Perfect.PerfectSchemaSubsetter import PerfectSchemaSubsetter
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 from NlSqlBenchmark.snails.SnailsNlSqlBenchmark import SnailsNlSqlBenchmark
+from NlSqlBenchmark.spider2.Spider2NlSqlBenchmark import Spider2NlSqlBenchmark
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
     SchemaTable,
@@ -39,6 +40,20 @@ def get_schema_subset_test():
     return result == correct_result
 
 
+def spider_2_query_test():
+    query_file = "./src/tests/sql/PerfectSchemaSubsetter/spider2.sql"
+    with open(query_file, "rt") as f:
+        query = f.read()
+    pss = PerfectSchemaSubsetter()
+    benchmark = Spider2NlSqlBenchmark()
+    subset = pss.get_schema_subset(BenchmarkQuestion(
+        question="foo",
+        question_number=0,
+        query=query,
+        query_dialect="postgresql",
+        schema=benchmark.get_active_schema(database="ga360")
+    ))
+    return type(subset) == Schema
 
 
 

@@ -2,7 +2,7 @@
 Class for evaluating a schema subset against the schema identifiers required for a NL-to-SQL question
 """
 
-from SchemaSubsetter.PerfectSchemaSubsetter import PerfectSchemaSubsetter
+from SchemaSubsetter.Perfect.PerfectSchemaSubsetter import PerfectSchemaSubsetter
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from SubsetEvaluator.SubsetEvaluation import SubsetEvaluation
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
@@ -42,12 +42,11 @@ class SchemaSubsetEvaluator:
         
         correct_subset = self.subsetter.get_schema_subset(benchmark_question=question)
 
-        if self.use_result_cache:
-            with open(
-                f"./src/SubsetEvaluator/correct_subsets/{question.schema.database}-{question.schema_naturalness}-{question.question_number}-subset.pkl",
-                "wb"
-                ) as f:
-                pickle.dump(correct_subset, f)
+        with open(
+            f"./src/SubsetEvaluator/correct_subsets/{question.schema.database}-{question.schema_naturalness}-{question.question_number}-subset.pkl",
+            "wb"
+            ) as f:
+            pickle.dump(correct_subset, f)
                 
         return correct_subset
 

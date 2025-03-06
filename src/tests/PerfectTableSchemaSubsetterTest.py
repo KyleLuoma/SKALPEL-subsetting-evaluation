@@ -1,4 +1,4 @@
-from SchemaSubsetter.PerfectTableSchemaSubsetter import PerfectTableSchemaSubsetter
+from SchemaSubsetter.Perfect.PerfectTableSchemaSubsetter import PerfectTableSchemaSubsetter
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
