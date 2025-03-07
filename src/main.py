@@ -19,7 +19,7 @@ import pandas as pd
 from tqdm import tqdm
 
 test = False
-verbose = True
+verbose = False
 
 results_filename = "./subsetting_results/subsetting-CodeS-snails-NVIDIA_RTX_2000.xlsx"
 results_filename = None
@@ -49,16 +49,27 @@ def main():
     results_df = pd.DataFrame(results)
 
     filename_comments = "NVIDIA_RTX_2000"
-    results_df.to_excel(
-        f"./subsetting_results/subsetting-{subsetter.name}-{benchmark.name}-{benchmark.naturalness}-{filename_comments}.xlsx",
-        index=False
-    )
+    end_while = False
+    while not end_while:
+        try:
+            results_df.to_excel(
+                f"./subsetting_results/subsetting-{subsetter.name}-{benchmark.name}-{benchmark.naturalness}-{filename_comments}.xlsx",
+                index=False
+            )
+            end_while = True
+        except Exception as e:
+            print("Could not save dataframe due to exception:")
+            print(e)
+            response = input("See if you can correct the issue and then press enter to try again. Enter quit to terminate without saving.")
+            if response.lower() == "quit":
+                end_while = True
 
 
 def generate_subsets(subsetter: SchemaSubsetter, benchmark: NlSqlBenchmark) -> tuple[dict, list]:
     results = {
         "database": [],
         "question_number": [],
+        "query_filename": [],
         "inference_time": [],
         "prompt_tokens": []
     }
@@ -81,6 +92,10 @@ def generate_subsets(subsetter: SchemaSubsetter, benchmark: NlSqlBenchmark) -> t
         subsets_questions.append((subset, question))
         results["database"].append(question["schema"]["database"])
         results["question_number"].append(question["question_number"])
+        if question.query_filename != None:
+            results["query_filename"].append(question.query_filename)
+        else:
+            results["query_filename"].append("")
         results["inference_time"].append(t_end - t_start)
         results["prompt_tokens"].append(0)
         v_print(subset)
@@ -129,6 +144,7 @@ def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) 
     results = {
         "database": [],
         "question_number": [],
+        "query_filename": [],
         "inference_time": [],
         "prompt_tokens": []
     }
@@ -140,6 +156,10 @@ def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) 
         question = benchmark.get_active_question()
         results["database"].append(row.database)
         results["question_number"].append(row.question_number)
+        try:
+            results["query_filename"].append(row.query_filename)
+        except:
+            results["query_filename"].append("")
         results["inference_time"].append(row.inference_time)
         results["prompt_tokens"].append(row.prompt_tokens)
         correct_tables = StringObjectParser.string_to_python_object(row.correct_tables)

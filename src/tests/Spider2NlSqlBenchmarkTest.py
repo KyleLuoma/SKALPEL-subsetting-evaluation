@@ -1,5 +1,6 @@
 from NlSqlBenchmark.spider2.Spider2NlSqlBenchmark import Spider2NlSqlBenchmark
 from NlSqlBenchmark.QueryResult import QueryResult
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
     SchemaTable,
@@ -45,6 +46,6 @@ def get_sample_values_test():
 
 def set_and_get_active_schema_test():
     bm = Spider2NlSqlBenchmark()
-    bm.set_active_schema("Pagila")
+    bm.set_active_schema("PATENTS")
     schema = bm.get_active_schema()
-    return schema.database == "Pagila"
+    return schema.database == "PATENTS"

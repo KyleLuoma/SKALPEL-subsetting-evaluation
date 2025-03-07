@@ -267,6 +267,7 @@ class QueryProfiler:
         response = response.replace("\\t", "")
         response = response.replace("\\'", "'")
         response = response.replace('""', '"')
+        # print("DEBUG RESPONSE", response)
         
         try:
             tree_string = response.split('@BEGINPARSETREE')[1]

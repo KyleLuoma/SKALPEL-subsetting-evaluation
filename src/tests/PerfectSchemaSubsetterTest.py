@@ -42,17 +42,16 @@ def get_schema_subset_test():
 
 def spider_2_query_test():
     query_file = "./src/tests/sql/PerfectSchemaSubsetter/spider2.sql"
-    with open(query_file, "rt") as f:
-        query = f.read()
     pss = PerfectSchemaSubsetter()
     benchmark = Spider2NlSqlBenchmark()
-    subset = pss.get_schema_subset(BenchmarkQuestion(
-        question="foo",
-        question_number=0,
-        query=query,
-        query_dialect="postgresql",
-        schema=benchmark.get_active_schema(database="ga360")
-    ))
+    benchmark.set_active_schema("noaa_data")
+    benchmark.set_active_question_number(3)
+    q = benchmark.get_active_question()
+    with open(query_file, "wt") as f:
+        f.write(f"-- {q.schema.database} {q.query_filename} {q.query_dialect}\n\n")
+        f.write(q.query)
+    subset = pss.get_schema_subset(q)
+    print(subset)
     return type(subset) == Schema
 
 

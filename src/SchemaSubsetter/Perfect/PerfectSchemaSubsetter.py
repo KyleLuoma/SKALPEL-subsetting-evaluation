@@ -35,6 +35,7 @@ class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
             )
         print("DEBUG get_schema_subset query_identifiers:", query_identifiers)
         query_tables = query_identifiers["tables"]
+        query_tables += [t.split(".")[-1] for t in query_tables if "." in t]
         query_columns = query_identifiers["columns"]
         schema_subset = Schema(database=full_schema.database, tables=[])
 
@@ -45,7 +46,13 @@ class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
         
 
         for table in full_schema.tables:
+            in_query_tables = False
             if table.name.upper() in query_tables:
+                in_query_tables = True
+            if len(table.name.split(".")) > 1 and table.name.split(".")[-1].upper() in query_tables:
+                in_query_tables = True
+
+            if in_query_tables:
                 add_table = SchemaTable(
                     name=table.name,
                     columns=[],

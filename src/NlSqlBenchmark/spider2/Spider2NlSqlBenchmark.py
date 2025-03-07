@@ -16,6 +16,11 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
 
     name = "spider2"
 
+    exclude_from_eval = [
+        "bq032.sql", # Contains * EXCEPT clause
+        "bq119.sql"  # Contains * EXCEPT clause
+    ]
+
     def __init__(self):
         super().__init__()
         self.name = Spider2NlSqlBenchmark.name
@@ -23,6 +28,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         self.gold_query_instance_ids = self._get_gold_query_instance_ids()
         self.gold_query_lookup = self._make_gold_query_lookup_by_instance_id()
         self.questions_list = self._get_questions_with_instance_ids(self.gold_query_instance_ids)
+        self.instance_id_lookup = self._make_instance_id_lookup(self.questions_list)
         self.databases: list[str] = []
         self.database_type_lookup = self._make_database_type_lookup()
         for q in self.questions_list:
@@ -38,7 +44,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         gold_query_instance_ids = []
         
         for file_name in os.listdir(sql_files_path):
-            if file_name.endswith(".sql"):
+            if file_name.endswith(".sql") and file_name not in Spider2NlSqlBenchmark.exclude_from_eval:
                 gold_query_instance_ids.append(file_name.replace(".sql", ""))
         
         return gold_query_instance_ids
@@ -57,6 +63,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         return lookup
 
 
+
     def _get_questions_with_instance_ids(self, instance_ids) -> list[dict]:
         with open(
             os.path.join(self.benchmark_folder, "spider2-lite/spider2-lite.jsonl"), 
@@ -72,6 +79,18 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
                 questions.append(inst_dict)
         return questions
     
+
+    def _make_instance_id_lookup(self, questions_list: list[dict]) -> dict[tuple[str, int] : str]:
+        lookup_dict = {}
+        question_counter = {}
+        for q in questions_list:
+            if q["db"] not in question_counter.keys():
+                question_counter[q["db"]] = 0
+            else:
+                question_counter[q["db"]] += 1
+            lookup_dict[(q["db"], question_counter[q["db"]])] = q["instance_id"]
+        return lookup_dict
+
 
     def _make_database_type_lookup(self) -> dict:
         database_path = os.path.join(self.benchmark_folder, "spider2-lite/resource/databases")
@@ -185,15 +204,21 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         return active_schema
     
 
-    def set_active_schema(self, database_name) -> None:
-        super().set_active_schema(database_name)
+    def set_active_schema(self, database_name: str) -> None:
+        schema_lookup = {k: v for v, k in enumerate(self.databases)}
+        self.active_database = schema_lookup[database_name]
+        self.active_database_questions = self.__load_active_database_questions()
+        self.active_database_queries = self.__load_active_database_queries()
 
 
     def get_active_question(self):
         question = super().get_active_question()
         question.query_dialect = self.database_type_lookup[question.schema.database]
-        if question.query_dialect != "sqlite":
-            question.query_dialect = "postgresql"
+        # if question.query_dialect != "sqlite":
+        #     question.query_dialect = "postgresql"
+        question.query_filename = self.instance_id_lookup[
+            (question.schema.database, question.question_number)
+            ] + ".sql"
         return question
     
 

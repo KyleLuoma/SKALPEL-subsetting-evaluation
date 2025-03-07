@@ -17,9 +17,10 @@ class BenchmarkQuestion:
         self.question_number = question_number
         self.schema = schema
         self.schema_naturalness = schema_naturalness
+        self.query_filename = None
 
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if type(self) != type(other):
             return False
         return (
@@ -29,6 +30,7 @@ class BenchmarkQuestion:
             and self.question_number == other.question_number
             and self.schema == other.schema
             and self.schema_naturalness == other.schema_naturalness
+            and self.query_filename == other.query_filname
         )
 
 
@@ -45,5 +47,7 @@ class BenchmarkQuestion:
             return self.schema
         if item_key == "schema_naturalness":
             return self.schema_naturalness
+        if item_key == "query_filename":
+            return self.query_filename
         raise KeyError(item_key)
     
