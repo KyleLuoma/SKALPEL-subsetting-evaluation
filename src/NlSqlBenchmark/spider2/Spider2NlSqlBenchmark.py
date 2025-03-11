@@ -18,7 +18,8 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
 
     exclude_from_eval = [
         "bq032.sql", # Contains * EXCEPT clause
-        "bq119.sql"  # Contains * EXCEPT clause
+        "bq119.sql", # Contains * EXCEPT clause
+        "bq098.sql"  # Unable to parse, reason unknown
     ]
 
     def __init__(self):

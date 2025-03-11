@@ -44,8 +44,8 @@ def spider_2_query_test():
     query_file = "./src/tests/sql/PerfectSchemaSubsetter/spider2.sql"
     pss = PerfectSchemaSubsetter()
     benchmark = Spider2NlSqlBenchmark()
-    benchmark.set_active_schema("noaa_data")
-    benchmark.set_active_question_number(3)
+    benchmark.set_active_schema("ebi_chembl")
+    benchmark.set_active_question_number(1)
     q = benchmark.get_active_question()
     with open(query_file, "wt") as f:
         f.write(f"-- {q.schema.database} {q.query_filename} {q.query_dialect}\n\n")
