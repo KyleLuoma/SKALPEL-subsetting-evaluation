@@ -35,8 +35,8 @@ def main():
     benchmark_name = "spider2"
     bm_factory = NlSqlBenchmarkFactory()
     benchmark = bm_factory.build_benchmark(benchmark_name)
-    # subsetter = CodeSSubsetter(benchmark)
-    subsetter = PerfectSchemaSubsetter()
+    subsetter = CodeSSubsetter(benchmark)
+    # subsetter = PerfectSchemaSubsetter()
 
     if results_filename == None:
         results, subsets_questions = generate_subsets(subsetter=subsetter, benchmark=benchmark)

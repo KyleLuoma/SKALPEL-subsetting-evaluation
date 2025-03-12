@@ -38,6 +38,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
         self.sql_dialect = "sqlite" #sqlite syntax should cover use cases for bigquery and snowflake as well
+        self.schema_cache = {}
 
 
     def _get_gold_query_instance_ids(self) -> list:
@@ -149,6 +150,8 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
     def get_active_schema(self, database = None) -> Schema:
         if database == None:
             database = self.databases[self.active_database]
+        if database in self.schema_cache.keys():
+            return self.schema_cache[database]
         active_schema = Schema(
             database=database,
             tables=[]
@@ -202,6 +205,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
                 active_schema.tables.append(new_table)
             if self.database_type_lookup[database] == "sqlite":
                 break
+        self.schema_cache[database] = active_schema
         return active_schema
     
 

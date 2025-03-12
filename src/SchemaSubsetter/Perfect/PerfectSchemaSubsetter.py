@@ -33,7 +33,7 @@ class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
             dialect=benchmark_question.query_dialect,
             include_brackets=False
             )
-        print("DEBUG get_schema_subset query_identifiers:", query_identifiers)
+        # print("DEBUG get_schema_subset query_identifiers:", query_identifiers)
         query_tables = query_identifiers["tables"]
         query_tables += [t.split(".")[-1] for t in query_tables if "." in t]
         query_columns = query_identifiers["columns"]
