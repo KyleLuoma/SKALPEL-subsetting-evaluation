@@ -1,0 +1,24 @@
+Langchain-based agentic system
+
+Program state is maintained in a singleton class called SystemState
+Agents communicate with each other by updating the global SystemState fields
+
+Has 4 agents on the team:
+1. information retriever
+    a. generate keywords from question using LLM
+    b. find columns and "entities" similar to keywords using embedding similarity searches
+    c. context retrieval - ??
+2. schema selector
+3. candidate generator
+4. unit tester
+
+
+
+Preprocessing: the preprocssing of the benchmark / database is quite extensive and relies heavily on a bespoke data / directory structure of bird-sql.
+
+TODO: Will need to adapt this to the SKALPEL benchmark data structure by injecting the NlSqlBenchmark class into the preprocessing script.
+
+Implementation plan:
+0. Incorporate necessary chess requirements into skalpel venv
+1. Modify preprocessing script to make compatible with SKALPEL benchmark class structure
+2. Write ChessSubsetter class to implement the first two agents (information retriever and schema selector) that can produce a schema subset using the Chess internals. 

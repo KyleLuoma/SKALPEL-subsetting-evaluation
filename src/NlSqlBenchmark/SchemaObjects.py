@@ -21,12 +21,14 @@ class TableColumn:
             data_type: str = None,
             table_name: str = None,
             description: str = None,
-            sample_values: list = None
+            sample_values: list = None,
+            value_description: str = None
             ):
         self.name = name
         self.data_type = data_type
         self.table_name = table_name
         self.description = description
+        self.value_description = value_description
         if sample_values == None:
             self.sample_values = []
         else:
@@ -63,6 +65,12 @@ class TableColumn:
             return self.data_type
         if item_key == "table_name":
             return self.table_name
+        if item_key == "description":
+            return self.description
+        if item_key == "sample_values":
+            return self.sample_values
+        if item_key == "value_description":
+            return self.value_description
         raise KeyError(item_key)
     
 
