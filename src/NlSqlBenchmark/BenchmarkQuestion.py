@@ -30,7 +30,7 @@ class BenchmarkQuestion:
             and self.question_number == other.question_number
             and self.schema == other.schema
             and self.schema_naturalness == other.schema_naturalness
-            and self.query_filename == other.query_filname
+            and self.query_filename == other.query_filename
         )
 
 

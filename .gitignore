@@ -9,6 +9,9 @@ venv_linux/
 __pycache__/
 *.pickle
 *.pkl
+.env
+*.bin
+*.sqlite
 *.profile
 temp_data/
 bin/

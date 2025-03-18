@@ -52,6 +52,9 @@ class TableColumn:
             self.name == other.name
             and self.data_type == other.data_type
             and self.table_name == other.table_name
+            and self.description == other.description
+            and self.sample_values == other.sample_values
+            and self.value_description == other.value_description
         )
     
 
@@ -82,7 +85,10 @@ class TableColumn:
         description_string = ""
         if self.description != None:
             description_string = f", description='{self.description}'"
-        return f"TableColumn(name='{name}'{data_type_string})"
+        value_description_string = ""
+        if self.value_description != None:
+            value_description_string = f", value_description='{self.value_description}'"
+        return f"TableColumn(name='{name}'{data_type_string}{description_string}{value_description_string})"
     
 
     def name_as_string(self) -> str:
@@ -211,7 +217,7 @@ class SchemaTable:
             columns_str = ", ".join(str(column) for column in self.columns)
             output_strings.append(f" columns=[{columns_str}]")
         if self.primary_keys != None and len(self.primary_keys) > 0:
-            primary_keys_str = ", ".join(self.primary_keys)
+            primary_keys_str = ", ".join([str(key) for key in self.primary_keys])
             output_strings.append(f" primary_keys=[{primary_keys_str}]")
         if self.foreign_keys != None and len(self.foreign_keys) != None:
             foreign_keys_str = ", ".join(str(fk) for fk in self.foreign_keys)
@@ -260,7 +266,7 @@ class Schema:
     
 
     def __str__(self):
-        tables_str = "\n  ".join(str(table) for table in self.tables)
-        return f"Schema(database={self.database}, tables=[\n  {tables_str}\n])"
+        tables_str = ",\n  ".join(str(table) for table in self.tables)
+        return f"Schema(database='{self.database}', tables=[\n  {tables_str}\n])"
 
 

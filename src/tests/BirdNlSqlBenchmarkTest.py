@@ -87,69 +87,69 @@ def get_active_question_test():
         query_dialect=bird.sql_dialect,
         question_number=0,
         schema=Schema(
-            database="debit_card_specializing",
+            database="debit_card_specializing", 
             tables=[
                 SchemaTable(
-                    name="customers",
+                    name='customers', 
                     columns=[
-                        TableColumn(name="CustomerID", data_type="integer"),
-                        TableColumn(name="Segment", data_type="text"),
-                        TableColumn(name="Currency", data_type="text")
-                    ],
-                    primary_keys=[["CustomerID"]],
+                        TableColumn(name='CustomerID', data_type='integer', description='identification of the customer'), 
+                        TableColumn(name='Segment', data_type='text', description='client segment'), 
+                        TableColumn(name='Currency', data_type='text', description='Currency')
+                    ], 
+                    primary_keys=['CustomerID'], 
                     foreign_keys=[]
-                ),
+                    ),
                 SchemaTable(
-                    name="gasstations",
+                    name='gasstations', 
                     columns=[
-                        TableColumn(name="GasStationID", data_type="integer"),
-                        TableColumn(name="ChainID", data_type="integer"),
-                        TableColumn(name="Country", data_type="text"),
-                        TableColumn(name="Segment", data_type="text")
-                    ],
-                    primary_keys=[["GasStationID"]],
+                        TableColumn(name='GasStationID', data_type='integer', description='Gas Station ID'), 
+                        TableColumn(name='ChainID', data_type='integer', description='Chain ID'), 
+                        TableColumn(name='Country', data_type='text', description=''), 
+                        TableColumn(name='Segment', data_type='text', description='chain segment')
+                        ], 
+                    primary_keys=['GasStationID'], 
                     foreign_keys=[]
-                ),
+                    ),
                 SchemaTable(
-                    name="products",
+                    name='products', 
                     columns=[
-                        TableColumn(name="ProductID", data_type="integer"),
-                        TableColumn(name="Description", data_type="text")
-                    ],
-                    primary_keys=[["ProductID"]],
+                        TableColumn(name='ProductID', data_type='integer', description='Product ID'), 
+                        TableColumn(name='Description', data_type='text', description='Description')
+                        ], 
+                    primary_keys=['ProductID'], 
                     foreign_keys=[]
-                ),
+                    ),
                 SchemaTable(
-                    name="transactions_1k",
+                    name='transactions_1k', 
                     columns=[
-                        TableColumn(name="TransactionID", data_type="integer"),
-                        TableColumn(name="Date", data_type="date"),
-                        TableColumn(name="Time", data_type="text"),
-                        TableColumn(name="CustomerID", data_type="integer"),
-                        TableColumn(name="CardID", data_type="integer"),
-                        TableColumn(name="GasStationID", data_type="integer"),
-                        TableColumn(name="ProductID", data_type="integer"),
-                        TableColumn(name="Amount", data_type="integer"),
-                        TableColumn(name="Price", data_type="real")
-                    ],
-                    primary_keys=[["TransactionID"]],
+                        TableColumn(name='TransactionID', data_type='integer', description='Transaction ID'), 
+                        TableColumn(name='Date', data_type='date', description='Date'), 
+                        TableColumn(name='Time', data_type='text', description='Time'), 
+                        TableColumn(name='CustomerID', data_type='integer', description='Customer ID'), 
+                        TableColumn(name='CardID', data_type='integer', description='Card ID'), 
+                        TableColumn(name='GasStationID', data_type='integer', description='Gas Station ID'), 
+                        TableColumn(name='ProductID', data_type='integer', description='Product ID'), 
+                        TableColumn(name='Amount', data_type='integer', description='Amount'), 
+                        TableColumn(name='Price', data_type='real', description='Price', value_description='"commonsense evidence: total price = Amount x Price"')
+                        ], 
+                    primary_keys=['TransactionID'], 
                     foreign_keys=[]
-                ),
+                    ),
                 SchemaTable(
-                    name="yearmonth",
+                    name='yearmonth', 
                     columns=[
-                        TableColumn(name="CustomerID", data_type="integer"),
-                        TableColumn(name="Date", data_type="text"),
-                        TableColumn(name="Consumption", data_type="real")
-                    ],
-                    primary_keys=[["CustomerID", "Date"]],
+                        TableColumn(name='CustomerID', data_type='integer', description='Customer ID'), 
+                        TableColumn(name='Date', data_type='text', description='Date'), 
+                        TableColumn(name='Consumption', data_type='real', description='consumption')
+                        ], 
+                    primary_keys=['CustomerID', 'Date'], 
                     foreign_keys=[
-                        ForeignKey(columns=["CustomerID"], references=("customers", ["CustomerID"]))
-                    ]
-                )
-            ]
+                        ForeignKey(columns=['CustomerID'], references=('customers', ['CustomerID']))
+                        ]
+                    )
+                ]
+            )
         )
-    )
 
 
 def get_sample_values_test():

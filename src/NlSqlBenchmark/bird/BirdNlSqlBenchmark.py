@@ -1,10 +1,12 @@
 import json
 import sqlite3
 from os.path import dirname, abspath
+import os
 
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from NlSqlBenchmark.QueryResult import QueryResult
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
     SchemaTable,
@@ -62,15 +64,17 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
             if s["db_id"] == database:
                 schema_dict = s
                 break
+        column_descriptions = self._load_database_description(db_name=database)
         active_schema = Schema(
             database=database,
             tables=[]
             )
         for i in range(0, len(schema_dict["table_names_original"])):
             # Get table names
+            table_name = schema_dict["table_names_original"][i]
             active_schema.tables.append(
                 SchemaTable(
-                    name=schema_dict["table_names_original"][i],
+                    name=table_name,
                     columns=[],
                     primary_keys=[],
                     foreign_keys=[]
@@ -80,7 +84,18 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
             # get column names
             for (c, t) in zip(schema_dict["column_names_original"], schema_dict["column_types"]):
                 if c[0] == i:
-                    columns.append(TableColumn(name=c[1], data_type=t))
+                    column_name = c[1]
+                    column_description = None
+                    value_description = None
+                    if f"{table_name}.{column_name}" in column_descriptions.keys():
+                        column_description = column_descriptions[f"{table_name}.{column_name}"]["column_description"]
+                        value_description = column_descriptions[f"{table_name}.{column_name}"]["value_description"]
+                    columns.append(TableColumn(
+                        name=column_name, 
+                        data_type=t,
+                        description=column_description,
+                        value_description=value_description
+                        ))
             active_schema.tables[i].columns = columns
             active_schema.tables[i].primary_keys = []
             active_schema.tables[i].foreign_keys = []
@@ -98,7 +113,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
                     key_column_name = schema_dict["column_names_original"][key][1]
                     composit_col_names.append(key_column_name)
                 if len(composit_col_names) > 0:
-                    active_schema.tables[i].primary_keys.append(composit_col_names)
+                    active_schema.tables[i].primary_keys += composit_col_names
             # Get foreign keys
             for fk_reference in schema_dict["foreign_keys"]:
                 new_fk = ForeignKey(columns=[], references=None)
@@ -207,11 +222,33 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
     
 
 
-    def __load_active_database_queries(self) -> list:
+    def __load_active_database_queries(self) -> list[str]:
         queries = []
         for q in self.questions_list:
             if q["db_id"] == self.databases[self.active_database]:
                 queries.append(q["SQL"])
         return queries
+    
+
+
+    def _load_database_description(self, db_name: str) -> dict[str, dict[str, str]]:
+        db_path = f"{self.benchmark_folder}/dev_databases/dev_databases/{db_name}/database_description"
+        csv_files = [f for f in os.listdir(db_path) if f.endswith('.csv')]
+        descr_lookup = {}
+        for file in csv_files:
+            with open(f"{db_path}/{file}") as f:
+                table_name = file.replace(".csv", "")
+                line = f.readline()
+                while line != "":
+                    vals = line.split(",")
+                    if len(vals) < 5:
+                        break
+                    descr_lookup[f"{table_name}.{vals[0]}"] = {}
+                    descr_lookup[f"{table_name}.{vals[0]}"]["column_description"] = vals[2]
+                    descr_lookup[f"{table_name}.{vals[0]}"]["value_description"] = vals[4] if vals[4] not in ("\n", "") else None
+                    line = f.readline()
+        return descr_lookup
+
+
     
 
