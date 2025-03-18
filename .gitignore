@@ -12,10 +12,12 @@ __pycache__/
 .env
 *.bin
 *.sqlite
+*.sqlite3
 *.profile
 temp_data/
 bin/
 benchmarks/
 src/SchemaSubsetter/CodeS/sic_ckpts/
+src/SchemaSubsetter/CHESS/processed_db
 src/BenchmarkEmbedding/pgvector/pgdata/*
 src/SubsetEvaluator/correct_subsets/*
