@@ -8,15 +8,15 @@ from langchain_chroma import Chroma
 from typing import Callable, Dict, List, Any
 import time
 
-from database_utils.schema import DatabaseSchema
-from database_utils.schema_generator import DatabaseSchemaGenerator
-from database_utils.execution import execute_sql, compare_sqls, validate_sql_query, aggregate_sqls, get_execution_status, subprocess_sql_executor
-from database_utils.db_info import get_db_all_tables, get_table_all_columns, get_db_schema
-from database_utils.sql_parser import get_sql_tables, get_sql_columns_dict, get_sql_condition_literals
-from database_utils.db_values.search import query_lsh
-from database_utils.db_catalog.search import query_vector_db
-from database_utils.db_catalog.preprocess import EMBEDDING_FUNCTION
-from database_utils.db_catalog.csv_utils import load_tables_description
+from SchemaSubsetter.CHESS.src.database_utils.schema import DatabaseSchema
+from SchemaSubsetter.CHESS.src.database_utils.schema_generator import DatabaseSchemaGenerator
+from SchemaSubsetter.CHESS.src.database_utils.execution import execute_sql, compare_sqls, validate_sql_query, aggregate_sqls, get_execution_status, subprocess_sql_executor
+from SchemaSubsetter.CHESS.src.database_utils.db_info import get_db_all_tables, get_table_all_columns, get_db_schema
+from SchemaSubsetter.CHESS.src.database_utils.sql_parser import get_sql_tables, get_sql_columns_dict, get_sql_condition_literals
+from SchemaSubsetter.CHESS.src.database_utils.db_values.search import query_lsh
+from SchemaSubsetter.CHESS.src.database_utils.db_catalog.search import query_vector_db
+from SchemaSubsetter.CHESS.src.database_utils.db_catalog.preprocess import EMBEDDING_FUNCTION
+from SchemaSubsetter.CHESS.src.database_utils.db_catalog.csv_utils import load_tables_description
 
 load_dotenv(override=True)
 DB_ROOT_PATH = Path(os.getenv("DB_ROOT_PATH"))

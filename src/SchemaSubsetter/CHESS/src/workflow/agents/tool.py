@@ -3,8 +3,8 @@ from typing import Dict, Any
 import re
 import time
 
-from runner.logger import Logger
-from workflow.system_state import SystemState
+from SchemaSubsetter.CHESS.src.runner.logger import Logger
+from SchemaSubsetter.CHESS.src.workflow.system_state import SystemState
 
 class Tool(ABC):
     

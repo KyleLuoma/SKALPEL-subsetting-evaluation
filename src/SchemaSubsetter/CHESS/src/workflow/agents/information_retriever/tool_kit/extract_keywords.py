@@ -1,10 +1,10 @@
 from typing import Dict
 
-from llm.models import get_llm_chain, async_llm_chain_call
-from llm.prompts import get_prompt
-from llm.parsers import get_parser
-from workflow.system_state import SystemState
-from workflow.agents.tool import Tool
+from SchemaSubsetter.CHESS.src.llm.models import get_llm_chain, async_llm_chain_call
+from SchemaSubsetter.CHESS.src.llm.prompts import get_prompt
+from SchemaSubsetter.CHESS.src.llm.parsers import get_parser
+from SchemaSubsetter.CHESS.src.workflow.system_state import SystemState
+from SchemaSubsetter.CHESS.src.workflow.agents.tool import Tool
 
 class ExtractKeywords(Tool):
     """

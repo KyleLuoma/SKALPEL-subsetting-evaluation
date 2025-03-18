@@ -10,7 +10,7 @@ from google.oauth2 import service_account
 from google.cloud import aiplatform
 import vertexai
 
-from database_utils.db_catalog.csv_utils import load_tables_description
+from SchemaSubsetter.CHESS.src.database_utils.db_catalog.csv_utils import load_tables_description
 
 load_dotenv(override=True)
 

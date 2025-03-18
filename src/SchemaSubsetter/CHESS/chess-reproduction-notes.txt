@@ -19,6 +19,6 @@ Preprocessing: the preprocssing of the benchmark / database is quite extensive a
 TODO: Will need to adapt this to the SKALPEL benchmark data structure by injecting the NlSqlBenchmark class into the preprocessing script.
 
 Implementation plan:
-0. Incorporate necessary chess requirements into skalpel venv
-1. Modify preprocessing script to make compatible with SKALPEL benchmark class structure
+0. Incorporate necessary chess requirements into skalpel venv x
+1. Modify preprocessing script to make compatible with SKALPEL benchmark class structure x
 2. Write ChessSubsetter class to implement the first two agents (information retriever and schema selector) that can produce a schema subset using the Chess internals. 

@@ -1,11 +1,11 @@
 import logging
 from typing import Dict, List
 
-from database_utils.db_catalog.csv_utils import load_tables_description
+from SchemaSubsetter.CHESS.src.database_utils.db_catalog.csv_utils import load_tables_description
 
-from runner.database_manager import DatabaseManager
-from workflow.system_state import SystemState
-from workflow.agents.tool import Tool
+from SchemaSubsetter.CHESS.src.runner.database_manager import DatabaseManager
+from SchemaSubsetter.CHESS.src.workflow.system_state import SystemState
+from SchemaSubsetter.CHESS.src.workflow.agents.tool import Tool
 
 import os
 from dotenv import load_dotenv

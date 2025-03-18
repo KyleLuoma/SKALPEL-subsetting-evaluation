@@ -1,7 +1,7 @@
 import logging
 from typing import List, Dict
 
-from database_utils.execution import execute_sql
+from SchemaSubsetter.CHESS.src.database_utils.execution import execute_sql
 
 def get_db_all_tables(db_path: str) -> List[str]:
     """

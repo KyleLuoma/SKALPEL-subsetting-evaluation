@@ -20,9 +20,9 @@ if GCP_CREDENTIALS and GCP_PROJECT and GCP_REGION:
     )
     vertexai.init(project=GCP_PROJECT, location=GCP_REGION, credentials=service_account.Credentials.from_service_account_file(GCP_CREDENTIALS))
 
-from runner.database_manager import DatabaseManager
-from workflow.system_state import SystemState
-from workflow.agents.tool import Tool
+from SchemaSubsetter.CHESS.src.runner.database_manager import DatabaseManager
+from SchemaSubsetter.CHESS.src.workflow.system_state import SystemState
+from SchemaSubsetter.CHESS.src.workflow.agents.tool import Tool
 
 class RetrieveEntity(Tool):
     """

@@ -3,9 +3,9 @@ from typing import Any, Dict, List
 from langchain_core.exceptions import OutputParserException
 from langchain.output_parsers import OutputFixingParser
 
-from llm.engine_configs import ENGINE_CONFIGS
-from runner.logger import Logger
-from threading_utils import ordered_concurrent_function_calls
+from SchemaSubsetter.CHESS.src.llm.engine_configs import ENGINE_CONFIGS
+from SchemaSubsetter.CHESS.src.runner.logger import Logger
+from SchemaSubsetter.CHESS.src.threading_utils import ordered_concurrent_function_calls
 
 def get_llm_chain(engine_name: str, temperature: float = 0, base_uri: str = None) -> Any:
     """

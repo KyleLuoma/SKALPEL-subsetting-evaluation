@@ -6,8 +6,8 @@ from func_timeout import func_timeout, FunctionTimedOut
 from sqlglot import parse_one, exp
 from sqlglot.optimizer.qualify import qualify
 
-from database_utils.execution import execute_sql
-from database_utils.db_info import get_table_all_columns, get_db_all_tables
+from SchemaSubsetter.CHESS.src.database_utils.execution import execute_sql
+from SchemaSubsetter.CHESS.src.database_utils.db_info import get_table_all_columns, get_db_all_tables
 
 def format_sql_query(query, meta_time_out = 10):
     try:

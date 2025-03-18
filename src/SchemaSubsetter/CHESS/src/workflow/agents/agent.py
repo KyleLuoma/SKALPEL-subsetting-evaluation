@@ -1,8 +1,8 @@
-from workflow.system_state import SystemState
-from workflow.agents.tool import Tool
+from SchemaSubsetter.CHESS.src.workflow.system_state import SystemState
+from SchemaSubsetter.CHESS.src.workflow.agents.tool import Tool
 
-from llm.models import call_engine, get_llm_chain
-from llm.prompts import get_prompt
+from SchemaSubsetter.CHESS.src.llm.models import call_engine, get_llm_chain
+from SchemaSubsetter.CHESS.src.llm.prompts import get_prompt
 
 class Agent:
     """

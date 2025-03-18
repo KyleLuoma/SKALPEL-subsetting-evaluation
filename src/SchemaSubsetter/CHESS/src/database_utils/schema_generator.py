@@ -3,9 +3,9 @@ import logging
 import random
 from typing import Dict, List, Optional
 
-from database_utils.execution import execute_sql
-from database_utils.db_info import get_db_schema
-from database_utils.schema import DatabaseSchema, get_primary_keys
+from SchemaSubsetter.CHESS.src.database_utils.execution import execute_sql
+from SchemaSubsetter.CHESS.src.database_utils.db_info import get_db_schema
+from SchemaSubsetter.CHESS.src.database_utils.schema import DatabaseSchema, get_primary_keys
 
 class DatabaseSchemaGenerator:
     """

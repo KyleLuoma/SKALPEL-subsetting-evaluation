@@ -4,7 +4,7 @@ from threading import Lock
 from pathlib import Path
 from typing import Any, List, Dict, Union
 
-from runner.task import Task
+from SchemaSubsetter.CHESS.src.runner.task import Task
 
 class Logger:
     _instance = None

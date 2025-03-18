@@ -1,8 +1,8 @@
 from pydantic import BaseModel, PrivateAttr
 from typing import List, Any, Dict
 
-from runner.database_manager import DatabaseManager
-from database_utils.execution import ExecutionStatus
+from SchemaSubsetter.CHESS.src.runner.database_manager import DatabaseManager
+from SchemaSubsetter.CHESS.src.database_utils.execution import ExecutionStatus
 from func_timeout import func_timeout, FunctionTimedOut
 
 LAZY_RESULT_TOKEN = "$$$LAZY$$$"

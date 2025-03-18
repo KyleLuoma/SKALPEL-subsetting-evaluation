@@ -5,7 +5,7 @@ from tqdm import tqdm
 import logging
 from typing import Dict, List, Any, Tuple
 
-from database_utils.execution import execute_sql
+from SchemaSubsetter.CHESS.src.database_utils.execution import execute_sql
 
 def _get_unique_values(db_path: str) -> Dict[str, Dict[str, List[str]]]:
     """
