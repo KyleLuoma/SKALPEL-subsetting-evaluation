@@ -1,11 +1,17 @@
 import re
 import logging
 import random
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any, Union
 
 from SchemaSubsetter.CHESS.src.database_utils.execution import execute_sql
 from SchemaSubsetter.CHESS.src.database_utils.db_info import get_db_schema
 from SchemaSubsetter.CHESS.src.database_utils.schema import DatabaseSchema, get_primary_keys
+
+#Skalpel imports
+from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.NlSqlBenchmarkFactory import NlSqlBenchmarkFactory
+from SchemaSubsetter.CHESS.src.skalpel_adapters.SchemaToDatabaseSchemaAdapter import SchemaToDatabaseSchemaAdapter
+from NlSqlBenchmark.QueryResult import QueryResult
 
 class DatabaseSchemaGenerator:
     """
@@ -32,7 +38,7 @@ class DatabaseSchemaGenerator:
         self.schema_structure = tentative_schema or DatabaseSchema()
         self.schema_with_examples = schema_with_examples or DatabaseSchema()
         self.schema_with_descriptions = schema_with_descriptions or DatabaseSchema()
-        self._initialize_schema_structure()
+        # self._initialize_schema_structure()
 
     @staticmethod
     def _set_primary_keys(db_path: str, database_schema: DatabaseSchema) -> None:
@@ -89,7 +95,30 @@ class DatabaseSchemaGenerator:
             db_id (str): The database identifier.
             db_path (str): The path to the database file.
         """
-        db_schema = DatabaseSchema.from_schema_dict(get_db_schema(db_path))
+        # db_schema = DatabaseSchema.from_schema_dict(get_db_schema(db_path))
+
+        ### Skalpel benchmark override ###
+        factory = NlSqlBenchmarkFactory()
+        benchmark_name = factory.lookup_benchmark_by_db_name(db_name=db_id)
+        skalpel_bench = factory.build_benchmark(benchmark_name=benchmark_name)
+        skalpel_schema = skalpel_bench.get_active_schema(database=db_id)
+        db_schema = SchemaToDatabaseSchemaAdapter.from_skalpel_schema(
+            skalpel_schema=skalpel_schema
+            )
+
+        def execute_sql(db_path: str, sql: str, fetch: Union[str, int] = "all", timeout: int = 60) -> Any:
+            try:
+                result = skalpel_bench.execute_query(
+                    query=sql,
+                    database=db_id
+                )
+            except NotImplementedError as e:
+                print(f"{skalpel_bench.name} has no execute_query method implementation.")
+            rtn_result = []
+            for i in range(0, len(result[list(result.result_set.keys())[0]])):
+                rtn_result.append([result.result_set[k][i] for k in result.result_set.keys()])
+            return rtn_result
+
         # schema_with_type = {
         #     table_name: {col[1]: {"type": col[2]} for col in execute_sql(db_path, f"PRAGMA table_info(`{table_name}`)", fetch="all")}
         #     for table_name in db_schema.tables.keys()
@@ -100,11 +129,19 @@ class DatabaseSchemaGenerator:
             schema_with_type[table_name] = {}
             for col in columns:
                 schema_with_type[table_name][col[1]] = {"type": col[2]}
-                unique_values = execute_sql(db_path, f"SELECT COUNT(*) FROM (SELECT DISTINCT `{col[1]}` FROM `{table_name}` LIMIT 21) AS subquery;", "all", 480)
+                unique_values = execute_sql(
+                    db_path, 
+                    f"SELECT COUNT(*) FROM (SELECT DISTINCT `{col[1]}` FROM `{table_name}` LIMIT 21) AS subquery;", 
+                    "all", 
+                    480
+                    )
                 is_categorical = int(unique_values[0][0]) < 20
                 unique_values = None
                 if is_categorical:
-                    unique_values = execute_sql(db_path, f"SELECT DISTINCT `{col[1]}` FROM `{table_name}` WHERE `{col[1]}` IS NOT NULL")
+                    unique_values = execute_sql(
+                        db_path, 
+                        f"SELECT DISTINCT `{col[1]}` FROM `{table_name}` WHERE `{col[1]}` IS NOT NULL"
+                        )
                 schema_with_type[table_name][col[1]].update({"unique_values": unique_values})
                 try:
                     value_statics_query = f"""
@@ -112,7 +149,12 @@ class DatabaseSchemaGenerator:
                         ' - Null count ' || SUM(CASE WHEN `{col[1]}` IS NULL THEN 1 ELSE 0 END) AS counts  
                     FROM (SELECT `{col[1]}` FROM `{table_name}` LIMIT 100000) AS limited_dataset;
                     """
-                    value_statics = execute_sql(db_path, value_statics_query, "all", 480)
+                    value_statics = execute_sql(
+                        db_path, 
+                        value_statics_query, 
+                        "all", 
+                        480
+                        )
                     schema_with_type[table_name][col[1]].update({
                         "value_statics": str(value_statics[0][0]) if value_statics else None
                     })
@@ -121,8 +163,8 @@ class DatabaseSchemaGenerator:
                     schema_with_type[table_name][col[1]].update({"value_statics": None})
         db_schema.set_columns_info(schema_with_type)
         cls.CACHED_DB_SCHEMA[db_id] = db_schema
-        cls._set_primary_keys(db_path, cls.CACHED_DB_SCHEMA[db_id])
-        cls._set_foreign_keys(db_path, cls.CACHED_DB_SCHEMA[db_id])
+        # cls._set_primary_keys(db_path, cls.CACHED_DB_SCHEMA[db_id])
+        # cls._set_foreign_keys(db_path, cls.CACHED_DB_SCHEMA[db_id])
    
     def _initialize_schema_structure(self) -> None:
         """
