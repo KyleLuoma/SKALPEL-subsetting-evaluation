@@ -35,7 +35,7 @@ class NlSqlBenchmarkFactory:
     #     elif benchmark_name == "bird":
     #         return BirdNlSqlBenchmark()
         
-    def build_benchmark(self, benchmark_name: str):
+    def build_benchmark(self, benchmark_name: str) -> NlSqlBenchmark:
         assert benchmark_name in NlSqlBenchmarkFactory.benchmark_register
         benchmark_class, init_args = NlSqlBenchmarkFactory.benchmark_build_dict[benchmark_name]
         return benchmark_class(**init_args)

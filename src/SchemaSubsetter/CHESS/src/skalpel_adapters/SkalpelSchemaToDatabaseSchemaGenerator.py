@@ -24,7 +24,8 @@ class SkalpelDatabaseSchemaGenerator(DatabaseSchemaGenerator):
             ):
         bm_factory = NlSqlBenchmarkFactory()
         self.benchmark_name = bm_factory.lookup_benchmark_by_db_name(db_id)
-        
+        self.benchmark = bm_factory.build_benchmark(self.benchmark_name)
+        self.benchmark.set_active_schema(database_name=db_id)
 
         self.db_id = db_id
         self.db_path = db_path

@@ -12,47 +12,25 @@ from SchemaSubsetter.CHESS.src.database_utils.schema import (
 
 from SchemaSubsetter.CHESS.src.database_utils.schema import *
 
-
+@dataclass
 class SchemaToDatabaseSchemaAdapter(DatabaseSchema):
 
-    tables: Dict[str, TableSchema] = field(default_factory=dict)
-
     @classmethod
-    def from_table_names(cls, table_names: List[str]) -> "DatabaseSchema":
-        raise NotImplementedError
+    def from_skalpel_schema(cls, skalpel_schema: Schema) -> "DatabaseSchema":
+        database_schema = cls()
+        for table in skalpel_schema.tables:
+            database_schema.tables.append({
+                table.name: TableSchema(columns={
+                    column.name: ColumnInfo(
+                        original_column_name=column.name,
+                        column_name=column.name,
+                        column_description=column.description,
+                        value_description=column.value_description if column.value_description else "",
+                        type=column.data_type,
+                        value_description=column.value_description,
+                        examples=column.sample_values
+                    )
+                    for column in table.columns
+                })
+            })
     
-    @classmethod
-    def from_schema_dict(cls, schema_dict: Dict[str, List[str]]) -> "DatabaseSchema":
-        raise NotImplementedError
-    
-    @classmethod
-    def from_schema_dict_with_examples(cls, schema_dict_with_info: Dict[str, Dict[str, List[str]]]) -> "DatabaseSchema":
-        raise NotImplementedError
-    
-    @classmethod
-    def from_schema_dict_with_descriptions(cls, schema_dict_with_info: Dict[str, Dict[str, Dict[str, Any]]]) -> "DatabaseSchema":
-        raise NotImplementedError
-    
-    def get_actual_table_name(self, table_name: str) -> Optional[str]:
-        return super().get_actual_table_name(table_name)
-    
-    def get_table_info(self, table_name: str) -> Optional[TableSchema]:
-        return super().get_table_info(table_name)
-    
-    def get_actual_column_name(self, table_name: str, column_name: str) -> Optional[str]:
-        return super().get_actual_column_name(table_name, column_name)
-    
-    def get_column_info(self, table_name: str, column_name: str) -> Optional[ColumnInfo]:
-        return super().get_column_info(table_name, column_name)
-    
-    def set_columns_info(self, schema_with_info: Dict[str, Dict[str, Dict[str, Any]]]) -> None:
-        raise NotImplementedError
-    
-    def subselect_schema(self, selected_database_schema: "DatabaseSchema") -> "DatabaseSchema":
-        raise NotImplementedError
-
-    def add_info_from_schema(self, schema: "DatabaseSchema", field_names: List[str]) -> None:
-        raise NotImplementedError
-    
-    def to_dict(self) -> Dict[str, List[str]]:
-        raise NotImplementedError
