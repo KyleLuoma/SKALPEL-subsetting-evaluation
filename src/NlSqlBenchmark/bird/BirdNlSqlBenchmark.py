@@ -21,13 +21,21 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
     def __init__(self):
         super().__init__()
         self.benchmark_folder = dirname(dirname(dirname(dirname(abspath(__file__))))) + "/benchmarks/bird/dev_20240627"
-        self.tables_dict = self.__load_tables_dict()
+        self.tables_dict = self.__load_tables_dict(self.benchmark_folder)
         self.questions_list = self.__load_questions_list()
         self.databases = [t["db_id"] for t in self.tables_dict]
+        self.schema_cache = {}
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
         self.name = "bird"
         self.sql_dialect = "sqlite"
+
+    @staticmethod
+    def get_database_names() -> list:
+        benchmark_folder = dirname(dirname(dirname(dirname(abspath(__file__))))) + "/benchmarks/bird/dev_20240627"
+        tables_dict = BirdNlSqlBenchmark.__load_tables_dict(benchmark_folder=benchmark_folder)
+        databases = [t["db_id"] for t in tables_dict]
+        return databases
 
     def __iter__(self):
         return self
@@ -60,6 +68,20 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
     def get_active_schema(self, database: str = None) -> Schema:
         if database == None:
             database = self.databases[self.active_database]
+        if database in self.schema_cache.keys():
+            return self.schema_cache[database]
+        
+        pickle_the_schema = True
+        if not self.schema_pickling_disabled:
+            try:
+                schema = self._retrieve_schema_pickle(database_name=database)
+                self.schema_cache[database] = schema
+                return schema
+            except FileNotFoundError as e:
+                pass
+        else:
+            pickle_the_schema = False
+        
         for s in self.tables_dict:
             if s["db_id"] == database:
                 schema_dict = s
@@ -141,7 +163,9 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
                 new_fk.references = (referenced_table_name, referenced_columns)
                 if len(new_fk.columns) > 0:
                     active_schema.tables[i].foreign_keys.append(new_fk)
-
+        self.schema_cache[database] = active_schema
+        if pickle_the_schema:
+            self._store_schema_pickle(active_schema)
         return active_schema
     
 
@@ -199,8 +223,9 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         return [s[0] for s in sample_values]
 
 
-    def __load_tables_dict(self) -> dict:
-        with open(f"{self.benchmark_folder}/dev_tables.json") as f:
+    @staticmethod
+    def __load_tables_dict(benchmark_folder: str) -> dict:
+        with open(f"{benchmark_folder}/dev_tables.json") as f:
             dev_tables = json.load(f)
         return dev_tables
     

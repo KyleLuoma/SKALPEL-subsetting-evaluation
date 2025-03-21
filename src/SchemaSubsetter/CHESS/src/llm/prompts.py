@@ -9,7 +9,8 @@ from langchain.prompts import (
     ChatPromptTemplate,
 )
 
-TEMPLATES_ROOT_PATH = "templates"
+# TEMPLATES_ROOT_PATH = "templates"
+TEMPLATES_ROOT_PATH = "src/SchemaSubsetter/CHESS/templates"
 
 def _load_template(template_name: str) -> str:
     """

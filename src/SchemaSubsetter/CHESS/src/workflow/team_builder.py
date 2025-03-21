@@ -6,16 +6,16 @@ from workflow.system_state import SystemState
 
 from workflow.agents.information_retriever.information_retriever import InformationRetriever
 from workflow.agents.schema_selector.schema_selector import SchemaSelector
-from workflow.agents.candidate_generator.candidate_generator import CandidateGenerator
-from workflow.agents.unit_tester.unit_tester import UnitTester
+# from workflow.agents.candidate_generator.candidate_generator import CandidateGenerator
+# from workflow.agents.unit_tester.unit_tester import UnitTester
 
 from workflow.agents.evaluation import ExecutionAccuracy
 
 AGENT_CLASSES = {
     "information_retriever": InformationRetriever,
     "schema_selector": SchemaSelector,
-    "candidate_generator": CandidateGenerator,
-    "unit_tester": UnitTester
+    # "candidate_generator": CandidateGenerator,
+    # "unit_tester": UnitTester
 }
 
 class CHESSTeamBuilder:

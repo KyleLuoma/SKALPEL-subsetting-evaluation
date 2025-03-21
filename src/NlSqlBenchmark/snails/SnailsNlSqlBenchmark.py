@@ -23,6 +23,17 @@ from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
     name = "snails"
+    databases = [
+        "ASIS_20161108_HerpInv_Database",
+        "ATBI",
+        "CratersWildlifeObservations",
+        "KlamathInvasiveSpecies",
+        "NorthernPlainsFireManagement",
+        "NTSB",
+        "NYSED_SRC2022",
+        "PacificIslandLandbirds",
+        "SBODemoUS"
+    ]
     
     def __init__(
             self, 
@@ -38,27 +49,19 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
         if db_host_profile == "docker":
             self.db_info_file = self.benchmark_folder + "/ms_sql/dbinfo.json"
             self.container = self._init_docker()
-        self.name = "snails"
+        self.name = SnailsNlSqlBenchmark.name
         self.naturalness = "Native"
         self.syntax = "tsql"
-        self.databases = [
-            "ASIS_20161108_HerpInv_Database",
-            "ATBI",
-            "CratersWildlifeObservations",
-            "KlamathInvasiveSpecies",
-            "NorthernPlainsFireManagement",
-            "NTSB",
-            "NYSED_SRC2022",
-            "PacificIslandLandbirds",
-            "SBODemoUS"
-        ]
+        self.databases = SnailsNlSqlBenchmark.databases
         self.sql_dialect = "mssql"
         self.schema_cache = {}
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
         
 
-        
+    @staticmethod
+    def get_database_names() -> list:
+        return SnailsNlSqlBenchmark.databases
 
 
     def __del__(self):
@@ -316,10 +319,21 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
             database = self.databases[self.active_database]
         if database in self.schema_cache.keys():
             return self.schema_cache[database]
-        else: 
-            schema = self._load_schema(database_name=database)
-            self.schema_cache[database] = schema
-            return schema 
+        pickle_the_schema = True
+        if not self.schema_pickling_disabled:
+            try:
+                schema = self._retrieve_schema_pickle(database_name=database)
+                self.schema_cache[database] = schema
+                return schema
+            except FileNotFoundError as e:
+                pass
+        else:
+            pickle_the_schema = False
+        schema = self._load_schema(database_name=database)
+        self.schema_cache[database] = schema
+        if pickle_the_schema:
+            self._store_schema_pickle(schema)
+        return schema 
 
 
     def execute_query(self, query: str, database: str = None, question: int = None) -> QueryResult:

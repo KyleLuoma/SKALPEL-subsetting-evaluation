@@ -1,5 +1,7 @@
 from NlSqlBenchmark.QueryResult import QueryResult
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+import os
+import pickle
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
     SchemaTable,
@@ -14,6 +16,7 @@ Super class for all the benchmarks we use in the SKALPEL project to evaluate sch
 class NlSqlBenchmark:
 
     name = "abstract"
+    schema_cache_dir = "src/NlSqlBenchmark/schema_cache"
 
     def __init__(self):
         self.databases = ["database1"]
@@ -25,6 +28,8 @@ class NlSqlBenchmark:
         self.name = "abstract"
         self.sql_dialect = "mssql"
         self.naturalness = "Native"
+        self.schema_cache = {}
+        self.schema_pickling_disabled = False
 
 
     def __iter__(self):
@@ -47,7 +52,11 @@ class NlSqlBenchmark:
 
     def __len__(self):
         return 0
-        
+    
+
+    @staticmethod
+    def get_database_names() -> list:
+        return ["database1"]
         
     def get_active_question(self) -> BenchmarkQuestion:
         return BenchmarkQuestion(
@@ -148,3 +157,28 @@ SELECT ? FROM ? LIMIT ?
     def __get_db_connection(self):
         pass
 
+    @staticmethod
+    def _retrieve_schema_pickle(database_name: str) -> Schema:
+        schema_path = os.path.join(
+            NlSqlBenchmark.schema_cache_dir, 
+            f"{database_name}-Schema.pkl"
+            )
+        if os.path.exists(schema_path):
+            with open(schema_path, "rb") as schema_file:
+                schema: Schema = pickle.load(schema_file)
+                return schema
+        else:
+            raise FileNotFoundError(f"Schema file not found at {schema_path}")
+
+
+    @staticmethod
+    def _store_schema_pickle(schema: Schema, alternate_name: str = None):
+        if not alternate_name:
+            db_name = schema.database
+        else:
+            db_name = alternate_name
+        filename = f"{db_name}-Schema.pkl"
+        schema_path = os.path.join(NlSqlBenchmark.schema_cache_dir, filename)
+        os.makedirs(NlSqlBenchmark.schema_cache_dir, exist_ok=True)
+        with open(schema_path, "wb") as schema_file:
+            pickle.dump(schema, schema_file)

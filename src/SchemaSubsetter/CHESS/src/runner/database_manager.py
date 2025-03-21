@@ -18,6 +18,7 @@ from SchemaSubsetter.CHESS.src.database_utils.db_catalog.search import query_vec
 from SchemaSubsetter.CHESS.src.database_utils.db_catalog.preprocess import EMBEDDING_FUNCTION
 from SchemaSubsetter.CHESS.src.database_utils.db_catalog.csv_utils import load_tables_description
 
+
 load_dotenv(override=True)
 DB_ROOT_PATH = Path(os.getenv("DB_ROOT_PATH"))
 

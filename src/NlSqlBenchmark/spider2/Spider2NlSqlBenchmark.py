@@ -26,9 +26,9 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         super().__init__()
         self.name = Spider2NlSqlBenchmark.name
         self.benchmark_folder = dirname(dirname(dirname(dirname(abspath(__file__))))) + "/benchmarks/spider2"
-        self.gold_query_instance_ids = self._get_gold_query_instance_ids()
+        self.gold_query_instance_ids = self._get_gold_query_instance_ids(self.benchmark_folder)
         self.gold_query_lookup = self._make_gold_query_lookup_by_instance_id()
-        self.questions_list = self._get_questions_with_instance_ids(self.gold_query_instance_ids)
+        self.questions_list = self._get_questions_with_instance_ids(self.benchmark_folder, self.gold_query_instance_ids)
         self.instance_id_lookup = self._make_instance_id_lookup(self.questions_list)
         self.databases: list[str] = []
         self.database_type_lookup = self._make_database_type_lookup()
@@ -41,8 +41,26 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         self.schema_cache = {}
 
 
-    def _get_gold_query_instance_ids(self) -> list:
-        sql_files_path = os.path.join(self.benchmark_folder, "spider2-lite/evaluation_suite/gold/sql")
+    @staticmethod
+    def get_database_names() -> list:
+        benchmark_folder = dirname(dirname(dirname(dirname(abspath(__file__))))) + "/benchmarks/spider2"
+        instance_ids = Spider2NlSqlBenchmark._get_gold_query_instance_ids(
+            benchmark_folder=benchmark_folder
+        )
+        question_list = Spider2NlSqlBenchmark._get_questions_with_instance_ids(
+            benchmark_folder=benchmark_folder,
+            instance_ids=instance_ids
+        )
+        databases = []
+        for q in question_list:
+            if q["db"] not in databases:
+                databases.append(q["db"])
+        return databases
+
+
+    @staticmethod
+    def _get_gold_query_instance_ids(benchmark_folder: str) -> list:
+        sql_files_path = os.path.join(benchmark_folder, "spider2-lite/evaluation_suite/gold/sql")
         gold_query_instance_ids = []
         
         for file_name in os.listdir(sql_files_path):
@@ -50,6 +68,23 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
                 gold_query_instance_ids.append(file_name.replace(".sql", ""))
         
         return gold_query_instance_ids
+    
+
+    @staticmethod
+    def _get_questions_with_instance_ids(benchmark_folder: str, instance_ids: list) -> list[dict]:
+        with open(
+            os.path.join(benchmark_folder, "spider2-lite/spider2-lite.jsonl"), 
+            "r",
+            encoding='utf-8'
+            ) as f:
+            instance_list = []
+            for line in f:
+                instance_list.append(json.loads(line))
+        questions = []
+        for inst_dict in instance_list:
+            if inst_dict["instance_id"] in instance_ids:
+                questions.append(inst_dict)
+        return questions
     
 
     def _make_gold_query_lookup_by_instance_id(self) -> dict:
@@ -64,23 +99,6 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
                     lookup[(file_name.replace(".sql", ""))] = f.read()
         return lookup
 
-
-
-    def _get_questions_with_instance_ids(self, instance_ids) -> list[dict]:
-        with open(
-            os.path.join(self.benchmark_folder, "spider2-lite/spider2-lite.jsonl"), 
-            "r",
-            encoding='utf-8'
-            ) as f:
-            instance_list = []
-            for line in f:
-                instance_list.append(json.loads(line))
-        questions = []
-        for inst_dict in instance_list:
-            if inst_dict["instance_id"] in instance_ids:
-                questions.append(inst_dict)
-        return questions
-    
 
     def _make_instance_id_lookup(self, questions_list: list[dict]) -> dict[tuple[str, int] : str]:
         lookup_dict = {}
@@ -152,6 +170,17 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             database = self.databases[self.active_database]
         if database in self.schema_cache.keys():
             return self.schema_cache[database]
+        pickle_the_schema = True
+        if not self.schema_pickling_disabled:
+            pickle_db_name = f"{database}-{self.database_type_lookup[database]}"
+            try:
+                schema = self._retrieve_schema_pickle(database_name=pickle_db_name)
+                self.schema_cache[database] = schema
+                return schema
+            except FileNotFoundError as e:
+                pass
+        else:
+            pickle_the_schema = False
         active_schema = Schema(
             database=database,
             tables=[]
@@ -206,6 +235,8 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             if self.database_type_lookup[database] == "sqlite":
                 break
         self.schema_cache[database] = active_schema
+        if pickle_the_schema:
+            self._store_schema_pickle(active_schema, pickle_db_name)
         return active_schema
     
 

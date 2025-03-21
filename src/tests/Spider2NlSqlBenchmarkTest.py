@@ -27,12 +27,13 @@ def get_active_schema_test():
 
 def iter_test():
     bm = Spider2NlSqlBenchmark()
+    bm.schema_pickling_disabled = False
     itercount = 0
     iter_questions = set()
     for question in bm:
         iter_questions.add(question.question)
         itercount += 1
-    return itercount == 256
+    return itercount == (256 - len(bm.exclude_from_eval))
 
 
 def get_sample_values_test():
