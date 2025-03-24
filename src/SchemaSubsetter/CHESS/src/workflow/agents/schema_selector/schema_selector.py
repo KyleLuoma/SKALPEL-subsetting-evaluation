@@ -1,8 +1,8 @@
-from workflow.agents.agent import Agent
+from SchemaSubsetter.CHESS.src.workflow.agents.agent import Agent
 
-from workflow.agents.schema_selector.tool_kit.filter_column import FilterColumn
-from workflow.agents.schema_selector.tool_kit.select_tables import SelectTables
-from workflow.agents.schema_selector.tool_kit.select_columns import SelectColumns
+from SchemaSubsetter.CHESS.src.workflow.agents.schema_selector.tool_kit.filter_column import FilterColumn
+from SchemaSubsetter.CHESS.src.workflow.agents.schema_selector.tool_kit.select_tables import SelectTables
+from SchemaSubsetter.CHESS.src.workflow.agents.schema_selector.tool_kit.select_columns import SelectColumns
 
 
 class SchemaSelector(Agent):

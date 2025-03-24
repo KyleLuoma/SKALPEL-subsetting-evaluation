@@ -1,6 +1,6 @@
 from typing import Optional, Any, Dict
 from pydantic import BaseModel
-from src.NlSqlBenchmark.SchemaObjects import Schema
+from NlSqlBenchmark.SchemaObjects import Schema
 
 class Task(BaseModel):
     """
@@ -21,4 +21,4 @@ class Task(BaseModel):
     SQL: Optional[str] = None
     difficulty: Optional[str] = None
     #Skalpel adds:
-    schema: Optional[Schema]
+    # schema: Optional[Schema]

@@ -1,12 +1,12 @@
 import logging
 from typing import Dict, List, Any
 
-from llm.models import async_llm_chain_call, get_llm_chain
-from llm.prompts import get_prompt
-from llm.parsers import get_parser
-from workflow.system_state import SystemState
-from workflow.agents.tool import Tool
-from runner.database_manager import DatabaseManager
+from SchemaSubsetter.CHESS.src.llm.models import async_llm_chain_call, get_llm_chain
+from SchemaSubsetter.CHESS.src.llm.prompts import get_prompt
+from SchemaSubsetter.CHESS.src.llm.parsers import get_parser
+from SchemaSubsetter.CHESS.src.workflow.system_state import SystemState
+from SchemaSubsetter.CHESS.src.workflow.agents.tool import Tool
+from SchemaSubsetter.CHESS.src.runner.database_manager import DatabaseManager
 
 class SelectTables(Tool):
     """

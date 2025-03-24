@@ -10,3 +10,10 @@ def init_test():
         print(e)
         return False
     return True
+
+
+def get_schema_subset_test():
+    bm_fact = NlSqlBenchmarkFactory()
+    bm = bm_fact.build_benchmark("bird")
+    chess = ChessSubsetter(do_preprocessing=False, benchmark=bm)
+    chess.get_schema_subset(bm.get_active_question())

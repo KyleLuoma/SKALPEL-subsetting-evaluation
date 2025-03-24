@@ -18,6 +18,11 @@ from SchemaSubsetter.CHESS.src.database_utils.db_catalog.search import query_vec
 from SchemaSubsetter.CHESS.src.database_utils.db_catalog.preprocess import EMBEDDING_FUNCTION
 from SchemaSubsetter.CHESS.src.database_utils.db_catalog.csv_utils import load_tables_description
 
+from NlSqlBenchmark.NlSqlBenchmarkFactory import NlSqlBenchmarkFactory
+from NlSqlBenchmark.SchemaObjects import (
+    Schema, SchemaTable, TableColumn
+)
+
 
 load_dotenv(override=True)
 DB_ROOT_PATH = Path(os.getenv("DB_ROOT_PATH"))
@@ -62,10 +67,14 @@ class DatabaseManager:
         self.minhashes = None
         self.vector_db = None
 
+        
+
     def _set_paths(self):
         """Sets the paths for the database files and directories."""
         self.db_path = DB_ROOT_PATH / f"{self.db_mode}_databases" / self.db_id / f"{self.db_id}.sqlite"
         self.db_directory_path = DB_ROOT_PATH / f"{self.db_mode}_databases" / self.db_id
+        #Skalpel mod:
+        self.db_path = self.db_id
 
     def set_lsh(self) -> str:
         """Sets the LSH and minhashes attributes by loading from pickle files."""
@@ -269,6 +278,9 @@ class DatabaseManager:
                 else:
                     union_schema[table] = list(set(union_schema[table] + columns))
         return union_schema
+    
+    
+
 
     @staticmethod
     def with_db_path(func: Callable):
@@ -291,6 +303,20 @@ class DatabaseManager:
             method = cls.with_db_path(func)
             setattr(cls, func.__name__, method)
 
+
+#Skalpel function overload
+def get_db_schema(db_path: str):
+    db_id = db_path
+    skalpel_benchmark_factory = NlSqlBenchmarkFactory()
+    benchmark_name = skalpel_benchmark_factory.lookup_benchmark_by_db_name(db_id) 
+    benchmark = skalpel_benchmark_factory.build_benchmark(benchmark_name)
+    schema = benchmark.get_active_schema(database=db_id)
+    schema_dict = {}
+    for table in schema.tables:
+        schema_dict[table.name] = [column.name for column in table.columns]
+    return schema_dict
+
+
 # List of functions to be added to the class
 functions_to_add = [
     subprocess_sql_executor,
@@ -300,7 +326,7 @@ functions_to_add = [
     aggregate_sqls,
     get_db_all_tables,
     get_table_all_columns,
-    get_db_schema,
+    get_db_schema, #Skalpel overload
     get_sql_tables,
     get_sql_columns_dict,
     get_sql_condition_literals,

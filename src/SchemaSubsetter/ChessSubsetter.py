@@ -37,6 +37,7 @@ class ChessSubsetter(SchemaSubsetter):
         
         self.benchmark = benchmark
         self.vector_db_root = "./src/SchemaSubsetter/CHESS/processed_db"
+        self.result_directory = "./src/SchemaSubsetter/CHESS/results"
 
         parser = argparse.ArgumentParser()
         args = parser.parse_args()
@@ -46,15 +47,17 @@ class ChessSubsetter(SchemaSubsetter):
         args.num_workers = 1
         args.log_level = 'warning'
         args.pick_final_sql = True
+        self.args = args
 
-        self.config = args.config
+        with open(args.config, 'r') as file:
+            self.config=yaml.safe_load(file)
 
         if do_preprocessing:
             s_time = time.perf_counter()
             self.preprocess_databases()
             e_time = time.perf_counter()
             print("Time to process", self.benchmark.name, "schemas was", str(e_time - s_time))
-        self.team = build_team(args.config)
+        self.team = build_team(self.config)
 
 
     def preprocess_databases(self):
@@ -70,7 +73,6 @@ class ChessSubsetter(SchemaSubsetter):
         """
         Replicates information retriever and schema selector agents in isolation from the full CHESS team context
         """
-
         team = build_team(self.config)
         task = Task(
             question_id=benchmark_question.question_number,
@@ -80,6 +82,7 @@ class ChessSubsetter(SchemaSubsetter):
             SQL=benchmark_question.query,
             difficulty=None
         )
+        DatabaseManager(db_mode=self.args.data_mode, db_id=task.db_id)
         logger = Logger(db_id=task.db_id, question_id=task.question_id, result_directory=self.result_directory)
         thread_id = f"{time.perf_counter()}_{task.db_id}_{task.question_id}"
         thread_config = {"configurable": {"thread_id": thread_id}}
