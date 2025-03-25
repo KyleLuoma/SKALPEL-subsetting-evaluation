@@ -116,6 +116,18 @@ class ChessSubsetter(SchemaSubsetter):
             logger.log("________________________________________________________________________________________")
             continue
         system_state = SystemState(**state_dict)
+        schema_subset = Schema(
+            database=benchmark_question.schema.database,
+            tables=[
+                SchemaTable(
+                    name=table,
+                    columns=[TableColumn(name=column) for column in system_state.tentative_schema[table]]
+                ) 
+                for table in system_state.tentative_schema
+            ]
+        )
+        return schema_subset
+
 
 
  

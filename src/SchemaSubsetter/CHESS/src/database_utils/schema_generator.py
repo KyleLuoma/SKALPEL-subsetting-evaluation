@@ -231,6 +231,19 @@ class DatabaseSchemaGenerator:
             ddl_commands[table_name] = create_prompt[0] if create_prompt else ""
         return ddl_commands
     
+    #Skalpel mod
+    def _extract_create_ddl_commands(self) -> Dict[str, str]:
+        ddl_commands = {}
+        factory = NlSqlBenchmarkFactory()
+        bm_name = factory.lookup_benchmark_by_db_name(self.db_id)
+        bm = factory.build_benchmark(bm_name)
+        schema = bm.get_active_schema(database=self.db_id)
+        for table_name in self.schema_structure.tables.keys():
+            table = schema.get_table_by_name(table_name)
+            ddl_commands[table_name] = table.as_ddl()
+        return ddl_commands
+
+    
     @staticmethod
     def _separate_column_definitions(column_definitions: str) -> List[str]:
         """

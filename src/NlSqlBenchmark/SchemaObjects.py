@@ -228,6 +228,29 @@ class SchemaTable:
             foreign_keys_str = ", ".join(str(fk) for fk in self.foreign_keys)
             output_strings.append(f" foreign_keys=[{foreign_keys_str}]")
         return (f"SchemaTable({",".join(output_strings)})")
+    
+
+    def as_ddl(self):
+        ddl = f"CREATE TABLE {self.name} (\n"
+        column_definitions = []
+        for column in self.columns:
+            column_def = f"  {column.name} {column.data_type}"
+            if column.name in self.primary_keys:
+                column_def += " PRIMARY KEY"
+            column_definitions.append(column_def)
+        ddl += ",\n".join(column_definitions)
+        if self.foreign_keys:
+            foreign_key_definitions = []
+            for fk in self.foreign_keys:
+                fk_columns = ", ".join(fk.columns)
+            ref_table, ref_columns = fk.references
+            ref_columns_str = ", ".join(ref_columns)
+            foreign_key_definitions.append(
+                f"  FOREIGN KEY ({fk_columns}) REFERENCES {ref_table} ({ref_columns_str})"
+            )
+            ddl += ",\n" + ",\n".join(foreign_key_definitions)
+        ddl += "\n);"
+        return ddl
 
 
 
@@ -273,5 +296,12 @@ class Schema:
     def __str__(self):
         tables_str = ",\n  ".join(str(table) for table in self.tables)
         return f"Schema(database='{self.database}', tables=[\n  {tables_str}\n])"
+    
+
+    def get_table_by_name(self, table_name: str):
+        for t in self.tables:
+            if t.name == table_name:
+                return t
+        raise KeyError(table_name)
 
 

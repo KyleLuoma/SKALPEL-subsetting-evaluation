@@ -1,5 +1,6 @@
 from SchemaSubsetter.ChessSubsetter import ChessSubsetter
 from NlSqlBenchmark.NlSqlBenchmarkFactory import NlSqlBenchmarkFactory
+from NlSqlBenchmark.SchemaObjects import Schema
 
 def init_test():
     bm_fact = NlSqlBenchmarkFactory()
@@ -16,4 +17,5 @@ def get_schema_subset_test():
     bm_fact = NlSqlBenchmarkFactory()
     bm = bm_fact.build_benchmark("bird")
     chess = ChessSubsetter(do_preprocessing=False, benchmark=bm)
-    chess.get_schema_subset(bm.get_active_question())
+    subset = chess.get_schema_subset(bm.get_active_question())
+    return type(subset) == Schema

@@ -32,3 +32,21 @@ def schema_pickle_test():
     print(loaded_schema)
     os.remove("schema.pkl")
     return True
+
+
+
+def schematable_as_ddl_test():
+    table = SchemaTable(
+        name="test_table",
+        columns=[
+            TableColumn("colA", "int"),
+            TableColumn("colB", "varchar(3)")
+        ],
+        primary_keys=["colA"],
+        foreign_keys=[ForeignKey(["colB"], ("t2", ["colC"]))]
+        )
+    return table.as_ddl() == """CREATE TABLE test_table (
+  colA int PRIMARY KEY,
+  colB varchar(3),
+  FOREIGN KEY (colB) REFERENCES t2 (colC)
+);"""
