@@ -90,3 +90,23 @@ def get_sample_values_test():
         database="ATBI"
         )
     return len(result) == len(correct_result) and set(result) == set(correct_result)
+
+
+def get_id_col_unique_values_test():
+    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    unique_values = snails.get_unique_values(
+        table_name="tlu_DecayStage", 
+        column_name="DecayStage_ID", 
+        database="ATBI"
+    )
+    return len(unique_values) == 0
+
+
+def get_unique_values_test():
+    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    unique_values = snails.get_unique_values(
+        table_name="tlu_DecayStage", 
+        column_name="DecayStage_Descr", 
+        database="ATBI"
+    )
+    return len(unique_values) == 6

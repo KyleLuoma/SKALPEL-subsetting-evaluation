@@ -27,7 +27,7 @@ class FilterColumn(Tool):
         Args:
             state (SystemState): The current system state.
         """
-
+        Logger().log(f"---Inside: {self.tool_name}._run()---", log_level="error", task=state.task)
         column_profiles = DatabaseManager().get_column_profiles(
             schema_with_examples=state.schema_with_examples, 
             use_value_description=True, 
@@ -35,6 +35,7 @@ class FilterColumn(Tool):
             with_references=True,
             tentative_schema=state.tentative_schema
         )
+        Logger().log(f"---column_profiles: {str(column_profiles)}---", log_level="error", task=state.task)
 
         list_of_kwargs = []
         for table_name, columns in column_profiles.items():

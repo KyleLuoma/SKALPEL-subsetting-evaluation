@@ -142,6 +142,14 @@ class NlSqlBenchmark:
 SELECT ? FROM ? LIMIT ?
 """
         return sample_values
+    
+    def get_unique_values(
+            self, 
+            table_name: str, 
+            column_name: str, 
+            database: str = None
+            ) -> set[str]:
+        return set()
 
     
     def set_active_question_number(self, number: int = 0):

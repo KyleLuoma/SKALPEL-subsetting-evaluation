@@ -22,6 +22,7 @@ class TableColumn:
             table_name: str = None,
             description: str = None,
             sample_values: list = None,
+            unique_values: set = None,
             value_description: str = None
             ):
         self.name = name
@@ -33,6 +34,10 @@ class TableColumn:
             self.sample_values = []
         else:
             self.sample_values = sample_values
+        if unique_values == None:
+            self.unique_values = set()
+        else:
+            self.unique_values = unique_values
 
 
     def __hash__(self):

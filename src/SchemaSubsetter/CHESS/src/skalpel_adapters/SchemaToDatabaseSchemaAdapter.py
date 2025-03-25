@@ -17,7 +17,12 @@ from SchemaSubsetter.CHESS.src.database_utils.schema import *
 class SchemaToDatabaseSchemaAdapter(DatabaseSchema):
 
     @classmethod
-    def from_skalpel_schema(cls, skalpel_schema: Schema) -> "DatabaseSchema":
+    def from_skalpel_schema(
+        cls, 
+        skalpel_schema: Schema, 
+        with_examples: bool = True, 
+        with_descriptions: bool = True
+        ) -> "DatabaseSchema":
         database_schema = cls()
         referenced_by_lookup = defaultdict(list)
         for table in skalpel_schema.tables:
@@ -32,10 +37,10 @@ class SchemaToDatabaseSchemaAdapter(DatabaseSchema):
                 new_column = ColumnInfo(
                     original_column_name=column.name,
                     column_name=column.name,
-                    column_description=column.description,
-                    value_description=column.value_description if column.value_description else "",
+                    column_description=column.description if with_descriptions else "",
+                    value_description=column.value_description if (with_descriptions and column.value_description) else "",
                     type=column.data_type,
-                    examples=column.sample_values,
+                    examples=column.sample_values if with_examples else [],
                     primary_key=True if column.name in table.primary_keys else False,
                     referenced_by=referenced_by_lookup[table.name, column.name]
                 )

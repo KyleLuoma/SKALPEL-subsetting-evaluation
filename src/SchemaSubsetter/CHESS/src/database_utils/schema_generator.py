@@ -117,7 +117,7 @@ class DatabaseSchemaGenerator:
             rtn_result = []
             if not result.result_set:
                 return rtn_result
-            for i in range(0, len(result[list(result.result_set.keys())[0]])):
+            for i in range(0, len(result.result_set[list(result.result_set.keys())[0]])):
                 rtn_result.append([result.result_set[k][i] for k in result.result_set.keys()])
             return rtn_result
 

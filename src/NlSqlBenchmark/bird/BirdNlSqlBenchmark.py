@@ -221,6 +221,59 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         res = cur.execute(query)
         sample_values = res.fetchall()
         return [s[0] for s in sample_values]
+    
+
+    
+    # Adapted from CHESS Logic:
+    # https://github.com/ShayanTalaei/CHESS
+    def get_unique_values(
+            self, 
+            table_name: str, 
+            column_name: str, 
+            database: str = None
+            ) -> set[str]:
+        if any(
+            keyword in column_name.lower() 
+            for keyword in [
+                "_id", " id", "url", "email", "web", "time", "phone", "date", "address"
+            ]) or column_name.endswith("Id"):
+            return set()
+        result = self.execute_query(
+            query=f"""
+                    SELECT SUM(LENGTH(unique_values)) as val_sum, COUNT(unique_values) as val_count
+                    FROM (
+                        SELECT DISTINCT `{column_name}` AS unique_values
+                        FROM `{table_name}`
+                        WHERE `{column_name}` IS NOT NULL
+                    ) AS subquery
+                """,
+            database=database
+        )
+        if result.result_set == None:
+            return set()
+        sum_of_lengths = result.result_set["val_sum"][0] 
+        count_distinct = result.result_set["val_count"][0]
+        if sum_of_lengths is None or count_distinct == 0:
+            return set()
+        average_length = sum_of_lengths / count_distinct
+        values = set()
+        if (
+            ("name" in column_name.lower() and sum_of_lengths < 5000000) 
+            or (sum_of_lengths < 2000000 and average_length < 25) 
+            or count_distinct < 100
+            ):
+            try:
+                result = self.execute_query(
+                        query = f"SELECT DISTINCT `{column_name}` FROM `{table_name}` WHERE `{column_name}` IS NOT NULL",
+                        database=database
+                        )
+                values = set(result.result_set[column_name])
+            except:
+                values = set()
+        return values
+
+        
+        
 
 
     @staticmethod

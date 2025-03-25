@@ -25,6 +25,7 @@ from SchemaSubsetter.CHESS.src.workflow.team_builder import build_team
 import time
 import yaml
 import argparse
+from pathlib import Path
 
 
 class ChessSubsetter(SchemaSubsetter):
@@ -36,8 +37,8 @@ class ChessSubsetter(SchemaSubsetter):
     ):
         
         self.benchmark = benchmark
-        self.vector_db_root = "./src/SchemaSubsetter/CHESS/processed_db"
-        self.result_directory = "./src/SchemaSubsetter/CHESS/results"
+        self.db_root_directory = Path("./src/SchemaSubsetter/CHESS/data")
+        self.result_directory = Path("./src/SchemaSubsetter/CHESS/results")
 
         parser = argparse.ArgumentParser()
         args = parser.parse_args()
@@ -47,6 +48,10 @@ class ChessSubsetter(SchemaSubsetter):
         args.num_workers = 1
         args.log_level = 'warning'
         args.pick_final_sql = True
+        args.n_gram=3
+        args.threshold=0.01
+        args.signature_size=100
+        args.verbose=True
         self.args = args
 
         with open(args.config, 'r') as file:
@@ -61,10 +66,25 @@ class ChessSubsetter(SchemaSubsetter):
 
 
     def preprocess_databases(self):
+
         for database in self.benchmark.databases:
+
+            db_dir = self.db_root_directory / "dev_databases" / database
+            db_dir.mkdir(exist_ok=True, parents=True)
+
+            preprocess.make_db_lsh(
+                benchmark=self.benchmark,
+                db_id=database,
+                db_directory_path=db_dir,
+                signature_size=self.args.signature_size,
+                n_gram=self.args.n_gram,
+                threshold=self.args.threshold,
+                verbose=self.args.verbose
+            )
+
             preprocess.make_db_context_vec_db(
                 db_id=database,
-                db_directory_path=self.vector_db_root,
+                db_directory_path=db_dir,
                 benchmark=self.benchmark
             )
 

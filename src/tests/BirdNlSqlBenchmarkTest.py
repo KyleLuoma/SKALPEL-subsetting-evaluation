@@ -160,3 +160,13 @@ def get_sample_values_test():
         column_name="Description"
     )
     return sample_values == ['Rucní zadání', 'Nafta']
+
+
+def get_unique_values_test():
+    bird = BirdNlSqlBenchmark()
+    unique_values = bird.get_unique_values(
+        table_name="products",
+        column_name="Description",
+        database="debit_card_specializing"
+    )
+    return len(unique_values) == 529
