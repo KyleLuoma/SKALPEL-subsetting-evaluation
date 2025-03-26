@@ -30,6 +30,8 @@ from pathlib import Path
 
 class ChessSubsetter(SchemaSubsetter):
 
+    name = "chess"
+
     def __init__(
             self,
             benchmark: NlSqlBenchmark,
@@ -53,6 +55,7 @@ class ChessSubsetter(SchemaSubsetter):
         args.signature_size=100
         args.verbose=True
         self.args = args
+        self.name = ChessSubsetter.name
 
         with open(args.config, 'r') as file:
             self.config=yaml.safe_load(file)

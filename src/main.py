@@ -10,6 +10,7 @@ from NlSqlBenchmark.SchemaObjects import (
 from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
 from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
 from SchemaSubsetter.CodeSSubsetter import CodeSSubsetter
+from SchemaSubsetter.ChessSubsetter import ChessSubsetter
 from SchemaSubsetter.Perfect.PerfectSchemaSubsetter import PerfectSchemaSubsetter
 from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
 from SubsetEvaluator import QueryProfiler
@@ -32,11 +33,12 @@ else:
     v_print = dummy
 
 def main():
-    benchmark_name = "spider2"
+    benchmark_name = "bird"
     bm_factory = NlSqlBenchmarkFactory()
     benchmark = bm_factory.build_benchmark(benchmark_name)
-    subsetter = CodeSSubsetter(benchmark)
+    # subsetter = CodeSSubsetter(benchmark)
     # subsetter = PerfectSchemaSubsetter()
+    subsetter = ChessSubsetter(benchmark)
 
     if results_filename == None:
         results, subsets_questions = generate_subsets(subsetter=subsetter, benchmark=benchmark)
@@ -48,7 +50,7 @@ def main():
     results = evaluate_subsets(subsets=subsets_questions, results=results)
     results_df = pd.DataFrame(results)
 
-    filename_comments = "NVIDIA_RTX_2000"
+    filename_comments = "gpt4o"
     end_while = False
     while not end_while:
         try:
