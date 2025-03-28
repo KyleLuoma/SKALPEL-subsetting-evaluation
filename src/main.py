@@ -18,9 +18,10 @@ from util.StringObjectParser import StringObjectParser
 import time
 import pandas as pd
 from tqdm import tqdm
+import pickle
 
 test = False
-verbose = False
+verbose = True
 
 results_filename = "./subsetting_results/subsetting-CodeS-snails-NVIDIA_RTX_2000.xlsx"
 results_filename = None
@@ -33,15 +34,22 @@ else:
     v_print = dummy
 
 def main():
-    benchmark_name = "bird"
+    benchmark_name = "snails"
+    filename_comments = "gpt4o"
     bm_factory = NlSqlBenchmarkFactory()
     benchmark = bm_factory.build_benchmark(benchmark_name)
     # subsetter = CodeSSubsetter(benchmark)
     # subsetter = PerfectSchemaSubsetter()
-    subsetter = ChessSubsetter(benchmark)
+    subsetter = ChessSubsetter(benchmark, do_preprocessing=False)
 
     if results_filename == None:
-        results, subsets_questions = generate_subsets(subsetter=subsetter, benchmark=benchmark)
+        results, subsets_questions = generate_subsets(
+            subsetter=subsetter, 
+            benchmark=benchmark,
+            recover_previous=True,
+            filename_comments=filename_comments,
+            bypass_databases=["SBODemoUS"]
+            )
     else:
         results, subsets_questions = load_subsets_from_results(
             results_filename=results_filename, 
@@ -50,7 +58,6 @@ def main():
     results = evaluate_subsets(subsets=subsets_questions, results=results)
     results_df = pd.DataFrame(results)
 
-    filename_comments = "gpt4o"
     end_while = False
     while not end_while:
         try:
@@ -67,7 +74,13 @@ def main():
                 end_while = True
 
 
-def generate_subsets(subsetter: SchemaSubsetter, benchmark: NlSqlBenchmark) -> tuple[dict, list]:
+def generate_subsets(
+        subsetter: SchemaSubsetter, 
+        benchmark: NlSqlBenchmark, 
+        recover_previous: bool = False,
+        filename_comments: str = "",
+        bypass_databases: list = []
+        ) -> tuple[dict, list]:
     results = {
         "database": [],
         "question_number": [],
@@ -78,15 +91,44 @@ def generate_subsets(subsetter: SchemaSubsetter, benchmark: NlSqlBenchmark) -> t
     failures: list[BenchmarkQuestion] = []
     test_counter = 0
     subsets_questions = []
-    for question in tqdm(benchmark, total=len(benchmark), desc=f"Running {subsetter.name} subsetter over {benchmark.name} benchmark."):
+
+    for question in tqdm(
+        benchmark, 
+        total=len(benchmark), 
+        desc=f"Running {subsetter.name} subsetter over {benchmark.name} benchmark."
+        ):
+
         test_counter += 1
+        if question.schema.database in bypass_databases:
+            results["database"].append(question.schema.database)
+            results["question_number"].append(question.question_number)
+            results["query_filename"].append(question.query_filename)
+            results["inference_time"].append(-1)
+            results["prompt_tokens"].append(-1)
+            subsets_questions.append((Schema(database=question.schema.database, tables=[]), question))
+            continue
+
+        recovery_filename = f"./.subsetting_recovery/{subsetter.name}/subsetting_recovery_{subsetter.name}_{benchmark.name}_{question.schema_naturalness}_{question.schema.database}_{question.question_number}_{filename_comments}.pkl"
+
+        if recover_previous:
+            try:
+                with open(recovery_filename, "rb") as load_file:
+                    loaded_result = pickle.loads(load_file.read())
+                    subsets_questions.append((loaded_result["subset"], loaded_result["question"]))
+                    for key in results.keys():
+                        results[key].append(loaded_result[key])
+                continue
+            except:
+                pass
+
         v_print("\n", question["query"])
         v_print("--- Running subsetter ---")
         t_start = time.perf_counter()
         try:
-            subset = subsetter.get_schema_subset(
+            result = subsetter.get_schema_subset(
                 benchmark_question=question
             )
+            subset = result.schema_subset
         except UnboundLocalError as e:
             failures.append((question, str(e)))
         t_end = time.perf_counter()
@@ -99,10 +141,19 @@ def generate_subsets(subsetter: SchemaSubsetter, benchmark: NlSqlBenchmark) -> t
         else:
             results["query_filename"].append("")
         results["inference_time"].append(t_end - t_start)
-        results["prompt_tokens"].append(0)
+        results["prompt_tokens"].append(result.prompt_tokens)
         v_print(subset)
         if test and test_counter > 5:
             break
+
+        with open(recovery_filename, "wb") as recovery_file:
+            save_results = {}
+            for key in results.keys():
+                save_results[key] = results[key][-1]
+            save_results["subset"] = subset
+            save_results["question"] = question
+            pickle.dump(save_results, recovery_file)
+
     if len(failures) > 0:
         with open(f"./subset_failures_{subsetter.name}_{benchmark.name}.log", "wt", encoding="utf-8") as f:
             for failure in failures:

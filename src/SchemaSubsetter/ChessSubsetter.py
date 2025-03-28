@@ -4,6 +4,8 @@ https://github.com/ShayanTalaei/CHESS
 """
 
 from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
+from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
+
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
@@ -26,6 +28,8 @@ import time
 import yaml
 import argparse
 from pathlib import Path
+
+from transformers import AutoTokenizer
 
 
 class ChessSubsetter(SchemaSubsetter):
@@ -92,7 +96,7 @@ class ChessSubsetter(SchemaSubsetter):
             )
 
 
-    def get_schema_subset(self, benchmark_question: BenchmarkQuestion) -> Schema:
+    def get_schema_subset(self, benchmark_question: BenchmarkQuestion) -> SchemaSubsetterResult:
         """
         Replicates information retriever and schema selector agents in isolation from the full CHESS team context
         """
@@ -129,10 +133,52 @@ class ChessSubsetter(SchemaSubsetter):
                 for table in system_state.tentative_schema
             ]
         )
-        return schema_subset
+        token_count, total_tokens = ChessSubsetter.get_token_counts_from_log(
+            database_name=benchmark_question.schema.database,
+            question_number=benchmark_question.question_number
+            )
+        return SchemaSubsetterResult(schema_subset=schema_subset, prompt_tokens=total_tokens)
+    
 
+    @staticmethod
+    def get_token_counts_from_log(database_name: str, question_number: int) -> tuple[list[dict[str, Any]], int]:
+        tokenizer = AutoTokenizer.from_pretrained("Xenova/gpt-4")
+        logpath = "src/SchemaSubsetter/CHESS/results/logs"
+        log_file = Path(logpath) / f"{question_number}_{database_name}.log"
+        total_tokens = 0
+        log_text = None
+        try:
+            with open(log_file, "rt", encoding="utf-8") as file:
+                log_text = file.read()
+        except UnicodeDecodeError as e:
+            pass
+        if log_text == None:
+            try:
+                with open(log_file, "rt", encoding="ascii") as file:
+                    log_text = file.read()
+            except Exception as e:
+                return ({}, -1)
+            
+        entries = log_text.split("############################## Human at step ")
+        token_counts = []
+        for ix, entry in enumerate(entries):
+            stage = entry.split(" ")[0].strip()
+            input_prompt = entry.split("############################## AI at step ")[0]
+            input_prompt = input_prompt.replace(stage, "")
+            output = entry.split(f"############################## AI at step {stage} ##############################")
+            if len(output) > 1:
+                output = output[1].strip()
+            else:
+                output = output[0]
+            token_counts.append({
+                "ix": ix,
+                "stage": stage,
+                "input_token_count": len(tokenizer.encode(input_prompt)),
+                "output_token_count": len(tokenizer.encode(output))
+            })
+            total_tokens += (len(tokenizer.encode(input_prompt)) + len(tokenizer.encode(output)))
+        return (token_counts, total_tokens)
+    
 
-
- 
         
     

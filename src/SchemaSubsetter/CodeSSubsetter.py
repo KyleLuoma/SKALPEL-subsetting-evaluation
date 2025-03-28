@@ -1,4 +1,5 @@
 from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
+from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
 from SchemaSubsetter.CodeS import schema_item_filter as sif
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from NlSqlBenchmark.SchemaObjects import (
@@ -22,7 +23,7 @@ class CodeSSubsetter(SchemaSubsetter):
 
 
 
-    def get_schema_subset(self, benchmark_question: BenchmarkQuestion) -> Schema:
+    def get_schema_subset(self, benchmark_question: BenchmarkQuestion) -> SchemaSubsetterResult:
         codes_compat_dataset = self.adapt_benchmark_schema(benchmark_question.schema, benchmark_question.question)
         codes_compat_dataset[0]["text"] = benchmark_question.question
         codes_filtered = self.filter_schema(
@@ -44,7 +45,7 @@ class CodeSSubsetter(SchemaSubsetter):
                     data_type=table["column_types"][i]
                 ))
             schema_subset.tables.append(new_table)
-        return schema_subset
+        return SchemaSubsetterResult(schema_subset=schema_subset)
 
 
 

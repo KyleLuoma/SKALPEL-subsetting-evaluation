@@ -9,6 +9,7 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn
 )
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
+from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
 
 
 class SchemaSubsetter:
@@ -23,7 +24,7 @@ class SchemaSubsetter:
     def get_schema_subset(
             self, 
             benchmark_question: BenchmarkQuestion
-            ) -> Schema:
+            ) -> SchemaSubsetterResult:
         """
         'Abstract' method for subset generation
 
@@ -34,7 +35,7 @@ class SchemaSubsetter:
         full_schema: Schema
             Full schema representation
         """
-        return Schema(
+        schema = Schema(
             database="database1",
             tables=[
                 SchemaTable(
@@ -47,3 +48,4 @@ class SchemaSubsetter:
                 )
             ]
         )
+        return SchemaSubsetterResult(schema_subset=schema)

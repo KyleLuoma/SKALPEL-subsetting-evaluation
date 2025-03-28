@@ -16,7 +16,7 @@ def get_schema_subset_test():
         query="",
         query_dialect="mssql"
     ))
-    return result == Schema(
+    return result.schema_subset == Schema(
             database="database1",
             tables=[
                 SchemaTable(

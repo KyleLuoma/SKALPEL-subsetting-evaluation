@@ -199,16 +199,18 @@ class DatabaseManager:
         Returns:
             Dict[str, Dict[str, str]]: The dictionary of column profiles.
         """
-        # schema_with_descriptions = load_tables_description(self.db_directory_path, use_value_description)
+        schema_with_descriptions = load_tables_description(self.db_directory_path, use_value_description)
         bm_factory = NlSqlBenchmarkFactory()
         benchmark_name = bm_factory.lookup_benchmark_by_db_name(self.db_id)
         benchmark = bm_factory.build_benchmark(benchmark_name=benchmark_name)
         skalpel_schema = benchmark.get_active_schema(self.db_id)
+
         #Skalpel mod: replace schema creation with Skalpel adapter class
+
         database_schema_generator = DatabaseSchemaGenerator(
             tentative_schema=DatabaseSchema.from_schema_dict(tentative_schema if tentative_schema else self.get_db_schema()),
-            # schema_with_examples=DatabaseSchema.from_schema_dict_with_examples(schema_with_examples),
-            schema_with_examples=DatabaseSchema.from_skalpel_schema(skalpel_schema, with_examples=True, with_descriptions=False),
+            schema_with_examples=DatabaseSchema.from_schema_dict_with_examples(schema_with_examples),
+            # schema_with_examples=DatabaseSchema.from_skalpel_schema(skalpel_schema, with_examples=True, with_descriptions=False),
             # schema_with_descriptions=DatabaseSchema.from_schema_dict_with_descriptions(schema_with_descriptions),
             schema_with_descriptions=DatabaseSchema.from_skalpel_schema(skalpel_schema, with_examples=False, with_descriptions=True),
             db_id=self.db_id,

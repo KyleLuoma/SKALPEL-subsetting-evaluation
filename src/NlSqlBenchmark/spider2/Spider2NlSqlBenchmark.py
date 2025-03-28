@@ -11,6 +11,10 @@ from NlSqlBenchmark.SchemaObjects import (
     ForeignKey
 )
 
+import snowflake.connector
+import sqlite3
+from google.cloud import bigquery
+import pandas as pd
 
 class Spider2NlSqlBenchmark(NlSqlBenchmark):
 
@@ -250,8 +254,6 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
     def get_active_question(self):
         question = super().get_active_question()
         question.query_dialect = self.database_type_lookup[question.schema.database]
-        # if question.query_dialect != "sqlite":
-        #     question.query_dialect = "postgresql"
         question.query_filename = self.instance_id_lookup[
             (question.schema.database, question.question_number)
             ] + ".sql"
@@ -259,14 +261,93 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
     
 
     def execute_query(self, query, database = None, question = None) -> QueryResult:
-        raise NotImplementedError
+        if database == None:
+            database = self.databases[self.active_database]
+        if question == None:
+            question = self.active_question_no
+        dialect = self.database_type_lookup[database]
 
+        if dialect == "sqlite":
+            result = self.query_sqlite(query=query, database=database)
+        elif dialect == "bigquery":
+            result = self.query_bigquery(query=query, database=database)
+        elif dialect == "snowflake":
+            result = self.query_snowflake(query=query, database=database)
+        result.question = question
+        return result
+    
+    def query_sqlite(self, query: str, database: str) -> QueryResult:
+        #benchmarks\spider2\spider2-lite\resource\databases\sqlite\local_sqlite\AdventureWorks.sqlite
+        conn = sqlite3.connect(
+            f"{self.benchmark_folder}/spider2-lite/resource/databases/sqlite/local_sqlite/{database}.sqlite"
+            )
+        cur = conn.cursor()
+        try:
+            res = cur.execute(query)
+        except sqlite3.OperationalError as e:
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message=str(e)
+            )
+        result_list = res.fetchall()
+        columns = [d[0] for d in res.description]
+        result_set_dict = {}
+        for i, c in enumerate(columns):
+            values = [t[i] for t in result_list]
+            result_set_dict[c] = values
+        return QueryResult(
+            result_set=result_set_dict,
+            database=database,
+            question=None,
+            error_message=None
+        )
+
+    def query_bigquery(self, query: str, database: str) -> QueryResult:
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./.local/nl-to-sql-model-eval-80a8e87ec156.json"
+        client = bigquery.Client()
+        try:
+            query_job = client.query(query)
+            results: pd.DataFrame = query_job.to_dataframe()
+            query_result = QueryResult(
+                result_set=results.to_dict(orient="list"),
+                database=database,
+                question=None
+            )
+        except Exception as e:
+            query_result = QueryResult(
+                result_set=None, database=database, question=None, error_message=str(e)
+            )
+        return query_result
+
+    
+
+    def query_snowflake(self, query: str, database: str) -> QueryResult:
+        snowflake_credential = json.load(open('./.local/snowflake_credential.json'))
+        conn = snowflake.connector.connect(
+            **snowflake_credential
+        )
+        cursor = conn.cursor()
+        cursor.execute(query)
+        columns = [desc[0] for desc in cursor.description]
+        result_set = {c: [] for c in columns}
+        try:
+            for row in cursor.fetchall():
+                for ix, c in enumerate(columns):
+                    result_set[c].append(row[ix])
+            query_result = QueryResult(result_set=result_set, database=database, question=None)
+        except Exception as e:
+            query_result = QueryResult(result_set=None, database=database, question=None, error_message=str(e))
+        return query_result
+    
 
     def get_sample_values(self, table_name: str, column_name: str, database: str = None, num_values: int = 2) -> list[str]:
         if database == None:
             schema = self.get_active_schema()
         else:
             schema = self.get_active_schema(database=database)
+        
         table_object = None
         for table in schema.tables:
             if table_name == table.name:

@@ -46,10 +46,10 @@ def filter_schema_test():
 def get_schema_subset_test():
     benchmark = BirdNlSqlBenchmark()
     subsetter = CodeSSubsetter(benchmark)
-    subset = subsetter.get_schema_subset(
+    result = subsetter.get_schema_subset(
         benchmark_question=benchmark.get_active_question()
     )
     return (
-        subset.database == "debit_card_specializing"
-        and len(subset.tables) == 5
+        result.schema_subset.database == "debit_card_specializing"
+        and len(result.schema_subset.tables) == 5
     )
