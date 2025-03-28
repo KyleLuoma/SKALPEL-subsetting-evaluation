@@ -133,3 +133,13 @@ def execute_query_bigquery_db_test():
         return True
     except Exception as e:
         return False
+    
+
+def get_unique_values_test():
+    bm = Spider2NlSqlBenchmark()
+    values = bm.get_unique_values(
+        table_name="bigquery-public-data.google_analytics_sample.ga_sessions_20170801",
+        column_name="channelGrouping",
+        database="ga360"
+    )
+    return len(values) == 7

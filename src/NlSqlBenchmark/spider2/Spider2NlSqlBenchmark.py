@@ -358,3 +358,59 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             if column.name == column_name and column.sample_values != None:
                 return column.sample_values[:min(len(column.sample_values) - 1, num_values)]
         return []
+    
+
+    def get_unique_values(
+            self, 
+            table_name: str, 
+            column_name: str, 
+            database: str
+            ) -> set[str]:
+        if any(
+            keyword in column_name.lower() 
+            for keyword in [
+                "_id", " id", "url", "email", "web", "time", "phone", "date", "address"
+            ]) or column_name.endswith("Id"):
+            return set()
+        ident_encase = {
+            "snowflake": '"',
+            "sqlite": '"',
+            "bigquery": "`" 
+        }
+        db_type = self.database_type_lookup[database]
+        query = f"""
+        SELECT SUM(LENGTH(unique_values)) as val_sum, COUNT(unique_values) as val_count
+        FROM (
+            SELECT DISTINCT `{column_name}` AS unique_values
+            FROM `{table_name}`
+            WHERE `{column_name}` IS NOT NULL
+        ) AS subquery
+        """.replace("`", ident_encase[db_type])
+        result = self.execute_query(
+            query=query,
+            database=database
+        )
+        if result.result_set == None:
+            return set()
+        sum_of_lengths = result.result_set["val_sum"][0] 
+        count_distinct = result.result_set["val_count"][0]
+        if sum_of_lengths is None or count_distinct == 0:
+            return set()
+        average_length = sum_of_lengths / count_distinct
+        values = set()
+        if (
+            ("name" in column_name.lower() and sum_of_lengths < 5000000) 
+            or (sum_of_lengths < 2000000 and average_length < 25) 
+            or count_distinct < 100
+            ):
+            query = f"SELECT DISTINCT `{column_name}` FROM `{table_name}` WHERE `{column_name}` IS NOT NULL"
+            query = query.replace("`", ident_encase[db_type])
+            try:
+                result = self.execute_query(
+                        query=query,
+                        database=database
+                        )
+                values = set(result.result_set[column_name])
+            except:
+                values = set()
+        return values

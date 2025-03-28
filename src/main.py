@@ -34,13 +34,13 @@ else:
     v_print = dummy
 
 def main():
-    benchmark_name = "snails"
+    benchmark_name = "spider2"
     filename_comments = "gpt4o"
     bm_factory = NlSqlBenchmarkFactory()
     benchmark = bm_factory.build_benchmark(benchmark_name)
     # subsetter = CodeSSubsetter(benchmark)
     # subsetter = PerfectSchemaSubsetter()
-    subsetter = ChessSubsetter(benchmark, do_preprocessing=False)
+    subsetter = ChessSubsetter(benchmark, do_preprocessing=True)
 
     if results_filename == None:
         results, subsets_questions = generate_subsets(
