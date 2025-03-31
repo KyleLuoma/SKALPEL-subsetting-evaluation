@@ -26,6 +26,7 @@ from SchemaSubsetter.CHESS.src.workflow.team_builder import build_team
 
 import time
 import yaml
+import json
 import argparse
 from pathlib import Path
 
@@ -64,11 +65,15 @@ class ChessSubsetter(SchemaSubsetter):
         with open(args.config, 'r') as file:
             self.config=yaml.safe_load(file)
 
+        with open(f"./subsetting_results/preprocessing_times/chess_{benchmark.name}_processing.json", "wt") as f:
+            json.dump({"processing_time": -1}, f)
         if do_preprocessing:
             s_time = time.perf_counter()
             self.preprocess_databases()
             e_time = time.perf_counter()
             print("Time to process", self.benchmark.name, "schemas was", str(e_time - s_time))
+            with open(f"./subsetting_results/preprocessing_times/chess_{benchmark.name}_processing.json", "wt") as f:
+                json.dump({"processing_time_seconds": e_time - s_time}, f)
         self.team = build_team(self.config)
 
 

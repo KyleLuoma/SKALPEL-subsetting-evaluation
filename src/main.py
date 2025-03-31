@@ -19,6 +19,9 @@ import time
 import pandas as pd
 from tqdm import tqdm
 import pickle
+import warnings
+
+warnings.filterwarnings("ignore")
 
 test = False
 verbose = True
@@ -41,7 +44,7 @@ def main():
     # subsetter = CodeSSubsetter(benchmark)
     # subsetter = PerfectSchemaSubsetter()
     subsetter = ChessSubsetter(benchmark, do_preprocessing=True)
-
+    return
     if results_filename == None:
         results, subsets_questions = generate_subsets(
             subsetter=subsetter, 

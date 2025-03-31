@@ -329,10 +329,10 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             **snowflake_credential
         )
         cursor = conn.cursor()
-        cursor.execute(query)
-        columns = [desc[0] for desc in cursor.description]
-        result_set = {c: [] for c in columns}
         try:
+            cursor.execute(query)
+            columns = [desc[0] for desc in cursor.description]
+            result_set = {c: [] for c in columns}
             for row in cursor.fetchall():
                 for ix, c in enumerate(columns):
                     result_set[c].append(row[ix])

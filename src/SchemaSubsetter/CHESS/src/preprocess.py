@@ -8,6 +8,7 @@ from langchain.schema.document import Document
 from langchain_openai import OpenAIEmbeddings
 
 from SchemaSubsetter.CHESS.src.database_utils.db_values.preprocess import make_lsh
+from tqdm import tqdm
 
 
 # from database_utils.db_catalog.csv_utils import load_tables_description
@@ -79,9 +80,14 @@ def make_db_lsh(db_id: str, db_directory_path: Path, benchmark: NlSqlBenchmark, 
     preprocessed_path = db_directory_path / "preprocessed" 
     preprocessed_path.mkdir(exist_ok=True)
     unique_values = {}
-    for table in benchmark.get_active_schema(database=db_id).tables:
+    schema = benchmark.get_active_schema(database=db_id)
+    for table in tqdm(schema.tables, total=len(schema.tables), desc=f"Making DB LSH of {schema.database}"):
         unique_values[table.name] = {}
         for column in table.columns:
+            if column.data_type.lower() not in ["string", "text", "clob", "ntext"] and "char" not in column.data_type.lower():
+                continue
+            if "." in column.name:
+                continue
             col_vals = list(benchmark.get_unique_values(
                 table_name=table.name,
                 column_name=column.name,

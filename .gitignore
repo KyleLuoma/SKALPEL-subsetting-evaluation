@@ -17,7 +17,10 @@ __pycache__/
 temp_data/
 bin/
 benchmarks/
+
 src/SchemaSubsetter/CodeS/sic_ckpts/
 src/SchemaSubsetter/CHESS/processed_db
 src/BenchmarkEmbedding/pgvector/pgdata/*
 src/SubsetEvaluator/correct_subsets/*
+src/SchemaSubsetter/CRUSH4SQL/data/*
+src/SchemaSubsetter/CRUSH4SQL/demo/CRUSH_demo
