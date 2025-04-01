@@ -27,7 +27,7 @@ PROMPT = {
     )
 }
 
-def get_openai_embedding(query, api_type, api_key, endpoint, api_version):
+def get_openai_embedding(query, api_type, api_key, endpoint, api_version) -> torch.Tensor:
     """
     Get text embedding using the Azure OpenAI API.
 

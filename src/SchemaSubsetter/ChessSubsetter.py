@@ -40,7 +40,8 @@ class ChessSubsetter(SchemaSubsetter):
     def __init__(
             self,
             benchmark: NlSqlBenchmark,
-            do_preprocessing: bool = False
+            do_preprocessing: bool = False,
+            overwrite_preprocessed: bool = False
     ):
         
         self.benchmark = benchmark
@@ -61,6 +62,7 @@ class ChessSubsetter(SchemaSubsetter):
         args.verbose=True
         self.args = args
         self.name = ChessSubsetter.name
+        self.overwrite_preprocessed = overwrite_preprocessed
 
         with open(args.config, 'r') as file:
             self.config=yaml.safe_load(file)
@@ -69,7 +71,7 @@ class ChessSubsetter(SchemaSubsetter):
             json.dump({"processing_time": -1}, f)
         if do_preprocessing:
             s_time = time.perf_counter()
-            self.preprocess_databases()
+            self.preprocess_databases(exist_ok=self.overwrite_preprocessed)
             e_time = time.perf_counter()
             print("Time to process", self.benchmark.name, "schemas was", str(e_time - s_time))
             with open(f"./subsetting_results/preprocessing_times/chess_{benchmark.name}_processing.json", "wt") as f:
@@ -77,12 +79,16 @@ class ChessSubsetter(SchemaSubsetter):
         self.team = build_team(self.config)
 
 
-    def preprocess_databases(self):
+    def preprocess_databases(self, exist_ok: bool = True):
 
         for database in self.benchmark.databases:
 
             db_dir = self.db_root_directory / "dev_databases" / database
-            db_dir.mkdir(exist_ok=True, parents=True)
+
+            try:
+                db_dir.mkdir(exist_ok=exist_ok, parents=True)
+            except OSError:
+                continue
 
             preprocess.make_db_lsh(
                 benchmark=self.benchmark,

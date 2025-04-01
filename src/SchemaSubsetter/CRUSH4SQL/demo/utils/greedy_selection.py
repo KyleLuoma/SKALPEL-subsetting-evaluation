@@ -48,6 +48,22 @@ def get_snm(segment, n, n_idx, cos, selected, mean_entropy):
         return weight * cos[segment][n_idx]
 
 def get_eij(n, selected):
+    """
+    Calculate the adjustment score for a given item `n` based on its relationship 
+    to the items in the `selected` list.
+    The function evaluates the relationships between `n` and each item in `selected` 
+    using the `RELATION_MAP` and assigns scores based on predefined rewards in `REWARDS`.
+    Args:
+        n (str): The identifier of the item to evaluate.
+        selected (list): A list of identifiers representing the currently selected items.
+    Returns:
+        int: The adjustment score for the item `n`. Returns 0 if `n` is already in `selected`.
+    Notes:
+        - `RELATION_MAP` is expected to be a dictionary where each key is an item identifier 
+          and the value is a dictionary containing at least the keys 'code' and 'source'.
+        - `REWARDS` is expected to be a dictionary containing the keys 'same_table', 
+          'same_db', and 'diff_db', which define the reward values for different relationships.
+    """
     if n in selected:
         return 0
     adj_score = 0
@@ -95,8 +111,11 @@ def get_data(docs, segments):
 
 # %%
 def greedy_select(segments, docs, BUDGET):
-    '''
-        segments: list of segments
+    """
+    Perform greedy selection of schema items based on segment scores.
+
+    Args:
+        segments (list): List of segment names.
         docs: sorted list of dicts, where each dict is of the form 
               {
                 'name': ..., 
@@ -105,7 +124,11 @@ def greedy_select(segments, docs, BUDGET):
                 'segment2': ...,        # score for segment2
                 ...
                 }
-    '''
+        BUDGET (int): Maximum number of schema items to select.
+
+    Returns:
+        set: A set of selected schema item names.
+    """
     cos, schema_items = get_data(docs, segments)
 
     list_entropies = []
