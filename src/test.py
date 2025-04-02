@@ -9,16 +9,20 @@ import tests
 # from tests import BirdNlSqlBenchmarkTest
 # from tests import SnailsNlSqlBenchmarkTest
 # from tests import SpiderNlSqlBenchmarkTest
-from tests import Spider2NlSqlBenchmarkTest
+# from tests import Spider2NlSqlBenchmarkTest
 # from tests import NlSqlBenchmarkFactoryTest
+
 # from tests import QueryResultTest
 # from tests import QueryProfilerTest
+
 # from tests import SchemaSubsetterTest
 # from tests import PerfectSchemaSubsetterTest
 # from tests import PerfectTableSchemaSubsetterTest
 # from tests import DinSqlSubsetterTest
 # from tests import CodeSSubsetterTest
 # from tests import ChessSubsetterTest
+from tests import Crush4SqlSubsetterTest
+
 # from tests import SchemaSubsetterEvaluatorTest
 # from tests import BenchmarkEmbeddingTest
 # from tests import StringObjectParserTest

@@ -2,7 +2,9 @@ import sys
 
 import torch
 import openai
-from openai.embeddings_utils import get_embedding
+# from openai.embeddings_utils import get_embedding
+
+# Skalpel modifications: Updating OpenAI API calls to current version
 
 PROMPT = {
     'hallucinate_schema':(
@@ -26,6 +28,10 @@ PROMPT = {
         "Example 7:\n\nQuestion: {0}\n\nTables:"
     )
 }
+
+def get_embedding(query: str, engine: str) -> dict:
+    return 
+
 
 def get_openai_embedding(query, api_type, api_key, endpoint, api_version) -> torch.Tensor:
     """
@@ -55,10 +61,10 @@ def get_openai_embedding(query, api_type, api_key, endpoint, api_version) -> tor
     else:
         openai.api_key = api_key
         model_id = "text-embedding-ada-002"
-        embedding = openai.Embedding.create(
+        embedding = openai.embeddings.create(
             input=query,
             model=model_id
-        )['data'][0]['embedding']
+        ).data[0].embedding
 
     # embedding will be a list of len dimension of vector
     embedding_tensor = torch.Tensor(embedding)
@@ -73,7 +79,7 @@ def get_hallucinated_segments(prompt_type, query, api_type, api_key, endpoint, a
         openai.api_version = api_version 
 
         deployment_name = 'prefix-text-davinci-003' #This will correspond to the custom name you chose for your deployment when you deployed a model. 
-        response = openai.Completion.create(
+        response = openai.chat.completions.create(
             engine=deployment_name,
             prompt=prompt,
             max_tokens=max_tokens,
@@ -85,7 +91,7 @@ def get_hallucinated_segments(prompt_type, query, api_type, api_key, endpoint, a
         text = response['choices'][0]['text']
     else:
         openai.api_key = api_key
-        response = openai.Completion.create(
+        response = openai.chat.completions.create(
             model="text-davinci-003",
             prompt=prompt, 
             max_tokens=max_tokens,

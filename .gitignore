@@ -2,6 +2,7 @@ venv/
 venv_linux/
 .venv/
 .venv_win/
+*_venv/
 .vscode/
 .local/*
 .cache/*

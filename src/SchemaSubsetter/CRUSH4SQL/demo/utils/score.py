@@ -73,6 +73,19 @@ def get_scored_docs(
     api_version,
     aggr_type='max'
 ):
+    """
+    Get scored documents based on the similarity between input segments and precomputed document embeddings.
+    Args:
+        question (str): The input question or query to provide context for scoring.
+        segments (list of str): A list of text segments to be scored against the document embeddings.
+        api_type (str): The type of API to use for generating embeddings (e.g., OpenAI API type).
+        api_key (str): The API key for authentication with the embedding service.
+        endpoint (str): The endpoint URL for the embedding service.
+        api_version (str): The version of the API to use.
+        aggr_type (str, optional): The aggregation type for combining segment scores. Defaults to 'max'.
+    Returns:
+        list: A ranked list of the top 100 documents based on their similarity scores.
+    """
     A = []
     for segment in segments:
         A.append(get_openai_embedding(segment, api_type, api_key, endpoint, api_version))

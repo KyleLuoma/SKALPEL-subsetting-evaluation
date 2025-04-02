@@ -23,7 +23,7 @@ class Crush4SqlSubsetter(SchemaSubsetter):
         self.processed_db_dir = Path("./src/SchemaSubsetter/CRUSH4SQL/processed")
         self.correct_txt_sql_pairs = {}
         self.api_type = 'python'
-        with open("./.loca/openai.json") as f:
+        with open("./.local/openai.json") as f:
             open_ai_info = json.load(f)
         self.api_key = open_ai_info["api_key"]
         self.endpoint = None
@@ -74,6 +74,7 @@ class Crush4SqlSubsetter(SchemaSubsetter):
 
 
     def _register_table(self, db_table_name: str) -> int:
+        table_code = self.next_code
         if db_table_name not in self.table_code_lookup.keys():
             self.table_code_lookup[db_table_name] = table_code
             self.code_table_lookup[table_code] = db_table_name
@@ -103,6 +104,6 @@ class Crush4SqlSubsetter(SchemaSubsetter):
                 relation_map[key] = {
                     "table": table.name,
                     "source": schema.database,
-                    "code": table_code
+                    "code": str(table_code)
                 }
         return relation_map
