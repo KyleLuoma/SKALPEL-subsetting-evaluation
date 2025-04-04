@@ -79,4 +79,18 @@ def make_schema_ddl_test():
         ]
     )
     sql = ddl.make_schema_ddl(schema=schema, schema_dialect="mssql", target_dialect="sqlite")
-    print(sql)
+    return sql == """CREATE TABLE `t1` (
+  `c1` INTEGER
+);
+CREATE TABLE `t2` (
+  `c2` INTEGER,
+  FOREIGN KEY (`c2`) REFERENCES `t1` (`c1`)
+);
+CREATE TABLE `t4` (
+  `c4` INTEGER,
+  FOREIGN KEY (`c4`) REFERENCES `t1` (`c1`)
+);
+CREATE TABLE `t3` (
+  `c3` TEXT,
+  FOREIGN KEY (`c3`) REFERENCES `t2` (`c2`)
+);"""

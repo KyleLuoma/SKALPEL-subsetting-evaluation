@@ -42,17 +42,24 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
             verbose: bool = False,
             sql_dialect: str = "mssql"
             ):
+        assert (
+            db_host_profile == "docker" and sql_dialect == "mssql"
+            or db_host_profile == "remote" and sql_dialect == "mssql"
+            or db_host_profile == "sqlite" and sql_dialect == "sqlite" 
+        )
         super().__init__()
         self.verbose = verbose
         self.benchmark_folder = dirname(dirname(dirname(dirname(abspath(__file__))))) + "/benchmarks/snails"
         self.kill_container_on_exit = kill_container_on_exit
         self.container = None
+        self.db_host_profile = db_host_profile
         if db_host_profile == "docker":
             self.db_info_file = self.benchmark_folder + "/ms_sql/dbinfo.json"
             self.container = self._init_docker()
         elif db_host_profile == "remote":
             self.db_info_file = self.benchmark_folder + "/ms_sql/remote_dbinfo.json"
-
+        elif db_host_profile == "sqlite":
+            self.db_info_file = self.benchmark_folder + "/snails_sqlite/sqlite_dbinfo.json"
         self.name = SnailsNlSqlBenchmark.name
         self.naturalness = "Native"
         self.databases = SnailsNlSqlBenchmark.databases
@@ -90,7 +97,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
             self.active_database += 1
             self.active_question_no = 0
             if self.active_database >= len(self.databases):
-                self.__init__()
+                self.__init__(db_host_profile=self.db_host_profile, sql_dialect=self.sql_dialect)
                 raise StopIteration
             self.active_database_questions = self.__load_active_database_questions()
             self.active_database_queries = self.__load_active_database_queries()
@@ -173,13 +180,13 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
                 db_list_file=self.db_info_file
                 )
 
-            pk_lookup, fk_lookup = self._make_pk_fk_lookups(database_name=database_name)
         elif self.sql_dialect == "sqlite":
             tables_and_columns = sqlite_db_util.get_tables_and_columns_from_sqlite_db(
                 db_name=database_name,
                 schema=schema_name,
                 db_list_file=self.db_info_file
             )
+        pk_lookup, fk_lookup = self._make_pk_fk_lookups(database_name=database_name)
 
         for table in tables_and_columns:
             if table in pk_lookup:
@@ -370,7 +377,11 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
                 question=question
             )
         elif self.sql_dialect == "sqlite":
-            pass
+            return self._execute_sqlite_query(
+                query=query,
+                database=database,
+                question=question
+            )
     
 
     def _execute_sqlite_query(self, query: str, database: str, question: int = None) -> QueryResult:
@@ -416,7 +427,10 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
 
     def get_sample_values(self, table_name: str, column_name: str, num_values: int = 2, database: str = None):
-        query = f"select top {num_values} [{column_name}] from [{table_name}]"
+        if self.sql_dialect == "mssql":
+            query = f"select top {num_values} [{column_name}] from [{table_name}]"
+        elif self.sql_dialect == "sqlite":
+            query = f"select `{column_name}` from `{table_name}` limit {num_values}"
         result = self.execute_query(query=query, database=database)
         return result.result_set[column_name]
 
@@ -436,15 +450,26 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
                 "_id", " id", "url", "email", "web", "time", "phone", "date", "address"
             ]) or column_name.endswith("Id"):
             return set()
+        if self.sql_dialect == "mssql":
+            query = f"""
+                SELECT SUM(LEN(unique_values)) as val_sum, COUNT(unique_values) as val_count
+                FROM (
+                    SELECT DISTINCT [{column_name}] AS unique_values
+                    FROM [{table_name}]
+                    WHERE [{column_name}] IS NOT NULL
+                ) AS subquery
+                """
+        elif self.sql_dialect == "sqlite":
+            query = f"""
+                SELECT SUM(LENGTH(unique_values)) as val_sum, COUNT(unique_values) as val_count
+                FROM (
+                    SELECT DISTINCT `{column_name}` AS unique_values
+                    FROM `{table_name}`
+                    WHERE `{column_name}` IS NOT NULL
+                ) AS subquery
+                """
         result = self.execute_query(
-            query=f"""
-                    SELECT SUM(LEN(unique_values)) as val_sum, COUNT(unique_values) as val_count
-                    FROM (
-                        SELECT DISTINCT [{column_name}] AS unique_values
-                        FROM [{table_name}]
-                        WHERE [{column_name}] IS NOT NULL
-                    ) AS subquery
-                """,
+            query=query,
             database=database
         )
         if result.result_set == None:

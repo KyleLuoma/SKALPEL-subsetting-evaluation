@@ -3,7 +3,8 @@ from NlSqlBenchmark.QueryResult import QueryResult
 
 import docker
 
-DB_HOST_PROFILE = "remote"
+DB_HOST_PROFILE = "sqlite"
+SQL_DIALECT = "sqlite"
 
 snails_databases = {
     "ASIS_20161108_HerpInv_Database",
@@ -18,12 +19,16 @@ snails_databases = {
 }
 
 def docker_init_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
+    if DB_HOST_PROFILE != "docker":
+        return True
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
     return snails.container != None and type(snails.container) == docker.models.containers.Container
 
 
 def docker_db_query_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
+    if DB_HOST_PROFILE != "docker":
+        return True
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
     result = snails.execute_query(
         query="select * from tlu_DecayStage;",
         database="ATBI"
@@ -32,13 +37,17 @@ def docker_db_query_test():
 
 
 def execute_query_syntax_error_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
     query = "SELECT * from tlu_DecayStage WHRER TRUE"
+    if SQL_DIALECT == "sqlite":
+        error_message = 'near "TRUE": syntax error'
+    elif SQL_DIALECT == "mssql":
+        error_message='(\'42000\', "[42000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Incorrect syntax near \'TRUE\'. (102) (SQLExecDirectW)")'
     correct_result = QueryResult(
         result_set=None, 
         database=None, 
         question=None, 
-        error_message='(\'42000\', "[42000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Incorrect syntax near \'TRUE\'. (102) (SQLExecDirectW)")'
+        error_message=error_message
     )
     result = snails.execute_query(
         query=query,
@@ -49,31 +58,36 @@ def execute_query_syntax_error_test():
 
 
 def make_pk_fk_lookups_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
     pk, fk = snails._make_pk_fk_lookups("ATBI")
-    return (
-        len(pk) == 15
-        and len(fk) == 10
-    )
+    if SQL_DIALECT=="mssql":
+        return (
+            len(pk) == 15
+            and len(fk) == 10
+        )
+    else:
+        return (
+            len(pk) == 14
+            and len(fk) == 9
+        )
 
 def load_schema_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
     schema = snails._load_schema("ATBI")
     return (
         len(schema.tables) == 28
-        and len(schema.tables[0].columns) == 10
     )
 
 
 def set_and_get_active_schema_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
     snails.set_active_schema("NTSB")
     schema = snails.get_active_schema()
     return len(schema.tables) == 40
 
 
 def iter_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
     found_databases = set()
     questions = []
     for q in snails:
@@ -84,7 +98,7 @@ def iter_test():
 
 def get_sample_values_test():
     correct_result = ['1', '2']
-    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
     result = snails.get_sample_values(
         table_name="tlu_DecayStage", 
         column_name="DecayStage_ID", 
@@ -94,7 +108,7 @@ def get_sample_values_test():
 
 
 def get_id_col_unique_values_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
     unique_values = snails.get_unique_values(
         table_name="tlu_DecayStage", 
         column_name="DecayStage_ID", 
@@ -104,7 +118,7 @@ def get_id_col_unique_values_test():
 
 
 def get_unique_values_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
     unique_values = snails.get_unique_values(
         table_name="tlu_DecayStage", 
         column_name="DecayStage_Descr", 

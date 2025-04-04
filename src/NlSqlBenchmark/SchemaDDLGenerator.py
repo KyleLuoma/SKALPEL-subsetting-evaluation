@@ -64,10 +64,12 @@ class SchemaDDLGenerator:
                         cursor.execute(
                             sql, values
                         )
+                        
                     except sqlite3.Error as e:
                         print(sql)
                         print(values)
                         raise RuntimeError(f"Failed to insert values into SQLite database: {e}")
+                connection.commit()
             connection.close()
                                        
 
@@ -231,7 +233,7 @@ class SchemaDDLGenerator:
 
     def _load_type_maps(self) -> dict[tuple, dict]:
         type_maps = {}
-        artifacts_dir = './NlSqlBenchmark/ddl_generator_artifacts'
+        artifacts_dir = './src/NlSqlBenchmark/ddl_generator_artifacts'
         for filename in os.listdir(artifacts_dir):
             from_sql = filename.split("_")[0]
             to_sql = filename.split("_")[1]

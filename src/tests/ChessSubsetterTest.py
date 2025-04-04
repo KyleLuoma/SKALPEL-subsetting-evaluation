@@ -25,14 +25,11 @@ def get_token_counts_from_log_test():
     token_counts = ChessSubsetter.get_token_counts_from_log("NTSB", 0)
     stage_sums = {}
     output_sums = {}
-    for item in token_counts:
-        print(item)
+    for item in token_counts[0]:
         if item["stage"] not in stage_sums.keys():
             stage_sums[item["stage"]] = item["input_token_count"]
             output_sums[item["stage"]] = item["output_token_count"]
         else:
             stage_sums[item["stage"]] += item["input_token_count"]
             output_sums[item["stage"]] += item["output_token_count"]
-    print("Stage sums input:", stage_sums)
-    print("Stage sums output:", output_sums)
-    return True
+    return stage_sums == {'': 0, 'extract_keywords': 634, 'filter_column': 4482437, 'select_tables': 2701, 'select_columns': 617}
