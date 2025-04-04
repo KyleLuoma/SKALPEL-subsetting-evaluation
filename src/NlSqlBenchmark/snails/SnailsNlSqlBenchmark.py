@@ -39,7 +39,8 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
             self, 
             db_host_profile: str = "docker",
             kill_container_on_exit: bool = True,
-            verbose: bool = False
+            verbose: bool = False,
+            sql_dialect: str = "mssql"
             ):
         super().__init__()
         self.verbose = verbose
@@ -54,9 +55,12 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
         self.name = SnailsNlSqlBenchmark.name
         self.naturalness = "Native"
-        self.syntax = "tsql"
         self.databases = SnailsNlSqlBenchmark.databases
-        self.sql_dialect = "mssql"
+        self.sql_dialect = sql_dialect
+        if self.sql_dialect == "mssql":
+            self.syntax = "tsql"
+        elif self.sql_dialect == "sqlite":
+            self.syntax = "sqlite"
         self.schema_cache = {}
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()

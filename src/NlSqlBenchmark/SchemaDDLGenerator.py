@@ -1,11 +1,14 @@
 from NlSqlBenchmark.SchemaObjects import (
     Schema, SchemaTable, TableColumn, ForeignKey
 )
+from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.QueryResult import QueryResult
 import json
+import decimal
 import os
 from itertools import product
 import sqlite3
-
+from tqdm import tqdm
 
 class SchemaDDLGenerator:
 
@@ -13,6 +16,60 @@ class SchemaDDLGenerator:
         self.type_maps = self._load_type_maps()
         self.available_target_dialects = [k[1] for k in self.type_maps.keys()]
         self.available_source_dialects = [k[0] for k in self.type_maps.keys()]
+        self.identifier_encase = {
+            ("mssql", "open"): "[",
+            ("mssql", "close"): "]",
+            ("sqlite", "open"): "`",
+            ("sqlite", "close"): "`"
+        }
+
+
+    def transform_benchmark_to_sqlite(self, benchmark: NlSqlBenchmark, db_path: str, do_only:list = None):
+        for db_name in benchmark.databases:
+            if do_only != None and db_name not in do_only:
+                continue
+            open_encase = self.identifier_encase[benchmark.sql_dialect, "open"]
+            close_encase = self.identifier_encase[benchmark.sql_dialect, "close"]
+            schema = benchmark.get_active_schema(db_name)
+            self.make_sqlite_database(schema=schema, schema_dialect=benchmark.sql_dialect, db_path=db_path)
+            save_path = db_path + "/" + schema.database + ".sqlite"
+            connection = sqlite3.connect(save_path)
+            cursor = connection.cursor()
+
+            table_hash: dict[str, SchemaTable] = {table.name: table for table in schema.tables}
+            table_order = self._define_table_creation_sequence(schema)
+            for table_name in table_order:
+                table = table_hash[table_name]
+                all_values = benchmark.execute_query(
+                    query=f"select * from {open_encase}{table.name}{close_encase}",
+                    database=db_name
+                )
+                if all_values.result_set == None:
+                    print("Error at", table.name, all_values.error_message)
+                    continue
+                columns = list(all_values.result_set.keys())
+                if len(columns) == 0:
+                    continue
+                if len(all_values.result_set[columns[0]]) == 0:
+                    continue
+                for ix in tqdm(range(0, len(all_values.result_set[columns[0]])), desc=f"Inserting values into {table.name}"):
+                    sql = self.make_sqlite_table_insert_statement(table=table)
+                    values = []
+                    for c in columns:
+                        value = all_values.result_set[c][ix]
+                        if isinstance(value, decimal.Decimal):
+                            value = float(value)
+                        values.append(value)
+                    try:
+                        cursor.execute(
+                            sql, values
+                        )
+                    except sqlite3.Error as e:
+                        print(sql)
+                        print(values)
+                        raise RuntimeError(f"Failed to insert values into SQLite database: {e}")
+            connection.close()
+                                       
 
 
     def make_sqlite_database(self, schema: Schema, schema_dialect: str, db_path: str):
@@ -25,6 +82,9 @@ class SchemaDDLGenerator:
             target_dialect="sqlite"
         )
 
+        db_path = db_path + "/" + schema.database + ".sqlite"
+        print(db_path)
+
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
 
@@ -32,9 +92,19 @@ class SchemaDDLGenerator:
             cursor.executescript(ddl)
             connection.commit()
         except sqlite3.Error as e:
+            print(ddl)
             raise RuntimeError(f"Failed to create SQLite database: {e}")
         finally:
             connection.close()
+
+
+    def make_sqlite_table_insert_statement(self, table: SchemaTable) -> str:
+        open_encase = self.identifier_encase["sqlite", "open"]
+        close_encase = self.identifier_encase["sqlite", "close"]
+        column_names = ", ".join([f"{open_encase}{column.name}{close_encase}" for column in table.columns])
+        placeholders = ", ".join(["?" for _ in table.columns])
+        insert_statement = f"INSERT INTO {open_encase}{table.name}{close_encase} ({column_names}) VALUES ({placeholders});"
+        return insert_statement
 
 
     def make_schema_ddl(self, schema: Schema, schema_dialect: str, target_dialect: str) -> str:
@@ -72,9 +142,9 @@ class SchemaDDLGenerator:
             remaining_tables = []
             for eval_table in eval_tables:
                 for fk in eval_table.foreign_keys:
-                    if fk.references[0] in table_sequence:
+                    if fk.references[0] in table_sequence and eval_table.name not in table_sequence:
                         table_sequence.append(eval_table.name)
-                    else:
+                    elif eval_table.name not in table_sequence:
                         remaining_tables.append(eval_table)
         return table_sequence
 
@@ -101,10 +171,13 @@ class SchemaDDLGenerator:
         type_map = self.type_maps.get((source_sql_dialect, target_sql_dialect))
         if not type_map:
             raise ValueError(f"No type map found for {source_sql_dialect} to {target_sql_dialect}")
+        
+        open_encase = self.identifier_encase[target_sql_dialect, "open"]
+        close_encase = self.identifier_encase[target_sql_dialect, "close"]
 
-        ddl = f"CREATE TABLE {table.name} (\n"
+        ddl = f"CREATE TABLE {open_encase}{table.name}{close_encase} (\n"
         column_definitions = []
-
+        pk_columns = []
         for column in table.columns:
             if "(" in column.data_type and ")" in column.data_type:
                 source_type, type_args = self._handle_source_type_with_parens(column.data_type)
@@ -118,21 +191,27 @@ class SchemaDDLGenerator:
                 base_target_type = target_data_type.split("(")[0]
                 target_data_type = base_target_type + f"({type_args})"
                 
-            column_def = f"  {column.name} {target_data_type}"
+            column_def = f"  {open_encase}{column.name}{close_encase} {target_data_type}"
             if column.name in table.primary_keys:
-                column_def += " PRIMARY KEY"
+                pk_columns.append(column.name)
             column_definitions.append(column_def)
 
         ddl += ",\n".join(column_definitions)
 
+        if len(pk_columns) > 0:
+            pk_definition = ", ".join([f"{open_encase}{c}{close_encase}" for c in pk_columns])
+            ddl += f",\n  PRIMARY KEY ({pk_definition})"
+
         if table.foreign_keys:
             foreign_key_definitions = []
             for fk in table.foreign_keys:
-                fk_columns = ", ".join(fk.columns)
+                fk_columns = ", ".join([f"{open_encase}{c}{close_encase}" for c in fk.columns])
                 ref_table, ref_columns = fk.references
-                ref_columns_str = ", ".join(ref_columns)
+                if type(ref_columns) == str:
+                    ref_columns = [ref_columns]
+                ref_columns_str = ", ".join([f"{open_encase}{c}{close_encase}" for c in ref_columns])
                 foreign_key_definitions.append(
-                    f"  FOREIGN KEY ({fk_columns}) REFERENCES {ref_table} ({ref_columns_str})"
+                    f"  FOREIGN KEY ({fk_columns}) REFERENCES {open_encase}{ref_table}{close_encase} ({ref_columns_str})"
                 )
             ddl += ",\n" + ",\n".join(foreign_key_definitions)
 
@@ -152,7 +231,7 @@ class SchemaDDLGenerator:
 
     def _load_type_maps(self) -> dict[tuple, dict]:
         type_maps = {}
-        artifacts_dir = './src/NlSqlBenchmark/ddl_generator_artifacts'
+        artifacts_dir = './NlSqlBenchmark/ddl_generator_artifacts'
         for filename in os.listdir(artifacts_dir):
             from_sql = filename.split("_")[0]
             to_sql = filename.split("_")[1]
