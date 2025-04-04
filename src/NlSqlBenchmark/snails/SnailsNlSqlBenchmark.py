@@ -49,6 +49,9 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
         if db_host_profile == "docker":
             self.db_info_file = self.benchmark_folder + "/ms_sql/dbinfo.json"
             self.container = self._init_docker()
+        elif db_host_profile == "remote":
+            self.db_info_file = self.benchmark_folder + "/ms_sql/remote_dbinfo.json"
+
         self.name = SnailsNlSqlBenchmark.name
         self.naturalness = "Native"
         self.syntax = "tsql"

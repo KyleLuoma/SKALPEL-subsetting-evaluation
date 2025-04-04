@@ -227,7 +227,7 @@ class SchemaTable:
         if self.foreign_keys != None and len(self.foreign_keys) != None:
             foreign_keys_str = ", ".join(str(fk) for fk in self.foreign_keys)
             output_strings.append(f" foreign_keys=[{foreign_keys_str}]")
-        return (f"SchemaTable({",".join(output_strings)})")
+        return (f"SchemaTable({','.join(output_strings)})")
     
 
     def as_ddl(self):

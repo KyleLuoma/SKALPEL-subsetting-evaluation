@@ -1,0 +1,10 @@
+pandas
+tqdm
+docker
+# torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+sentence-transformers
+psycopg[binary]
+pgvector
+openai
+nltk
+# simcse

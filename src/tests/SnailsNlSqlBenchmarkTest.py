@@ -3,6 +3,7 @@ from NlSqlBenchmark.QueryResult import QueryResult
 
 import docker
 
+DB_HOST_PROFILE = "remote"
 
 snails_databases = {
     "ASIS_20161108_HerpInv_Database",
@@ -17,12 +18,12 @@ snails_databases = {
 }
 
 def docker_init_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
     return snails.container != None and type(snails.container) == docker.models.containers.Container
 
 
 def docker_db_query_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
     result = snails.execute_query(
         query="select * from tlu_DecayStage;",
         database="ATBI"
@@ -31,7 +32,7 @@ def docker_db_query_test():
 
 
 def execute_query_syntax_error_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
     query = "SELECT * from tlu_DecayStage WHRER TRUE"
     correct_result = QueryResult(
         result_set=None, 
@@ -48,7 +49,7 @@ def execute_query_syntax_error_test():
 
 
 def make_pk_fk_lookups_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
     pk, fk = snails._make_pk_fk_lookups("ATBI")
     return (
         len(pk) == 15
@@ -56,7 +57,7 @@ def make_pk_fk_lookups_test():
     )
 
 def load_schema_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
     schema = snails._load_schema("ATBI")
     return (
         len(schema.tables) == 28
@@ -65,14 +66,14 @@ def load_schema_test():
 
 
 def set_and_get_active_schema_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
     snails.set_active_schema("NTSB")
     schema = snails.get_active_schema()
     return len(schema.tables) == 40
 
 
 def iter_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
     found_databases = set()
     questions = []
     for q in snails:
@@ -83,7 +84,7 @@ def iter_test():
 
 def get_sample_values_test():
     correct_result = ['1', '2']
-    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
     result = snails.get_sample_values(
         table_name="tlu_DecayStage", 
         column_name="DecayStage_ID", 
@@ -93,7 +94,7 @@ def get_sample_values_test():
 
 
 def get_id_col_unique_values_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
     unique_values = snails.get_unique_values(
         table_name="tlu_DecayStage", 
         column_name="DecayStage_ID", 
@@ -103,7 +104,7 @@ def get_id_col_unique_values_test():
 
 
 def get_unique_values_test():
-    snails = SnailsNlSqlBenchmark(db_host_profile="docker", kill_container_on_exit=False)
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False)
     unique_values = snails.get_unique_values(
         table_name="tlu_DecayStage", 
         column_name="DecayStage_Descr", 
