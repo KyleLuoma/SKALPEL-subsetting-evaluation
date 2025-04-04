@@ -19,6 +19,7 @@
     "MONEY": "NUMERIC",
     "NCHAR(n)": "TEXT",
     "NTEXT": "TEXT",
+    "NUMERIC": "NUMERIC",
     "NUMERIC(n,m)": "NUMERIC",
     "NVARCHAR(n)": "TEXT",
     "NVARCHAR(max)": "TEXT",

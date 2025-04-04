@@ -6,7 +6,7 @@ import docker.errors
 import docker.models
 import docker.models.containers
 
-from NlSqlBenchmark.snails.util import db_util, load_nl_questions
+from NlSqlBenchmark.snails.util import db_util, load_nl_questions, sqlite_db_util
 from NlSqlBenchmark.QueryResult import QueryResult
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from NlSqlBenchmark.SchemaObjects import (
@@ -166,13 +166,20 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
         schema = Schema(database=database_name, tables=[])
             
-        tables_and_columns = db_util.get_tables_and_columns_from_sql_server_db(
-            db_name=database_name,
-            schema=schema_name,
-            db_list_file=self.db_info_file
-            )
+        if self.sql_dialect == "mssql":            
+            tables_and_columns = db_util.get_tables_and_columns_from_sql_server_db(
+                db_name=database_name,
+                schema=schema_name,
+                db_list_file=self.db_info_file
+                )
 
-        pk_lookup, fk_lookup = self._make_pk_fk_lookups(database_name=database_name)
+            pk_lookup, fk_lookup = self._make_pk_fk_lookups(database_name=database_name)
+        elif self.sql_dialect == "sqlite":
+            tables_and_columns = sqlite_db_util.get_tables_and_columns_from_sqlite_db(
+                db_name=database_name,
+                schema=schema_name,
+                db_list_file=self.db_info_file
+            )
 
         for table in tables_and_columns:
             if table in pk_lookup:
@@ -199,14 +206,24 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
 
     def _make_pk_fk_lookups(self, database_name: str) -> (dict, dict):
-        with open(f"./src/NlSqlBenchmark/snails/util/get_fk_pk_from_mssql.sql", "r") as f:
-            pk_fk_query = f.read()
+        if self.sql_dialect == "mssql":
+            with open(f"./src/NlSqlBenchmark/snails/util/get_fk_pk_from_mssql.sql", "r") as f:
+                pk_fk_query = f.read()
 
-        pk_fk = db_util.do_query(
-            query=pk_fk_query,
-            database_name=database_name,
-            db_list_file=self.db_info_file
-        )
+            pk_fk = db_util.do_query(
+                query=pk_fk_query,
+                database_name=database_name,
+                db_list_file=self.db_info_file
+            )
+        elif self.sql_dialect == "sqlite":
+            with open(f"./src/NlSqlBenchmark/snails/util/get_fk_pk_from_sqlite.sql", "r") as f:
+                pk_fk_query = f.read()
+
+            pk_fk = sqlite_db_util.do_query(
+                query=pk_fk_query,
+                database_name=database_name,
+                db_list_file=self.db_info_file
+            )
 
         pk_lookup = {}
         fk_lookup = {}
@@ -346,6 +363,38 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
     def execute_query(self, query: str, database: str = None, question: int = None) -> QueryResult:
         if database == None:
             database = self.databases[self.active_database]
+        if self.sql_dialect == "mssql":
+            return self._execute_mssql_query(
+                query=query,
+                database=database,
+                question=question
+            )
+        elif self.sql_dialect == "sqlite":
+            pass
+    
+
+    def _execute_sqlite_query(self, query: str, database: str, question: int = None) -> QueryResult:
+        try:
+            result_set_dict = sqlite_db_util.do_query(
+                query=query,
+                database_name=database,
+                db_list_file=self.db_info_file
+            )
+        except sqlite_db_util.sqlite3.OperationalError as e:
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message=str(e)
+            )
+        return QueryResult(
+            result_set=result_set_dict,
+            database=database,
+            question=question
+        )
+
+
+    def _execute_mssql_query(self, query: str, database: str, question: int = None) -> QueryResult:
         try:
             result_set_dict = db_util.do_query(
                 query=query,
@@ -364,7 +413,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
             database = database,
             question = question
         )
-    
+
 
     def get_sample_values(self, table_name: str, column_name: str, num_values: int = 2, database: str = None):
         query = f"select top {num_values} [{column_name}] from [{table_name}]"
