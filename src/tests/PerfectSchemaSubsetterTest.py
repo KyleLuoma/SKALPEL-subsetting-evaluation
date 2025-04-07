@@ -20,7 +20,7 @@ def get_schema_subset_test():
             SchemaTable(
                 name='frpm', 
                 columns=[
-                    TableColumn(name='County Name', data_type='text'),
+                    TableColumn(name='County Name', data_type='text', description='County Code '),
                     TableColumn(name='Enrollment (K-12)', data_type='real'),
                     TableColumn(name='Free Meal Count (K-12)', data_type='real')
                     ],
@@ -36,7 +36,7 @@ def get_schema_subset_test():
         question_number=0,
         schema=benchmark.get_active_schema()
     ))
-    print(result)
+    # print(result)
     return result == correct_result
 
 
@@ -51,7 +51,7 @@ def spider_2_query_test():
         f.write(f"-- {q.schema.database} {q.query_filename} {q.query_dialect}\n\n")
         f.write(q.query)
     subset = pss.get_schema_subset(q)
-    print(subset)
+    # print(subset)
     return type(subset) == Schema
 
 

@@ -4,6 +4,7 @@ import pandas as pd
 import subprocess
 import json
 from os.path import dirname, abspath
+import os
 
 test_query = """
 SELECT a from o
@@ -43,6 +44,7 @@ class QueryProfiler:
         self.query = None
         self.tree = None
         self.stats = None
+        self.use_shell = os.name != 'nt'
         pass
 
 
@@ -184,6 +186,7 @@ class QueryProfiler:
                 - table_aliases:  table alias list
                 - column_aliases: column alias list
         """
+        
         query = str(query)
         query = query.upper() 
         if syntax == "sqlite":
@@ -195,7 +198,8 @@ class QueryProfiler:
                 q = query,
                 s = syntax
             ),
-            capture_output=True
+            capture_output=True,
+            shell=self.use_shell
         )
         response = str(response)
         # print("\ntag_query DEBUG:", response)
@@ -252,13 +256,16 @@ class QueryProfiler:
         """
         query_to_parse = query.upper()
         query_to_parse = query_to_parse.replace('"', '\\"')
+        if os.name != 'nt':
+            query_to_parse = query_to_parse.replace("`", "\`")
         response = subprocess.run(
             'java -jar "{j}" --query "{q}" --dialect {s}'.format(
                 j = self.__jar_path,
                 q = query_to_parse,
                 s = syntax
             ),
-            capture_output=True
+            capture_output=True,
+            shell=self.use_shell
         )
         response = str(response)
         # print("__parse_query DEBUG:", response)

@@ -314,7 +314,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         csv_files = [f for f in os.listdir(db_path) if f.endswith('.csv')]
         descr_lookup = {}
         for file in csv_files:
-            with open(f"{db_path}/{file}") as f:
+            with open(f"{db_path}/{file}", encoding="windows-1252") as f:
                 table_name = file.replace(".csv", "")
                 line = f.readline()
                 while line != "":

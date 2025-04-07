@@ -57,7 +57,7 @@ def get_tables_and_columns_from_sqlite_db(
 
     tables_and_columns = {}
     for table in tables:
-        cursor.execute(f"PRAGMA table_info({table});")
+        cursor.execute(f"PRAGMA table_info(`{table}`);")
         columns = cursor.fetchall()
         column_list = []
         for column in columns:

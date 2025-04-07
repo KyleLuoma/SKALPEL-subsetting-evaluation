@@ -1,3 +1,4 @@
+#Skalpel
 pandas
 tqdm
 docker
@@ -8,3 +9,22 @@ pgvector
 openai
 nltk
 # simcse
+
+#Spider2:
+snowflake
+google-cloud-bigquery
+db-dtypes
+
+#CHESS:
+dotenv
+langchain
+langchain_chroma
+langchain_openai
+langchain_google_vertexai
+langchain_google_genai
+langchain_anthropic
+langgraph
+datasketch
+func_timeout
+sqlglot
+sqlvalidator

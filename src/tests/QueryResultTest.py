@@ -59,5 +59,5 @@ Database: C
 Question: 1
 Result Set Dict:
 {'A': 'B'}"""
-    print(result)
+    # print(result)
     return str(result) == result_str

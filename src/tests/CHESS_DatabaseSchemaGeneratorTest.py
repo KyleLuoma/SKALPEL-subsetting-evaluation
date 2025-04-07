@@ -13,7 +13,7 @@ def init_test():
 def schema_build_test():
     schema_generator = DatabaseSchemaGenerator(db_id="PacificIslandLandbirds")
     schema = DatabaseSchemaGenerator.CACHED_DB_SCHEMA["PacificIslandLandbirds"]
-    snails = SnailsNlSqlBenchmark()
+    snails = SnailsNlSqlBenchmark(db_host_profile="sqlite", sql_dialect="sqlite")
     pilb_schema = snails.get_active_schema("PacificIslandLandbirds")
     return (
         len(pilb_schema.tables) == len(schema.tables)

@@ -18,11 +18,12 @@ def load_type_maps_test():
 
 def make_create_table_statement_test():
     ddl = SchemaDDLGenerator()
-    sql = """CREATE TABLE test_table (
-  column1 TEXT PRIMARY KEY,
-  column2 TEXT,
-  column3 NUMERIC,
-  FOREIGN KEY (column3) REFERENCES table2 (column4)
+    sql = """CREATE TABLE `test_table` (
+  `column1` TEXT,
+  `column2` TEXT,
+  `column3` NUMERIC,
+  PRIMARY KEY (`column1`),
+  FOREIGN KEY (`column3`) REFERENCES `table2` (`column4`)
 );"""
     table = SchemaTable(
         name="test_table",
@@ -34,7 +35,8 @@ def make_create_table_statement_test():
         primary_keys=["column1"],
         foreign_keys=[ForeignKey(columns=["column3"], references=("table2", ["column4"]))]
     )
-    return ddl._make_create_table_statement(table, "mssql", "sqlite") == sql
+    generated_ddl = ddl._make_create_table_statement(table, "mssql", "sqlite") 
+    return generated_ddl == sql
 
 
 def define_table_creation_sequence_test():

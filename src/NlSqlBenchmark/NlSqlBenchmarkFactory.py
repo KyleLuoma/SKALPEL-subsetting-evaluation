@@ -15,7 +15,7 @@ class NlSqlBenchmarkFactory:
     ]
 
     benchmark_build_dict = {
-        "snails": (SnailsNlSqlBenchmark, {"kill_container_on_exit": False}),
+        "snails": (SnailsNlSqlBenchmark, {"kill_container_on_exit": False, "db_host_profile": "sqlite", "sql_dialect": "sqlite"}),
         # "spider": (SpiderNlSqlBenchmark, {}),
         "spider2": (Spider2NlSqlBenchmark, {}),
         "bird": (BirdNlSqlBenchmark, {})
@@ -35,9 +35,11 @@ class NlSqlBenchmarkFactory:
     #     elif benchmark_name == "bird":
     #         return BirdNlSqlBenchmark()
         
-    def build_benchmark(self, benchmark_name: str) -> NlSqlBenchmark:
+    def build_benchmark(self, benchmark_name: str, benchmark_init_args: dict = None) -> NlSqlBenchmark:
         assert benchmark_name in NlSqlBenchmarkFactory.benchmark_register
         benchmark_class, init_args = NlSqlBenchmarkFactory.benchmark_build_dict[benchmark_name]
+        if benchmark_init_args != None:
+            init_args = benchmark_init_args
         return benchmark_class(**init_args)
         
     def lookup_benchmark_by_db_name(self, db_name: str) -> str:
