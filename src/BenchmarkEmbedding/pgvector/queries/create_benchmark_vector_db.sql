@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS benchmark_natural_language_questions(
     FOREIGN KEY (benchmark_name, database_name) 
         REFERENCES benchmarks(benchmark_name, database_name)
 )
+;
 
 CREATE TABLE IF NOT EXISTS benchmark_gold_queries(
     benchmark_name text,
@@ -46,6 +47,7 @@ CREATE TABLE IF NOT EXISTS benchmark_gold_queries(
     FOREIGN KEY (benchmark_name, database_name) 
         REFERENCES benchmarks(benchmark_name, database_name)
 )
+;
 
 CREATE TABLE IF NOT EXISTS database_table_word_embeddings(
     benchmark_name text,

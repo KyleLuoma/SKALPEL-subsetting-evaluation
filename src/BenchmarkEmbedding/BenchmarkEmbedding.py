@@ -38,9 +38,12 @@ class BenchmarkEmbedding:
             kill_container_on_exit: bool = False,
             verbose: bool = False,
             build_database_on_init: bool = False,
-            instantiate_embedding_model: bool = True
+            instantiate_embedding_model: bool = True,
+            db_host_profile: str = "docker",
+            db_host: str = "localhost"
             ):
         self.verbose = verbose
+        self.benchmark_name = benchmark_name
         self.build_database_on_init = build_database_on_init
         self.current_working_directory = os.path.abspath(os.getcwd())
         if self.verbose:
@@ -48,14 +51,16 @@ class BenchmarkEmbedding:
         self.vector_length = vector_length
 
         self.kill_container_on_exit = kill_container_on_exit
-        self.container = self._init_docker()
+        self.db_host_profile = db_host_profile
+        self.db_host = db_host
+        if self.db_host_profile == "docker":
+            self.container = self._init_docker()
         self.db_conn = self._init_pgvector_db()
 
         if model_name != None:
             self.model_name = model_name
         else:
             self.model_name = "dunzhang/stella_en_1.5B_v5"
-        self.benchmark_name = benchmark_name
         if instantiate_embedding_model:
             self.embedding_model = SentenceTransformer(self.model_name, trust_remote_code=True)
             self.embedding_model.max_seq_length = 512
@@ -167,24 +172,25 @@ class BenchmarkEmbedding:
 
     def _init_pgvector_db(self) -> psycopg.connection.Connection:
         db_conn = psycopg.connect(
-            "user=postgres host=localhost port=5432 password=skalpel"
+            f"user=postgres host={self.db_host} port=5432 password=skalpel"
         )
         db_conn.autocommit = True
         try:
-            db_conn.execute("CREATE DATABASE benchmark_vector_db;")
+            db_conn.execute(f"CREATE DATABASE {self.benchmark_name}_benchmark_vector_db;")
         except psycopg.errors.DuplicateDatabase as e:
             pass
-        db_conn.execute('CREATE EXTENSION IF NOT EXISTS vector')
         db_conn.commit()
         db_conn.close()      
+
         db_conn = psycopg.connect(
-            "user=postgres dbname=benchmark_vector_db host=localhost port=5432 password=skalpel"
+            f"user=postgres dbname=benchmark_vector_db host={self.db_host} port=5432 password=skalpel dbname={self.benchmark_name}_benchmark_vector_db"
         )
+        db_conn.autocommit = True
         db_conn.execute('CREATE EXTENSION IF NOT EXISTS vector')
         register_vector(db_conn)
         if self.build_database_on_init:
             db_creation_sql = open(
-                f".\\src\\BenchmarkEmbedding\\pgvector\\queries\\create_benchmark_vector_db.sql"
+                f"./src/BenchmarkEmbedding/pgvector/queries/create_benchmark_vector_db.sql"
                 ).read()
             db_creation_sql = db_creation_sql.replace("__VECTORLENGTH__", str(self.vector_length)) 
             cur = db_conn.cursor()
@@ -195,6 +201,18 @@ class BenchmarkEmbedding:
 
 
     def encode_benchmark_questions(self, benchmark: NlSqlBenchmark) -> None:
+
+        add_question_to_benchmark_natural_language_questions_query = """
+INSERT INTO benchmark_natural_language_questions(
+    benchmark_name,
+    database_name,
+    question_number
+) VALUES (
+    %s,
+    %s,
+    %s
+)
+"""
 
         insert_word_query = """
 INSERT INTO benchmark_question_natural_language_question_word_embeddings(
@@ -217,6 +235,18 @@ INSERT INTO benchmark_question_natural_language_question_word_embeddings(
 """
         cursor = self.db_conn.cursor()
         for question in tqdm(benchmark, total=len(benchmark), desc="Encoding benchmark NL questions"):
+            try:
+                cursor.execute(
+                    add_question_to_benchmark_natural_language_questions_query,
+                    [
+                        benchmark.name,
+                        question.schema.database,
+                        question.question_number
+                    ]
+                )
+            except psycopg.errors.UniqueViolation as e:
+                        pass
+            self.db_conn.commit()
             ngrams = {1: [], 2: [], 3: []}
             words = question.question.split()
             for n in [1, 2, 3]:
@@ -235,7 +265,7 @@ INSERT INTO benchmark_question_natural_language_question_word_embeddings(
                                 ngram,
                                 n,
                                 self.model_name,
-                                embedding[0]
+                                embedding
                             ]
                         )
                     except psycopg.errors.UniqueViolation as e:
@@ -245,6 +275,20 @@ INSERT INTO benchmark_question_natural_language_question_word_embeddings(
 
 
     def encode_benchmark_gold_query_identifiers(self, benchmark: NlSqlBenchmark) -> None:
+
+        add_to_benchmark_gold_queries_query = """
+INSERT INTO benchmark_gold_queries(
+    benchmark_name,
+    naturalness,
+    database_name,
+    question_number
+    ) VALUES (
+    %s,
+    %s,
+    %s,
+    %s
+    )
+"""
 
         insert_table_query = """
 INSERT INTO benchmark_gold_query_tables(
@@ -290,6 +334,18 @@ INSERT INTO benchmark_gold_query_columns(
         cursor = self.db_conn.cursor()
         evaluator = SchemaSubsetEvaluator(use_result_cache=True)
         for question in tqdm(benchmark, total=len(benchmark), desc="Encoding benchmark Gold Query identifiers."):
+            try:
+                cursor.execute(
+                    add_to_benchmark_gold_queries_query,
+                    [
+                        benchmark.name,
+                        question.schema_naturalness,
+                        question.schema.database,
+                        question.question_number
+                    ]
+                )
+            except psycopg.errors.UniqueViolation as e:
+                        pass
             correct_subset = evaluator.get_correct_subset(question)
             for table in correct_subset.tables:
                 table_embedding = self.get_embedding(table.name)
@@ -407,6 +463,14 @@ SELECT text_value
 FROM text_value_embeddings
 """
 
+        add_to_distinct_text_values_query = """
+INSERT INTO distinct_text_values(
+    text_value
+) VALUES (
+    %s
+)
+"""
+
         insert_value_embedding_query = """
 INSERT INTO text_value_embeddings(
     text_value,
@@ -459,8 +523,19 @@ INSERT INTO benchmark_text_values(
                         continue
                     col_values = query_result.result_set[column.name]
                     for v in tqdm(col_values, desc=f"Encoding values in {db}.{table.name}.{column.name}"):
-                        if v == None:
+                        if v == None or len(v) > 2700:
                             continue
+                        try:
+                            cursor.execute(
+                                add_to_distinct_text_values_query,
+                                [v]
+                            )
+                            self.db_conn.commit()
+                        except psycopg.errors.UniqueViolation as e:
+                            self.db_conn.commit()
+                        except psycopg.DataError as e:
+                            continue
+
                         try:
                             cursor.execute(
                                 query=insert_benchmark_text_value_query,
@@ -474,7 +549,7 @@ INSERT INTO benchmark_text_values(
                             self.db_conn.commit()
                             continue
                         # print("\nDEBUG v", v)
-                        v_emb = self.get_embedding(v, try_from_db=False)[0]
+                        v_emb = self.get_embedding(v, try_from_db=False)
                         # print("DEBUG type(v_emb)", type(v_emb))
                         try:
                             cursor.execute(
@@ -489,6 +564,28 @@ INSERT INTO benchmark_text_values(
     
 
     def encode_benchmark(self, benchmark: NlSqlBenchmark) -> (int, int):
+
+        add_benchmark_to_benchmarks_query = """
+INSERT INTO benchmarks(
+    benchmark_name,
+    database_name
+) VALUES (
+    %s,
+    %s
+)
+"""
+
+        add_table_to_database_table_names_query = """
+INSERT INTO database_table_names(
+    benchmark_name,
+    database_name,
+    table_name
+) VALUES (
+    %s,
+    %s,
+    %s
+)
+"""
 
         insert_table_query = """
 INSERT INTO database_table_word_embeddings(
@@ -514,6 +611,21 @@ WHERE
     AND database_name = %s
     AND embedding_model = %s
 """
+
+        add_column_to_database_column_names_query = """
+INSERT INTO database_column_names(
+    benchmark_name,
+    database_name,
+    table_name,
+    column_name
+) VALUES (
+    %s,
+    %s,
+    %s,
+    %s
+)
+"""
+
 
         insert_column_query = """
 INSERT INTO database_column_word_embeddings(
@@ -542,12 +654,23 @@ INSERT INTO database_column_word_embeddings(
             AND table_name = %s
             AND embedding_model = %s
 """
-
+    
         tables_inserted = 0
         columns_inserted = 0
         for db in benchmark.databases:
-            schema = benchmark.get_active_schema(database=db)
             cursor = self.db_conn.cursor()
+            try:
+                cursor.execute(
+                    add_benchmark_to_benchmarks_query,
+                    [
+                        benchmark.name,
+                        db
+                    ]
+                )
+            except psycopg.errors.UniqueViolation as e:
+                        self.db_conn.commit()
+            schema = benchmark.get_active_schema(database=db)
+            
             result = cursor.execute(
                 get_encoded_tables_query,
                 [benchmark.name, schema.database, self.model_name]
@@ -557,6 +680,17 @@ INSERT INTO database_column_word_embeddings(
             for table in tqdm(schema.tables, desc=f"Encoding tables and columns in {schema.database}."):
                 if table.name not in encoded_tables:
                     table_emb = self.embedding_model.encode(table.name)
+                    try:
+                        cursor.execute(
+                            add_table_to_database_table_names_query,
+                            [
+                                benchmark.name,
+                                schema.database,
+                                table.name
+                            ]
+                        )
+                    except psycopg.errors.UniqueViolation as e:
+                        self.db_conn.commit()
                     try:
                         cursor.execute(
                             insert_table_query,
@@ -579,6 +713,18 @@ INSERT INTO database_column_word_embeddings(
 
                 encoded_columns = [row[0] for row in result.fetchall()]
                 for column in table.columns:
+                    try:
+                        cursor.execute(
+                            add_column_to_database_column_names_query,
+                            [
+                                benchmark.name,
+                                schema.database,
+                                table.name,
+                                column.name
+                            ]
+                        )
+                    except psycopg.errors.UniqueViolation as e:
+                        self.db_conn.commit()
                     if column.name in encoded_columns:
                         result = cursor.execute(
                             "SELECT embedding FROM database_column_word_embeddings WHERE schema_identifier = %s AND embedding_model = %s LIMIT 1",

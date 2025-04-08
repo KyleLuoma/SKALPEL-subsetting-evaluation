@@ -19,7 +19,7 @@ def main():
     print(os.getcwd())
     naturalness = "Native"
     results_folder = "./subsetting_results"
-    results_filename = f"subsetting-CodeS-snails-{naturalness}-NVIDIA_RTX_2000.xlsx"
+    results_filename = f"subsetting-CodeS-bird-{naturalness}-NVIDIA_RTX_2000.xlsx"
     results_df = pd.read_excel(f"{results_folder}/{results_filename}")
     filename_params = results_filename.split("-")
     subsetter_name = filename_params[1]
@@ -28,16 +28,21 @@ def main():
     benchmark_factory = NlSqlBenchmarkFactory()
     benchmark = benchmark_factory.build_benchmark(benchmark_name=benchmark_name)
 
-    benchmark_embedding = BenchmarkEmbedding(benchmark_name=benchmark_name, build_database_on_init=False)
+    benchmark_embedding = BenchmarkEmbedding(
+        benchmark_name=benchmark_name, 
+        build_database_on_init=True,
+        db_host_profile="remote",
+        db_host="cdas2"
+        )
 
     ### Benchmark encoding tasks, uncomment as-needed ###
 
-    # benchmark_embedding.encode_benchmark(benchmark)
-    # benchmark_embedding.encode_benchmark_questions(benchmark)
-    # benchmark_embedding.encode_benchmark_gold_query_identifiers(benchmark=benchmark)
-    # benchmark_embedding.encode_benchmark_values(benchmark=benchmark)
-    # benchmark_embedding.encode_benchmark_gold_query_predicates(benchmark=benchmark)
-    # return
+    benchmark_embedding.encode_benchmark(benchmark)
+    benchmark_embedding.encode_benchmark_questions(benchmark)
+    benchmark_embedding.encode_benchmark_gold_query_identifiers(benchmark=benchmark)
+    benchmark_embedding.encode_benchmark_values(benchmark=benchmark)
+    benchmark_embedding.encode_benchmark_gold_query_predicates(benchmark=benchmark)
+    return
 
     results_dict = {
         "database": [],
@@ -147,7 +152,7 @@ def main():
         index=False
         )
     pd.DataFrame(value_reference_problem_results_dict).to_excel(
-        f"{results_folder}/diagnosis/value_reference_problems_expanded/{results_filename.replace('subsetting-', 'value-reference-problem-diagnosis-')}",
+        f"{results_folder}/diagnosis/value_reference_problems_expanded/{results_filename.replace('subsetting-', 'value-reference-problem-diagnosis-lambdatest')}",
         index=False
     )
 
