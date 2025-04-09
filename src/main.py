@@ -8,44 +8,77 @@ from NlSqlBenchmark.SchemaObjects import (
     ForeignKey
 )
 from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
-from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
-from SchemaSubsetter.CodeSSubsetter import CodeSSubsetter
-from SchemaSubsetter.ChessSubsetter import ChessSubsetter
-from SchemaSubsetter.Perfect.PerfectSchemaSubsetter import PerfectSchemaSubsetter
+from SchemaSubsetter.SchemaSubsetterFactory import SchemaSubsetterFactory
 from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
 from SubsetEvaluator import QueryProfiler
 from util.StringObjectParser import StringObjectParser
+import os
 import time
 import pandas as pd
 from tqdm import tqdm
 import pickle
 import warnings
+import json
+import argparse
 
 warnings.filterwarnings("ignore")
 
 test = False
-verbose = True
 
 results_filename = "./subsetting_results/subsetting-CodeS-snails-NVIDIA_RTX_2000.xlsx"
 results_filename = None
 
-if verbose:
-    v_print = print
-else:
-    def dummy(*values, **kwargs) -> None:
-        pass
-    v_print = dummy
-
 def main():
-    benchmark_name = "spider2"
-    filename_comments = "gpt4o"
+
+    parser = argparse.ArgumentParser(description="Run schema subsetting evaluation.")
+    parser.add_argument("--subsetter_name", type=str, default="abstract", help="Name of the subsetter to use.")
+    parser.add_argument("--benchmark_name", type=str, default="snails", help="Name of the benchmark to use.")
+    parser.add_argument("--filename_comments", type=str, default="", help="Comments to append to the filename.")
+    parser.add_argument("--cuda_device", type=int, default=None, help="CUDA device to use.")
+    parser.add_argument("--verbose", action="store_true", default=False, help="Enable verbose output.")
+    parser.add_argument("--subsetter_preprocessing", action="store_true", default=False, help="Enable subsetter preprocessing.")
+    parser.add_argument("--no_subset_generation", action="store_true", default=False, help="Set to True to skip subsetting (e.g., if you want to preprocess only).")
+    parser.add_argument("--results_filename", default=None, help="Load specified results and evaluate only (no re-subsetting).")
+
+    args = parser.parse_args()
+
+    subsetter_name = args.subsetter_name
+    benchmark_name = args.benchmark_name
+    filename_comments = args.filename_comments
+    cuda_device = args.cuda_device
+    verbose = args.verbose
+    subsetter_preprocessing = args.subsetter_preprocessing
+    subset_generation = not args.no_subset_generation
+
+    global v_print
+    if verbose:
+        v_print = print
+    else:
+        def dummy(*values, **kwargs) -> None:
+            pass
+        v_print = dummy
+
     bm_factory = NlSqlBenchmarkFactory()
     benchmark = bm_factory.build_benchmark(benchmark_name)
-    # subsetter = CodeSSubsetter(benchmark)
-    # subsetter = PerfectSchemaSubsetter()
-    subsetter = ChessSubsetter(benchmark, do_preprocessing=True)
-    return
-    if results_filename == None:
+    subsetter_factory = SchemaSubsetterFactory()
+    subsetter_args = {}
+    if cuda_device != None:
+        subsetter_args["device"] = cuda_device
+    subsetter = subsetter_factory.build_subsetter(
+        subsetter_name=subsetter_name, 
+        benchmark=benchmark, 
+        subsetter_init_args=subsetter_args
+        )
+    if subsetter_preprocessing:
+        s_time = time.perf_counter()
+        db_processing_times = subsetter.preprocess_databases(exist_ok=True)
+        e_time = time.perf_counter()
+        total_time = e_time - s_time
+        db_processing_times["total"] = total_time
+        with open(f"./subsetting_results/preprocessing_times/{subsetter.name}_{benchmark.name}_{filename_comments}_processing.json", "wt") as f:
+            f.write(json.dumps(db_processing_times, indent=2))
+
+    if results_filename == None and subset_generation:
         results, subsets_questions = generate_subsets(
             subsetter=subsetter, 
             benchmark=benchmark,
@@ -53,11 +86,14 @@ def main():
             filename_comments=filename_comments,
             bypass_databases=["SBODemoUS"]
             )
-    else:
+    elif results_filename != None:
         results, subsets_questions = load_subsets_from_results(
             results_filename=results_filename, 
             benchmark=benchmark
             )
+    else:
+        print("Terminating program without generating or evaluating subsets.")
+        return
     results = evaluate_subsets(subsets=subsets_questions, results=results)
     results_df = pd.DataFrame(results)
 
@@ -149,6 +185,9 @@ def generate_subsets(
         if test and test_counter > 5:
             break
 
+        recovery_dir = os.path.dirname(recovery_filename)
+        if not os.path.exists(recovery_dir):
+            os.makedirs(recovery_dir, exist_ok=True)
         with open(recovery_filename, "wb") as recovery_file:
             save_results = {}
             for key in results.keys():

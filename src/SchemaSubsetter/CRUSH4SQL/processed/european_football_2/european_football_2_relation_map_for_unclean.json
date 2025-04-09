@@ -1,0 +1,998 @@
+
+{
+  "european_football_2 Player_Attributes 1035 id": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 player_fifa_api_id": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 player_api_id": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 date": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 overall_rating": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 potential": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 preferred_foot": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 attacking_work_rate": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 defensive_work_rate": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 crossing": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 finishing": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 heading_accuracy": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 short_passing": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 volleys": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 dribbling": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 curve": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 free_kick_accuracy": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 long_passing": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 ball_control": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 acceleration": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 sprint_speed": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 agility": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 reactions": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 balance": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 shot_power": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 jumping": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 stamina": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 strength": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 long_shots": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 aggression": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 interceptions": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 positioning": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 vision": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 penalties": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 marking": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 standing_tackle": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 sliding_tackle": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 gk_diving": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 gk_handling": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 gk_kicking": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 gk_positioning": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player_Attributes 1035 gk_reflexes": {
+    "table": "Player_Attributes",
+    "source": "european_football_2",
+    "code": "1035"
+  },
+  "european_football_2 Player 1036 id": {
+    "table": "Player",
+    "source": "european_football_2",
+    "code": "1036"
+  },
+  "european_football_2 Player 1036 player_api_id": {
+    "table": "Player",
+    "source": "european_football_2",
+    "code": "1036"
+  },
+  "european_football_2 Player 1036 player_name": {
+    "table": "Player",
+    "source": "european_football_2",
+    "code": "1036"
+  },
+  "european_football_2 Player 1036 player_fifa_api_id": {
+    "table": "Player",
+    "source": "european_football_2",
+    "code": "1036"
+  },
+  "european_football_2 Player 1036 birthday": {
+    "table": "Player",
+    "source": "european_football_2",
+    "code": "1036"
+  },
+  "european_football_2 Player 1036 height": {
+    "table": "Player",
+    "source": "european_football_2",
+    "code": "1036"
+  },
+  "european_football_2 Player 1036 weight": {
+    "table": "Player",
+    "source": "european_football_2",
+    "code": "1036"
+  },
+  "european_football_2 League 1037 id": {
+    "table": "League",
+    "source": "european_football_2",
+    "code": "1037"
+  },
+  "european_football_2 League 1037 country_id": {
+    "table": "League",
+    "source": "european_football_2",
+    "code": "1037"
+  },
+  "european_football_2 League 1037 name": {
+    "table": "League",
+    "source": "european_football_2",
+    "code": "1037"
+  },
+  "european_football_2 Country 1038 id": {
+    "table": "Country",
+    "source": "european_football_2",
+    "code": "1038"
+  },
+  "european_football_2 Country 1038 name": {
+    "table": "Country",
+    "source": "european_football_2",
+    "code": "1038"
+  },
+  "european_football_2 Team 1039 id": {
+    "table": "Team",
+    "source": "european_football_2",
+    "code": "1039"
+  },
+  "european_football_2 Team 1039 team_api_id": {
+    "table": "Team",
+    "source": "european_football_2",
+    "code": "1039"
+  },
+  "european_football_2 Team 1039 team_fifa_api_id": {
+    "table": "Team",
+    "source": "european_football_2",
+    "code": "1039"
+  },
+  "european_football_2 Team 1039 team_long_name": {
+    "table": "Team",
+    "source": "european_football_2",
+    "code": "1039"
+  },
+  "european_football_2 Team 1039 team_short_name": {
+    "table": "Team",
+    "source": "european_football_2",
+    "code": "1039"
+  },
+  "european_football_2 Team_Attributes 1040 id": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 team_fifa_api_id": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 team_api_id": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 date": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 buildUpPlaySpeed": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 buildUpPlaySpeedClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 buildUpPlayDribbling": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 buildUpPlayDribblingClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 buildUpPlayPassing": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 buildUpPlayPassingClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 buildUpPlayPositioningClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 chanceCreationPassing": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 chanceCreationPassingClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 chanceCreationCrossing": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 chanceCreationCrossingClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 chanceCreationShooting": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 chanceCreationShootingClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 chanceCreationPositioningClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 defencePressure": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 defencePressureClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 defenceAggression": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 defenceAggressionClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 defenceTeamWidth": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 defenceTeamWidthClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Team_Attributes 1040 defenceDefenderLineClass": {
+    "table": "Team_Attributes",
+    "source": "european_football_2",
+    "code": "1040"
+  },
+  "european_football_2 Match 1041 id": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 country_id": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 league_id": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 season": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 stage": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 date": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 match_api_id": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_team_api_id": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_team_api_id": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_team_goal": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_team_goal": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_X1": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_X2": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_X3": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_X4": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_X5": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_X6": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_X7": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_X8": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_X9": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_X10": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_X11": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_X1": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_X2": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_X3": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_X4": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_X5": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_X6": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_X7": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_X8": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_X9": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_X10": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_X11": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_Y1": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_Y2": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_Y3": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_Y4": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_Y5": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_Y6": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_Y7": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_Y8": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_Y9": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_Y10": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_Y11": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_Y1": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_Y2": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_Y3": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_Y4": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_Y5": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_Y6": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_Y7": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_Y8": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_Y9": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_Y10": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_Y11": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_1": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_2": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_3": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_4": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_5": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_6": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_7": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_8": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_9": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_10": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 home_player_11": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_1": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_2": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_3": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_4": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_5": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_6": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_7": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_8": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_9": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_10": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 away_player_11": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 goal": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 shoton": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 shotoff": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 foulcommit": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 card": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 cross": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 corner": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 possession": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 B365H": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 B365D": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 B365A": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 BWH": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 BWD": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 BWA": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 IWH": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 IWD": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 IWA": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 LBH": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 LBD": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 LBA": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 PSH": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 PSD": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 PSA": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 WHH": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 WHD": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 WHA": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 SJH": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 SJD": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 SJA": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 VCH": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 VCD": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 VCA": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 GBH": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 GBD": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 GBA": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 BSH": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 BSD": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  },
+  "european_football_2 Match 1041 BSA": {
+    "table": "Match",
+    "source": "european_football_2",
+    "code": "1041"
+  }
+}

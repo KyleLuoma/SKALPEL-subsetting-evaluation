@@ -1,0 +1,448 @@
+
+{
+  "california_schools frpm 1026 CDSCode": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Academic Year": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 County Code": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 District Code": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 School Code": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 County Name": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 District Name": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 School Name": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 District Type": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 School Type": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Educational Option Type": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 NSLP Provision Status": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Charter School (Y/N)": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Charter School Number": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Charter Funding Type": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 IRC": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Low Grade": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 High Grade": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Enrollment (K-12)": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Free Meal Count (K-12)": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Percent (%) Eligible Free (K-12)": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 FRPM Count (K-12)": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Percent (%) Eligible FRPM (K-12)": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Enrollment (Ages 5-17)": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Free Meal Count (Ages 5-17)": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Percent (%) Eligible Free (Ages 5-17)": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 FRPM Count (Ages 5-17)": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 Percent (%) Eligible FRPM (Ages 5-17)": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools frpm 1026 2013-14 CALPADS Fall 1 Certification Status": {
+    "table": "frpm",
+    "source": "california_schools",
+    "code": "1026"
+  },
+  "california_schools satscores 1027 cds": {
+    "table": "satscores",
+    "source": "california_schools",
+    "code": "1027"
+  },
+  "california_schools satscores 1027 rtype": {
+    "table": "satscores",
+    "source": "california_schools",
+    "code": "1027"
+  },
+  "california_schools satscores 1027 sname": {
+    "table": "satscores",
+    "source": "california_schools",
+    "code": "1027"
+  },
+  "california_schools satscores 1027 dname": {
+    "table": "satscores",
+    "source": "california_schools",
+    "code": "1027"
+  },
+  "california_schools satscores 1027 cname": {
+    "table": "satscores",
+    "source": "california_schools",
+    "code": "1027"
+  },
+  "california_schools satscores 1027 enroll12": {
+    "table": "satscores",
+    "source": "california_schools",
+    "code": "1027"
+  },
+  "california_schools satscores 1027 NumTstTakr": {
+    "table": "satscores",
+    "source": "california_schools",
+    "code": "1027"
+  },
+  "california_schools satscores 1027 AvgScrRead": {
+    "table": "satscores",
+    "source": "california_schools",
+    "code": "1027"
+  },
+  "california_schools satscores 1027 AvgScrMath": {
+    "table": "satscores",
+    "source": "california_schools",
+    "code": "1027"
+  },
+  "california_schools satscores 1027 AvgScrWrite": {
+    "table": "satscores",
+    "source": "california_schools",
+    "code": "1027"
+  },
+  "california_schools satscores 1027 NumGE1500": {
+    "table": "satscores",
+    "source": "california_schools",
+    "code": "1027"
+  },
+  "california_schools schools 1028 CDSCode": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 NCESDist": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 NCESSchool": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 StatusType": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 County": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 District": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 School": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 Street": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 StreetAbr": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 City": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 Zip": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 State": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 MailStreet": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 MailStrAbr": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 MailCity": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 MailZip": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 MailState": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 Phone": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 Ext": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 Website": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 OpenDate": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 ClosedDate": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 Charter": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 CharterNum": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 FundingType": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 DOC": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 DOCType": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 SOC": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 SOCType": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 EdOpsCode": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 EdOpsName": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 EILCode": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 EILName": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 GSoffered": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 GSserved": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 Virtual": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 Magnet": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 Latitude": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 Longitude": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 AdmFName1": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 AdmLName1": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 AdmEmail1": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 AdmFName2": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 AdmLName2": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 AdmEmail2": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 AdmFName3": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 AdmLName3": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 AdmEmail3": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  },
+  "california_schools schools 1028 LastUpdate": {
+    "table": "schools",
+    "source": "california_schools",
+    "code": "1028"
+  }
+}

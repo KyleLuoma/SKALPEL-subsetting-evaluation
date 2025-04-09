@@ -1,0 +1,243 @@
+
+{
+  "student_club event 1049 event_id": {
+    "table": "event",
+    "source": "student_club",
+    "code": "1049"
+  },
+  "student_club event 1049 event_name": {
+    "table": "event",
+    "source": "student_club",
+    "code": "1049"
+  },
+  "student_club event 1049 event_date": {
+    "table": "event",
+    "source": "student_club",
+    "code": "1049"
+  },
+  "student_club event 1049 type": {
+    "table": "event",
+    "source": "student_club",
+    "code": "1049"
+  },
+  "student_club event 1049 notes": {
+    "table": "event",
+    "source": "student_club",
+    "code": "1049"
+  },
+  "student_club event 1049 location": {
+    "table": "event",
+    "source": "student_club",
+    "code": "1049"
+  },
+  "student_club event 1049 status": {
+    "table": "event",
+    "source": "student_club",
+    "code": "1049"
+  },
+  "student_club major 1050 major_id": {
+    "table": "major",
+    "source": "student_club",
+    "code": "1050"
+  },
+  "student_club major 1050 major_name": {
+    "table": "major",
+    "source": "student_club",
+    "code": "1050"
+  },
+  "student_club major 1050 department": {
+    "table": "major",
+    "source": "student_club",
+    "code": "1050"
+  },
+  "student_club major 1050 college": {
+    "table": "major",
+    "source": "student_club",
+    "code": "1050"
+  },
+  "student_club zip_code 1051 zip_code": {
+    "table": "zip_code",
+    "source": "student_club",
+    "code": "1051"
+  },
+  "student_club zip_code 1051 type": {
+    "table": "zip_code",
+    "source": "student_club",
+    "code": "1051"
+  },
+  "student_club zip_code 1051 city": {
+    "table": "zip_code",
+    "source": "student_club",
+    "code": "1051"
+  },
+  "student_club zip_code 1051 county": {
+    "table": "zip_code",
+    "source": "student_club",
+    "code": "1051"
+  },
+  "student_club zip_code 1051 state": {
+    "table": "zip_code",
+    "source": "student_club",
+    "code": "1051"
+  },
+  "student_club zip_code 1051 short_state": {
+    "table": "zip_code",
+    "source": "student_club",
+    "code": "1051"
+  },
+  "student_club attendance 1052 link_to_event": {
+    "table": "attendance",
+    "source": "student_club",
+    "code": "1052"
+  },
+  "student_club attendance 1052 link_to_member": {
+    "table": "attendance",
+    "source": "student_club",
+    "code": "1052"
+  },
+  "student_club budget 1053 budget_id": {
+    "table": "budget",
+    "source": "student_club",
+    "code": "1053"
+  },
+  "student_club budget 1053 category": {
+    "table": "budget",
+    "source": "student_club",
+    "code": "1053"
+  },
+  "student_club budget 1053 spent": {
+    "table": "budget",
+    "source": "student_club",
+    "code": "1053"
+  },
+  "student_club budget 1053 remaining": {
+    "table": "budget",
+    "source": "student_club",
+    "code": "1053"
+  },
+  "student_club budget 1053 amount": {
+    "table": "budget",
+    "source": "student_club",
+    "code": "1053"
+  },
+  "student_club budget 1053 event_status": {
+    "table": "budget",
+    "source": "student_club",
+    "code": "1053"
+  },
+  "student_club budget 1053 link_to_event": {
+    "table": "budget",
+    "source": "student_club",
+    "code": "1053"
+  },
+  "student_club expense 1054 expense_id": {
+    "table": "expense",
+    "source": "student_club",
+    "code": "1054"
+  },
+  "student_club expense 1054 expense_description": {
+    "table": "expense",
+    "source": "student_club",
+    "code": "1054"
+  },
+  "student_club expense 1054 expense_date": {
+    "table": "expense",
+    "source": "student_club",
+    "code": "1054"
+  },
+  "student_club expense 1054 cost": {
+    "table": "expense",
+    "source": "student_club",
+    "code": "1054"
+  },
+  "student_club expense 1054 approved": {
+    "table": "expense",
+    "source": "student_club",
+    "code": "1054"
+  },
+  "student_club expense 1054 link_to_member": {
+    "table": "expense",
+    "source": "student_club",
+    "code": "1054"
+  },
+  "student_club expense 1054 link_to_budget": {
+    "table": "expense",
+    "source": "student_club",
+    "code": "1054"
+  },
+  "student_club income 1055 income_id": {
+    "table": "income",
+    "source": "student_club",
+    "code": "1055"
+  },
+  "student_club income 1055 date_received": {
+    "table": "income",
+    "source": "student_club",
+    "code": "1055"
+  },
+  "student_club income 1055 amount": {
+    "table": "income",
+    "source": "student_club",
+    "code": "1055"
+  },
+  "student_club income 1055 source": {
+    "table": "income",
+    "source": "student_club",
+    "code": "1055"
+  },
+  "student_club income 1055 notes": {
+    "table": "income",
+    "source": "student_club",
+    "code": "1055"
+  },
+  "student_club income 1055 link_to_member": {
+    "table": "income",
+    "source": "student_club",
+    "code": "1055"
+  },
+  "student_club member 1056 member_id": {
+    "table": "member",
+    "source": "student_club",
+    "code": "1056"
+  },
+  "student_club member 1056 first_name": {
+    "table": "member",
+    "source": "student_club",
+    "code": "1056"
+  },
+  "student_club member 1056 last_name": {
+    "table": "member",
+    "source": "student_club",
+    "code": "1056"
+  },
+  "student_club member 1056 email": {
+    "table": "member",
+    "source": "student_club",
+    "code": "1056"
+  },
+  "student_club member 1056 position": {
+    "table": "member",
+    "source": "student_club",
+    "code": "1056"
+  },
+  "student_club member 1056 t_shirt_size": {
+    "table": "member",
+    "source": "student_club",
+    "code": "1056"
+  },
+  "student_club member 1056 phone": {
+    "table": "member",
+    "source": "student_club",
+    "code": "1056"
+  },
+  "student_club member 1056 zip": {
+    "table": "member",
+    "source": "student_club",
+    "code": "1056"
+  },
+  "student_club member 1056 link_to_major": {
+    "table": "member",
+    "source": "student_club",
+    "code": "1056"
+  }
+}

@@ -252,7 +252,7 @@ def lista_contains_listb(lista, listb):
     return 1
 
 class SchemaItemClassifierInference():
-    def __init__(self, model_save_path):
+    def __init__(self, model_save_path, device: int = None):
         set_seed(42)
         # load tokenizer
         self.tokenizer = AutoTokenizer.from_pretrained(model_save_path, add_prefix_space = True)
@@ -261,7 +261,7 @@ class SchemaItemClassifierInference():
         # load fine-tuned params
         self.model.load_state_dict(torch.load(model_save_path + "/dense_classifier.pt", map_location=torch.device(0), weights_only=True), strict=False)
         if torch.cuda.is_available():
-            self.model = self.model.cuda()
+            self.model = self.model.cuda(device=device)
         self.model.eval()
     
     def predict_one(self, sample):

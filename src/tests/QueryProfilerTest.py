@@ -38,3 +38,17 @@ WHERE T2.STATUS = 'LEGAL' AND T2.FORMAT = 'COMMANDER' AND (T1.POWER IS NULL OR T
     qp = QueryProfiler()
     result = qp.profile_query(query=test_query, dialect="sqlite")
     return result["stats"] == correct_output
+
+
+def profile_query_with_nonstandard_characters_test():
+    test_query = """
+SELECT COUNT(T3.id) 
+FROM ( 
+    SELECT T1.id 
+    FROM cards AS T1 
+    INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid 
+    WHERE T1.artist = 'Volkan Baǵa' AND T2.language = 'French' GROUP BY T1.id
+) AS T3"""
+    qp = QueryProfiler()
+    result = qp.profile_query(query=test_query, dialect="sqlite")
+    return "'VOLKAN BAǴA'" in str(result)

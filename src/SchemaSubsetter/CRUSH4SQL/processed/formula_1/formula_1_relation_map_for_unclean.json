@@ -1,0 +1,473 @@
+
+{
+  "formula_1 circuits 1013 circuitId": {
+    "table": "circuits",
+    "source": "formula_1",
+    "code": "1013"
+  },
+  "formula_1 circuits 1013 circuitRef": {
+    "table": "circuits",
+    "source": "formula_1",
+    "code": "1013"
+  },
+  "formula_1 circuits 1013 name": {
+    "table": "circuits",
+    "source": "formula_1",
+    "code": "1013"
+  },
+  "formula_1 circuits 1013 location": {
+    "table": "circuits",
+    "source": "formula_1",
+    "code": "1013"
+  },
+  "formula_1 circuits 1013 country": {
+    "table": "circuits",
+    "source": "formula_1",
+    "code": "1013"
+  },
+  "formula_1 circuits 1013 lat": {
+    "table": "circuits",
+    "source": "formula_1",
+    "code": "1013"
+  },
+  "formula_1 circuits 1013 lng": {
+    "table": "circuits",
+    "source": "formula_1",
+    "code": "1013"
+  },
+  "formula_1 circuits 1013 alt": {
+    "table": "circuits",
+    "source": "formula_1",
+    "code": "1013"
+  },
+  "formula_1 circuits 1013 url": {
+    "table": "circuits",
+    "source": "formula_1",
+    "code": "1013"
+  },
+  "formula_1 constructors 1014 constructorId": {
+    "table": "constructors",
+    "source": "formula_1",
+    "code": "1014"
+  },
+  "formula_1 constructors 1014 constructorRef": {
+    "table": "constructors",
+    "source": "formula_1",
+    "code": "1014"
+  },
+  "formula_1 constructors 1014 name": {
+    "table": "constructors",
+    "source": "formula_1",
+    "code": "1014"
+  },
+  "formula_1 constructors 1014 nationality": {
+    "table": "constructors",
+    "source": "formula_1",
+    "code": "1014"
+  },
+  "formula_1 constructors 1014 url": {
+    "table": "constructors",
+    "source": "formula_1",
+    "code": "1014"
+  },
+  "formula_1 drivers 1015 driverId": {
+    "table": "drivers",
+    "source": "formula_1",
+    "code": "1015"
+  },
+  "formula_1 drivers 1015 driverRef": {
+    "table": "drivers",
+    "source": "formula_1",
+    "code": "1015"
+  },
+  "formula_1 drivers 1015 number": {
+    "table": "drivers",
+    "source": "formula_1",
+    "code": "1015"
+  },
+  "formula_1 drivers 1015 code": {
+    "table": "drivers",
+    "source": "formula_1",
+    "code": "1015"
+  },
+  "formula_1 drivers 1015 forename": {
+    "table": "drivers",
+    "source": "formula_1",
+    "code": "1015"
+  },
+  "formula_1 drivers 1015 surname": {
+    "table": "drivers",
+    "source": "formula_1",
+    "code": "1015"
+  },
+  "formula_1 drivers 1015 dob": {
+    "table": "drivers",
+    "source": "formula_1",
+    "code": "1015"
+  },
+  "formula_1 drivers 1015 nationality": {
+    "table": "drivers",
+    "source": "formula_1",
+    "code": "1015"
+  },
+  "formula_1 drivers 1015 url": {
+    "table": "drivers",
+    "source": "formula_1",
+    "code": "1015"
+  },
+  "formula_1 seasons 1016 year": {
+    "table": "seasons",
+    "source": "formula_1",
+    "code": "1016"
+  },
+  "formula_1 seasons 1016 url": {
+    "table": "seasons",
+    "source": "formula_1",
+    "code": "1016"
+  },
+  "formula_1 races 1017 raceId": {
+    "table": "races",
+    "source": "formula_1",
+    "code": "1017"
+  },
+  "formula_1 races 1017 year": {
+    "table": "races",
+    "source": "formula_1",
+    "code": "1017"
+  },
+  "formula_1 races 1017 round": {
+    "table": "races",
+    "source": "formula_1",
+    "code": "1017"
+  },
+  "formula_1 races 1017 circuitId": {
+    "table": "races",
+    "source": "formula_1",
+    "code": "1017"
+  },
+  "formula_1 races 1017 name": {
+    "table": "races",
+    "source": "formula_1",
+    "code": "1017"
+  },
+  "formula_1 races 1017 date": {
+    "table": "races",
+    "source": "formula_1",
+    "code": "1017"
+  },
+  "formula_1 races 1017 time": {
+    "table": "races",
+    "source": "formula_1",
+    "code": "1017"
+  },
+  "formula_1 races 1017 url": {
+    "table": "races",
+    "source": "formula_1",
+    "code": "1017"
+  },
+  "formula_1 constructorResults 1018 constructorResultsId": {
+    "table": "constructorResults",
+    "source": "formula_1",
+    "code": "1018"
+  },
+  "formula_1 constructorResults 1018 raceId": {
+    "table": "constructorResults",
+    "source": "formula_1",
+    "code": "1018"
+  },
+  "formula_1 constructorResults 1018 constructorId": {
+    "table": "constructorResults",
+    "source": "formula_1",
+    "code": "1018"
+  },
+  "formula_1 constructorResults 1018 points": {
+    "table": "constructorResults",
+    "source": "formula_1",
+    "code": "1018"
+  },
+  "formula_1 constructorResults 1018 status": {
+    "table": "constructorResults",
+    "source": "formula_1",
+    "code": "1018"
+  },
+  "formula_1 constructorStandings 1019 constructorStandingsId": {
+    "table": "constructorStandings",
+    "source": "formula_1",
+    "code": "1019"
+  },
+  "formula_1 constructorStandings 1019 raceId": {
+    "table": "constructorStandings",
+    "source": "formula_1",
+    "code": "1019"
+  },
+  "formula_1 constructorStandings 1019 constructorId": {
+    "table": "constructorStandings",
+    "source": "formula_1",
+    "code": "1019"
+  },
+  "formula_1 constructorStandings 1019 points": {
+    "table": "constructorStandings",
+    "source": "formula_1",
+    "code": "1019"
+  },
+  "formula_1 constructorStandings 1019 position": {
+    "table": "constructorStandings",
+    "source": "formula_1",
+    "code": "1019"
+  },
+  "formula_1 constructorStandings 1019 positionText": {
+    "table": "constructorStandings",
+    "source": "formula_1",
+    "code": "1019"
+  },
+  "formula_1 constructorStandings 1019 wins": {
+    "table": "constructorStandings",
+    "source": "formula_1",
+    "code": "1019"
+  },
+  "formula_1 driverStandings 1020 driverStandingsId": {
+    "table": "driverStandings",
+    "source": "formula_1",
+    "code": "1020"
+  },
+  "formula_1 driverStandings 1020 raceId": {
+    "table": "driverStandings",
+    "source": "formula_1",
+    "code": "1020"
+  },
+  "formula_1 driverStandings 1020 driverId": {
+    "table": "driverStandings",
+    "source": "formula_1",
+    "code": "1020"
+  },
+  "formula_1 driverStandings 1020 points": {
+    "table": "driverStandings",
+    "source": "formula_1",
+    "code": "1020"
+  },
+  "formula_1 driverStandings 1020 position": {
+    "table": "driverStandings",
+    "source": "formula_1",
+    "code": "1020"
+  },
+  "formula_1 driverStandings 1020 positionText": {
+    "table": "driverStandings",
+    "source": "formula_1",
+    "code": "1020"
+  },
+  "formula_1 driverStandings 1020 wins": {
+    "table": "driverStandings",
+    "source": "formula_1",
+    "code": "1020"
+  },
+  "formula_1 lapTimes 1021 raceId": {
+    "table": "lapTimes",
+    "source": "formula_1",
+    "code": "1021"
+  },
+  "formula_1 lapTimes 1021 driverId": {
+    "table": "lapTimes",
+    "source": "formula_1",
+    "code": "1021"
+  },
+  "formula_1 lapTimes 1021 lap": {
+    "table": "lapTimes",
+    "source": "formula_1",
+    "code": "1021"
+  },
+  "formula_1 lapTimes 1021 position": {
+    "table": "lapTimes",
+    "source": "formula_1",
+    "code": "1021"
+  },
+  "formula_1 lapTimes 1021 time": {
+    "table": "lapTimes",
+    "source": "formula_1",
+    "code": "1021"
+  },
+  "formula_1 lapTimes 1021 milliseconds": {
+    "table": "lapTimes",
+    "source": "formula_1",
+    "code": "1021"
+  },
+  "formula_1 pitStops 1022 raceId": {
+    "table": "pitStops",
+    "source": "formula_1",
+    "code": "1022"
+  },
+  "formula_1 pitStops 1022 driverId": {
+    "table": "pitStops",
+    "source": "formula_1",
+    "code": "1022"
+  },
+  "formula_1 pitStops 1022 stop": {
+    "table": "pitStops",
+    "source": "formula_1",
+    "code": "1022"
+  },
+  "formula_1 pitStops 1022 lap": {
+    "table": "pitStops",
+    "source": "formula_1",
+    "code": "1022"
+  },
+  "formula_1 pitStops 1022 time": {
+    "table": "pitStops",
+    "source": "formula_1",
+    "code": "1022"
+  },
+  "formula_1 pitStops 1022 duration": {
+    "table": "pitStops",
+    "source": "formula_1",
+    "code": "1022"
+  },
+  "formula_1 pitStops 1022 milliseconds": {
+    "table": "pitStops",
+    "source": "formula_1",
+    "code": "1022"
+  },
+  "formula_1 qualifying 1023 qualifyId": {
+    "table": "qualifying",
+    "source": "formula_1",
+    "code": "1023"
+  },
+  "formula_1 qualifying 1023 raceId": {
+    "table": "qualifying",
+    "source": "formula_1",
+    "code": "1023"
+  },
+  "formula_1 qualifying 1023 driverId": {
+    "table": "qualifying",
+    "source": "formula_1",
+    "code": "1023"
+  },
+  "formula_1 qualifying 1023 constructorId": {
+    "table": "qualifying",
+    "source": "formula_1",
+    "code": "1023"
+  },
+  "formula_1 qualifying 1023 number": {
+    "table": "qualifying",
+    "source": "formula_1",
+    "code": "1023"
+  },
+  "formula_1 qualifying 1023 position": {
+    "table": "qualifying",
+    "source": "formula_1",
+    "code": "1023"
+  },
+  "formula_1 qualifying 1023 q1": {
+    "table": "qualifying",
+    "source": "formula_1",
+    "code": "1023"
+  },
+  "formula_1 qualifying 1023 q2": {
+    "table": "qualifying",
+    "source": "formula_1",
+    "code": "1023"
+  },
+  "formula_1 qualifying 1023 q3": {
+    "table": "qualifying",
+    "source": "formula_1",
+    "code": "1023"
+  },
+  "formula_1 status 1024 statusId": {
+    "table": "status",
+    "source": "formula_1",
+    "code": "1024"
+  },
+  "formula_1 status 1024 status": {
+    "table": "status",
+    "source": "formula_1",
+    "code": "1024"
+  },
+  "formula_1 results 1025 resultId": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 raceId": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 driverId": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 constructorId": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 number": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 grid": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 position": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 positionText": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 positionOrder": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 points": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 laps": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 time": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 milliseconds": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 fastestLap": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 rank": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 fastestLapTime": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 fastestLapSpeed": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  },
+  "formula_1 results 1025 statusId": {
+    "table": "results",
+    "source": "formula_1",
+    "code": "1025"
+  }
+}

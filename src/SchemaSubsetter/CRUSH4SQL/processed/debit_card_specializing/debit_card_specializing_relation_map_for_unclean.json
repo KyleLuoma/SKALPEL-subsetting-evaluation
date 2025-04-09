@@ -1,0 +1,108 @@
+
+{
+  "debit_card_specializing customers 1000 CustomerID": {
+    "table": "customers",
+    "source": "debit_card_specializing",
+    "code": "1000"
+  },
+  "debit_card_specializing customers 1000 Segment": {
+    "table": "customers",
+    "source": "debit_card_specializing",
+    "code": "1000"
+  },
+  "debit_card_specializing customers 1000 Currency": {
+    "table": "customers",
+    "source": "debit_card_specializing",
+    "code": "1000"
+  },
+  "debit_card_specializing gasstations 1001 GasStationID": {
+    "table": "gasstations",
+    "source": "debit_card_specializing",
+    "code": "1001"
+  },
+  "debit_card_specializing gasstations 1001 ChainID": {
+    "table": "gasstations",
+    "source": "debit_card_specializing",
+    "code": "1001"
+  },
+  "debit_card_specializing gasstations 1001 Country": {
+    "table": "gasstations",
+    "source": "debit_card_specializing",
+    "code": "1001"
+  },
+  "debit_card_specializing gasstations 1001 Segment": {
+    "table": "gasstations",
+    "source": "debit_card_specializing",
+    "code": "1001"
+  },
+  "debit_card_specializing products 1002 ProductID": {
+    "table": "products",
+    "source": "debit_card_specializing",
+    "code": "1002"
+  },
+  "debit_card_specializing products 1002 Description": {
+    "table": "products",
+    "source": "debit_card_specializing",
+    "code": "1002"
+  },
+  "debit_card_specializing transactions_1k 1003 TransactionID": {
+    "table": "transactions_1k",
+    "source": "debit_card_specializing",
+    "code": "1003"
+  },
+  "debit_card_specializing transactions_1k 1003 Date": {
+    "table": "transactions_1k",
+    "source": "debit_card_specializing",
+    "code": "1003"
+  },
+  "debit_card_specializing transactions_1k 1003 Time": {
+    "table": "transactions_1k",
+    "source": "debit_card_specializing",
+    "code": "1003"
+  },
+  "debit_card_specializing transactions_1k 1003 CustomerID": {
+    "table": "transactions_1k",
+    "source": "debit_card_specializing",
+    "code": "1003"
+  },
+  "debit_card_specializing transactions_1k 1003 CardID": {
+    "table": "transactions_1k",
+    "source": "debit_card_specializing",
+    "code": "1003"
+  },
+  "debit_card_specializing transactions_1k 1003 GasStationID": {
+    "table": "transactions_1k",
+    "source": "debit_card_specializing",
+    "code": "1003"
+  },
+  "debit_card_specializing transactions_1k 1003 ProductID": {
+    "table": "transactions_1k",
+    "source": "debit_card_specializing",
+    "code": "1003"
+  },
+  "debit_card_specializing transactions_1k 1003 Amount": {
+    "table": "transactions_1k",
+    "source": "debit_card_specializing",
+    "code": "1003"
+  },
+  "debit_card_specializing transactions_1k 1003 Price": {
+    "table": "transactions_1k",
+    "source": "debit_card_specializing",
+    "code": "1003"
+  },
+  "debit_card_specializing yearmonth 1004 CustomerID": {
+    "table": "yearmonth",
+    "source": "debit_card_specializing",
+    "code": "1004"
+  },
+  "debit_card_specializing yearmonth 1004 Date": {
+    "table": "yearmonth",
+    "source": "debit_card_specializing",
+    "code": "1004"
+  },
+  "debit_card_specializing yearmonth 1004 Consumption": {
+    "table": "yearmonth",
+    "source": "debit_card_specializing",
+    "code": "1004"
+  }
+}

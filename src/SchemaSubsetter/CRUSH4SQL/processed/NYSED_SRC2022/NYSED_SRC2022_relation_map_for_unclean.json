@@ -1,0 +1,2118 @@
+
+{
+  "NYSED_SRC2022 sysdiagrams 1162 name": {
+    "table": "sysdiagrams",
+    "source": "NYSED_SRC2022",
+    "code": "1162"
+  },
+  "NYSED_SRC2022 sysdiagrams 1162 principal_id": {
+    "table": "sysdiagrams",
+    "source": "NYSED_SRC2022",
+    "code": "1162"
+  },
+  "NYSED_SRC2022 sysdiagrams 1162 diagram_id": {
+    "table": "sysdiagrams",
+    "source": "NYSED_SRC2022",
+    "code": "1162"
+  },
+  "NYSED_SRC2022 sysdiagrams 1162 version": {
+    "table": "sysdiagrams",
+    "source": "NYSED_SRC2022",
+    "code": "1162"
+  },
+  "NYSED_SRC2022 sysdiagrams 1162 definition": {
+    "table": "sysdiagrams",
+    "source": "NYSED_SRC2022",
+    "code": "1162"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 INSTITUTION_ID": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 ENTITY_CD": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 ENTITY_NAME": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 YEAR": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 SUBJECT": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 SUBGROUP_NAME": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 ENROLLMENT": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 ABSENT_COUNT": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 ABSENT_RATE": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 LEVEL": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 OVERRIDE": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 DATA_REP_FLAG": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Chronic_Absenteeism 1163 PARTIAL_DATA_FLAG": {
+    "table": "ACC_EM_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1163"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 INSTITUTION_ID": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 ENTITY_CD": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 ENTITY_NAME": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 YEAR": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 SUBJECT": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 SUBGROUP_NAME": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 CORE_COHORT": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 CORE_INDEX": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 CORE_LEVEL": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 WEIGHTED_COHORT": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 WEIGHTED_INDEX": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 WGT_LEVEL": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 OVERRIDE_WEIGHTED": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_Core_and_Weighted_Performance 1164 OVERRIDE_CORE": {
+    "table": "ACC_EM_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1164"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 INSTITUTION_ID": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 ENTITY_CD": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 ENTITY_NAME": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 YEAR": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 SUBJECT": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 SUBGROUP_NAME": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 ELL_COUNT": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 BENCHMARK": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 PROGRESS_RATE": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 SUCCESS_RATIO": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 LEVEL": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_ELP 1165 OVERRIDE": {
+    "table": "ACC_EM_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1165"
+  },
+  "NYSED_SRC2022 ACC_EM_NYSESLAT_for_Participation 1166 INSTITUTION_ID": {
+    "table": "ACC_EM_NYSESLAT_for_Participation",
+    "source": "NYSED_SRC2022",
+    "code": "1166"
+  },
+  "NYSED_SRC2022 ACC_EM_NYSESLAT_for_Participation 1166 ENTITY_CD": {
+    "table": "ACC_EM_NYSESLAT_for_Participation",
+    "source": "NYSED_SRC2022",
+    "code": "1166"
+  },
+  "NYSED_SRC2022 ACC_EM_NYSESLAT_for_Participation 1166 ENTITY_NAME": {
+    "table": "ACC_EM_NYSESLAT_for_Participation",
+    "source": "NYSED_SRC2022",
+    "code": "1166"
+  },
+  "NYSED_SRC2022 ACC_EM_NYSESLAT_for_Participation 1166 YEAR": {
+    "table": "ACC_EM_NYSESLAT_for_Participation",
+    "source": "NYSED_SRC2022",
+    "code": "1166"
+  },
+  "NYSED_SRC2022 ACC_EM_NYSESLAT_for_Participation 1166 SUBJECT": {
+    "table": "ACC_EM_NYSESLAT_for_Participation",
+    "source": "NYSED_SRC2022",
+    "code": "1166"
+  },
+  "NYSED_SRC2022 ACC_EM_NYSESLAT_for_Participation 1166 NYSESLAT_PART": {
+    "table": "ACC_EM_NYSESLAT_for_Participation",
+    "source": "NYSED_SRC2022",
+    "code": "1166"
+  },
+  "NYSED_SRC2022 ACC_EM_NYSESLAT_for_Participation 1166 SSMA_TimeStamp": {
+    "table": "ACC_EM_NYSESLAT_for_Participation",
+    "source": "NYSED_SRC2022",
+    "code": "1166"
+  },
+  "NYSED_SRC2022 ACC_EM_Participation_Rate 1167 INSTITUTION_ID": {
+    "table": "ACC_EM_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1167"
+  },
+  "NYSED_SRC2022 ACC_EM_Participation_Rate 1167 ENTITY_CD": {
+    "table": "ACC_EM_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1167"
+  },
+  "NYSED_SRC2022 ACC_EM_Participation_Rate 1167 ENTITY_NAME": {
+    "table": "ACC_EM_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1167"
+  },
+  "NYSED_SRC2022 ACC_EM_Participation_Rate 1167 YEAR": {
+    "table": "ACC_EM_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1167"
+  },
+  "NYSED_SRC2022 ACC_EM_Participation_Rate 1167 SUBJECT": {
+    "table": "ACC_EM_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1167"
+  },
+  "NYSED_SRC2022 ACC_EM_Participation_Rate 1167 SUBGROUP_NAME": {
+    "table": "ACC_EM_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1167"
+  },
+  "NYSED_SRC2022 ACC_EM_Participation_Rate 1167 COHORT": {
+    "table": "ACC_EM_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1167"
+  },
+  "NYSED_SRC2022 ACC_EM_Participation_Rate 1167 RATE": {
+    "table": "ACC_EM_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1167"
+  },
+  "NYSED_SRC2022 ACC_EM_Participation_Rate 1167 MET_95_PERCENT": {
+    "table": "ACC_EM_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1167"
+  },
+  "NYSED_SRC2022 ACC_EM_Participation_Rate 1167 OVERRIDE": {
+    "table": "ACC_EM_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1167"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 INSTITUTION_ID": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 ENTITY_CD": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 ENTITY_NAME": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 YEAR": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 SUBJECT": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 SUBGROUP_NAME": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 ENROLLMENT": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 ABSENT_COUNT": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 ABSENT_RATE": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 LEVEL": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 OVERRIDE": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 DATA_REP_FLAG": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Chronic_Absenteeism 1168 PARTIAL_DATA_FLAG": {
+    "table": "ACC_HS_Chronic_Absenteeism",
+    "source": "NYSED_SRC2022",
+    "code": "1168"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 INSTITUTION_ID": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 ENTITY_CD": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 ENTITY_NAME": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 YEAR": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 SUBJECT": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 SUBGROUP_NAME": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 CORE_COHORT": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 CORE_INDEX": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 CORE_LEVEL": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 WEIGHTED_COHORT": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 WEIGHTED_INDEX": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 WGT_LEVEL": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 OVERRIDE_WEIGHTED": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_Core_and_Weighted_Performance 1169 OVERRIDE_CORE": {
+    "table": "ACC_HS_Core_and_Weighted_Performance",
+    "source": "NYSED_SRC2022",
+    "code": "1169"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 INSTITUTION_ID": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 ENTITY_CD": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 ENTITY_NAME": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 YEAR": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 SUBJECT": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 SUBGROUP_NAME": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 ELL_COUNT": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 BENCHMARK": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 PROGRESS_RATE": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 SUCCESS_RATIO": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 LEVEL": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_ELP 1170 OVERRIDE": {
+    "table": "ACC_HS_ELP",
+    "source": "NYSED_SRC2022",
+    "code": "1170"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 INSTITUTION_ID": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 ENTITY_CD": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 ENTITY_NAME": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 YEAR": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 SUBGROUP_NAME": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 COHORT": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 COHORT_COUNT": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 GRAD_COUNT": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 GRAD_RATE": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 COHORT_LEVEL": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 OVERRIDE": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Graduation_Rate 1171 WT_PERF_FLAG": {
+    "table": "ACC_HS_Graduation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1171"
+  },
+  "NYSED_SRC2022 ACC_HS_Participation_Rate 1172 INSTITUTION_ID": {
+    "table": "ACC_HS_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1172"
+  },
+  "NYSED_SRC2022 ACC_HS_Participation_Rate 1172 ENTITY_CD": {
+    "table": "ACC_HS_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1172"
+  },
+  "NYSED_SRC2022 ACC_HS_Participation_Rate 1172 ENTITY_NAME": {
+    "table": "ACC_HS_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1172"
+  },
+  "NYSED_SRC2022 ACC_HS_Participation_Rate 1172 YEAR": {
+    "table": "ACC_HS_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1172"
+  },
+  "NYSED_SRC2022 ACC_HS_Participation_Rate 1172 SUBJECT": {
+    "table": "ACC_HS_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1172"
+  },
+  "NYSED_SRC2022 ACC_HS_Participation_Rate 1172 SUBGROUP_NAME": {
+    "table": "ACC_HS_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1172"
+  },
+  "NYSED_SRC2022 ACC_HS_Participation_Rate 1172 COHORT": {
+    "table": "ACC_HS_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1172"
+  },
+  "NYSED_SRC2022 ACC_HS_Participation_Rate 1172 RATE": {
+    "table": "ACC_HS_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1172"
+  },
+  "NYSED_SRC2022 ACC_HS_Participation_Rate 1172 MET_95_PERCENT": {
+    "table": "ACC_HS_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1172"
+  },
+  "NYSED_SRC2022 ACC_HS_Participation_Rate 1172 OVERRIDE": {
+    "table": "ACC_HS_Participation_Rate",
+    "source": "NYSED_SRC2022",
+    "code": "1172"
+  },
+  "NYSED_SRC2022 Accountability_Levels 1173 INSTITUTION_ID": {
+    "table": "Accountability_Levels",
+    "source": "NYSED_SRC2022",
+    "code": "1173"
+  },
+  "NYSED_SRC2022 Accountability_Levels 1173 ENTITY_CD": {
+    "table": "Accountability_Levels",
+    "source": "NYSED_SRC2022",
+    "code": "1173"
+  },
+  "NYSED_SRC2022 Accountability_Levels 1173 ENTITY_NAME": {
+    "table": "Accountability_Levels",
+    "source": "NYSED_SRC2022",
+    "code": "1173"
+  },
+  "NYSED_SRC2022 Accountability_Levels 1173 YEAR": {
+    "table": "Accountability_Levels",
+    "source": "NYSED_SRC2022",
+    "code": "1173"
+  },
+  "NYSED_SRC2022 Accountability_Levels 1173 INDICATOR": {
+    "table": "Accountability_Levels",
+    "source": "NYSED_SRC2022",
+    "code": "1173"
+  },
+  "NYSED_SRC2022 Accountability_Levels 1173 SUBGROUP_NAME": {
+    "table": "Accountability_Levels",
+    "source": "NYSED_SRC2022",
+    "code": "1173"
+  },
+  "NYSED_SRC2022 Accountability_Levels 1173 LEVEL": {
+    "table": "Accountability_Levels",
+    "source": "NYSED_SRC2022",
+    "code": "1173"
+  },
+  "NYSED_SRC2022 Accountability_Levels 1173 OVERRIDE": {
+    "table": "Accountability_Levels",
+    "source": "NYSED_SRC2022",
+    "code": "1173"
+  },
+  "NYSED_SRC2022 Accountability_Status 1174 INSTITUTION_ID": {
+    "table": "Accountability_Status",
+    "source": "NYSED_SRC2022",
+    "code": "1174"
+  },
+  "NYSED_SRC2022 Accountability_Status 1174 ENTITY_CD": {
+    "table": "Accountability_Status",
+    "source": "NYSED_SRC2022",
+    "code": "1174"
+  },
+  "NYSED_SRC2022 Accountability_Status 1174 ENTITY_NAME": {
+    "table": "Accountability_Status",
+    "source": "NYSED_SRC2022",
+    "code": "1174"
+  },
+  "NYSED_SRC2022 Accountability_Status 1174 YEAR": {
+    "table": "Accountability_Status",
+    "source": "NYSED_SRC2022",
+    "code": "1174"
+  },
+  "NYSED_SRC2022 Accountability_Status 1174 OVERALL_STATUS": {
+    "table": "Accountability_Status",
+    "source": "NYSED_SRC2022",
+    "code": "1174"
+  },
+  "NYSED_SRC2022 Accountability_Status 1174 MADE_PROGRESS": {
+    "table": "Accountability_Status",
+    "source": "NYSED_SRC2022",
+    "code": "1174"
+  },
+  "NYSED_SRC2022 Accountability_Status 1174 OVERRIDE": {
+    "table": "Accountability_Status",
+    "source": "NYSED_SRC2022",
+    "code": "1174"
+  },
+  "NYSED_SRC2022 Accountability_Status 1174 MADE_PROGRESS_FLAG": {
+    "table": "Accountability_Status",
+    "source": "NYSED_SRC2022",
+    "code": "1174"
+  },
+  "NYSED_SRC2022 Accountability_Status_by_Subgroup 1175 INSTITUTION_ID": {
+    "table": "Accountability_Status_by_Subgroup",
+    "source": "NYSED_SRC2022",
+    "code": "1175"
+  },
+  "NYSED_SRC2022 Accountability_Status_by_Subgroup 1175 ENTITY_CD": {
+    "table": "Accountability_Status_by_Subgroup",
+    "source": "NYSED_SRC2022",
+    "code": "1175"
+  },
+  "NYSED_SRC2022 Accountability_Status_by_Subgroup 1175 ENTITY_NAME": {
+    "table": "Accountability_Status_by_Subgroup",
+    "source": "NYSED_SRC2022",
+    "code": "1175"
+  },
+  "NYSED_SRC2022 Accountability_Status_by_Subgroup 1175 YEAR": {
+    "table": "Accountability_Status_by_Subgroup",
+    "source": "NYSED_SRC2022",
+    "code": "1175"
+  },
+  "NYSED_SRC2022 Accountability_Status_by_Subgroup 1175 SCHOOL_TYPE": {
+    "table": "Accountability_Status_by_Subgroup",
+    "source": "NYSED_SRC2022",
+    "code": "1175"
+  },
+  "NYSED_SRC2022 Accountability_Status_by_Subgroup 1175 SUBGROUP_NAME": {
+    "table": "Accountability_Status_by_Subgroup",
+    "source": "NYSED_SRC2022",
+    "code": "1175"
+  },
+  "NYSED_SRC2022 Accountability_Status_by_Subgroup 1175 OVERALL_STATUS": {
+    "table": "Accountability_Status_by_Subgroup",
+    "source": "NYSED_SRC2022",
+    "code": "1175"
+  },
+  "NYSED_SRC2022 Accountability_Status_by_Subgroup 1175 MADE_PROGRESS": {
+    "table": "Accountability_Status_by_Subgroup",
+    "source": "NYSED_SRC2022",
+    "code": "1175"
+  },
+  "NYSED_SRC2022 Accountability_Status_by_Subgroup 1175 OVERRIDE": {
+    "table": "Accountability_Status_by_Subgroup",
+    "source": "NYSED_SRC2022",
+    "code": "1175"
+  },
+  "NYSED_SRC2022 Accountability_Status_by_Subgroup 1175 MADE_PROGRESS_FLAG": {
+    "table": "Accountability_Status_by_Subgroup",
+    "source": "NYSED_SRC2022",
+    "code": "1175"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 INSTITUTION_ID": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 ENTITY_CD": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 ENTITY_NAME": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 YEAR": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 ASSESSMENT_NAME": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 SUBGROUP_NAME": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 TOTAL_COUNT": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 NOT_TESTED": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 PCT_NOT_TESTED": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 NUM_TESTED": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 PCT_TESTED": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 LEVEL1_COUNT": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 LEVEL1_%TESTED": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 LEVEL2_COUNT": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 LEVEL2_%TESTED": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 LEVEL3_COUNT": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 LEVEL3_%TESTED": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 LEVEL4_COUNT": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 LEVEL4_%TESTED": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 NUM_PROF": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 PER_PROF": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 TOTAL_SCALE_SCORES": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 MEAN_SCORE": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_ELA 1176 SSMA_TimeStamp": {
+    "table": "Annual_EM_ELA",
+    "source": "NYSED_SRC2022",
+    "code": "1176"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 INSTITUTION_ID": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 ENTITY_CD": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 ENTITY_NAME": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 YEAR": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 ASSESSMENT_NAME": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 SUBGROUP_NAME": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 TOTAL_COUNT": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 NOT_TESTED": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 PCT_NOT_TESTED": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 NUM_TESTED": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 PCT_TESTED": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 LEVEL1_COUNT": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 LEVEL1_%TESTED": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 LEVEL2_COUNT": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 LEVEL2_%TESTED": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 LEVEL3_COUNT": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 LEVEL3_%TESTED": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 LEVEL4_COUNT": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 LEVEL4_%TESTED": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 LEVEL5_COUNT": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 LEVEL5_%TESTED": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 NUM_PROF": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 PER_PROF": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 TOTAL_SCALE_SCORES": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 MEAN_SCORE": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 TOTAL_EXEMPT": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 NUM_EXEMPT_NTEST": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 PCT_EXEMPT_NTEST": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 NUM_EXEMPT_TEST": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 PCT_EXEMPT_TEST": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_MATH 1177 SSMA_TimeStamp": {
+    "table": "Annual_EM_MATH",
+    "source": "NYSED_SRC2022",
+    "code": "1177"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 INSTITUTION_ID": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 ENTITY_CD": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 ENTITY_NAME": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 YEAR": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 ASSESSMENT_NAME": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 SUBGROUP_NAME": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 TOTAL_COUNT": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 NOT_TESTED": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 PCT_NOT_TESTED": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 NUM_TESTED": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 PCT_TESTED": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 LEVEL1_COUNT": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 LEVEL1_%TESTED": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 LEVEL2_COUNT": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 LEVEL2_%TESTED": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 LEVEL3_COUNT": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 LEVEL3_%TESTED": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 LEVEL4_COUNT": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 LEVEL4_%TESTED": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 NUM_PROF": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 PER_PROF": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 TOTAL_SCALE_SCORES": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 MEAN_SCORE": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 TOTAL_EXEMPT": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 NUM_EXEMPT_NTEST": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 PCT_EXEMPT_NTEST": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 NUM_EXEMPT_TEST": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 PCT_EXEMPT_TEST": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_EM_SCIENCE 1178 SSMA_TimeStamp": {
+    "table": "Annual_EM_SCIENCE",
+    "source": "NYSED_SRC2022",
+    "code": "1178"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 INSTITUTION_ID": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 ENTITY_CD": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 ENTITY_NAME": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 YEAR": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 SUBJECT": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 SUBGROUP_NAME": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 TOTAL": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 NOT_TESTED": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 NOT_TESTED_PER": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 EXEMPT": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 EXEMPT_PER": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 TESTED": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 PER_TESTED": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 LEVEL1_COUNT": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 LEVEL1_PER": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 LEVEL2_COUNT": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 LEVEL2_PER": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 LEVEL3_COUNT": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 LEVEL3_PER": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 LEVEL4_COUNT": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 LEVEL4_PER": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 PROFICIENT_COUNT": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 PROFICIENT_PER": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSAA 1179 SSMA_TimeStamp": {
+    "table": "Annual_NYSAA",
+    "source": "NYSED_SRC2022",
+    "code": "1179"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 INSTITUTION_ID": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 ENTITY_CD": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 ENTITY_NAME": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 YEAR": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 SUBJECT": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 SUBGROUP_NAME": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 TOTAL": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 NOT_TESTED": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 PER_NTEST": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 TESTED": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 PER_TEST": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 NUM_ENT": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 PER_ENT": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 NUM_EMER": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 PER_EMER": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 NUM_TRAN": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 PER_TRAN": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 NUM_EXP": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 PER_EXP": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 NUM_COM": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 PER_COM": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_NYSESLAT 1180 SSMA_TimeStamp": {
+    "table": "Annual_NYSESLAT",
+    "source": "NYSED_SRC2022",
+    "code": "1180"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 INSTITUTION_ID": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 ENTITY_CD": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 ENTITY_NAME": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 YEAR": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 SUBJECT": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 SUBGROUP_NAME": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 TESTED": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 NUM_LEVEL1": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 PER_LEVEL1": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 NUM_LEVEL2": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 PER_LEVEL2": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 NUM_LEVEL3": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 PER_LEVEL3": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 NUM_LEVEL4": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 PER_LEVEL4": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 NUM_LEVEL5": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 PER_LEVEL5": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 NUM_PROF": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 PER_PROF": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 TOTAL_EXEMPT": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 NUM_EXEMPT_NTEST": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 PCT_EXEMPT_NTEST": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 NUM_EXEMPT_TEST": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 PCT_EXEMPT_TEST": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 ASSMNT_FLAG": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 Annual_Regents_Exams 1181 SSMA_TimeStamp": {
+    "table": "Annual_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1181"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 INSTITUTION_ID": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 ENTITY_CD": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 SCHOOL_NAME": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 YEAR": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 DISTRICT_CD": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 DISTRICT_NAME": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 BOCES_CD": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 BOCES_NAME": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 COUNTY_CD": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 COUNTY_NAME": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 NEEDS_INDEX": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 BOCES_and_N/RC 1182 SSMA_TimeStamp": {
+    "table": "BOCES_and_N/RC",
+    "source": "NYSED_SRC2022",
+    "code": "1182"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 INSTITUTION_ID": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 ENTITY_CD": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 ENTITY_NAME": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 YEAR": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 PUPIL_COUNT_TOT": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 FEDERAL_EXP": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 PER_FEDERAL_EXP": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 STATE_LOCAL_EXP": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 PER_STATE_LOCAL_EXP": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 FED_STATE_LOCAL_EXP": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 PER_FED_STATE_LOCAL_EXP": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 DATA_REPORTED_ENR": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 DATA_REPORTED_EXP": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Expenditures_per_Pupil 1183 SSMA_TimeStamp": {
+    "table": "Expenditures_per_Pupil",
+    "source": "NYSED_SRC2022",
+    "code": "1183"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 INSTITUTION_ID": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 ENTITY_CD": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 ENTITY_NAME": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 YEAR": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 NUM_TEACH": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 NUM_TEACH_INEXP": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 PER_TEACH_INEXP": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 TOT_TEACH_LOW": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 NUM_TEACH_LOW": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 PER_TEACH_LOW": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 TOT_TEACH_HIGH": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 NUM_TEACH_HIGH": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 PER_TEACH_HIGH": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 NUM_PRINC": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 NUM_PRINC_INEXP": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 PER_PRINC_INEXP": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 TOT_PRINC_LOW": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 NUM_PRINC_LOW": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 PER_PRINC_LOW": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 TOT_PRINC_HIGH": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 NUM_PRINC_HIGH": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 PER_PRINC_HIGH": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 TEACH_DATA_REP_FLAG": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 PRIN_DATA_REP_FLAG": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Inexperienced_Teachers_and_Principals 1184 SSMA_TimeStamp": {
+    "table": "Inexperienced_Teachers_and_Principals",
+    "source": "NYSED_SRC2022",
+    "code": "1184"
+  },
+  "NYSED_SRC2022 Institution_Grouping 1185 INSTITUTION_ID": {
+    "table": "Institution_Grouping",
+    "source": "NYSED_SRC2022",
+    "code": "1185"
+  },
+  "NYSED_SRC2022 Institution_Grouping 1185 GROUP_CODE": {
+    "table": "Institution_Grouping",
+    "source": "NYSED_SRC2022",
+    "code": "1185"
+  },
+  "NYSED_SRC2022 Institution_Grouping 1185 GROUP_NAME": {
+    "table": "Institution_Grouping",
+    "source": "NYSED_SRC2022",
+    "code": "1185"
+  },
+  "NYSED_SRC2022 Institution_Grouping 1185 ENTITY_CD": {
+    "table": "Institution_Grouping",
+    "source": "NYSED_SRC2022",
+    "code": "1185"
+  },
+  "NYSED_SRC2022 Institution_Grouping 1185 ENTITY_NAME": {
+    "table": "Institution_Grouping",
+    "source": "NYSED_SRC2022",
+    "code": "1185"
+  },
+  "NYSED_SRC2022 Institution_Grouping 1185 SSMA_TimeStamp": {
+    "table": "Institution_Grouping",
+    "source": "NYSED_SRC2022",
+    "code": "1185"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 INSTITUTION_ID": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 ENTITY_CD": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 ENTITY_NAME": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 YEAR": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 MEMBERSHIP_DESC": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 SUBGROUP_NAME": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 TOTAL_GRAD_COUNT": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 NYS_PUB_2_YR_CNT": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 PER_NYS_PUB_2_YR": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 NYS_PUB_4_YR_CNT": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 PER_NYS_PUB_4_YR": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 NYS_PVT_2_YR_CNT": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 PER_NYS_PVT_2_YR": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 NYS_PVT_4_YR_CNT": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 PER_NYS_PVT_4_YR": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 OUT_2_YR_CNT": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 PER_OUT_2_YR": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 OUT_4_YR_CNT": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 PER_OUT_4_YR": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Postsecondary_Enrollment 1186 SSMA_TimeStamp": {
+    "table": "Postsecondary_Enrollment",
+    "source": "NYSED_SRC2022",
+    "code": "1186"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 INSTITUTION_ID": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 ENTITY_CD": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 ENTITY_NAME": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 YEAR": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 NUM_TEACH_OC": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 NUM_OUT_CERT": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 PER_OUT_CERT": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 TOT_OUT_CERT_LOW": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 NUM_OUT_CERT_LOW": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 PER_OUT_CERT_LOW": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 TOT_OUT_CERT_HIGH": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 NUM_OUT_CERT_HIGH": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 PER_OUT_CERT_HIGH": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 OUT_OF_CERT_DATA_REP_FLAG": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Teachers_Teaching_Out_of_Certification 1187 SSMA_TimeStamp": {
+    "table": "Teachers_Teaching_Out_of_Certification",
+    "source": "NYSED_SRC2022",
+    "code": "1187"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 INSTITUTION_ID": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 ENTITY_CD": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 ENTITY_NAME": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 SUBGROUP_NAME": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 SUBJECT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 COHORT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 COHORT_COUNT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 NTEST_COUNT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 NTEST_%COHORT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 TEST_COUNT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 TEST_%COHORT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 LEVEL1_COUNT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 LEVEL1_%COHORT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 LEVEL2_COUNT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 LEVEL2_%COHORT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 LEVEL3_COUNT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 LEVEL3_%COHORT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 LEVEL4_COUNT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 LEVEL4_%COHORT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 PROF_COUNT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 PROF_%COHORT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 TOTAL_EXEMPT": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 NUM_EXEMPT_NTEST": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 PCT_EXEMPT_NTEST": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 NUM_EXEMPT_TEST": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 PCT_EXEMPT_TEST": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  },
+  "NYSED_SRC2022 Total_Cohort_Regents_Exams 1188 SSMA_TimeStamp": {
+    "table": "Total_Cohort_Regents_Exams",
+    "source": "NYSED_SRC2022",
+    "code": "1188"
+  }
+}

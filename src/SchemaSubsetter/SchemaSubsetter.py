@@ -15,9 +15,11 @@ from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
 class SchemaSubsetter:
 
     name = "abstract"
+    uses_gpu = False
     
     def __init__(self, benchmark: NlSqlBenchmark = None):
         self.benchmark = benchmark
+        self.device = None
         pass
 
 
@@ -49,3 +51,10 @@ class SchemaSubsetter:
             ]
         )
         return SchemaSubsetterResult(schema_subset=schema)
+    
+
+    def preprocess_databases(self) -> dict[str, float]:
+        processing_times = {}
+        for database in self.benchmark.databases:
+            processing_times["database"] = 0.0
+        return processing_times

@@ -19,9 +19,13 @@ class PerfectTableSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
     This class of schema subsetter will return a subset with only required tables, 
     and all columns for each required table
     """
+
+    name = "perfect_table_subsetter"
+
     def __init__(self):
         super().__init__()
         self.query_profiler = QueryProfiler()
+        self.name = PerfectTableSchemaSubsetter.name
 
 
 

@@ -1,0 +1,1 @@
+database1 table1 1000 column1

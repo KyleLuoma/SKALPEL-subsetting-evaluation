@@ -1,0 +1,158 @@
+
+{
+  "superhero alignment 1057 id": {
+    "table": "alignment",
+    "source": "superhero",
+    "code": "1057"
+  },
+  "superhero alignment 1057 alignment": {
+    "table": "alignment",
+    "source": "superhero",
+    "code": "1057"
+  },
+  "superhero attribute 1058 id": {
+    "table": "attribute",
+    "source": "superhero",
+    "code": "1058"
+  },
+  "superhero attribute 1058 attribute_name": {
+    "table": "attribute",
+    "source": "superhero",
+    "code": "1058"
+  },
+  "superhero colour 1059 id": {
+    "table": "colour",
+    "source": "superhero",
+    "code": "1059"
+  },
+  "superhero colour 1059 colour": {
+    "table": "colour",
+    "source": "superhero",
+    "code": "1059"
+  },
+  "superhero gender 1060 id": {
+    "table": "gender",
+    "source": "superhero",
+    "code": "1060"
+  },
+  "superhero gender 1060 gender": {
+    "table": "gender",
+    "source": "superhero",
+    "code": "1060"
+  },
+  "superhero publisher 1061 id": {
+    "table": "publisher",
+    "source": "superhero",
+    "code": "1061"
+  },
+  "superhero publisher 1061 publisher_name": {
+    "table": "publisher",
+    "source": "superhero",
+    "code": "1061"
+  },
+  "superhero race 1062 id": {
+    "table": "race",
+    "source": "superhero",
+    "code": "1062"
+  },
+  "superhero race 1062 race": {
+    "table": "race",
+    "source": "superhero",
+    "code": "1062"
+  },
+  "superhero superhero 1063 id": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero superhero 1063 superhero_name": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero superhero 1063 full_name": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero superhero 1063 gender_id": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero superhero 1063 eye_colour_id": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero superhero 1063 hair_colour_id": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero superhero 1063 skin_colour_id": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero superhero 1063 race_id": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero superhero 1063 publisher_id": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero superhero 1063 alignment_id": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero superhero 1063 height_cm": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero superhero 1063 weight_kg": {
+    "table": "superhero",
+    "source": "superhero",
+    "code": "1063"
+  },
+  "superhero hero_attribute 1064 hero_id": {
+    "table": "hero_attribute",
+    "source": "superhero",
+    "code": "1064"
+  },
+  "superhero hero_attribute 1064 attribute_id": {
+    "table": "hero_attribute",
+    "source": "superhero",
+    "code": "1064"
+  },
+  "superhero hero_attribute 1064 attribute_value": {
+    "table": "hero_attribute",
+    "source": "superhero",
+    "code": "1064"
+  },
+  "superhero superpower 1065 id": {
+    "table": "superpower",
+    "source": "superhero",
+    "code": "1065"
+  },
+  "superhero superpower 1065 power_name": {
+    "table": "superpower",
+    "source": "superhero",
+    "code": "1065"
+  },
+  "superhero hero_power 1066 hero_id": {
+    "table": "hero_power",
+    "source": "superhero",
+    "code": "1066"
+  },
+  "superhero hero_power 1066 power_id": {
+    "table": "hero_power",
+    "source": "superhero",
+    "code": "1066"
+  }
+}

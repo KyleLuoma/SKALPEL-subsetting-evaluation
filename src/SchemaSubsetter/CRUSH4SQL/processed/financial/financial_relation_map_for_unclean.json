@@ -1,0 +1,278 @@
+
+{
+  "financial account 1005 account_id": {
+    "table": "account",
+    "source": "financial",
+    "code": "1005"
+  },
+  "financial account 1005 district_id": {
+    "table": "account",
+    "source": "financial",
+    "code": "1005"
+  },
+  "financial account 1005 frequency": {
+    "table": "account",
+    "source": "financial",
+    "code": "1005"
+  },
+  "financial account 1005 date": {
+    "table": "account",
+    "source": "financial",
+    "code": "1005"
+  },
+  "financial card 1006 card_id": {
+    "table": "card",
+    "source": "financial",
+    "code": "1006"
+  },
+  "financial card 1006 disp_id": {
+    "table": "card",
+    "source": "financial",
+    "code": "1006"
+  },
+  "financial card 1006 type": {
+    "table": "card",
+    "source": "financial",
+    "code": "1006"
+  },
+  "financial card 1006 issued": {
+    "table": "card",
+    "source": "financial",
+    "code": "1006"
+  },
+  "financial client 1007 client_id": {
+    "table": "client",
+    "source": "financial",
+    "code": "1007"
+  },
+  "financial client 1007 gender": {
+    "table": "client",
+    "source": "financial",
+    "code": "1007"
+  },
+  "financial client 1007 birth_date": {
+    "table": "client",
+    "source": "financial",
+    "code": "1007"
+  },
+  "financial client 1007 district_id": {
+    "table": "client",
+    "source": "financial",
+    "code": "1007"
+  },
+  "financial disp 1008 disp_id": {
+    "table": "disp",
+    "source": "financial",
+    "code": "1008"
+  },
+  "financial disp 1008 client_id": {
+    "table": "disp",
+    "source": "financial",
+    "code": "1008"
+  },
+  "financial disp 1008 account_id": {
+    "table": "disp",
+    "source": "financial",
+    "code": "1008"
+  },
+  "financial disp 1008 type": {
+    "table": "disp",
+    "source": "financial",
+    "code": "1008"
+  },
+  "financial district 1009 district_id": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A2": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A3": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A4": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A5": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A6": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A7": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A8": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A9": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A10": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A11": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A12": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A13": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A14": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A15": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial district 1009 A16": {
+    "table": "district",
+    "source": "financial",
+    "code": "1009"
+  },
+  "financial loan 1010 loan_id": {
+    "table": "loan",
+    "source": "financial",
+    "code": "1010"
+  },
+  "financial loan 1010 account_id": {
+    "table": "loan",
+    "source": "financial",
+    "code": "1010"
+  },
+  "financial loan 1010 date": {
+    "table": "loan",
+    "source": "financial",
+    "code": "1010"
+  },
+  "financial loan 1010 amount": {
+    "table": "loan",
+    "source": "financial",
+    "code": "1010"
+  },
+  "financial loan 1010 duration": {
+    "table": "loan",
+    "source": "financial",
+    "code": "1010"
+  },
+  "financial loan 1010 payments": {
+    "table": "loan",
+    "source": "financial",
+    "code": "1010"
+  },
+  "financial loan 1010 status": {
+    "table": "loan",
+    "source": "financial",
+    "code": "1010"
+  },
+  "financial order 1011 order_id": {
+    "table": "order",
+    "source": "financial",
+    "code": "1011"
+  },
+  "financial order 1011 account_id": {
+    "table": "order",
+    "source": "financial",
+    "code": "1011"
+  },
+  "financial order 1011 bank_to": {
+    "table": "order",
+    "source": "financial",
+    "code": "1011"
+  },
+  "financial order 1011 account_to": {
+    "table": "order",
+    "source": "financial",
+    "code": "1011"
+  },
+  "financial order 1011 amount": {
+    "table": "order",
+    "source": "financial",
+    "code": "1011"
+  },
+  "financial order 1011 k_symbol": {
+    "table": "order",
+    "source": "financial",
+    "code": "1011"
+  },
+  "financial trans 1012 trans_id": {
+    "table": "trans",
+    "source": "financial",
+    "code": "1012"
+  },
+  "financial trans 1012 account_id": {
+    "table": "trans",
+    "source": "financial",
+    "code": "1012"
+  },
+  "financial trans 1012 date": {
+    "table": "trans",
+    "source": "financial",
+    "code": "1012"
+  },
+  "financial trans 1012 type": {
+    "table": "trans",
+    "source": "financial",
+    "code": "1012"
+  },
+  "financial trans 1012 operation": {
+    "table": "trans",
+    "source": "financial",
+    "code": "1012"
+  },
+  "financial trans 1012 amount": {
+    "table": "trans",
+    "source": "financial",
+    "code": "1012"
+  },
+  "financial trans 1012 balance": {
+    "table": "trans",
+    "source": "financial",
+    "code": "1012"
+  },
+  "financial trans 1012 k_symbol": {
+    "table": "trans",
+    "source": "financial",
+    "code": "1012"
+  },
+  "financial trans 1012 bank": {
+    "table": "trans",
+    "source": "financial",
+    "code": "1012"
+  },
+  "financial trans 1012 account": {
+    "table": "trans",
+    "source": "financial",
+    "code": "1012"
+  }
+}

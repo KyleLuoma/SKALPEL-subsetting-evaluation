@@ -1,0 +1,64 @@
+thrombosis_prediction Examination 1042 ID
+thrombosis_prediction Examination 1042 Examination Date
+thrombosis_prediction Examination 1042 aCL IgG
+thrombosis_prediction Examination 1042 aCL IgM
+thrombosis_prediction Examination 1042 ANA
+thrombosis_prediction Examination 1042 ANA Pattern
+thrombosis_prediction Examination 1042 aCL IgA
+thrombosis_prediction Examination 1042 Diagnosis
+thrombosis_prediction Examination 1042 KCT
+thrombosis_prediction Examination 1042 RVVT
+thrombosis_prediction Examination 1042 LAC
+thrombosis_prediction Examination 1042 Symptoms
+thrombosis_prediction Examination 1042 Thrombosis
+thrombosis_prediction Patient 1043 ID
+thrombosis_prediction Patient 1043 SEX
+thrombosis_prediction Patient 1043 Birthday
+thrombosis_prediction Patient 1043 Description
+thrombosis_prediction Patient 1043 First Date
+thrombosis_prediction Patient 1043 Admission
+thrombosis_prediction Patient 1043 Diagnosis
+thrombosis_prediction Laboratory 1044 ID
+thrombosis_prediction Laboratory 1044 Date
+thrombosis_prediction Laboratory 1044 GOT
+thrombosis_prediction Laboratory 1044 GPT
+thrombosis_prediction Laboratory 1044 LDH
+thrombosis_prediction Laboratory 1044 ALP
+thrombosis_prediction Laboratory 1044 TP
+thrombosis_prediction Laboratory 1044 ALB
+thrombosis_prediction Laboratory 1044 UA
+thrombosis_prediction Laboratory 1044 UN
+thrombosis_prediction Laboratory 1044 CRE
+thrombosis_prediction Laboratory 1044 T-BIL
+thrombosis_prediction Laboratory 1044 T-CHO
+thrombosis_prediction Laboratory 1044 TG
+thrombosis_prediction Laboratory 1044 CPK
+thrombosis_prediction Laboratory 1044 GLU
+thrombosis_prediction Laboratory 1044 WBC
+thrombosis_prediction Laboratory 1044 RBC
+thrombosis_prediction Laboratory 1044 HGB
+thrombosis_prediction Laboratory 1044 HCT
+thrombosis_prediction Laboratory 1044 PLT
+thrombosis_prediction Laboratory 1044 PT
+thrombosis_prediction Laboratory 1044 APTT
+thrombosis_prediction Laboratory 1044 FG
+thrombosis_prediction Laboratory 1044 PIC
+thrombosis_prediction Laboratory 1044 TAT
+thrombosis_prediction Laboratory 1044 TAT2
+thrombosis_prediction Laboratory 1044 U-PRO
+thrombosis_prediction Laboratory 1044 IGG
+thrombosis_prediction Laboratory 1044 IGA
+thrombosis_prediction Laboratory 1044 IGM
+thrombosis_prediction Laboratory 1044 CRP
+thrombosis_prediction Laboratory 1044 RA
+thrombosis_prediction Laboratory 1044 RF
+thrombosis_prediction Laboratory 1044 C3
+thrombosis_prediction Laboratory 1044 C4
+thrombosis_prediction Laboratory 1044 RNP
+thrombosis_prediction Laboratory 1044 SM
+thrombosis_prediction Laboratory 1044 SC170
+thrombosis_prediction Laboratory 1044 SSA
+thrombosis_prediction Laboratory 1044 SSB
+thrombosis_prediction Laboratory 1044 CENTROMEA
+thrombosis_prediction Laboratory 1044 DNA
+thrombosis_prediction Laboratory 1044 DNA-II

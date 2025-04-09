@@ -1,0 +1,58 @@
+
+{
+  "toxicology atom 1045 atom_id": {
+    "table": "atom",
+    "source": "toxicology",
+    "code": "1045"
+  },
+  "toxicology atom 1045 molecule_id": {
+    "table": "atom",
+    "source": "toxicology",
+    "code": "1045"
+  },
+  "toxicology atom 1045 element": {
+    "table": "atom",
+    "source": "toxicology",
+    "code": "1045"
+  },
+  "toxicology bond 1046 bond_id": {
+    "table": "bond",
+    "source": "toxicology",
+    "code": "1046"
+  },
+  "toxicology bond 1046 molecule_id": {
+    "table": "bond",
+    "source": "toxicology",
+    "code": "1046"
+  },
+  "toxicology bond 1046 bond_type": {
+    "table": "bond",
+    "source": "toxicology",
+    "code": "1046"
+  },
+  "toxicology connected 1047 atom_id": {
+    "table": "connected",
+    "source": "toxicology",
+    "code": "1047"
+  },
+  "toxicology connected 1047 atom_id2": {
+    "table": "connected",
+    "source": "toxicology",
+    "code": "1047"
+  },
+  "toxicology connected 1047 bond_id": {
+    "table": "connected",
+    "source": "toxicology",
+    "code": "1047"
+  },
+  "toxicology molecule 1048 molecule_id": {
+    "table": "molecule",
+    "source": "toxicology",
+    "code": "1048"
+  },
+  "toxicology molecule 1048 label": {
+    "table": "molecule",
+    "source": "toxicology",
+    "code": "1048"
+  }
+}

@@ -1,0 +1,1228 @@
+
+{
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 ObsInits": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 LastName": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 FirstName": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 MiddleInit": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 Agency/Title": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 ADDRESS": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 ADDRESS2": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 CITY": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 State": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 ZipCode": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 EmailAddress": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 HomePhone": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 WorkPhone": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 WorkExtension": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 FaxNumber": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 Notes": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database Observer_LU 1000 SSMA_TimeStamp": {
+    "table": "Observer_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1000"
+  },
+  "ASIS_20161108_HerpInv_Database tblAbundance_LU 1001 AbundanceID": {
+    "table": "tblAbundance_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1001"
+  },
+  "ASIS_20161108_HerpInv_Database tblAbundance_LU 1001 Abundance": {
+    "table": "tblAbundance_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1001"
+  },
+  "ASIS_20161108_HerpInv_Database tblAbundance_LU 1001 AbundanceText": {
+    "table": "tblAbundance_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1001"
+  },
+  "ASIS_20161108_HerpInv_Database tblAbundance_LU 1001 SSMA_TimeStamp": {
+    "table": "tblAbundance_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1001"
+  },
+  "ASIS_20161108_HerpInv_Database tblCultivation_LU 1002 CultivationCode": {
+    "table": "tblCultivation_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1002"
+  },
+  "ASIS_20161108_HerpInv_Database tblCultivation_LU 1002 Cultivation": {
+    "table": "tblCultivation_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1002"
+  },
+  "ASIS_20161108_HerpInv_Database tblCultivation_LU 1002 CultivationText": {
+    "table": "tblCultivation_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1002"
+  },
+  "ASIS_20161108_HerpInv_Database tblCultivation_LU 1002 SSMA_TimeStamp": {
+    "table": "tblCultivation_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1002"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 EventID": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 ObsInits": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 AirTemp": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 WaterTemp": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 WindSpeed": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 WindDirection": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 Rain": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 Precipitation": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 Clouds": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 Weather": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 Habitat": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 Substrate_Temperature": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 TripReport": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 ContactID": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 SiteDescription": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEventDataHerps 1003 SSMA_TimeStamp": {
+    "table": "tblEventDataHerps",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1003"
+  },
+  "ASIS_20161108_HerpInv_Database tblEvents 1004 EventID": {
+    "table": "tblEvents",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1004"
+  },
+  "ASIS_20161108_HerpInv_Database tblEvents 1004 Project": {
+    "table": "tblEvents",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1004"
+  },
+  "ASIS_20161108_HerpInv_Database tblEvents 1004 Year": {
+    "table": "tblEvents",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1004"
+  },
+  "ASIS_20161108_HerpInv_Database tblEvents 1004 StartDate": {
+    "table": "tblEvents",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1004"
+  },
+  "ASIS_20161108_HerpInv_Database tblEvents 1004 EndDate": {
+    "table": "tblEvents",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1004"
+  },
+  "ASIS_20161108_HerpInv_Database tblEvents 1004 StartTime": {
+    "table": "tblEvents",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1004"
+  },
+  "ASIS_20161108_HerpInv_Database tblEvents 1004 EndTime": {
+    "table": "tblEvents",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1004"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataAmphibianCallCounts 1005 RecordID": {
+    "table": "tblFieldDataAmphibianCallCounts",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1005"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataAmphibianCallCounts 1005 LocationID": {
+    "table": "tblFieldDataAmphibianCallCounts",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1005"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataAmphibianCallCounts 1005 EventID": {
+    "table": "tblFieldDataAmphibianCallCounts",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1005"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataAmphibianCallCounts 1005 Species_Code": {
+    "table": "tblFieldDataAmphibianCallCounts",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1005"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataAmphibianCallCounts 1005 Call_Index": {
+    "table": "tblFieldDataAmphibianCallCounts",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1005"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataAmphibianCallCounts 1005 Number_Observed": {
+    "table": "tblFieldDataAmphibianCallCounts",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1005"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataAmphibianCallCounts 1005 Comments": {
+    "table": "tblFieldDataAmphibianCallCounts",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1005"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataAmphibianCallCounts 1005 SSMA_TimeStamp": {
+    "table": "tblFieldDataAmphibianCallCounts",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1005"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataCoverBoard 1006 RecordID": {
+    "table": "tblFieldDataCoverBoard",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1006"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataCoverBoard 1006 LocationID": {
+    "table": "tblFieldDataCoverBoard",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1006"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataCoverBoard 1006 EventID": {
+    "table": "tblFieldDataCoverBoard",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1006"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataCoverBoard 1006 Board_#": {
+    "table": "tblFieldDataCoverBoard",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1006"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataCoverBoard 1006 Type": {
+    "table": "tblFieldDataCoverBoard",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1006"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataCoverBoard 1006 Species_Code": {
+    "table": "tblFieldDataCoverBoard",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1006"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataCoverBoard 1006 SnakeID": {
+    "table": "tblFieldDataCoverBoard",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1006"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataCoverBoard 1006 Recapture": {
+    "table": "tblFieldDataCoverBoard",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1006"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataCoverBoard 1006 Comments": {
+    "table": "tblFieldDataCoverBoard",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1006"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataCoverBoard 1006 SSMA_TimeStamp": {
+    "table": "tblFieldDataCoverBoard",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1006"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataGreenCardObservations 1007 RecordID": {
+    "table": "tblFieldDataGreenCardObservations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1007"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataGreenCardObservations 1007 LocationID": {
+    "table": "tblFieldDataGreenCardObservations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1007"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataGreenCardObservations 1007 EventID": {
+    "table": "tblFieldDataGreenCardObservations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1007"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataGreenCardObservations 1007 Species_Code": {
+    "table": "tblFieldDataGreenCardObservations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1007"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataGreenCardObservations 1007 Number": {
+    "table": "tblFieldDataGreenCardObservations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1007"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataGreenCardObservations 1007 Evidence_Code": {
+    "table": "tblFieldDataGreenCardObservations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1007"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataGreenCardObservations 1007 Stage": {
+    "table": "tblFieldDataGreenCardObservations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1007"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataGreenCardObservations 1007 Comments": {
+    "table": "tblFieldDataGreenCardObservations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1007"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataGreenCardObservations 1007 SSMA_TimeStamp": {
+    "table": "tblFieldDataGreenCardObservations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1007"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataMinnowTrapSurveys 1008 RecordID": {
+    "table": "tblFieldDataMinnowTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1008"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataMinnowTrapSurveys 1008 LocationID": {
+    "table": "tblFieldDataMinnowTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1008"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataMinnowTrapSurveys 1008 EventID": {
+    "table": "tblFieldDataMinnowTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1008"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataMinnowTrapSurveys 1008 Trap_#": {
+    "table": "tblFieldDataMinnowTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1008"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataMinnowTrapSurveys 1008 Species_Code": {
+    "table": "tblFieldDataMinnowTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1008"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataMinnowTrapSurveys 1008 Count": {
+    "table": "tblFieldDataMinnowTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1008"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataMinnowTrapSurveys 1008 Stage": {
+    "table": "tblFieldDataMinnowTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1008"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataMinnowTrapSurveys 1008 Comments": {
+    "table": "tblFieldDataMinnowTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1008"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataMinnowTrapSurveys 1008 SSMA_TimeStamp": {
+    "table": "tblFieldDataMinnowTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1008"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 RecordID": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 LocationID": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 EventID": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 SnakeID": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 CaptureMethod": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 Behavior": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 Species_Code": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 Sex": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 SVL": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 TLength": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 Weight": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 Gravid": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 Notes": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataSnakeDataCollection 1009 SSMA_TimeStamp": {
+    "table": "tblFieldDataSnakeDataCollection",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1009"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 RecordID": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 LocationID": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 EventID": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 Species_Code": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 Sex": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 Stage": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 Number": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 Habitat": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 Notch_Code": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 SnakeID": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 Recapture": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 Call_Index": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 Notes": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTimeConstrainedSearches 1010 SSMA_TimeStamp": {
+    "table": "tblFieldDataTimeConstrainedSearches",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1010"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 RecordID": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 LocationID": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 EventID": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Notch_Code": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Tag#": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Capture_Method": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Substrate_Temperature": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Habitat": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Behavior": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Species_Code": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Sex": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Age": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Carapace_Length": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Carapace_Width": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Plastron_Length": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Plastron_Width": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Weight": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Ectoparasites": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Gravid": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 Comments": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleMeasurements 1011 SSMA_TimeStamp": {
+    "table": "tblFieldDataTurtleMeasurements",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1011"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleTrapSurveys 1012 RecordID": {
+    "table": "tblFieldDataTurtleTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1012"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleTrapSurveys 1012 LocationID": {
+    "table": "tblFieldDataTurtleTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1012"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleTrapSurveys 1012 EventID": {
+    "table": "tblFieldDataTurtleTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1012"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleTrapSurveys 1012 Trap_#": {
+    "table": "tblFieldDataTurtleTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1012"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleTrapSurveys 1012 Trap_Type": {
+    "table": "tblFieldDataTurtleTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1012"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleTrapSurveys 1012 Species_Code": {
+    "table": "tblFieldDataTurtleTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1012"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleTrapSurveys 1012 Sex": {
+    "table": "tblFieldDataTurtleTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1012"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleTrapSurveys 1012 Notch_Code": {
+    "table": "tblFieldDataTurtleTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1012"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleTrapSurveys 1012 Recapture": {
+    "table": "tblFieldDataTurtleTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1012"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleTrapSurveys 1012 Comments": {
+    "table": "tblFieldDataTurtleTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1012"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataTurtleTrapSurveys 1012 SSMA_TimeStamp": {
+    "table": "tblFieldDataTurtleTrapSurveys",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1012"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataWaterProperties 1013 RecordID": {
+    "table": "tblFieldDataWaterProperties",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1013"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataWaterProperties 1013 LocationID": {
+    "table": "tblFieldDataWaterProperties",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1013"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataWaterProperties 1013 EventID": {
+    "table": "tblFieldDataWaterProperties",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1013"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataWaterProperties 1013 TempC": {
+    "table": "tblFieldDataWaterProperties",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1013"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataWaterProperties 1013 Salinity": {
+    "table": "tblFieldDataWaterProperties",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1013"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataWaterProperties 1013 Conductivity": {
+    "table": "tblFieldDataWaterProperties",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1013"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataWaterProperties 1013 pH": {
+    "table": "tblFieldDataWaterProperties",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1013"
+  },
+  "ASIS_20161108_HerpInv_Database tblFieldDataWaterProperties 1013 SSMA_TimeStamp": {
+    "table": "tblFieldDataWaterProperties",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1013"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 LocationID": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 ParkCode": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 Project": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 SiteID": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 StartUTMX": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 StartUTMY": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 StopUTMX": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 StopUTMY": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 UtmZone": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 StartLat": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 StartLon": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 StopLat": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 StopLon": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 Datum": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 EstHError": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 AccNotes": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 Elevation": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 EstVError": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 Aspect": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 Slope": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 Notes": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 Habitat": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocations 1014 SSMA_TimeStamp": {
+    "table": "tblLocations",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1014"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocationsPoints 1015 LocationID": {
+    "table": "tblLocationsPoints",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1015"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocationsPoints 1015 PointID": {
+    "table": "tblLocationsPoints",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1015"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocationsPoints 1015 UTMX": {
+    "table": "tblLocationsPoints",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1015"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocationsPoints 1015 UTMY": {
+    "table": "tblLocationsPoints",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1015"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocationsPoints 1015 LatY": {
+    "table": "tblLocationsPoints",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1015"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocationsPoints 1015 LonX": {
+    "table": "tblLocationsPoints",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1015"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocationsPoints 1015 EstHError": {
+    "table": "tblLocationsPoints",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1015"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocationsPoints 1015 AccCategory": {
+    "table": "tblLocationsPoints",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1015"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocationsPoints 1015 UtmZone": {
+    "table": "tblLocationsPoints",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1015"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocationsPoints 1015 Datum": {
+    "table": "tblLocationsPoints",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1015"
+  },
+  "ASIS_20161108_HerpInv_Database tblLocationsPoints 1015 SSMA_TimeStamp": {
+    "table": "tblLocationsPoints",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1015"
+  },
+  "ASIS_20161108_HerpInv_Database tblNativity_LU 1016 NativityID": {
+    "table": "tblNativity_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1016"
+  },
+  "ASIS_20161108_HerpInv_Database tblNativity_LU 1016 Nativity": {
+    "table": "tblNativity_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1016"
+  },
+  "ASIS_20161108_HerpInv_Database tblNativity_LU 1016 NativityText": {
+    "table": "tblNativity_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1016"
+  },
+  "ASIS_20161108_HerpInv_Database tblNativity_LU 1016 SSMA_TimeStamp": {
+    "table": "tblNativity_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1016"
+  },
+  "ASIS_20161108_HerpInv_Database tblParkStatus_LU 1017 ParkStatusID": {
+    "table": "tblParkStatus_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1017"
+  },
+  "ASIS_20161108_HerpInv_Database tblParkStatus_LU 1017 ParkStatus": {
+    "table": "tblParkStatus_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1017"
+  },
+  "ASIS_20161108_HerpInv_Database tblParkStatus_LU 1017 ParkStatusText": {
+    "table": "tblParkStatus_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1017"
+  },
+  "ASIS_20161108_HerpInv_Database tblParkStatus_LU 1017 SSMA_TimeStamp": {
+    "table": "tblParkStatus_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1017"
+  },
+  "ASIS_20161108_HerpInv_Database tblResidency_LU 1018 ResidencyID": {
+    "table": "tblResidency_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1018"
+  },
+  "ASIS_20161108_HerpInv_Database tblResidency_LU 1018 Residency": {
+    "table": "tblResidency_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1018"
+  },
+  "ASIS_20161108_HerpInv_Database tblResidency_LU 1018 ResidencyText": {
+    "table": "tblResidency_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1018"
+  },
+  "ASIS_20161108_HerpInv_Database tblResidency_LU 1018 SSMA_TimeStamp": {
+    "table": "tblResidency_LU",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1018"
+  },
+  "ASIS_20161108_HerpInv_Database tlinkObservers 1019 EventID": {
+    "table": "tlinkObservers",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1019"
+  },
+  "ASIS_20161108_HerpInv_Database tlinkObservers 1019 ObsInits": {
+    "table": "tlinkObservers",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1019"
+  },
+  "ASIS_20161108_HerpInv_Database tluBehavior 1020 Behavior": {
+    "table": "tluBehavior",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1020"
+  },
+  "ASIS_20161108_HerpInv_Database tluBehavior 1020 Description": {
+    "table": "tluBehavior",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1020"
+  },
+  "ASIS_20161108_HerpInv_Database tluCallIndex 1021 CallIndex": {
+    "table": "tluCallIndex",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1021"
+  },
+  "ASIS_20161108_HerpInv_Database tluCallIndex 1021 Description": {
+    "table": "tluCallIndex",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1021"
+  },
+  "ASIS_20161108_HerpInv_Database tluCaptureMethod 1022 CaptureMethod": {
+    "table": "tluCaptureMethod",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1022"
+  },
+  "ASIS_20161108_HerpInv_Database tluCaptureMethod 1022 Description": {
+    "table": "tluCaptureMethod",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1022"
+  },
+  "ASIS_20161108_HerpInv_Database tluEggMassStages 1023 StageCode": {
+    "table": "tluEggMassStages",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1023"
+  },
+  "ASIS_20161108_HerpInv_Database tluEggMassStages 1023 Description": {
+    "table": "tluEggMassStages",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1023"
+  },
+  "ASIS_20161108_HerpInv_Database tluEggMassStages 1023 GosnerStages": {
+    "table": "tluEggMassStages",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1023"
+  },
+  "ASIS_20161108_HerpInv_Database tluEggMassStages 1023 SortOrder": {
+    "table": "tluEggMassStages",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1023"
+  },
+  "ASIS_20161108_HerpInv_Database tluEvidenceCode 1024 Evidence_Code": {
+    "table": "tluEvidenceCode",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1024"
+  },
+  "ASIS_20161108_HerpInv_Database tluEvidenceCode 1024 Text": {
+    "table": "tluEvidenceCode",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1024"
+  },
+  "ASIS_20161108_HerpInv_Database tluHabitat 1025 Habitat": {
+    "table": "tluHabitat",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1025"
+  },
+  "ASIS_20161108_HerpInv_Database tluHabitat 1025 Description": {
+    "table": "tluHabitat",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1025"
+  },
+  "ASIS_20161108_HerpInv_Database tluHabitat 1025 SortOrder": {
+    "table": "tluHabitat",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1025"
+  },
+  "ASIS_20161108_HerpInv_Database tluHabitat 1025 SSMA_TimeStamp": {
+    "table": "tluHabitat",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1025"
+  },
+  "ASIS_20161108_HerpInv_Database tluMicroHabitat 1026 Habitat": {
+    "table": "tluMicroHabitat",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1026"
+  },
+  "ASIS_20161108_HerpInv_Database tluMicroHabitat 1026 Description": {
+    "table": "tluMicroHabitat",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1026"
+  },
+  "ASIS_20161108_HerpInv_Database tluMicroHabitat 1026 SortOrder": {
+    "table": "tluMicroHabitat",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1026"
+  },
+  "ASIS_20161108_HerpInv_Database tluMicroHabitat 1026 SSMA_TimeStamp": {
+    "table": "tluMicroHabitat",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1026"
+  },
+  "ASIS_20161108_HerpInv_Database tluParkCode 1027 PARKCODE": {
+    "table": "tluParkCode",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1027"
+  },
+  "ASIS_20161108_HerpInv_Database tluParkCode 1027 PARKNAME": {
+    "table": "tluParkCode",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1027"
+  },
+  "ASIS_20161108_HerpInv_Database tluParkCode 1027 PARKTYPE": {
+    "table": "tluParkCode",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1027"
+  },
+  "ASIS_20161108_HerpInv_Database tluProject 1028 Project": {
+    "table": "tluProject",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1028"
+  },
+  "ASIS_20161108_HerpInv_Database tluProject 1028 Description": {
+    "table": "tluProject",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1028"
+  },
+  "ASIS_20161108_HerpInv_Database tluSampleZone 1029 SampleZone": {
+    "table": "tluSampleZone",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1029"
+  },
+  "ASIS_20161108_HerpInv_Database tluSampleZone 1029 Description": {
+    "table": "tluSampleZone",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1029"
+  },
+  "ASIS_20161108_HerpInv_Database tluSpecies 1030 Species_Code": {
+    "table": "tluSpecies",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1030"
+  },
+  "ASIS_20161108_HerpInv_Database tluSpecies 1030 Scientific_Name": {
+    "table": "tluSpecies",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1030"
+  },
+  "ASIS_20161108_HerpInv_Database tluSpecies 1030 Common_Name": {
+    "table": "tluSpecies",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1030"
+  },
+  "ASIS_20161108_HerpInv_Database tluSpecies 1030 TSN": {
+    "table": "tluSpecies",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1030"
+  },
+  "ASIS_20161108_HerpInv_Database tluStage 1031 Stage": {
+    "table": "tluStage",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1031"
+  },
+  "ASIS_20161108_HerpInv_Database tluStage 1031 Description": {
+    "table": "tluStage",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1031"
+  },
+  "ASIS_20161108_HerpInv_Database tluStage 1031 SortOrder": {
+    "table": "tluStage",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1031"
+  },
+  "ASIS_20161108_HerpInv_Database tluSubstrate 1032 Substrate": {
+    "table": "tluSubstrate",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1032"
+  },
+  "ASIS_20161108_HerpInv_Database tluSubstrate 1032 Description": {
+    "table": "tluSubstrate",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1032"
+  },
+  "ASIS_20161108_HerpInv_Database tluWeather 1033 Weather": {
+    "table": "tluWeather",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1033"
+  },
+  "ASIS_20161108_HerpInv_Database tluWeather 1033 SortID": {
+    "table": "tluWeather",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1033"
+  },
+  "ASIS_20161108_HerpInv_Database tluWindSpeed 1034 WindCode": {
+    "table": "tluWindSpeed",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1034"
+  },
+  "ASIS_20161108_HerpInv_Database tluWindSpeed 1034 Description": {
+    "table": "tluWindSpeed",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1034"
+  },
+  "ASIS_20161108_HerpInv_Database sysdiagrams 1035 name": {
+    "table": "sysdiagrams",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1035"
+  },
+  "ASIS_20161108_HerpInv_Database sysdiagrams 1035 principal_id": {
+    "table": "sysdiagrams",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1035"
+  },
+  "ASIS_20161108_HerpInv_Database sysdiagrams 1035 diagram_id": {
+    "table": "sysdiagrams",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1035"
+  },
+  "ASIS_20161108_HerpInv_Database sysdiagrams 1035 version": {
+    "table": "sysdiagrams",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1035"
+  },
+  "ASIS_20161108_HerpInv_Database sysdiagrams 1035 definition": {
+    "table": "sysdiagrams",
+    "source": "ASIS_20161108_HerpInv_Database",
+    "code": "1035"
+  }
+}

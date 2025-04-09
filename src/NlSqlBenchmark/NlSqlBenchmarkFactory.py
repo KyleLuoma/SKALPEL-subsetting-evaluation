@@ -11,14 +11,16 @@ class NlSqlBenchmarkFactory:
         "snails",
         "spider",
         "spider2",
-        "bird"
+        "bird",
+        "abstract"
     ]
 
     benchmark_build_dict = {
         "snails": (SnailsNlSqlBenchmark, {"kill_container_on_exit": False, "db_host_profile": "sqlite", "sql_dialect": "sqlite"}),
         # "spider": (SpiderNlSqlBenchmark, {}),
         "spider2": (Spider2NlSqlBenchmark, {}),
-        "bird": (BirdNlSqlBenchmark, {})
+        "bird": (BirdNlSqlBenchmark, {}),
+        "abstract": (NlSqlBenchmark, {})
     }
 
     def __init__(self):

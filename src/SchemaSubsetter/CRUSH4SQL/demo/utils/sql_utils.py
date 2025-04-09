@@ -12,10 +12,16 @@ file_dir = os.path.dirname(os.path.abspath(__file__))
 json_file_path = os.path.join(file_dir, 'relation_map_for_unclean.json')
 RELATION_MAP = json.load(open(json_file_path))
 
-def create_schema(selected_lst):
-    file_dir = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(file_dir, 'ndap_super.json')
-    ndap_meta = json.load(open(file_path))
+# Skalpel mod: added schema meta as input
+def create_schema(selected_lst, schema_meta: dict = None, local_relation_map = None):
+    if local_relation_map != None:
+        RELATION_MAP = local_relation_map
+    if schema_meta == None:
+        file_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(file_dir, 'ndap_super.json')
+        ndap_meta = json.load(open(file_path))
+    else:
+        ndap_meta = schema_meta
     schema = defaultdict(list)
     for item in selected_lst:
         table_source = RELATION_MAP[item]['source']
@@ -28,7 +34,7 @@ def create_schema(selected_lst):
 
     for key in schema.keys():
         table_code = key.split(' ')[-1]
-        key_columns = ndap_meta[table_code]['key_columns']
+        key_columns = ndap_meta[int(table_code)]['key_columns']
         schema[key] = schema[key] + [key_column for key_column in key_columns if key_column.strip() not in schema[key]]
 
     return schema

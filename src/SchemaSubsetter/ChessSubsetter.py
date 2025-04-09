@@ -39,17 +39,16 @@ class ChessSubsetter(SchemaSubsetter):
 
     def __init__(
             self,
-            benchmark: NlSqlBenchmark,
-            do_preprocessing: bool = False,
-            overwrite_preprocessed: bool = False
+            benchmark: NlSqlBenchmark
     ):
         
         self.benchmark = benchmark
         self.db_root_directory = Path("./src/SchemaSubsetter/CHESS/data")
         self.result_directory = Path("./src/SchemaSubsetter/CHESS/results")
 
-        parser = argparse.ArgumentParser()
-        args = parser.parse_args()
+        class DummyArgs:
+            pass
+        args = DummyArgs()
         args.data_mode = 'dev'
         args.data_path = None
         args.config = "./src/SchemaSubsetter/CHESS/run/configs/CHESS_IR_SS.yaml"
@@ -62,26 +61,19 @@ class ChessSubsetter(SchemaSubsetter):
         args.verbose=True
         self.args = args
         self.name = ChessSubsetter.name
-        self.overwrite_preprocessed = overwrite_preprocessed
 
         with open(args.config, 'r') as file:
             self.config=yaml.safe_load(file)
-
-        with open(f"./subsetting_results/preprocessing_times/chess_{benchmark.name}_processing.json", "wt") as f:
-            json.dump({"processing_time": -1}, f)
-        if do_preprocessing:
-            s_time = time.perf_counter()
-            self.preprocess_databases(exist_ok=self.overwrite_preprocessed)
-            e_time = time.perf_counter()
-            print("Time to process", self.benchmark.name, "schemas was", str(e_time - s_time))
-            with open(f"./subsetting_results/preprocessing_times/chess_{benchmark.name}_processing.json", "wt") as f:
-                json.dump({"processing_time_seconds": e_time - s_time}, f)
         self.team = build_team(self.config)
 
 
-    def preprocess_databases(self, exist_ok: bool = True):
+    def preprocess_databases(self, exist_ok: bool = True) -> dict[str, float]:
+
+        processing_times = {}
 
         for database in self.benchmark.databases:
+
+            s_time = time.perf_counter()
 
             db_dir = self.db_root_directory / "dev_databases" / database
 
@@ -105,6 +97,11 @@ class ChessSubsetter(SchemaSubsetter):
                 db_directory_path=db_dir,
                 benchmark=self.benchmark
             )
+
+            e_time = time.perf_counter()
+            processing_times[database] = e_time - s_time
+
+        return processing_times
 
 
     def get_schema_subset(self, benchmark_question: BenchmarkQuestion) -> SchemaSubsetterResult:

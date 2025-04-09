@@ -1,0 +1,578 @@
+
+{
+  "card_games cards 1029 id": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 artist": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 asciiName": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 availability": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 borderColor": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 cardKingdomFoilId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 cardKingdomId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 colorIdentity": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 colorIndicator": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 colors": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 convertedManaCost": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 duelDeck": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 edhrecRank": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 faceConvertedManaCost": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 faceName": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 flavorName": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 flavorText": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 frameEffects": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 frameVersion": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 hand": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 hasAlternativeDeckLimit": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 hasContentWarning": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 hasFoil": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 hasNonFoil": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 isAlternative": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 isFullArt": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 isOnlineOnly": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 isOversized": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 isPromo": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 isReprint": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 isReserved": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 isStarter": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 isStorySpotlight": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 isTextless": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 isTimeshifted": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 keywords": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 layout": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 leadershipSkills": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 life": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 loyalty": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 manaCost": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 mcmId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 mcmMetaId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 mtgArenaId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 mtgjsonV4Id": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 mtgoFoilId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 mtgoId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 multiverseId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 name": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 number": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 originalReleaseDate": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 originalText": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 originalType": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 otherFaceIds": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 power": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 printings": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 promoTypes": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 purchaseUrls": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 rarity": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 scryfallId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 scryfallIllustrationId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 scryfallOracleId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 setCode": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 side": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 subtypes": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 supertypes": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 tcgplayerProductId": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 text": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 toughness": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 type": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 types": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 uuid": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 variations": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games cards 1029 watermark": {
+    "table": "cards",
+    "source": "card_games",
+    "code": "1029"
+  },
+  "card_games foreign_data 1030 id": {
+    "table": "foreign_data",
+    "source": "card_games",
+    "code": "1030"
+  },
+  "card_games foreign_data 1030 flavorText": {
+    "table": "foreign_data",
+    "source": "card_games",
+    "code": "1030"
+  },
+  "card_games foreign_data 1030 language": {
+    "table": "foreign_data",
+    "source": "card_games",
+    "code": "1030"
+  },
+  "card_games foreign_data 1030 multiverseid": {
+    "table": "foreign_data",
+    "source": "card_games",
+    "code": "1030"
+  },
+  "card_games foreign_data 1030 name": {
+    "table": "foreign_data",
+    "source": "card_games",
+    "code": "1030"
+  },
+  "card_games foreign_data 1030 text": {
+    "table": "foreign_data",
+    "source": "card_games",
+    "code": "1030"
+  },
+  "card_games foreign_data 1030 type": {
+    "table": "foreign_data",
+    "source": "card_games",
+    "code": "1030"
+  },
+  "card_games foreign_data 1030 uuid": {
+    "table": "foreign_data",
+    "source": "card_games",
+    "code": "1030"
+  },
+  "card_games legalities 1031 id": {
+    "table": "legalities",
+    "source": "card_games",
+    "code": "1031"
+  },
+  "card_games legalities 1031 format": {
+    "table": "legalities",
+    "source": "card_games",
+    "code": "1031"
+  },
+  "card_games legalities 1031 status": {
+    "table": "legalities",
+    "source": "card_games",
+    "code": "1031"
+  },
+  "card_games legalities 1031 uuid": {
+    "table": "legalities",
+    "source": "card_games",
+    "code": "1031"
+  },
+  "card_games sets 1032 id": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 baseSetSize": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 block": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 booster": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 code": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 isFoilOnly": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 isForeignOnly": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 isNonFoilOnly": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 isOnlineOnly": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 isPartialPreview": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 keyruneCode": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 mcmId": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 mcmIdExtras": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 mcmName": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 mtgoCode": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 name": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 parentCode": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 releaseDate": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 tcgplayerGroupId": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 totalSetSize": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games sets 1032 type": {
+    "table": "sets",
+    "source": "card_games",
+    "code": "1032"
+  },
+  "card_games set_translations 1033 id": {
+    "table": "set_translations",
+    "source": "card_games",
+    "code": "1033"
+  },
+  "card_games set_translations 1033 language": {
+    "table": "set_translations",
+    "source": "card_games",
+    "code": "1033"
+  },
+  "card_games set_translations 1033 setCode": {
+    "table": "set_translations",
+    "source": "card_games",
+    "code": "1033"
+  },
+  "card_games set_translations 1033 translation": {
+    "table": "set_translations",
+    "source": "card_games",
+    "code": "1033"
+  },
+  "card_games rulings 1034 id": {
+    "table": "rulings",
+    "source": "card_games",
+    "code": "1034"
+  },
+  "card_games rulings 1034 date": {
+    "table": "rulings",
+    "source": "card_games",
+    "code": "1034"
+  },
+  "card_games rulings 1034 text": {
+    "table": "rulings",
+    "source": "card_games",
+    "code": "1034"
+  },
+  "card_games rulings 1034 uuid": {
+    "table": "rulings",
+    "source": "card_games",
+    "code": "1034"
+  }
+}

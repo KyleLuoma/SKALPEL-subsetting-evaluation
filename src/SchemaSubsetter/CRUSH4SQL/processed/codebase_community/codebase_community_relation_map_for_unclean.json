@@ -1,0 +1,358 @@
+
+{
+  "codebase_community badges 1067 Id": {
+    "table": "badges",
+    "source": "codebase_community",
+    "code": "1067"
+  },
+  "codebase_community badges 1067 UserId": {
+    "table": "badges",
+    "source": "codebase_community",
+    "code": "1067"
+  },
+  "codebase_community badges 1067 Name": {
+    "table": "badges",
+    "source": "codebase_community",
+    "code": "1067"
+  },
+  "codebase_community badges 1067 Date": {
+    "table": "badges",
+    "source": "codebase_community",
+    "code": "1067"
+  },
+  "codebase_community comments 1068 Id": {
+    "table": "comments",
+    "source": "codebase_community",
+    "code": "1068"
+  },
+  "codebase_community comments 1068 PostId": {
+    "table": "comments",
+    "source": "codebase_community",
+    "code": "1068"
+  },
+  "codebase_community comments 1068 Score": {
+    "table": "comments",
+    "source": "codebase_community",
+    "code": "1068"
+  },
+  "codebase_community comments 1068 Text": {
+    "table": "comments",
+    "source": "codebase_community",
+    "code": "1068"
+  },
+  "codebase_community comments 1068 CreationDate": {
+    "table": "comments",
+    "source": "codebase_community",
+    "code": "1068"
+  },
+  "codebase_community comments 1068 UserId": {
+    "table": "comments",
+    "source": "codebase_community",
+    "code": "1068"
+  },
+  "codebase_community comments 1068 UserDisplayName": {
+    "table": "comments",
+    "source": "codebase_community",
+    "code": "1068"
+  },
+  "codebase_community postHistory 1069 Id": {
+    "table": "postHistory",
+    "source": "codebase_community",
+    "code": "1069"
+  },
+  "codebase_community postHistory 1069 PostHistoryTypeId": {
+    "table": "postHistory",
+    "source": "codebase_community",
+    "code": "1069"
+  },
+  "codebase_community postHistory 1069 PostId": {
+    "table": "postHistory",
+    "source": "codebase_community",
+    "code": "1069"
+  },
+  "codebase_community postHistory 1069 RevisionGUID": {
+    "table": "postHistory",
+    "source": "codebase_community",
+    "code": "1069"
+  },
+  "codebase_community postHistory 1069 CreationDate": {
+    "table": "postHistory",
+    "source": "codebase_community",
+    "code": "1069"
+  },
+  "codebase_community postHistory 1069 UserId": {
+    "table": "postHistory",
+    "source": "codebase_community",
+    "code": "1069"
+  },
+  "codebase_community postHistory 1069 Text": {
+    "table": "postHistory",
+    "source": "codebase_community",
+    "code": "1069"
+  },
+  "codebase_community postHistory 1069 Comment": {
+    "table": "postHistory",
+    "source": "codebase_community",
+    "code": "1069"
+  },
+  "codebase_community postHistory 1069 UserDisplayName": {
+    "table": "postHistory",
+    "source": "codebase_community",
+    "code": "1069"
+  },
+  "codebase_community postLinks 1070 Id": {
+    "table": "postLinks",
+    "source": "codebase_community",
+    "code": "1070"
+  },
+  "codebase_community postLinks 1070 CreationDate": {
+    "table": "postLinks",
+    "source": "codebase_community",
+    "code": "1070"
+  },
+  "codebase_community postLinks 1070 PostId": {
+    "table": "postLinks",
+    "source": "codebase_community",
+    "code": "1070"
+  },
+  "codebase_community postLinks 1070 RelatedPostId": {
+    "table": "postLinks",
+    "source": "codebase_community",
+    "code": "1070"
+  },
+  "codebase_community postLinks 1070 LinkTypeId": {
+    "table": "postLinks",
+    "source": "codebase_community",
+    "code": "1070"
+  },
+  "codebase_community posts 1071 Id": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 PostTypeId": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 AcceptedAnswerId": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 CreaionDate": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 Score": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 ViewCount": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 Body": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 OwnerUserId": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 LasActivityDate": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 Title": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 Tags": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 AnswerCount": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 CommentCount": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 FavoriteCount": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 LastEditorUserId": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 LastEditDate": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 CommunityOwnedDate": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 ParentId": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 ClosedDate": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 OwnerDisplayName": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community posts 1071 LastEditorDisplayName": {
+    "table": "posts",
+    "source": "codebase_community",
+    "code": "1071"
+  },
+  "codebase_community tags 1072 Id": {
+    "table": "tags",
+    "source": "codebase_community",
+    "code": "1072"
+  },
+  "codebase_community tags 1072 TagName": {
+    "table": "tags",
+    "source": "codebase_community",
+    "code": "1072"
+  },
+  "codebase_community tags 1072 Count": {
+    "table": "tags",
+    "source": "codebase_community",
+    "code": "1072"
+  },
+  "codebase_community tags 1072 ExcerptPostId": {
+    "table": "tags",
+    "source": "codebase_community",
+    "code": "1072"
+  },
+  "codebase_community tags 1072 WikiPostId": {
+    "table": "tags",
+    "source": "codebase_community",
+    "code": "1072"
+  },
+  "codebase_community users 1073 Id": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 Reputation": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 CreationDate": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 DisplayName": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 LastAccessDate": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 WebsiteUrl": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 Location": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 AboutMe": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 Views": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 UpVotes": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 DownVotes": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 AccountId": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 Age": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community users 1073 ProfileImageUrl": {
+    "table": "users",
+    "source": "codebase_community",
+    "code": "1073"
+  },
+  "codebase_community votes 1074 Id": {
+    "table": "votes",
+    "source": "codebase_community",
+    "code": "1074"
+  },
+  "codebase_community votes 1074 PostId": {
+    "table": "votes",
+    "source": "codebase_community",
+    "code": "1074"
+  },
+  "codebase_community votes 1074 VoteTypeId": {
+    "table": "votes",
+    "source": "codebase_community",
+    "code": "1074"
+  },
+  "codebase_community votes 1074 CreationDate": {
+    "table": "votes",
+    "source": "codebase_community",
+    "code": "1074"
+  },
+  "codebase_community votes 1074 UserId": {
+    "table": "votes",
+    "source": "codebase_community",
+    "code": "1074"
+  },
+  "codebase_community votes 1074 BountyAmount": {
+    "table": "votes",
+    "source": "codebase_community",
+    "code": "1074"
+  }
+}

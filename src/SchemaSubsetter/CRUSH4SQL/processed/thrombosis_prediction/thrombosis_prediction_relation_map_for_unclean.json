@@ -1,0 +1,323 @@
+
+{
+  "thrombosis_prediction Examination 1042 ID": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 Examination Date": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 aCL IgG": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 aCL IgM": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 ANA": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 ANA Pattern": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 aCL IgA": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 Diagnosis": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 KCT": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 RVVT": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 LAC": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 Symptoms": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Examination 1042 Thrombosis": {
+    "table": "Examination",
+    "source": "thrombosis_prediction",
+    "code": "1042"
+  },
+  "thrombosis_prediction Patient 1043 ID": {
+    "table": "Patient",
+    "source": "thrombosis_prediction",
+    "code": "1043"
+  },
+  "thrombosis_prediction Patient 1043 SEX": {
+    "table": "Patient",
+    "source": "thrombosis_prediction",
+    "code": "1043"
+  },
+  "thrombosis_prediction Patient 1043 Birthday": {
+    "table": "Patient",
+    "source": "thrombosis_prediction",
+    "code": "1043"
+  },
+  "thrombosis_prediction Patient 1043 Description": {
+    "table": "Patient",
+    "source": "thrombosis_prediction",
+    "code": "1043"
+  },
+  "thrombosis_prediction Patient 1043 First Date": {
+    "table": "Patient",
+    "source": "thrombosis_prediction",
+    "code": "1043"
+  },
+  "thrombosis_prediction Patient 1043 Admission": {
+    "table": "Patient",
+    "source": "thrombosis_prediction",
+    "code": "1043"
+  },
+  "thrombosis_prediction Patient 1043 Diagnosis": {
+    "table": "Patient",
+    "source": "thrombosis_prediction",
+    "code": "1043"
+  },
+  "thrombosis_prediction Laboratory 1044 ID": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 Date": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 GOT": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 GPT": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 LDH": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 ALP": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 TP": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 ALB": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 UA": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 UN": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 CRE": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 T-BIL": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 T-CHO": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 TG": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 CPK": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 GLU": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 WBC": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 RBC": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 HGB": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 HCT": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 PLT": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 PT": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 APTT": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 FG": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 PIC": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 TAT": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 TAT2": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 U-PRO": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 IGG": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 IGA": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 IGM": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 CRP": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 RA": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 RF": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 C3": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 C4": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 RNP": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 SM": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 SC170": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 SSA": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 SSB": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 CENTROMEA": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 DNA": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  },
+  "thrombosis_prediction Laboratory 1044 DNA-II": {
+    "table": "Laboratory",
+    "source": "thrombosis_prediction",
+    "code": "1044"
+  }
+}

@@ -23,6 +23,7 @@ class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
     def __init__(self):
         super().__init__()                                                                                                                                                                                                                                                                                                                                          
         self.query_profiler = QueryProfiler()
+        self.name = PerfectSchemaSubsetter.name
 
 
 

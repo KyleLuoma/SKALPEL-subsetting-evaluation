@@ -71,7 +71,9 @@ def get_scored_docs(
     api_key,
     endpoint,
     api_version,
-    aggr_type='max'
+    aggr_type='max',
+    processed_benchmark_filepath: str = None, #Skalpel modification
+    database_name: str = None #Skalpel modification
 ):
     """
     Get scored documents based on the similarity between input segments and precomputed document embeddings.
@@ -88,25 +90,36 @@ def get_scored_docs(
     """
     A = []
     for segment in segments:
-        A.append(get_openai_embedding(segment, api_type, api_key, endpoint, api_version))
+        embedding = get_openai_embedding(segment, api_type, api_key, endpoint, api_version)
+        A.append(embedding)
     #A = torch.stack(A).to(device)                                         # num_of_segments x d                                                      
     A = torch.stack(A)                                                     # num_of_segments x d                                                      
         
     #A = get_openai_embedding(segments, api_key, endpoint)                 # num_of_segments x d -> WRONG
     #A = get_contextual_emb(question, segments)                            # num_of_segments x d
 
-    file_dir = os.path.dirname(os.path.realpath(__file__))
+    if processed_benchmark_filepath == None:
+        file_dir = os.path.dirname(os.path.realpath(__file__))
+    else:
+        file_dir = processed_benchmark_filepath
 
-    doc_file_path = os.path.join(file_dir, 'ndap_super_flat_unclean.txt')
+    if database_name == None:
+        doc_file_path = os.path.join(file_dir, 'ndap_super_flat_unclean.txt')
+    else: #Skalpel mod
+        doc_file_path = os.path.join(file_dir, f'{database_name}_super_flat_unclean.txt')
     with open(doc_file_path, 'r') as fp:
         list_schema_elements = fp.readlines()
     list_schema_elements = [item.strip() for item in list_schema_elements]
     #print(len(list_schema_elements), list_schema_elements[:4])
 
-    embedding_file_path = os.path.join(file_dir, 'openai_docs_unclean_embedding.pickle')
+    if database_name == None:
+        embedding_file_path = os.path.join(file_dir, 'openai_docs_unclean_embedding.pickle')
+    else: #Skalpel mod
+        embedding_file_path = os.path.join(file_dir, f'{database_name}_openai_docs_unclean_embedding.pickle')
     with open(embedding_file_path, 'rb') as doc_pkl:
         #docs_embedding = pickle.load(doc_pkl).to(device)
-        docs_embedding = pickle.load(doc_pkl)
+        # docs_embedding = pickle.load(doc_pkl)
+        docs_embedding = torch.load(doc_pkl)
         #print(docs_embedding.shape)
 
     docs = ranking(A, docs_embedding, list_schema_elements, segments, aggr_type=aggr_type)

@@ -40,7 +40,7 @@ def main():
     benchmark_embedding.encode_benchmark(benchmark)
     benchmark_embedding.encode_benchmark_questions(benchmark)
     benchmark_embedding.encode_benchmark_gold_query_identifiers(benchmark=benchmark)
-    benchmark_embedding.encode_benchmark_values(benchmark=benchmark)
+    # benchmark_embedding.encode_benchmark_values(benchmark=benchmark) #All values no longer needed
     benchmark_embedding.encode_benchmark_gold_query_predicates(benchmark=benchmark)
     return
 

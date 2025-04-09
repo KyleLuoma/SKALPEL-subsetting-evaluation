@@ -1,0 +1,89 @@
+california_schools frpm 1026 CDSCode
+california_schools frpm 1026 Academic Year
+california_schools frpm 1026 County Code
+california_schools frpm 1026 District Code
+california_schools frpm 1026 School Code
+california_schools frpm 1026 County Name
+california_schools frpm 1026 District Name
+california_schools frpm 1026 School Name
+california_schools frpm 1026 District Type
+california_schools frpm 1026 School Type
+california_schools frpm 1026 Educational Option Type
+california_schools frpm 1026 NSLP Provision Status
+california_schools frpm 1026 Charter School (Y/N)
+california_schools frpm 1026 Charter School Number
+california_schools frpm 1026 Charter Funding Type
+california_schools frpm 1026 IRC
+california_schools frpm 1026 Low Grade
+california_schools frpm 1026 High Grade
+california_schools frpm 1026 Enrollment (K-12)
+california_schools frpm 1026 Free Meal Count (K-12)
+california_schools frpm 1026 Percent (%) Eligible Free (K-12)
+california_schools frpm 1026 FRPM Count (K-12)
+california_schools frpm 1026 Percent (%) Eligible FRPM (K-12)
+california_schools frpm 1026 Enrollment (Ages 5-17)
+california_schools frpm 1026 Free Meal Count (Ages 5-17)
+california_schools frpm 1026 Percent (%) Eligible Free (Ages 5-17)
+california_schools frpm 1026 FRPM Count (Ages 5-17)
+california_schools frpm 1026 Percent (%) Eligible FRPM (Ages 5-17)
+california_schools frpm 1026 2013-14 CALPADS Fall 1 Certification Status
+california_schools satscores 1027 cds
+california_schools satscores 1027 rtype
+california_schools satscores 1027 sname
+california_schools satscores 1027 dname
+california_schools satscores 1027 cname
+california_schools satscores 1027 enroll12
+california_schools satscores 1027 NumTstTakr
+california_schools satscores 1027 AvgScrRead
+california_schools satscores 1027 AvgScrMath
+california_schools satscores 1027 AvgScrWrite
+california_schools satscores 1027 NumGE1500
+california_schools schools 1028 CDSCode
+california_schools schools 1028 NCESDist
+california_schools schools 1028 NCESSchool
+california_schools schools 1028 StatusType
+california_schools schools 1028 County
+california_schools schools 1028 District
+california_schools schools 1028 School
+california_schools schools 1028 Street
+california_schools schools 1028 StreetAbr
+california_schools schools 1028 City
+california_schools schools 1028 Zip
+california_schools schools 1028 State
+california_schools schools 1028 MailStreet
+california_schools schools 1028 MailStrAbr
+california_schools schools 1028 MailCity
+california_schools schools 1028 MailZip
+california_schools schools 1028 MailState
+california_schools schools 1028 Phone
+california_schools schools 1028 Ext
+california_schools schools 1028 Website
+california_schools schools 1028 OpenDate
+california_schools schools 1028 ClosedDate
+california_schools schools 1028 Charter
+california_schools schools 1028 CharterNum
+california_schools schools 1028 FundingType
+california_schools schools 1028 DOC
+california_schools schools 1028 DOCType
+california_schools schools 1028 SOC
+california_schools schools 1028 SOCType
+california_schools schools 1028 EdOpsCode
+california_schools schools 1028 EdOpsName
+california_schools schools 1028 EILCode
+california_schools schools 1028 EILName
+california_schools schools 1028 GSoffered
+california_schools schools 1028 GSserved
+california_schools schools 1028 Virtual
+california_schools schools 1028 Magnet
+california_schools schools 1028 Latitude
+california_schools schools 1028 Longitude
+california_schools schools 1028 AdmFName1
+california_schools schools 1028 AdmLName1
+california_schools schools 1028 AdmEmail1
+california_schools schools 1028 AdmFName2
+california_schools schools 1028 AdmLName2
+california_schools schools 1028 AdmEmail2
+california_schools schools 1028 AdmFName3
+california_schools schools 1028 AdmLName3
+california_schools schools 1028 AdmEmail3
+california_schools schools 1028 LastUpdate

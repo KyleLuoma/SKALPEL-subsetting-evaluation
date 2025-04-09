@@ -258,16 +258,18 @@ class QueryProfiler:
         query_to_parse = query_to_parse.replace('"', '\\"')
         if os.name != 'nt':
             query_to_parse = query_to_parse.replace("`", "\`")
-        response = subprocess.run(
+        encoded_response = subprocess.run(
             'java -jar "{j}" --query "{q}" --dialect {s}'.format(
                 j = self.__jar_path,
                 q = query_to_parse,
-                s = syntax
+                s = syntax,
+                text=True
             ),
             capture_output=True,
-            shell=self.use_shell
+            shell=self.use_shell,
+            text=True
         )
-        response = str(response)
+        response = str(encoded_response)
         # print("__parse_query DEBUG:", response)
         response = response.replace("\\n", "")
         response = response.replace("\\r", "")

@@ -463,6 +463,10 @@ SELECT text_value
 FROM text_value_embeddings
 """
 
+        get_distinct_text_values_query = """
+SELECT text_value from distinct_text_values
+"""
+
         add_to_distinct_text_values_query = """
 INSERT INTO distinct_text_values(
     text_value
@@ -481,6 +485,14 @@ INSERT INTO text_value_embeddings(
     %s,
     (%s)
 )
+"""
+
+        get_already_processed_tables = """
+SELECT distinct table_name
+FROM benchmark_text_values
+WHERE 
+    benchmark_name = '{}'
+    AND database_name = '{}'
 """
 
         insert_benchmark_text_value_query = """
@@ -502,11 +514,23 @@ INSERT INTO benchmark_text_values(
         cursor = self.db_conn.cursor()
         result = cursor.execute(get_encoded_query)
         already_encoded = [row[0].upper() for row in result.fetchall()]
+        result = cursor.execute(get_distinct_text_values_query)
+        already_in_distinct_text_values = [row[0].upper() for row in result.fetchall()]
 
         for db in benchmark.databases:
             schema = benchmark.get_active_schema(database=db)
+            result = cursor.execute(
+                get_already_processed_tables.format(
+                    benchmark.name,
+                    db
+                )
+            )
+            processed_tables = [row[0].upper() for row in result.fetchall()]
             for table in schema.tables:
+                if table.name.upper() in processed_tables:
+                    continue
                 for column in table.columns:
+                    # existing_values = [row[0].upper() for row in result.fetchall()]
                     # Ignore non-text columns:
                     if column.data_type.upper() not in text_types:
                         continue
@@ -525,25 +549,30 @@ INSERT INTO benchmark_text_values(
                     for v in tqdm(col_values, desc=f"Encoding values in {db}.{table.name}.{column.name}"):
                         if v == None or len(v) > 2700:
                             continue
-                        try:
-                            cursor.execute(
-                                add_to_distinct_text_values_query,
-                                [v]
-                            )
-                            self.db_conn.commit()
-                        except psycopg.errors.UniqueViolation as e:
-                            self.db_conn.commit()
-                        except psycopg.DataError as e:
-                            continue
-
+                        if v not in already_in_distinct_text_values:
+                            try:
+                                cursor.execute(
+                                    add_to_distinct_text_values_query,
+                                    [v]
+                                )
+                                self.db_conn.commit()
+                            except psycopg.errors.UniqueViolation as e:
+                                self.db_conn.commit()
+                            except psycopg.DataError as e:
+                                self.db_conn.commit()
+                                continue
                         try:
                             cursor.execute(
                                 query=insert_benchmark_text_value_query,
                                 params=[benchmark.name, db, table.name, column.name, v]
                             )
                         except psycopg.errors.UniqueViolation as e:
-                            pass
+                            self.db_conn.commit()
                         except psycopg.DataError as e:
+                            self.db_conn.commit()
+                            continue
+                        except psycopg.errors.ProgramLimitExceeded as e:
+                            self.db_conn.commit()
                             continue
                         if v.upper() in already_encoded:
                             self.db_conn.commit()
@@ -557,7 +586,7 @@ INSERT INTO benchmark_text_values(
                                 params=[v, self.model_name, v_emb]
                             )
                         except psycopg.errors.UniqueViolation as e:
-                            pass
+                            self.db_conn.commit()
                         self.db_conn.commit()
 
 

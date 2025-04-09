@@ -78,7 +78,8 @@ def get_hallucinated_segments(prompt_type, query, api_type, api_key, endpoint, a
         openai.api_base = endpoint
         openai.api_version = api_version 
 
-        deployment_name = 'prefix-text-davinci-003' #This will correspond to the custom name you chose for your deployment when you deployed a model. 
+        # deployment_name = 'prefix-text-davinci-003' #This will correspond to the custom name you chose for your deployment when you deployed a model. 
+        deployment_name = 'gpt-4o-mini-2024-07-18'
         response = openai.chat.completions.create(
             engine=deployment_name,
             prompt=prompt,
@@ -92,22 +93,25 @@ def get_hallucinated_segments(prompt_type, query, api_type, api_key, endpoint, a
     else:
         openai.api_key = api_key
         response = openai.chat.completions.create(
-            model="text-davinci-003",
-            prompt=prompt, 
+            # model="text-davinci-003",
+            model="gpt-4o-mini-2024-07-18",
+            # prompt=prompt, 
+            messages=[{"role": "developer", "content": prompt}],
             max_tokens=max_tokens,
             temperature=temperature,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0
         )
-        text = response.choices[0].text
+        text = response.choices[0].message.content
+        tokens = response.usage.total_tokens
 
     try:
         segments = [l for l in text.splitlines() if l != ""]
         segments = [segment.split(':')[1].strip() for segment in segments]
-        return segments
+        return segments, tokens
     except:
-        return [text]
+        return [text], tokens
 
 def main():
 

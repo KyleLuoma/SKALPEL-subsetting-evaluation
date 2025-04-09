@@ -147,6 +147,7 @@ def greedy_select(segments, docs, BUDGET):
         for i, segment in enumerate(segments):
             if covered[i] == 1:
                 continue
+                 
 
             lst_score = []              # list of (score, n) tuples
             for n_idx, n in enumerate(schema_items):
@@ -161,6 +162,9 @@ def greedy_select(segments, docs, BUDGET):
         i_dash, (s_dash, n_dash) = max(lst, key=lambda x: x[1][0])
         covered[i_dash] = 1
         selected.add(n_dash)
+        # To break the halt bug:
+        if sum(covered) == len(covered):
+            break
     return list(selected)
 
 def extract_predicted_tables_uncleaned(selected_lst, gold_tables, gold_codes):
