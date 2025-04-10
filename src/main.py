@@ -33,6 +33,7 @@ def main():
     parser = argparse.ArgumentParser(description="Run schema subsetting evaluation.")
     parser.add_argument("--subsetter_name", type=str, default="abstract", help="Name of the subsetter to use.")
     parser.add_argument("--benchmark_name", type=str, default="snails", help="Name of the benchmark to use.")
+    parser.add_argument("--recover_previous", action="store_true", default=False, help="Retrieve partial subsetting results for the provided configuration (Usefull if the process was interupted.)")
     parser.add_argument("--filename_comments", type=str, default="", help="Comments to append to the filename.")
     parser.add_argument("--cuda_device", type=int, default=None, help="CUDA device to use.")
     parser.add_argument("--verbose", action="store_true", default=False, help="Enable verbose output.")
@@ -44,11 +45,13 @@ def main():
 
     subsetter_name = args.subsetter_name
     benchmark_name = args.benchmark_name
+    recover_previous = args.recover_previous
     filename_comments = args.filename_comments
     cuda_device = args.cuda_device
     verbose = args.verbose
     subsetter_preprocessing = args.subsetter_preprocessing
     subset_generation = not args.no_subset_generation
+    
 
     global v_print
     if verbose:
@@ -82,7 +85,7 @@ def main():
         results, subsets_questions = generate_subsets(
             subsetter=subsetter, 
             benchmark=benchmark,
-            recover_previous=True,
+            recover_previous=recover_previous,
             filename_comments=filename_comments,
             bypass_databases=["SBODemoUS"]
             )

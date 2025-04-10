@@ -47,7 +47,7 @@ def get_snm(segment, n, n_idx, cos, selected, mean_entropy):
     else:
         return weight * cos[segment][n_idx]
 
-def get_eij(n, selected):
+def get_eij(n, selected, skalpel_relation_map = None):
     """
     Calculate the adjustment score for a given item `n` based on its relationship 
     to the items in the `selected` list.
@@ -66,6 +66,8 @@ def get_eij(n, selected):
     """
     if n in selected:
         return 0
+    if skalpel_relation_map != None:
+        RELATION_MAP = skalpel_relation_map
     adj_score = 0
     for item in selected:
         if RELATION_MAP[item]['code'] == RELATION_MAP[n]['code']:
@@ -76,7 +78,9 @@ def get_eij(n, selected):
             adj_score += REWARDS['diff_db']
     return adj_score
 
-def get_eij_modified(n, selected):
+def get_eij_modified(n, selected, skalpel_relation_map = None):
+    if skalpel_relation_map != None:
+        RELATION_MAP = skalpel_relation_map
     if n in selected:
         return 0
     adj_score = 0
@@ -91,12 +95,12 @@ def get_eij_modified(n, selected):
     adj_score = REWARDS['same_table']*(math.log(same_table_count+1)) + REWARDS['same_db']*(math.log(same_db_count+1))
     return adj_score
 
-def get_complete_score(segment, n, n_idx, cos, selected, mean_entropy):
+def get_complete_score(segment, n, n_idx, cos, selected, mean_entropy, skalpel_relation_map = None):
     snm = get_snm(segment, n, n_idx, cos, selected, mean_entropy)
     if USE_eij_MODIFIED:
-        eij = get_eij_modified(n, selected)
+        eij = get_eij_modified(n, selected, skalpel_relation_map)
     else:
-        eij = get_eij(n, selected)
+        eij = get_eij(n, selected, skalpel_relation_map)
     return (snm + eij, n)
 
 #%%
@@ -110,7 +114,7 @@ def get_data(docs, segments):
     return cos, schema_items
 
 # %%
-def greedy_select(segments, docs, BUDGET):
+def greedy_select(segments, docs, BUDGET, skalpel_relation_map = None):
     """
     Perform greedy selection of schema items based on segment scores.
 
@@ -130,6 +134,9 @@ def greedy_select(segments, docs, BUDGET):
         set: A set of selected schema item names.
     """
     cos, schema_items = get_data(docs, segments)
+    # Skalpel mod: limit loops to max number of iterations that should occur
+    max_checks = len(segments) * len(schema_items)
+    num_checks = 0
 
     list_entropies = []
     for segment in segments:
@@ -152,7 +159,7 @@ def greedy_select(segments, docs, BUDGET):
             lst_score = []              # list of (score, n) tuples
             for n_idx, n in enumerate(schema_items):
                 lst_score.append(
-                    get_complete_score(segment, n, n_idx, cos, selected, mean_entropy)
+                    get_complete_score(segment, n, n_idx, cos, selected, mean_entropy, skalpel_relation_map)
                 )
 
             s_dash, n_dash = max(lst_score, key=lambda x: x[0])
@@ -162,9 +169,11 @@ def greedy_select(segments, docs, BUDGET):
         i_dash, (s_dash, n_dash) = max(lst, key=lambda x: x[1][0])
         covered[i_dash] = 1
         selected.add(n_dash)
-        # To break the halt bug:
-        if sum(covered) == len(covered):
+        # Skalpel mod to break the halt bug:
+        if num_checks > max_checks:
             break
+        num_checks += 1
+
     return list(selected)
 
 def extract_predicted_tables_uncleaned(selected_lst, gold_tables, gold_codes):

@@ -19,7 +19,7 @@ def main():
     print(os.getcwd())
     naturalness = "Native"
     results_folder = "./subsetting_results"
-    results_filename = f"subsetting-CodeS-bird-{naturalness}-NVIDIA_RTX_2000.xlsx"
+    results_filename = f"subsetting-CodeS-spider2-{naturalness}-NVIDIA_RTX_2000.xlsx"
     results_df = pd.read_excel(f"{results_folder}/{results_filename}")
     filename_params = results_filename.split("-")
     subsetter_name = filename_params[1]

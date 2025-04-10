@@ -5,6 +5,7 @@ from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 from NlSqlBenchmark.SchemaObjects import (
     Schema, SchemaTable, TableColumn
 )
+from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
 import os
 
 def init_test():
@@ -15,6 +16,14 @@ def init_test():
     except:
         return False
 
+def get_schema_subset_test():
+    crush = Crush4SqlSubsetter(benchmark=BirdNlSqlBenchmark())
+    bm = BirdNlSqlBenchmark()
+    bm.set_active_question_number(1)
+    question = bm.get_active_question()
+    result = crush.get_schema_subset(question)
+    print(result.schema_subset)
+    return type(result) == SchemaSubsetterResult
 
 def flatten_schema_test():
     benchmark = NlSqlBenchmark()
@@ -108,8 +117,3 @@ def preprocess_database_test():
     return os.path.exists(relation_map_path)
 
 
-def get_schema_subset_test():
-    crush = Crush4SqlSubsetter(benchmark=BirdNlSqlBenchmark())
-    question = BirdNlSqlBenchmark().get_active_question()
-    subset = crush.get_schema_subset(question)
-    return type(subset) == Schema

@@ -422,6 +422,8 @@ INSERT INTO benchmark_gold_query_predicates(
                 column = key.split(" ")[1].replace("[", "").replace("]", "")
                 column = column.replace("`", "")
                 literal_value = value.split(" ")[1].replace("'", "")
+                if len(literal_value) == 0:
+                    continue
                 if literal_value[0] == "%":
                     literal_value = literal_value[1:]
                 if literal_value[-1] == "%":

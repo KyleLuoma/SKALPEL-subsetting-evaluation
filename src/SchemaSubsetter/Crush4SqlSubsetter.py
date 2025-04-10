@@ -71,7 +71,12 @@ class Crush4SqlSubsetter(SchemaSubsetter):
         )
         global RELATION_MAP
         RELATION_MAP = self.relation_maps[benchmark_question.schema.database]
-        greedy_docs = greedy_select(segments=segments, docs=scored_docs, BUDGET=20)
+        greedy_docs = greedy_select(
+            segments=segments, 
+            docs=scored_docs, 
+            BUDGET=20,
+            skalpel_relation_map=RELATION_MAP
+            )
 
         sql_input = {
             'question': benchmark_question.question,
@@ -133,9 +138,10 @@ class Crush4SqlSubsetter(SchemaSubsetter):
                     api_version=self.api_version
                 )
                 embeddings.append(embedding)
+            stacked_embeddings = torch.stack(embeddings)
             with open(processed_path / f"{db}_openai_docs_unclean_embedding.pickle", "wb") as file:
                 for embedding in embeddings:
-                    torch.save(torch.Tensor(embedding), file)
+                    torch.save(stacked_embeddings, file)
             e_time = time.perf_counter()
             processing_times[db] = e_time - s_time
         return processing_times
