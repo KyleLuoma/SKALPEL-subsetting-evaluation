@@ -130,7 +130,7 @@ def execute_query_sqlite_db_test():
 def execute_query_snowflake_db_test():
     bm = Spider2NlSqlBenchmark()
     try:
-        bm.execute_query(query="select 1", database="ETHEREUM_BLOCKCHAIN")
+        bm.execute_query(query="select 1", database="ETHEREUM_BLOCKCHAIN", use_result_caching=False)
         return True
     except Exception as e:
         return False
@@ -139,10 +139,17 @@ def execute_query_snowflake_db_test():
 def execute_query_bigquery_db_test():
     bm = Spider2NlSqlBenchmark()
     try:
-        bm.execute_query(query="select 1", database="bbc")
+        bm.execute_query(query="select 1", database="bbc", use_result_caching=False)
         return True
     except Exception as e:
         return False
+    
+
+def execute_query_bigquery_with_caching_test():
+    bm = Spider2NlSqlBenchmark()
+    result_no_cache = bm.execute_query(query="select 1", database="bbc", use_result_caching=False)
+    result_cache = bm.execute_query(query="select 1", database="bbc", use_result_caching=True)
+    return result_cache == result_no_cache
     
 
 def get_unique_values_test():

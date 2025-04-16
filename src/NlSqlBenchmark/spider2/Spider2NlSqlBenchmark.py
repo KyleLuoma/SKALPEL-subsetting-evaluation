@@ -1,8 +1,11 @@
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from NlSqlBenchmark.QueryResult import QueryResult
 
+import time
 import json
 import os
+import pickle
+
 from os.path import dirname, abspath
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
@@ -277,7 +280,14 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         return question
     
 
-    def execute_query(self, query, database = None, question = None) -> QueryResult:
+    def execute_query(
+            self, 
+            query: str, 
+            database: str = None, 
+            question: str = None, 
+            use_result_caching: bool = True, 
+            simulate_exec_time_with_cache: bool = True
+            ) -> QueryResult:
         if database == None:
             database = self.databases[self.active_database]
         if question == None:
@@ -287,9 +297,9 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         if dialect == "sqlite":
             result = self.query_sqlite(query=query, database=database)
         elif dialect == "bigquery":
-            result = self.query_bigquery(query=query, database=database)
+            result = self.query_bigquery(query=query, database=database, use_result_caching=use_result_caching)
         elif dialect == "snowflake":
-            result = self.query_snowflake(query=query, database=database)
+            result = self.query_snowflake(query=query, database=database, use_result_caching=use_result_caching)
         result.question = question
         return result
     
@@ -320,8 +330,46 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             question=None,
             error_message=None
         )
+    
 
-    def query_bigquery(self, query: str, database: str) -> QueryResult:
+
+    def _cache_query_result(self, query: str, database: str, query_result: QueryResult, exec_time: int) -> int:
+        result_to_cache = {"time": exec_time, "query_result": query_result}
+        query_hash = hash(query)
+        filename = f"{database}-{query_hash}.pkl"
+        cache_dir = "./benchmarks/spider2/spider2-lite/query_result_cache"
+        os.makedirs(cache_dir, exist_ok=True)
+        cache_file_path = os.path.join(cache_dir, filename)
+        with open(cache_file_path, "wb") as cache_file:
+            pickle.dump(result_to_cache, cache_file)
+        return query_hash
+
+
+    def _get_cached_result(self, query: str, database: str, simulate_exec_time: bool = True) -> QueryResult:
+        query_hash = hash(query)
+        filename = f"{database}-{query_hash}.pkl"
+        cache_dir = "./benchmarks/spider2/spider2-lite/query_result_cache"
+        cache_file_path = os.path.join(cache_dir, filename)
+        if os.path.exists(cache_file_path):
+            with open(cache_file_path, "rb") as cache_file:
+                cached_result = pickle.load(cache_file)
+            if simulate_exec_time:
+                time.sleep(cached_result["time"])
+            return cached_result["query_result"]
+        return None
+
+
+    def query_bigquery(
+            self, query: str, 
+            database: str, 
+            use_result_caching: bool = True,
+            simulate_exec_time_on_cache_retrieval: bool = True
+            ) -> QueryResult:
+        if use_result_caching:
+            cached_result = self._get_cached_result(query, database, simulate_exec_time=simulate_exec_time_on_cache_retrieval)
+            if cached_result != None:
+                return cached_result
+        s_time = time.perf_counter()
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./.local/nl-to-sql-model-eval-80a8e87ec156.json"
         client = bigquery.Client()
         try:
@@ -336,11 +384,25 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             query_result = QueryResult(
                 result_set=None, database=database, question=None, error_message=str(e)
             )
+        e_time = time.perf_counter()
+        exec_time = e_time - s_time
+        self._cache_query_result(query, database, query_result, exec_time)
         return query_result
 
     
 
-    def query_snowflake(self, query: str, database: str) -> QueryResult:
+    def query_snowflake(
+            self, 
+            query: str, 
+            database: str, 
+            use_result_caching: bool = True,
+            simulate_exec_time_on_cache_retrieval: bool = True
+            ) -> QueryResult:
+        if use_result_caching:
+            cached_result = self._get_cached_result(query, database, simulate_exec_time=simulate_exec_time_on_cache_retrieval)
+            if cached_result != None:
+                return cached_result
+        s_time = time.perf_counter()
         snowflake_credential = json.load(open('./.local/snowflake_credential.json'))
         conn = snowflake.connector.connect(
             **snowflake_credential
@@ -356,6 +418,9 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             query_result = QueryResult(result_set=result_set, database=database, question=None)
         except Exception as e:
             query_result = QueryResult(result_set=None, database=database, question=None, error_message=str(e))
+        e_time = time.perf_counter()
+        exec_time = e_time - s_time
+        self._cache_query_result(query, database, query_result, exec_time)
         return query_result
     
 
