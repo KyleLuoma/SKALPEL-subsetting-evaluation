@@ -24,7 +24,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         "bq032.sql", # Contains * EXCEPT clause
         "bq119.sql", # Contains * EXCEPT clause
         "bq098.sql"  # Unable to parse, reason unknown
-    ]
+    ]   
 
     def __init__(self):
         super().__init__()
@@ -130,6 +130,23 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             lookup_dict[dir] = "sqlite"
         return lookup_dict
     
+
+    def _make_bigquery_schema_lookup(self) -> dict[str,list]:
+        lookup = {}
+        for q in self.questions_list:
+            if self.database_type_lookup[q["db"]] == "bigquery":
+                bq_dbs = set()
+                query_lines = self.gold_query_lookup[q["instance_id"]].split("\n")
+                query_lines = [l for l in query_lines if "bigquery-public-data." in l]
+                for l in query_lines:
+                    db_name = l.split(".")[1]
+                    bq_dbs.add(db_name)
+                if q["db"] not in lookup.keys():
+                    lookup[q["db"]] = bq_dbs
+                else:
+                    lookup[q["db"]] = lookup[q["db"]].union(bq_dbs)
+        return lookup
+
 
     def __iter__(self):
         return self

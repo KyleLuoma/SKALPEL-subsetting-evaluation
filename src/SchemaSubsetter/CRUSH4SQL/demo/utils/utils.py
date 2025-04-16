@@ -43,7 +43,9 @@ def extract_items(segment):
         words = match.group(2).split(', ')
         return [f"{word1}.{word.replace(' ', '_')}" for word in words]
     else:
-        return None
+        # return None
+        # Skalpel mod to handle situation where segment does not match regex pattern
+        return []
 
 def get_relevant_fewshot_examples(question, correct_txt_sql_pairs, api_type, api_key, endpoint, api_version, topk=5):
     for item in correct_txt_sql_pairs:

@@ -105,6 +105,7 @@ class DatabaseSchemaGenerator:
         db_schema = SchemaToDatabaseSchemaAdapter.from_skalpel_schema(
             skalpel_schema=skalpel_schema
             )
+        db_type = skalpel_bench.database_type_lookup[db_id]
 
         def execute_sql(db_path: str, sql: str, fetch: Union[str, int] = "all", timeout: int = 60) -> Any:
             try:
@@ -127,29 +128,42 @@ class DatabaseSchemaGenerator:
         # }
         schema_with_type = {}
         for table_name in db_schema.tables.keys():
-            columns = execute_sql(db_path, f"PRAGMA table_info(`{table_name}`)", fetch="all")
+            if db_type == "sqlite":
+                columns = execute_sql(db_path, f"PRAGMA table_info(`{table_name}`)", fetch="all")
+            else:
+                columns = [("", col.name, col.data_type) for col in skalpel_schema.get_table_by_name(table_name=table_name).columns]
             schema_with_type[table_name] = {}
             for col in columns:
                 schema_with_type[table_name][col[1]] = {"type": col[2]}
+                
+                if db_type == "sqlite":
+                    table_encase = "`"
+                    col_encase = "`"
+                elif db_type == "snowflake":
+                    table_encase = "" if " " not in table_name else '"'
+                    col_encase = '"'
+                elif db_type == "bigquery":
+                    table_encase = '`'
+                    col_encase = '`'
                 unique_values = execute_sql(
                     db_path, 
-                    f"SELECT COUNT(*) FROM (SELECT DISTINCT `{col[1]}` FROM `{table_name}` LIMIT 21) AS subquery;", 
+                    f"SELECT COUNT(*) FROM (SELECT DISTINCT {col_encase}{col[1]}{col_encase} FROM {table_encase}{table_name}{table_encase} LIMIT 21) AS subquery;", 
                     "all", 
                     480
                     )
-                is_categorical = int(unique_values[0][0]) < 20
+                is_categorical = not len(unique_values) == 0 and int(unique_values[0][0]) < 20
                 unique_values = None
                 if is_categorical:
                     unique_values = execute_sql(
                         db_path, 
-                        f"SELECT DISTINCT `{col[1]}` FROM `{table_name}` WHERE `{col[1]}` IS NOT NULL"
+                        f"SELECT DISTINCT {col_encase}{col[1]}{col_encase} FROM {table_encase}{table_name}{table_encase} WHERE {col_encase}{col[1]}{col_encase} IS NOT NULL"
                         )
                 schema_with_type[table_name][col[1]].update({"unique_values": unique_values})
                 try:
                     value_statics_query = f"""
-                    SELECT 'Total count ' || COUNT(`{col[1]}`) || ' - Distinct count ' || COUNT(DISTINCT `{col[1]}`) || 
-                        ' - Null count ' || SUM(CASE WHEN `{col[1]}` IS NULL THEN 1 ELSE 0 END) AS counts  
-                    FROM (SELECT `{col[1]}` FROM `{table_name}` LIMIT 100000) AS limited_dataset;
+                    SELECT 'Total count ' || COUNT({col_encase}{col[1]}{col_encase}) || ' - Distinct count ' || COUNT(DISTINCT {col_encase}{col[1]}{col_encase}) || 
+                        ' - Null count ' || SUM(CASE WHEN {col_encase}{col[1]}{col_encase} IS NULL THEN 1 ELSE 0 END) AS counts  
+                    FROM (SELECT {col_encase}{col[1]}{col_encase} FROM {table_encase}{table_name}{table_encase} LIMIT 100000) AS limited_dataset;
                     """
                     value_statics = execute_sql(
                         db_path, 
@@ -239,8 +253,11 @@ class DatabaseSchemaGenerator:
         bm = factory.build_benchmark(bm_name)
         schema = bm.get_active_schema(database=self.db_id)
         for table_name in self.schema_structure.tables.keys():
-            table = schema.get_table_by_name(table_name)
-            ddl_commands[table_name] = table.as_ddl()
+            try:
+                table = schema.get_table_by_name(table_name)
+            except KeyError as e:
+                continue
+            ddl_commands[table_name] = table.as_ddl(ident_enclose_l='"', ident_enclose_r='"')
         return ddl_commands
 
     
@@ -308,6 +325,8 @@ class DatabaseSchemaGenerator:
         """
         connections = {}
         for table_name, table_schema in self.schema_structure.tables.items():
+            if table_name not in self.CACHED_DB_SCHEMA[self.db_id].tables:
+                continue
             connections[table_name] = []
             for column_name, column_info in self.CACHED_DB_SCHEMA[self.db_id].tables[table_name].columns.items():
                 if self._is_connection(table_name, column_name):
@@ -385,7 +404,8 @@ class DatabaseSchemaGenerator:
             # ddl_commands = dict(random.sample(ddl_commands.items(), len(ddl_commands)))
         for table_name, ddl_command in ddl_commands.items():
             ddl_command = re.sub(r'\s+', ' ', ddl_command.strip())
-            create_table_match = re.match(r'CREATE TABLE "?`?([\w -]+)`?"?\s*\((.*)\)', ddl_command, re.DOTALL)
+            # Skalpel mod: added '.' to table regex expression to accomodate Spider2 DDL statements
+            create_table_match = re.match(r'CREATE TABLE "?`?([\w. -]+)`?"?\s*\((.*)\)', ddl_command, re.DOTALL)
             table = create_table_match.group(1).strip()
             if table != table_name:
                 logging.warning(f"Table name mismatch: {table} != {table_name}")

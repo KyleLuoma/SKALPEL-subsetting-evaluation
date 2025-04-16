@@ -39,6 +39,7 @@ def main():
     parser.add_argument("--verbose", action="store_true", default=False, help="Enable verbose output.")
     parser.add_argument("--subsetter_preprocessing", action="store_true", default=False, help="Enable subsetter preprocessing.")
     parser.add_argument("--no_subset_generation", action="store_true", default=False, help="Set to True to skip subsetting (e.g., if you want to preprocess only).")
+    parser.add_argument("--max_col_count", type=int, default=None, help="Limit subset generation to schemas with fewer than this number of columns.")
     parser.add_argument("--results_filename", default=None, help="Load specified results and evaluate only (no re-subsetting).")
 
     args = parser.parse_args()
@@ -51,6 +52,7 @@ def main():
     verbose = args.verbose
     subsetter_preprocessing = args.subsetter_preprocessing
     subset_generation = not args.no_subset_generation
+    max_col_count = args.max_col_count
     
 
     global v_print
@@ -74,7 +76,11 @@ def main():
         )
     if subsetter_preprocessing:
         s_time = time.perf_counter()
-        db_processing_times = subsetter.preprocess_databases(exist_ok=True)
+        db_processing_times = subsetter.preprocess_databases(
+            exist_ok=True, 
+            filename_comments=filename_comments,
+            skip_already_processed=True
+            )
         e_time = time.perf_counter()
         total_time = e_time - s_time
         db_processing_times["total"] = total_time
@@ -87,7 +93,8 @@ def main():
             benchmark=benchmark,
             recover_previous=recover_previous,
             filename_comments=filename_comments,
-            bypass_databases=["SBODemoUS"]
+            bypass_databases=[],
+            max_col_count_to_generate=max_col_count
             )
     elif results_filename != None:
         results, subsets_questions = load_subsets_from_results(
@@ -121,7 +128,8 @@ def generate_subsets(
         benchmark: NlSqlBenchmark, 
         recover_previous: bool = False,
         filename_comments: str = "",
-        bypass_databases: list = []
+        bypass_databases: list = [],
+        max_col_count_to_generate: int = None
         ) -> tuple[dict, list]:
     results = {
         "database": [],
@@ -141,7 +149,11 @@ def generate_subsets(
         ):
 
         test_counter += 1
-        if question.schema.database in bypass_databases:
+        if question.schema.database in bypass_databases or (
+            max_col_count_to_generate 
+            and question.schema.get_column_count() > max_col_count_to_generate
+            ):
+            print(f"Bypassing database {question.schema.database} with {question.schema.get_column_count()} columns.")
             results["database"].append(question.schema.database)
             results["question_number"].append(question.question_number)
             results["query_filename"].append(question.query_filename)

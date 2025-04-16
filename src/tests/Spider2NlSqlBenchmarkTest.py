@@ -108,6 +108,16 @@ def query_bigquery_test():
     )
 
 
+def query_bigquery_information_schema_test():
+    query = f"""
+    SELECT column_name, data_type
+    FROM `bigquery-public-data.ga4_obfuscated_sample_ecommerce.INFORMATION_SCHEMA.COLUMNS`;
+    """
+    bm = Spider2NlSqlBenchmark()
+    result = bm.query_bigquery(query, database="")
+    return False
+
+
 def execute_query_sqlite_db_test():
     bm = Spider2NlSqlBenchmark()
     try:
@@ -143,3 +153,10 @@ def get_unique_values_test():
         database="ga360"
     )
     return len(values) == 7
+
+
+def make_bigquery_schema_lookup_test():
+    bm = Spider2NlSqlBenchmark()
+    lookup = bm._make_bigquery_schema_lookup()
+    print(lookup)
+    return False

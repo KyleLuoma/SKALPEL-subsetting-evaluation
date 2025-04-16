@@ -230,11 +230,11 @@ class SchemaTable:
         return (f"SchemaTable({','.join(output_strings)})")
     
 
-    def as_ddl(self):
-        ddl = f"CREATE TABLE {self.name} (\n"
+    def as_ddl(self, ident_enclose_l: str = "", ident_enclose_r: str = ""):
+        ddl = f"CREATE TABLE {ident_enclose_l}{self.name}{ident_enclose_r} (\n"
         column_definitions = []
         for column in self.columns:
-            column_def = f"  {column.name} {column.data_type}"
+            column_def = f"  {ident_enclose_l}{column.name}{ident_enclose_r} {column.data_type}"
             if column.name in self.primary_keys:
                 column_def += " PRIMARY KEY"
             column_definitions.append(column_def)
@@ -242,15 +242,22 @@ class SchemaTable:
         if self.foreign_keys:
             foreign_key_definitions = []
             for fk in self.foreign_keys:
-                fk_columns = ", ".join(fk.columns)
+                processed_fk_columns = [f"{ident_enclose_l}{c}{ident_enclose_r}" for c in fk.columns]
+                fk_columns = ", ".join(processed_fk_columns)
             ref_table, ref_columns = fk.references
-            ref_columns_str = ", ".join(ref_columns)
+            processed_references = {f"{ident_enclose_l}{c}{ident_enclose_r}" for c in ref_columns}
+            ref_columns_str = ", ".join(processed_references)
             foreign_key_definitions.append(
-                f"  FOREIGN KEY ({fk_columns}) REFERENCES {ref_table} ({ref_columns_str})"
+                f"  FOREIGN KEY ({fk_columns}) REFERENCES {ident_enclose_l}{ref_table}{ident_enclose_r} ({ref_columns_str})"
             )
             ddl += ",\n" + ",\n".join(foreign_key_definitions)
-        ddl += "\n);"
+        ddl += "\n);" 
         return ddl
+    
+
+
+    def get_column_count(self) -> int:
+        return len(self.columns)
 
 
 
@@ -303,5 +310,17 @@ class Schema:
             if t.name == table_name:
                 return t
         raise KeyError(table_name)
+    
+
+    def get_table_count(self) -> int:
+        return len(self.tables)
+    
+
+    def get_column_count(self) -> int:
+        col_count = 0
+        for table in self.tables:
+            col_count += table.get_column_count()
+        return col_count
+
 
 

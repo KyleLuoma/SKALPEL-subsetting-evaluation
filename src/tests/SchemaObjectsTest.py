@@ -4,6 +4,8 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn,
     ForeignKey
 )
+from NlSqlBenchmark.snails.SnailsNlSqlBenchmark import SnailsNlSqlBenchmark
+from NlSqlBenchmark.spider2.Spider2NlSqlBenchmark import Spider2NlSqlBenchmark
 import pickle
 import os
 
@@ -50,3 +52,10 @@ def schematable_as_ddl_test():
   colB varchar(3),
   FOREIGN KEY (colB) REFERENCES t2 (colC)
 );"""
+
+
+def schema_col_count_test():
+    snails = SnailsNlSqlBenchmark(sql_dialect="sqlite", db_host_profile="sqlite")
+    schema = snails.get_active_schema(database="NTSB")
+    print(schema.get_column_count())
+    return schema.get_column_count() == 1161

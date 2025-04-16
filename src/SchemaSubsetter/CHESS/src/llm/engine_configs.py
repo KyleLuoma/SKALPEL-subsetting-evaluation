@@ -22,6 +22,8 @@ GCP_PROJECT = os.getenv("GCP_PROJECT")
 GCP_REGION = os.getenv("GCP_REGION")
 GCP_CREDENTIALS = os.getenv("GCP_CREDENTIALS")
 
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
 if GCP_CREDENTIALS and GCP_PROJECT and GCP_REGION:
     aiplatform.init(
     project=GCP_PROJECT,
@@ -67,31 +69,31 @@ ENGINE_CONFIGS: Dict[str, Dict[str, Any]] = {
     },
     "gpt-3.5-turbo-0125": {
         "constructor": ChatOpenAI,
-        "params": {"model": "gpt-3.5-turbo-0125", "temperature": 0}
+        "params": {"model": "gpt-3.5-turbo-0125", "temperature": 0, "api_key": OPENAI_API_KEY}
     },
     "gpt-3.5-turbo-instruct": {
         "constructor": ChatOpenAI,
-        "params": {"model": "gpt-3.5-turbo-instruct", "temperature": 0}
+        "params": {"model": "gpt-3.5-turbo-instruct", "temperature": 0, "api_key": OPENAI_API_KEY}
     },
     "gpt-4-1106-preview": {
         "constructor": ChatOpenAI,
-        "params": {"model": "gpt-4-1106-preview", "temperature": 0}
+        "params": {"model": "gpt-4-1106-preview", "temperature": 0, "api_key": OPENAI_API_KEY}
     },
     "gpt-4-0125-preview": {
         "constructor": ChatOpenAI,
-        "params": {"model": "gpt-4-0125-preview", "temperature": 0}
+        "params": {"model": "gpt-4-0125-preview", "temperature": 0, "api_key": OPENAI_API_KEY}
     },
     "gpt-4-turbo": {
         "constructor": ChatOpenAI,
-        "params": {"model": "gpt-4-turbo", "temperature": 0}
+        "params": {"model": "gpt-4-turbo", "temperature": 0, "api_key": OPENAI_API_KEY}
     },
     "gpt-4o": {
         "constructor": ChatOpenAI,
-        "params": {"model": "gpt-4o", "temperature": 0}
+        "params": {"model": "gpt-4o", "temperature": 0, "api_key": OPENAI_API_KEY}
     },
     "gpt-4o-mini": {
         "constructor": ChatOpenAI,
-        "params": {"model": "gpt-4o-mini", "temperature": 0}
+        "params": {"model": "gpt-4o-mini", "temperature": 0, "api_key": OPENAI_API_KEY}
     },
     "claude-3-opus-20240229": {
         "constructor": ChatAnthropic,
@@ -114,7 +116,8 @@ ENGINE_CONFIGS: Dict[str, Dict[str, Any]] = {
             "model": "ft:gpt-4o-mini-2024-07-18:stanford-university::9p4f6Z4W",
             "max_tokens": 400,
             "temperature": 0,
-            "stop": ["```\n", ";"]
+            "stop": ["```\n", ";"], 
+            "api_key": OPENAI_API_KEY
         }
     },
     "column_selection_finetuning": {
@@ -123,7 +126,8 @@ ENGINE_CONFIGS: Dict[str, Dict[str, Any]] = {
             "model": "ft:gpt-4o-mini-2024-07-18:stanford-university::9t1Gcj6Y:ckpt-step-1511",
             "max_tokens": 1000,
             "temperature": 0,
-            "stop": [";"]
+            "stop": [";"],
+            "api_key": OPENAI_API_KEY
         }
     },
     # "finetuned_nl2sql_cot": {
@@ -156,7 +160,8 @@ ENGINE_CONFIGS: Dict[str, Dict[str, Any]] = {
             "temperature": 0,
             "model_kwargs": {
                 "stop": [""]
-            }
+            }, 
+            "api_key": OPENAI_API_KEY
         }
     }
 }

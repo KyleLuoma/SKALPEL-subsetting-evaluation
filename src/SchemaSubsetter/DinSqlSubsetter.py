@@ -7,6 +7,7 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn,
     ForeignKey
 )
+from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 
 import openai
@@ -35,7 +36,7 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
             self,
             benchmark_question: BenchmarkQuestion,
             print_prompt: bool = False
-    ) -> Schema:
+    ) -> SchemaSubsetterResult:
         prompt = self.schema_linking_prompt_maker(
             question=benchmark_question.question,
             schema=benchmark_question.schema
@@ -47,7 +48,7 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
         schema_links = None
         while schema_links is None:
             try:
-                schema_links = self.GPT4_generation(prompt=prompt)
+                schema_links, tokens = self.GPT4_generation(prompt=prompt)
             except IndexError:
                 time.sleep(3)
                 print(".")
@@ -97,7 +98,7 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
                             schema_subset["tables"][ix]["columns"].append(
                                 TableColumn(name=column, data_type=None)
                             )
-        return schema_subset
+        return SchemaSubsetterResult(schema_subset=schema_subset, prompt_tokens=tokens)
         
 
 
@@ -134,9 +135,9 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
     
 
 
-    def GPT4_generation(self, prompt):
+    def GPT4_generation(self, prompt) -> tuple[str, int]:
 
-        response = openai.ChatCompletion.create(
+        response = openai.chat.completions.create(
             model="gpt-4",
             messages=[{"role": "user", "content": prompt}],
             n = 1,
@@ -148,4 +149,5 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
             presence_penalty=0.0,
             stop = ["Q:"]
         )
-        return response['choices'][0]['message']['content']
+        tokens = response.usage.total_tokens
+        return response.choices[0].message.content, tokens

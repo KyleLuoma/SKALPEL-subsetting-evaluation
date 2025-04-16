@@ -31,6 +31,8 @@ import argparse
 from pathlib import Path
 
 from transformers import AutoTokenizer
+from dotenv import load_dotenv
+import os
 
 
 class ChessSubsetter(SchemaSubsetter):
@@ -67,7 +69,7 @@ class ChessSubsetter(SchemaSubsetter):
         self.team = build_team(self.config)
 
 
-    def preprocess_databases(self, exist_ok: bool = True) -> dict[str, float]:
+    def preprocess_databases(self, exist_ok: bool = True, **args) -> dict[str, float]:
 
         processing_times = {}
 
@@ -108,6 +110,9 @@ class ChessSubsetter(SchemaSubsetter):
         """
         Replicates information retriever and schema selector agents in isolation from the full CHESS team context
         """
+        # Load environment variables from .env file
+        load_dotenv(dotenv_path="src/SchemaSubsetter/CHESS/.env", override=True)
+
         team = build_team(self.config)
         task = Task(
             question_id=benchmark_question.question_number,
@@ -115,8 +120,10 @@ class ChessSubsetter(SchemaSubsetter):
             question=benchmark_question.question,
             evidence="",
             SQL=benchmark_question.query,
-            difficulty=None
+            difficulty=None,
+            query_dialect=benchmark_question.query_dialect
         )
+        task.query_dialect = benchmark_question.query_dialect
         DatabaseManager(db_mode=self.args.data_mode, db_id=task.db_id)
         logger = Logger(db_id=task.db_id, question_id=task.question_id, result_directory=self.result_directory)
         thread_id = f"{time.perf_counter()}_{task.db_id}_{task.question_id}"

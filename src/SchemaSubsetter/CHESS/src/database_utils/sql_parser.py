@@ -71,7 +71,8 @@ def _get_table_with_alias(parsed_sql: exp.Expression, alias: str) -> Optional[ex
     """
     return next((table for table in parsed_sql.find_all(exp.Table) if table.alias == alias), None)
 
-def get_sql_columns_dict(db_path: str, sql: str) -> Dict[str, List[str]]:
+# Skalpel mod: passing sql_dialect to handle Spider2 snowflake and bigquery sql
+def get_sql_columns_dict(db_path: str, sql: str, sql_dialect: str = None) -> Dict[str, List[str]]:
     """
     Retrieves a dictionary of tables and their respective columns involved in an SQL query.
     
@@ -82,7 +83,7 @@ def get_sql_columns_dict(db_path: str, sql: str) -> Dict[str, List[str]]:
     Returns:
         Dict[str, List[str]]: Dictionary of tables and their columns.
     """
-    sql = qualify(parse_one(sql, read='sqlite'), qualify_columns=True, validate_qualify_columns=False) if isinstance(sql, str) else sql
+    sql = qualify(parse_one(sql, read=sql_dialect), qualify_columns=True, validate_qualify_columns=False) if isinstance(sql, str) else sql
     columns_dict = {}
 
     sub_queries = [subq for subq in sql.find_all(exp.Subquery) if subq != sql]

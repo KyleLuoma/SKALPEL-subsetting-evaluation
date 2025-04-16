@@ -22,3 +22,4 @@ class Task(BaseModel):
     difficulty: Optional[str] = None
     #Skalpel adds:
     # schema: Optional[Schema]
+    query_dialect: str

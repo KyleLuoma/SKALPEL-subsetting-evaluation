@@ -5,6 +5,10 @@ from SchemaSubsetter.CHESS.src.runner.task import Task
 from SchemaSubsetter.CHESS.src.runner.database_manager import DatabaseManager
 from SchemaSubsetter.CHESS.src.workflow.sql_meta_info import SQLMetaInfo
 
+# Skalpel imports to handle non-sqlite sql dialects for parsing
+from SubsetEvaluator.QueryProfiler import QueryProfiler
+from NlSqlBenchmark.spider2 import Spider2NlSqlBenchmark
+
 import re
 
 
@@ -62,7 +66,8 @@ class SystemState(BaseModel):
             Dict[str, Any]: A dictionary with the status of missing tables and columns.
         """
         ground_truth_sql = self.task.SQL
-        correct_columns = DatabaseManager().get_sql_columns_dict(sql=ground_truth_sql)
+        #Skalpel mod, passing sql dialect:
+        correct_columns = DatabaseManager().get_sql_columns_dict(sql=ground_truth_sql, sql_dialect=self.task.query_dialect)
         missing_tables = []
         missing_columns = []
 

@@ -53,7 +53,13 @@ class SchemaSubsetter:
         return SchemaSubsetterResult(schema_subset=schema)
     
 
-    def preprocess_databases(self) -> dict[str, float]:
+    def preprocess_databases(
+            self, 
+            exist_ok: bool = True, 
+            filename_comments: str = "",
+            skip_already_processed: bool = False,
+            **args
+            ) -> dict[str, float]:
         processing_times = {}
         for database in self.benchmark.databases:
             processing_times["database"] = 0.0
