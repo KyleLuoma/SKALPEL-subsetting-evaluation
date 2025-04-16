@@ -1,0 +1,1377 @@
+##### NTSB - 93 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question:
+
+**Question:**  
+"Which vehicle make has the most instances of mismatched front left tires? That is, where the left front tire size on the vehicle does not match the manufacturers first recommended front tire size."
+
+### 1. Identify the key information needed:
+
+- "vehicle make" → column: GV.MAKE
+- "most instances" → need to count occurrences, so GROUP BY GV.MAKE
+- "mismatched front left tires" → need to compare the actual left front tire size on the vehicle to the manufacturer's first recommended front tire size
+
+### 2. Find relevant columns/tables:
+
+- **Actual left front tire size on the vehicle:**  
+  - Table: TIRE  
+  - Columns: TIRE.TIRELOC (location), TIRE.TIRESIZE (actual tire size)
+  - TIRE.TIRELOC = 'LFT' or similar (left front tire; exact value may vary, but this is the typical code)
+- **Manufacturer's first recommended front tire size:**  
+  - Table: TIREPLAC  
+  - Columns: TIREPLAC.RECFRONT1 (first recommended front tire size)
+- **Vehicle make:**  
+  - Table: GV  
+  - Column: GV.MAKE
+
+### 3. Foreign keys/joins needed:
+
+- TIRE.VEHNO = GV.VEHNO and TIRE.CASEID = GV.CASEID (to get make for each tire)
+- TIREPLAC.VEHNO = GV.VEHNO and TIREPLAC.CASEID = GV.CASEID (to get recommended tire size for each vehicle)
+
+### 4. Filter/condition:
+
+- Only consider TIRE.TIRELOC = 'LFT' (left front tire)
+- Only consider cases where TIRE.TIRESIZE <> TIREPLAC.RECFRONT1 (mismatch)
+
+### 5. Schema links and cell values:
+
+- Columns: GV.MAKE, TIRE.TIRELOC, TIRE.TIRESIZE, TIRE.VEHNO, TIRE.CASEID, TIREPLAC.RECFRONT1, TIREPLAC.VEHNO, TIREPLAC.CASEID
+- Foreign keys: TIRE.VEHNO = GV.VEHNO, TIRE.CASEID = GV.CASEID, TIREPLAC.VEHNO = GV.VEHNO, TIREPLAC.CASEID = GV.CASEID
+- Cell values: 'LFT' (or whatever code is used for left front tire)
+
+---
+
+## Final Schema Links
+
+**Schema_links:**
+- GV.MAKE
+- TIRE.TIRELOC
+- TIRE.TIRESIZE
+- TIRE.VEHNO = GV.VEHNO
+- TIRE.CASEID = GV.CASEID
+- TIREPLAC.RECFRONT1
+- TIREPLAC.VEHNO = GV.VEHNO
+- TIRE
+  ## Question:
+    Which vehicle make has the most instances of mismatched front left tires? That is, where the left front tire size on the vehicle does not match the manufacturers first recommended front tire size.
+
+  ## Query:
+    SELECT TOP 1 MAKE FROM TIRE T JOIN TIREPLAC TP ON T.CASEID = TP.CASEID AND T.VEHNO = TP.VEHNO JOIN VPICDECODE V ON T.CASEID = V.CASEID AND T.VEHNO = V.VEHNO WHERE TIRELOC = 'LF' AND TIRESIZE <> RECFRONT1 GROUP BY MAKE ORDER BY COUNT(DISTINCT T.CASEID) DESC 
+
+
+##### NYSED_SRC2022 - 5 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question:
+
+**Question:**  
+"Show the 2022 high school participation rates and graduation rates for the subgroup 'All Students' who attended Brooklyn Collegiate."
+
+### 1. Identify the requested information
+
+- **2022 high school participation rates**  
+  → Table: `ACC_HS_Participation_Rate`  
+  → Columns: `YEAR`, `ENTITY_NAME`, `SUBGROUP_NAME`, `RATE`
+
+- **2022 high school graduation rates**  
+  → Table: `ACC_HS_Graduation_Rate`  
+  → Columns: `YEAR`, `ENTITY_NAME`, `SUBGROUP_NAME`, `GRAD_RATE`
+
+- **for the subgroup 'All Students'**  
+  → Filter: `SUBGROUP_NAME = 'All Students'`
+
+- **who attended Brooklyn Collegiate**  
+  → Filter: `ENTITY_NAME = 'Brooklyn Collegiate'`
+
+### 2. Find relevant schema elements
+
+#### Tables and columns:
+- `ACC_HS_Participation_Rate.YEAR`
+- `ACC_HS_Participation_Rate.ENTITY_NAME`
+- `ACC_HS_Participation_Rate.SUBGROUP_NAME`
+- `ACC_HS_Participation_Rate.RATE`
+- `ACC_HS_Graduation_Rate.YEAR`
+- `ACC_HS_Graduation_Rate.ENTITY_NAME`
+- `ACC_HS_Graduation_Rate.SUBGROUP_NAME`
+- `ACC_HS_Graduation_Rate.GRAD_RATE`
+
+#### Cell values:
+- `2022`
+- `'All Students'`
+- `'Brooklyn Collegiate'`
+
+#### Foreign keys:
+- There are no explicit foreign keys between these two tables, but they can be joined on `ENTITY_NAME`, `YEAR`, and `SUBGROUP_NAME` if needed.
+
+### 3. Schema Links
+
+**Schema_links:**
+- `ACC_HS_Participation_Rate.YEAR`
+- `ACC_HS_Participation_Rate.ENTITY_NAME`
+- `ACC_HS_Participation_Rate.SUBGROUP_NAME`
+- `ACC_HS_Participation_Rate.RATE`
+- `ACC_HS_Graduation_Rate.YEAR`
+- `ACC_HS_Graduation_Rate.ENTITY_NAME`
+- `ACC_HS_Graduation_Rate.SUBGROUP_NAME`
+- `ACC_HS_Graduation_Rate.GRAD_RATE`
+- `2022`
+- `'All Students'`
+- `'Brooklyn Collegiate'`
+
+**If you want to be explicit about the join:**
+- `ACC_HS_Participation_Rate.ENTITY_NAME = ACC_HS_Graduation_Rate.ENTITY_NAME`
+- `ACC_HS_Participation_Rate.YEAR = ACC_HS_Graduation_Rate.YEAR`
+- `ACC_HS_Participation_Rate.SUBGROUP_NAME = ACC_HS_Graduation_Rate.SUB
+  ## Question:
+    Show the 2022 high school participation rates and graduation rates for the subgroup 'All Students' who attended Brooklyn Collegiate.
+
+  ## Query:
+    select rate, grad_rate from [ACC_HS_Participation_Rate] p join [ACC_HS_Graduation_Rate] g  	on p.ENTITY_CD = g.ENTITY_CD  	and p.SUBGROUP_NAME = g.SUBGROUP_NAME  	and p.YEAR = g.YEAR  	and p.ENTITY_NAME = g.ENTITY_NAME 	and p.INSTITUTION_ID = g.INSTITUTION_ID where p.ENTITY_NAME = 'Brooklyn Collegiate' and p.SUBGROUP_NAME = 'All Students' and p.year = 2022 
+
+
+##### NYSED_SRC2022 - 18 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question and map it to the schema step by step:
+
+**Question:**  
+"Show the names of the public elementary school entities with level 2 english learner programs that have a non-zero number of english language learners in the all students subgroup, who did not participate in the new york state english as a second language achievement test. Include only one row per school name."
+
+### 1. "names of the public elementary school entities"
+- "names" → likely `ENTITY_NAME` or `SCHOOL_NAME`
+- "public elementary school entities" → filter on school type or group; possibly via `Institution_Grouping` or a field in the main tables
+
+### 2. "with level 2 english learner programs"
+- "level 2 english learner programs" → likely `LEVEL=2` in `ACC_EM_ELP` (elementary/middle) or `ACC_HS_ELP` (high school)
+- Since the question says "elementary", use `ACC_EM_ELP`
+
+### 3. "that have a non-zero number of english language learners in the all students subgroup"
+- "non-zero number of english language learners" → `ELL_COUNT > 0` in `ACC_EM_ELP`
+- "in the all students subgroup" → `SUBGROUP_NAME = 'All Students'`
+
+### 4. "who did not participate in the new york state english as a second language achievement test"
+- "did not participate in the new york state english as a second language achievement test" →  
+  - The test is NYSESLAT, so look at `Annual_NYSESLAT` or `ACC_EM_NYSESLAT_for_Participation`
+  - "did not participate" → `NOT_TESTED > 0` or `TESTED = 0` in `Annual_NYSESLAT` or `NYSESLAT_PART = 0` in `ACC_EM_NYSESLAT_for_Participation`
+  - Need to join on `INSTITUTION_ID`, `ENTITY_CD`, `YEAR`, and possibly `SUBGROUP_NAME`
+
+### 5. "Include only one row per school name."
+- Use `DISTINCT` or `GROUP BY ENTITY_NAME` or `SCHOOL_NAME`
+
+---
+
+## **Schema Links**
+
+### **Columns:**
+- `ACC_EM_ELP.ENTITY_NAME` (school/entity name)
+- `ACC_EM_ELP.LEVEL` (level 2)
+- `ACC_EM_ELP.ELL_COUNT` (non-zero)
+- `ACC_EM_ELP.SUBGROUP_NAME` ('All Students')
+- `ACC_EM_ELP.INSTITUTION_ID`, `ACC_EM_ELP.ENTITY_CD`, `ACC_EM_ELP.YEAR` (for joining)
+- `ACC_EM_NYSESLAT_for_Participation.INSTITUTION_ID`, `ENTITY_CD`, `YEAR` (for joining)
+- `ACC_EM_N
+  ## Question:
+    Show the names of the public elementary school entities with level 2 english learner programs that have a non-zero number of english language learners in the all students subgroup, who did not participate in the new york state english as a second language achievement test. Include only one row per school name.
+
+  ## Query:
+    select distinct entity_name from [ACC_EM_ELP]  where entity_cd in ( 	select distinct entity_cd 	from [ACC_EM_NYSESLAT_for_Participation] 	where NYSESLAT_PART = '0' )  	and ELL_COUNT <> '0'  	and SUBGROUP_NAME = 'all students'  	and level = '2' 	and ENTITY_CD in ( 		select entity_cd 		from [Institution_Grouping] 		where group_name = 'Public School' 	) 
+
+
+##### NYSED_SRC2022 - 29 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question:
+
+**Question:**  
+"Show the school name and the average weighted index subject score for science for the five lowest scoring public school districts. Exclude weighted index scores with the value 's'."
+
+**Step-by-step reasoning:**
+
+1. **"school name"**  
+   - This refers to the name of the school or district.  
+   - In the schema, the likely column is `ENTITY_NAME` (appears in many tables, e.g., `ACC_EM_Core_and_Weighted_Performance`, `ACC_HS_Core_and_Weighted_Performance`).
+
+2. **"average weighted index subject score for science"**  
+   - "Weighted index subject score" is likely the `WEIGHTED_INDEX` column.
+   - "for science" means we need to filter where `SUBJECT = 'Science'`.
+
+3. **"for the five lowest scoring public school districts"**  
+   - "Public school districts" means we need to filter for public districts.  
+   - The table `BOCES_and_N/RC` has `SCHOOL_NAME` and `DISTRICT_NAME`, but for "districts", we likely want to group by `ENTITY_NAME` where the entity is a district.
+   - The table `Institution_Grouping` may help identify public school districts, possibly via `GROUP_NAME` or `ENTITY_NAME`.
+   - Alternatively, if there is a column or value that identifies public school districts, we need to use it as a filter.
+
+4. **"Exclude weighted index scores with the value 's'"**  
+   - So, `WEIGHTED_INDEX <> 's'`.
+
+5. **Relevant tables and columns:**  
+   - `ACC_EM_Core_and_Weighted_Performance` and/or `ACC_HS_Core_and_Weighted_Performance` (both have `WEIGHTED_INDEX`, `ENTITY_NAME`, `SUBJECT`, etc.)
+   - Possibly `Institution_Grouping` or `BOCES_and_N/RC` to filter for public school districts.
+
+6. **Foreign keys:**  
+   - There are no explicit foreign keys listed, but `ENTITY_CD` and `ENTITY_NAME` are common columns for joining.
+
+7. **Possible cell values:**  
+   - 'Science' (for `SUBJECT`)
+   - 's' (for `WEIGHTED_INDEX`)
+   - 'Public School District' or similar (for filtering districts, depending on the data)
+
+---
+
+**Schema_links:**
+
+- `ACC_EM_Core_and_Weighted_Performance.ENTITY_NAME` (school/district name)
+- `ACC_EM_Core_and_Weighted_Performance.WEIGHTED_INDEX` (weighted index score)
+- `ACC_EM_Core_and_Weighted_Performance.SUBJECT` ('Science')
+- `ACC_EM_Core_and_Weighted_Performance.ENTITY_CD` (for possible join/filter)
+- `Institution_Grouping.ENTITY_CD = ACC_EM_Core_and_Weighted_Performance.ENTITY
+  ## Question:
+    Show the school name and the average weighted index subject score for science for the five lowest scoring public school districts. Exclude weighted index scores with the value 's'.
+
+  ## Query:
+    select top 5 entity_name, avg(cast(weighted_index as float)) averageScienceScore from [ACC_HS_Core_and_Weighted_Performance] where weighted_index <> 's' and subject = 'SCIENCE' and entity_cd in ( 	select entity_cd 	from [Institution_Grouping] 	where GROUP_NAME = 'public school district' ) group by entity_name order by avg(cast(weighted_index as float)) asc 
+
+
+##### NYSED_SRC2022 - 32 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question:
+
+**Question:**  
+"What is the 2022 federal expenditure per student at the public high school with the highest english language learner count in the All Students sub group in their english language program? Include the school name, language learner count, and federal expenditure per student in the result."
+
+---
+
+### 1. **Identify the required columns:**
+
+- **school name** → likely from a column like `ENTITY_NAME` (in most tables)
+- **language learner count** → "english language learner count" in "english language program" for "All Students" subgroup, in 2022
+    - This is likely from a table with ELL/ELP data, e.g., `ACC_HS_ELP` (for high school)
+    - Column: `ELL_COUNT`
+    - Filter: `YEAR = 2022`, `SUBGROUP_NAME = 'All Students'`
+- **federal expenditure per student** → from `Expenditures_per_Pupil`
+    - Column: `PER_FEDERAL_EXP`
+    - Filter: `YEAR = 2022`
+
+---
+
+### 2. **Identify the tables:**
+
+- **ACC_HS_ELP**: for ELL count at high schools
+    - Columns: `ENTITY_NAME`, `YEAR`, `SUBGROUP_NAME`, `ELL_COUNT`
+- **Expenditures_per_Pupil**: for federal expenditure per student
+    - Columns: `ENTITY_NAME`, `YEAR`, `PER_FEDERAL_EXP`
+- Both tables have `ENTITY_NAME` and `YEAR` for joining.
+
+---
+
+### 3. **Identify the filters:**
+
+- Only **public high schools**: The table is `ACC_HS_ELP` (HS = High School), so this is already filtered to high schools.
+- **YEAR = 2022**
+- **SUBGROUP_NAME = 'All Students'**
+- **english language program**: Table is ELP (English Language Program), so this is satisfied.
+
+---
+
+### 4. **Identify the join:**
+
+- Join `ACC_HS_ELP` and `Expenditures_per_Pupil` on `ENTITY_NAME` and `YEAR`.
+
+---
+
+### 5. **Find the school with the highest ELL_COUNT:**
+
+- Order by `ELL_COUNT` DESC, limit 1.
+
+---
+
+### 6. **Schema links:**
+
+- `ACC_HS_ELP.ENTITY_NAME`
+- `ACC_HS_ELP.YEAR`
+- `ACC_HS_ELP.SUBGROUP_NAME`
+- `ACC_HS_ELP.ELL_COUNT`
+- `Expenditures_per_Pupil.ENTITY_NAME`
+- `Expenditures_per_Pupil.YEAR`
+- `Expenditures_per_Pupil.PER_FEDERAL_EXP`
+- Join: `ACC_HS_ELP.ENTITY_NAME = Expenditures_per_Pupil.ENTITY_NAME`, `ACC_HS_ELP.YEAR = Expenditures_per_P
+  ## Question:
+    What is the 2022 federal expenditure per student at the public high school with the highest english language learner count in the All Students sub group in their english language program? Include the school name, language learner count, and federal expenditure per student in the result.
+
+  ## Query:
+    select top 1 el.ENTITY_NAME, ELL_COUNT, PER_FED_STATE_LOCAL_EXP from [ACC_HS_ELP] el join [Expenditures_per_Pupil] ex  	on el.ENTITY_CD = ex.ENTITY_CD  	and el.year = ex.year where SUBGROUP_NAME = 'All Students' 	and ELL_COUNT <> 's' 	and ex.YEAR = 2022 	and el.entity_cd in ( 		select entity_cd 		from [Institution_Grouping] 		where GROUP_NAME = 'public school district' 	) order by cast(ELL_COUNT as float) desc 
+
+
+##### NYSED_SRC2022 - 42 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question:
+
+**Question:**  
+"For each subject, what is the average percent of students scoring at the entering level, the emerging level, the transitioning level, the expanding level, or the commanding level, on the new york state english as a second language achievement test in 2021 for students at public schools? Exclude score values of 's'."
+
+**Step-by-step reasoning:**
+
+1. **"For each subject"**  
+   - We need the column: `Annual_NYSESLAT.subject`
+
+2. **"average percent of students scoring at the entering level, the emerging level, the transitioning level, the expanding level, or the commanding level"**  
+   - The relevant columns for percent at each level are:  
+     - `Annual_NYSESLAT.PER_ENT` (percent entering)
+     - `Annual_NYSESLAT.PER_EMER` (percent emerging)
+     - `Annual_NYSESLAT.PER_TRAN` (percent transitioning)
+     - `Annual_NYSESLAT.PER_EXP` (percent expanding)
+     - `Annual_NYSESLAT.PER_COM` (percent commanding)
+   - We need to compute the average for each of these columns, grouped by subject.
+
+3. **"on the new york state english as a second language achievement test"**  
+   - This is the `Annual_NYSESLAT` table.
+
+4. **"in 2021"**  
+   - We need to filter: `Annual_NYSESLAT.YEAR = 2021`
+
+5. **"for students at public schools"**  
+   - There is no explicit "public school" column, but likely `Annual_NYSESLAT.ENTITY_NAME` or `Annual_NYSESLAT.ENTITY_CD` can be used to filter for public schools.  
+   - If there is a standard way to identify public schools in `ENTITY_NAME` or `ENTITY_CD`, that would be used. For schema-linking, we include these columns.
+
+6. **"Exclude score values of 's'"**  
+   - The percent columns (`PER_ENT`, etc.) may have the value 's' (string) for suppressed or missing data. We need to exclude rows where any of these columns is 's'.
+
+---
+
+**Schema Links:**
+
+- Columns needed:
+  - `Annual_NYSESLAT.subject`
+  - `Annual_NYSESLAT.PER_ENT`
+  - `Annual_NYSESLAT.PER_EMER`
+  - `Annual_NYSESLAT.PER_TRAN`
+  - `Annual_NYSESLAT.PER_EXP`
+  - `Annual_NYSESLAT.PER_COM`
+  - `Annual_NYSESLAT.YEAR`
+  - `Annual_NYSESLAT.ENTITY_NAME`
+  - `Annual_NYSESLAT.ENTITY_CD`
+- Cell
+  ## Question:
+    For each subject, what is the average percent of students scoring at the entering level, the emerging level, the transitioning level, the expanding level, or the commanding level, on the new york state english as a second language achievement test in 2021 for students at public schools? Exclude score values of 's'.
+
+  ## Query:
+    select subject,  	avg(cast(per_ent as float)) avgEnt, 	avg(cast(per_emer as float)) avgEmer, 	avg(cast(per_tran as float)) avgTran, 	avg(cast(per_exp as float)) avgExp, 	avg(cast(per_com as float)) avgCom from [Annual_NYSESLAT] where per_ent <> 's' 	and year = 2021 	and entity_cd in ( 		select entity_cd 		from [Institution_Grouping] 		where GROUP_NAME = 'public school district' 	) group by subject 
+
+
+##### PacificIslandLandbirds - 30 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s think step by step.
+
+In the question "What species has Patrick Hart observed? List all of them by their scientific and common names. Don't include duplicate rows.", we are asked:
+
+- "species ... observed" → We need to find the species observed by a person.
+- "Patrick Hart" → This is a person, so we need to find the Contact_ID for Patrick Hart in tlu_Contacts.
+- "observed" → Observations are in tbl_Observations, which links to tbl_Events (Event_ID), which can be linked to xref_Event_Contacts (Event_ID, Contact_ID).
+- "List all of them by their scientific and common names" → We need tlu_Species.Scientific_Name and tlu_Species.Common_Name.
+- "Don't include duplicate rows" → Use DISTINCT.
+
+Based on the columns and tables, we need these:
+
+- tlu_Contacts.Contact_ID (to find Patrick Hart)
+- tlu_Contacts.First_Name, tlu_Contacts.Last_Name (to filter for Patrick Hart)
+- xref_Event_Contacts.Contact_ID = tlu_Contacts.Contact_ID (to link contacts to events)
+- xref_Event_Contacts.Event_ID = tbl_Events.Event_ID (to get events)
+- tbl_Observations.Event_ID = tbl_Events.Event_ID (to get observations for those events)
+- tbl_Observations.Species_ID = tlu_Species.Species_ID (to get species)
+- tlu_Species.Scientific_Name, tlu_Species.Common_Name (to output)
+
+Based on the tables, columns, and Foreign_keys, The set of possible cell values are = ['Patrick','Hart'].
+
+So the Schema_links are:
+
+**Schema_links:**
+- tlu_Contacts.Contact_ID
+- tlu_Contacts.First_Name
+- tlu_Contacts.Last_Name
+- xref_Event_Contacts.Contact_ID = tlu_Contacts.Contact_ID
+- xref_Event_Contacts.Event_ID = tbl_Events.Event_ID
+- tbl_Observations.Event_ID = tbl_Events.Event_ID
+- tbl_Observations.Species_ID = tlu_Species.Species_ID
+- tlu_Species.Scientific_Name
+- tlu_Species.Common_Name
+- 'Patrick'
+- 'Hart'
+  ## Question:
+    What species has Patrick Hart observed? List all of them by their scientific and common names. Don't include duplicate rows.
+
+  ## Query:
+    select distinct scientific_name, common_name from tlu_species spc join tbl_observations obs on spc.Species_ID = obs.species_id join xref_event_contacts xcon on xcon.Event_ID = obs.event_id join tlu_contacts con on xcon.Contact_ID = con.Contact_ID where last_name = 'Hart' and first_name = 'Patrick' order by Scientific_Name 
+
+
+##### PacificIslandLandbirds - 38 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question and map the schema links step by step.
+
+**Question:**  
+"Create a list of species sightings at each station. Include the island, site name, location name, transect and transect type, station, the station's latitude, the event id of the observations, the last names of those who observed as well as their notes, the family, scientific name, common name, and alternate name of each bird observed."
+
+---
+
+### 1. **Species sightings at each station**
+- "species sightings" → observations of species at stations
+- Table: `tbl_Observations` (Observation_ID, Event_ID, Species_ID, Sort_Order)
+- Table: `tbl_Stations` (Station_ID, Transect_ID, Station, Lat_final, ...)
+
+**Link:**  
+- `tbl_Observations.Event_ID` → `tbl_Events.Event_ID`
+- `tbl_Events.Station_ID` → `tbl_Stations.Station_ID`
+
+---
+
+### 2. **Include the island, site name, location name**
+- "island" → `tbl_Locations.Island`
+- "site name" → `tbl_Sites.Site_Name`
+- "location name" → `tbl_Locations.Loc_Name`
+
+**Links:**  
+- `tbl_Stations.Transect_ID` → `tbl_Transect.Transect_ID`
+- `tbl_Transect.Location_ID` → `tbl_Locations.Location_ID`
+- `tbl_Locations.Site_ID` → `tbl_Sites.Site_ID`
+
+---
+
+### 3. **Transect and transect type**
+- "transect" → `tbl_Transect.Transect`
+- "transect type" → `tbl_Transect.Transect_Type`
+
+---
+
+### 4. **Station and station's latitude**
+- "station" → `tbl_Stations.Station`
+- "station's latitude" → `tbl_Stations.Lat_final`
+
+---
+
+### 5. **Event id of the observations**
+- "event id" → `tbl_Observations.Event_ID`
+
+---
+
+### 6. **Last names of those who observed as well as their notes**
+- "last names" → `tlu_Contacts.Last_Name`
+- "notes" → `tlu_Contacts.Contact_Notes`
+
+**Links:**  
+- `tbl_Observations.Event_ID` → `xref_Event_Contacts.Event_ID`
+- `xref_Event_Contacts.Contact_ID` → `tlu_Contacts.Contact_ID`
+
+---
+
+### 7. **Family, scientific name, common name, and alternate name of each bird observed**
+- "family" → `tlu_Species.Family`
+- "scientific name" → `tlu_Species.Scientific_Name`
+- "common name" → `tlu_Species.Common_Name`
+- "alternate name" → `xref_Species_Alternate_Names.Alternate_Name`
+
+**Links:**  
+- `tbl_
+  ## Question:
+    Create a list of species sightings at each station. Include the island, site name, location name, transect and transect type, station, the station's latitude, the event id of the observations, the last names of those who observed as well as their notes, the family, scientific name, common name, and alternate name of each bird observed.
+
+  ## Query:
+    select island, site_name, Loc_Name, transect, transect_type, Station, lat_final, te.event_id, last_name, event_notes, family, Scientific_Name, Common_Name, Alternate_Name from tbl_locations tl join tbl_sites ts on tl.Site_ID = ts.Site_ID join tbl_transect tr on tr.Location_ID = tl.Location_ID join tbl_stations st on st.Transect_ID = tr.Transect_ID join tbl_events te on te.station_id = st.station_id join xref_Event_Contacts ec on ec.Event_ID = te.Event_ID join tlu_Contacts con on ec.Contact_ID = con.Contact_ID join tbl_Observations obs on te.Event_ID = obs.Event_ID join tlu_species spc on obs.Species_ID = spc.Species_ID join xref_Species_Alternate_Names spc_alt on spc.Species_ID = spc_alt.Species_ID 
+
+
+##### SBODemoUS - 3 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let's break down the question:
+
+**Question:**  
+"What are the witholding tax deduction amounts and percents for checks for payment associated with the account with account number '100-3443-7867'?"
+
+## Step 1: Identify the key elements in the question
+
+- "withholding tax deduction amounts and percents" → looking for deduction amount and percent for withholding tax
+- "for checks for payment" → checks used for payment
+- "associated with the account with account number '100-3443-7867'" → filter by account number
+
+## Step 2: Find relevant tables and columns
+
+### 1. Account number
+- The account number is likely in a table related to accounts or bank accounts.
+- Searching for "account number" in the schema, we find:
+  - OPWB.account (OPWB = Payment Bank)
+  - OPWB.Account = account number
+  - OPWB also has CardCode, BankCode, etc.
+
+### 2. Checks for payment
+- Checks are likely in tables like OCHD, OCHO, CHO1, CHD1, etc.
+- OCHD, OCHO, CHO1, CHD1 all have CheckNum, CheckKey, BankNum, Account, etc.
+- OCHD.Account = account number (but OCHD has AcctNum, not Account)
+- OCHD.AcctNum = account number
+
+### 3. Withholding tax deduction amounts and percents
+- Looking for columns like WT, Deduct, Deduction, etc.
+- OCHD has Deduction, DdctPrcnt (Deduction Percent), DdctPrcnt (Deduction Percent), Deduction (Deduction Amount)
+- CHO1 has LineDitail, LineMoney, LineAcct, etc., but not deduction.
+- OCHD.Deduction, OCHD.DdctPrcnt
+
+### 4. Relationship
+- The account number is in OCHD.AcctNum
+- OCHD is the main table for checks for payment, with deduction fields
+
+## Step 3: Foreign keys and relationships
+
+- The question is about checks for payment associated with a specific account number.
+- OCHD.AcctNum = '100-3443-7867'
+- OCHD.Deduction, OCHD.DdctPrcnt are the deduction amount and percent
+
+## Step 4: Cell values
+
+- The only cell value is '100-3443-7867'
+
+## Step 5: Schema links
+
+- OCHD.Deduction (withholding tax deduction amount)
+- OCHD.DdctPrcnt (withholding tax deduction percent)
+- OCHD.AcctNum (account number)
+- '100-3443-7867' (cell value)
+
+## Step 6: Final Schema_links
+
+**Schema_links:**
+- O
+  ## Question:
+    What are the witholding tax deduction amounts and percents for checks for payment associated with the account with account number '100-3443-7867'?
+
+  ## Query:
+    select Deduction, DdctPrcnt from ocho where AcctNum = '100-3443-7867' 
+
+
+##### SBODemoUS - 14 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let's break down the question:
+
+**Question:**  
+"What are the names, mobile phone numbers, and email addresses of sales employees in the high commission group?"
+
+## Step 1: Identify the required information
+
+- "names" → employee names
+- "mobile phone numbers" → employee mobile numbers
+- "email addresses" → employee email addresses
+- "sales employees" → employees whose role is sales
+- "high commission group" → employees in a group with high commission
+
+## Step 2: Find relevant tables and columns
+
+### Employee Information
+
+From the schema, the main employee table is likely **OHEM** (employees):
+
+- OHEM columns: empID, lastName, firstName, middleName, sex, jobTitle, type, dept, branch, ..., mobile, email, ...
+
+So, for names, mobile, and email:
+- OHEM.firstName, OHEM.middleName, OHEM.lastName (for full name)
+- OHEM.mobile
+- OHEM.email
+
+### Employee Role: Sales
+
+- OHEM.jobTitle or OHEM.type or OHEM.salesPrson
+- OHEM.salesPrson: could be a flag or a code indicating sales role
+
+### Commission Group
+
+- "high commission group" implies a group with high commission.
+- There is a table **OCRG** (GroupCode, GroupName, GroupType, ..., Commission, ...), which likely stores group information, including commission.
+- OHEM.dept or OHEM.branch or OHEM.salesPrson may link to a group.
+
+But, more likely, the link is via **OHEM.salesPrson** (which may be a code for the salesperson), and **OSLP** (salesperson table) has SlpCode, SlpName, GroupCode, etc.
+
+- OSLP: SlpCode, SlpName, GroupCode, Commission, etc.
+
+So, the link is:
+- OHEM.salesPrson = OSLP.SlpCode
+- OSLP.GroupCode = OCRG.GroupCode
+
+Then, OCRG.Commission (or GroupName) can be used to filter "high commission group".
+
+## Step 3: Foreign Keys / Joins
+
+- OHEM.salesPrson = OSLP.SlpCode
+- OSLP.GroupCode = OCRG.GroupCode
+
+## Step 4: Cell values
+
+- "high commission group" → OCRG.Commission is high (may need a value, e.g., Commission > some threshold, or GroupName = 'High Commission')
+- "sales employees" → OHEM.salesPrson is not null, or OHEM.jobTitle = 'Sales', or OSLP.SlpName contains 'Sales'
+
+## Step 5: Schema Links
+
+**Columns:**
+- OHEM.firstName, OHEM.middleName, OHEM.last
+  ## Question:
+    What are the names, mobile phone numbers, and email addresses of sales employees in the high commission group?
+
+  ## Query:
+    select SlpName, Mobil, Email from OSLP join OCOG on OSLP.GroupCode = OCOG.GroupCode where GroupName = 'High Commission' 
+
+
+##### SBODemoUS - 15 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let's break down the question:
+
+**Question:**  
+"Display the payment code and tax code for current business partners whose closing date procedure number is lower than 35"
+
+**Step-by-step reasoning:**
+
+1. **Identify the main entity:**  
+   - "current business partners" → This refers to business partners, which in SAP B1 are typically in the table OCRD.
+
+2. **Find the relevant columns:**  
+   - "payment code" → In OCRD, this is likely the field `PymCode`.
+   - "tax code" → In OCRD, this is likely the field `TaxCode`.
+
+3. **Find the closing date procedure number:**  
+   - "closing date procedure number" → In OCRD, there is a field called `DclProcNum` (sometimes called Closing Date Procedure Number), but in your schema, this field is not directly visible in OCRD.
+   - However, there is a table called OCLG (Activities), but that's not relevant here.
+   - There is a field in OCRD called `DclProcNum` in some SAP B1 versions, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present.
+   - There is a field called `DclProcNum` in some schemas, but in your schema, it's not present
+  ## Question:
+    Display the payment code and tax code for current business partners whos closing date procedure number is lower than 35
+
+  ## Query:
+    select PymCode, TaxCode from OCRD join CRD1 on OCRD.CardCode = CRD1.CardCode where CDPNum < 35 
+
+
+##### SBODemoUS - 19 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let's break down the question:
+
+**Question:**  
+"What is the email address and federal tax ID of the target with the position of CIO that is of target type C?"
+
+## Step 1: Identify the key information in the question
+
+- "email address" → looking for a column with email addresses
+- "federal tax ID" → looking for a column with federal tax ID (often called TaxIdNum, TaxId, or similar)
+- "target" → likely refers to a person or entity, possibly a user or employee
+- "position of CIO" → filter for position = 'CIO'
+- "target type C" → filter for type = 'C'
+
+## Step 2: Find relevant tables and columns
+
+Let's look for tables with columns related to:
+- email address
+- tax ID
+- position
+- type
+
+### Candidates for email address:
+- OUSR: E_Mail
+- OHEM: email
+- OCPR: E_MailL
+- OTBP: E_Mail
+- OCLG: (no email)
+- OALR: (has UserText, MsgData, but not email)
+- OPRT: (no email)
+- OPRR: (no email)
+- OUPT: (no email)
+- OUBR: (no email)
+- OPRF: (no email)
+- OPRC: (no email)
+- OPR4: (no email)
+- OCPR: E_MailL (contact person)
+- OSLP: Email (salesperson)
+- OHEM: email (employee)
+- OADM: E_Mail (company)
+- OTBP: E_Mail (business partner)
+- OCPR: E_MailL (contact person)
+
+### Candidates for federal tax ID:
+- OADM: TaxIdNum
+- OHEM: govID
+- OTBP: (no tax id)
+- OCPR: (no tax id)
+- OUSR: (no tax id)
+- OCLG: (no tax id)
+- OALR: (no tax id)
+- OPRT: (no tax id)
+- OPRR: (no tax id)
+- OUPT: (no tax id)
+- OUBR: (no tax id)
+- OPRF: (no tax id)
+- OPRC: (no tax id)
+- OPR4: (no tax id)
+- OCPR: (no tax id)
+- OSLP: (no tax id)
+- OHEM: govID (employee)
+- OADM: TaxIdNum (company)
+
+### Candidates for position:
+- OHEM: jobTitle, position
+- OCPR: Position
+- OTBP: Position
+
+### Candidates for type:
+- OUPT: AbsId, Name, Options, FathId,
+  ## Question:
+    What is the email address and federal tax ID of the target with the position of CIO that is of target type C?
+
+  ## Query:
+    select E_Mail, LicTradNum from TGG1 join OTGG on TGG1.TargetCode = OTGG.TargetCode where Position = 'CIO' and TargetType = 'C' 
+
+
+##### SBODemoUS - 35 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let's break down the question:
+
+**Question:**  
+"What is the resource name, type, group code, and resource cost 1 of the employee resource with employee ID 9?"
+
+**Step 1: Identify the relevant tables and columns.**
+
+- "resource name" → likely a column like ResName or similar.
+- "type" → could be ResType or Type.
+- "group code" → could be ResGrpCod or GroupCode.
+- "resource cost 1" → could be CostName1, CostVal1, or similar.
+- "employee resource" with "employee ID 9" → we need to find a table that links resources to employees, and filter by employee ID = 9.
+
+**Step 2: Search for relevant tables.**
+
+From the schema, the most relevant tables are:
+
+- ARSB: [ResGrpCod, ResGrpNam, Locked, DataSource, UserSign, Object, logInstanc, createDate, userSign2, updateDate, ResType, CostName1, CostVal1, ...]
+- ARSC: [ResCode, VisResCode, Series, Number, CodeBars, ResName, FrgnName, ResType, ResGrpCod, UnitOfMsr, PrchseRes, SellRes, ProdRes, CardCode, ...]
+- ARSC4: [ResCode, EmpID, LogInstanc]
+- ARSC5: [ResCode, VendorCode, LogInstanc, ObjType]
+- ARSC6: [ResCode, WeekDay, CapFactor1, CapFactor2, CapFactor3, CapFactor4, CapTotal, Remarks, LogInstanc, SngRunCap]
+
+**Step 3: Find the link between employee and resource.**
+
+- ARSC4: [ResCode, EmpID, LogInstanc] — this table links resources to employees.
+
+**Step 4: Find the resource details.**
+
+- ARSC: [ResCode, ..., ResName, ..., ResType, ResGrpCod, ...] — this table has resource name, type, group code, etc.
+
+**Step 5: Find resource cost 1.**
+
+- ARSB: [ResGrpCod, ..., CostName1, CostVal1, ...] — this table has group code and cost values.
+
+**Step 6: Foreign keys/joins.**
+
+- ARSC4.EmpID = 9 (filter)
+- ARSC4.ResCode = ARSC.ResCode (join to get resource details)
+- ARSC.ResGrpCod = ARSB.ResGrpCod (join to get group cost info)
+
+**Step 7: Cell value.**
+
+- Employee ID = 9
+
+---
+
+**Schema_links:**
+
+- ARSC4.EmpID, 9 (filter employee)
+- ARSC4.ResCode = ARSC.ResCode (join resource details)
+- ARSC.ResName (resource name)
+- ARSC.Res
+  ## Question:
+    What is the resource name, type, group code, and resource cost 1 of the employee resource with employee ID 9?
+
+  ## Query:
+    select ResName, ResType, ResGrpCod, StdCost1 from ORSC join RSC4 on ORSC.ResCode = RSC4.ResCode where EmpId = 9 
+
+
+##### SBODemoUS - 37 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question:
+
+**Question:**  
+"Show the project name and open issue remarks, and open issue solution for projects that have open issues."
+
+**Step 1: Identify the main entities and columns:**
+- "project name" → likely a column like Project.Name, PrjName, or similar.
+- "open issue remarks" → remarks about open issues, so a column like Issue.Remarks, or a remarks/description field in an issues table.
+- "open issue solution" → the solution for the open issue, so a column like Issue.Solution, SolutionID, or similar.
+
+**Step 2: Find relevant tables and columns:**
+- Look for a project table: APRJ (PrjCode, PrjName, ...), or similar.
+- Look for an issues table: OSCL (service calls), SCL1 (solutions), ASC1 (solutions), etc.
+- "Open issues" implies a status column (e.g., status, closed, open, etc.)
+
+**Step 3: Find relationships (foreign keys):**
+- Issues (service calls) are likely linked to projects via a project code or ID.
+- Solutions are linked to issues via a solution ID or similar.
+
+**Step 4: Map columns and foreign keys:**
+- Project name: APRJ.PrjName
+- Issue remarks: OSCL.descrption or OSCL.remarks or similar
+- Issue solution: SCL1.solutionID (linked to a solution table), or ASC1.solutionID, or SCL1.solutionID
+
+**Step 5: Find the open issues:**
+- OSCL.status (or similar) = 'Open' or not 'Closed'
+
+**Step 6: Find the schema links:**
+
+**Tables and columns:**
+- APRJ.PrjName (project name)
+- OSCL (issues/service calls): status, descrption, remarks, project code
+- SCL1/ASC1 (solutions): solutionID, solution
+
+**Foreign keys:**
+- OSCL.ProjCode = APRJ.PrjCode (linking issues to projects)
+- OSCL.srvcCallID = SCL1.srvcCallID (linking issues to solutions)
+- SCL1.solutionID = ASC1.solutionID (if solution text is in ASC1)
+
+**Possible cell values:**
+- 'Open' (for open issues)
+
+---
+
+**Schema_links:**
+- APRJ.PrjName
+- OSCL.ProjCode = APRJ.PrjCode
+- OSCL.status, 'Open'
+- OSCL.srvcCallID = SCL1.srvcCallID
+- SCL1.solutionID = ASC1.solutionID (if solution text is in ASC1)
+- OSCL.descrption or OSCL.remarks (for issue remarks)
+- ASC1.solutionID or ASC1.solution (for solution text)
+
+---
+
+**Final Schema_links:**
+
+```markdown
+
+  ## Question:
+    Show the project name and open issue remarks, and open issue solution for projects that have open issues.
+
+  ## Query:
+    select NAME, REMARKS, SOLUTION from OPMG join PMG2 on OPMG.AbsEntry = PMG2.AbsEntry 
+
+
+##### SBODemoUS - 53 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let's break down the question:
+
+**Question:**  
+"Show the date of birth, country of birth, home city, home county, and home country for the employees with the job title of accountant"
+
+**Step 1: Identify the relevant table(s) and columns.**
+
+From the schema, the most relevant table is **OHEM** (employees):
+
+- OHEM columns include:
+  - empID
+  - lastName
+  - firstName
+  - middleName
+  - sex
+  - jobTitle
+  - type
+  - dept
+  - branch
+  - workStreet
+  - workBlock
+  - workZip
+  - workCity
+  - workCounty
+  - workCountr
+  - workState
+  - manager
+  - userId
+  - salesPrson
+  - officeTel
+  - officeExt
+  - mobile
+  - pager
+  - homeTel
+  - fax
+  - email
+  - startDate
+  - status
+  - salary
+  - salaryUnit
+  - emplCost
+  - empCostUnt
+  - termDate
+  - termReason
+  - bankCode
+  - bankBranch
+  - bankBranNo
+  - bankAcount
+  - homeStreet
+  - homeBlock
+  - homeZip
+  - homeCity
+  - homeCounty
+  - homeCountr
+  - homeState
+  - birthDate
+  - brthCountr
+  - martStatus
+  - nChildren
+  - govID
+  - citizenship
+  - passportNo
+  - passportEx
+  - picture
+  - remark
+  - attachment
+  - salaryCurr
+  - empCostCur
+  - WorkBuild
+  - HomeBuild
+  - position
+  - AtcEntry
+  - AddrTypeW
+  - AddrTypeH
+  - StreetNoW
+  - StreetNoH
+  - DispMidNam
+  - NamePos
+  - DispComma
+  - CostCenter
+  - CompanyNum
+  - VacPreYear
+  - VacCurYear
+  - MunKey
+  - TaxClass
+  - InTaxLiabi
+  - EmTaxCCode
+  - RelPartner
+  - ExemptAmnt
+  - ExemptUnit
+  - AddiAmnt
+  - AddiUnit
+  - TaxOName
+  - TaxONum
+  - HeaInsName
+  - HeaInsCode
+  - HeaInsType
+  - SInsurNum
+  - StatusOfP
+  - StatusOfE
+  - BCodeDateV
+  - DevBAOwner
+  - FNameSP
+  - SurnameSP
+  - LogInstanc
+  - UserSign
+  - UserSign2
+  - UpdateDate
+
+  ## Question:
+    Show the date of birth, country of birth, home city, home county, and home country for the employees with the job title of accountant
+
+  ## Query:
+    select birthDate, brthCountr, homeCity, homeCounty, homeCountr from OHEM where jobTitle = 'Accountant' 
+
+
+##### SBODemoUS - 63 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question:
+
+**Question:**  
+"For the item named 'Printer Paper A4 White', show the package dimensions including height 1, width 1, length 1, and volume, for the packaging that holds a quantity of 24."
+
+## Step 1: Identify relevant tables and columns
+
+- "item named 'Printer Paper A4 White'"  
+  - Table: OITM (ItemCode, ItemName, ...)
+- "package dimensions including height 1, width 1, length 1, and volume"  
+  - Table: OPKG (PkgCode, Length1, Width1, Height1, Volume, ...)
+  - Table: ITM4 (ItemCode, UomType, UomEntry, PkgCode, Height1, Width1, Length1, Volume, QtyPerPack, ...)
+- "packaging that holds a quantity of 24"  
+  - Table: ITM4 (QtyPerPack)
+  - Table: OPKG (may also have package info, but ITM4 links item to package)
+
+## Step 2: Find relationships (Foreign Keys)
+
+- ITM4.ItemCode = OITM.ItemCode (links item to its packaging info)
+- ITM4.PkgCode = OPKG.PkgCode (links packaging info to package dimensions)
+
+## Step 3: Identify cell values
+
+- 'Printer Paper A4 White' (OITM.ItemName)
+- 24 (ITM4.QtyPerPack)
+
+## Step 4: List all schema links
+
+### Columns needed:
+- OITM.ItemName
+- ITM4.ItemCode
+- ITM4.PkgCode
+- ITM4.Height1
+- ITM4.Width1
+- ITM4.Length1
+- ITM4.Volume
+- ITM4.QtyPerPack
+- OPKG.PkgCode
+- OPKG.Height1
+- OPKG.Width1
+- OPKG.Length1
+- OPKG.Volume
+
+### Foreign keys:
+- ITM4.ItemCode = OITM.ItemCode
+- ITM4.PkgCode = OPKG.PkgCode
+
+### Cell values:
+- 'Printer Paper A4 White'
+- 24
+
+## Step 5: Final Schema Links
+
+**Schema_links:**
+- OITM.ItemName
+- ITM4.ItemCode = OITM.ItemCode
+- ITM4.PkgCode = OPKG.PkgCode
+- ITM4.QtyPerPack
+- ITM4.Height1
+- ITM4.Width1
+- ITM4.Length1
+- ITM4.Volume
+- OPKG.Height1
+- OPKG.Width1
+- OPKG.Length1
+- OPKG.Volume
+- 'Printer Paper A4 White'
+- 24
+
+## Step 6: Prune to only necessary links
+
+Since the question is about the item with a specific name,
+  ## Question:
+    For the item named 'Printer Paper A4 White', show the package dimensions including height 1, width 1, length 1, and volume, for the packaging that holds a quantity of 24.
+
+  ## Query:
+    select height1, width1, length1, volume from ITM4 join OITM on ITM4.ItemCode = OITM.ItemCode where itemname = 'Printer Paper A4 White'       and QtyPerPack = 24 
+
+
+##### SBODemoUS - 72 #####
+Error: Slicing error for the schema_linking module
+Prompt: To answer "How many queries are there in each category?" we need to:
+
+1. **Define what "category" means** in the context of the database schema and the question.  
+   - In SQL and database QA, "category" can mean:  
+     - Query type (e.g., SELECT, COUNT, SUM, etc.)
+     - Query intent (e.g., aggregation, filtering, join, etc.)
+     - Query topic/domain (e.g., students, instructors, products, etc.)
+     - Or, in the context of the question, it may refer to the type of information being asked (e.g., listing, counting, filtering by attribute, etc.)
+
+2. **Review the sample queries and their schema links** provided above.
+
+3. **Classify each query into a category** based on its intent/type.
+
+4. **Count the number of queries in each category.**
+
+---
+
+Let's review the sample queries and assign a category to each:
+
+### 1. "Find the buildings which have rooms with capacity more than 50."
+- **Category:** Filtering (with condition on attribute), Listing (SELECT DISTINCT)
+- **Type:** Filter + List
+
+### 2. "How many heads of the departments are older than 56 ?"
+- **Category:** Aggregation (COUNT), Filtering (attribute)
+- **Type:** Aggregation (COUNT) + Filter
+
+### 3. "what are the distinct creation years of the departments managed by a secretary born in state 'Alabama'?"
+- **Category:** Filtering (join + attribute), Listing (DISTINCT)
+- **Type:** Filter (join + attribute) + List DISTINCT
+
+### 4. "List the id of students who never attends courses?"
+- **Category:** Anti-join (NOT EXISTS), Listing
+- **Type:** Anti-join + List
+
+### 5. "List the names of all left-footed players who have overall rating between 85 and 90."
+- **Category:** Filtering (multiple attributes), Listing
+- **Type:** Filter + List
+
+### 6. "Give the title of the course offered in Chandler during the Fall of 2010."
+- **Category:** Filtering (multiple attributes), Join, Listing
+- **Type:** Filter + Join + List
+
+### 7. "Show the status of the city that has hosted the greatest number of competitions."
+- **Category:** Aggregation (MAX/COUNT), Join, Listing
+- **Type:** Aggregation (MAX/COUNT) + Join + List
+
+### 8. "Find the id of instructors who taught a class in Fall 2009 but not in Spring 2010."
+- **Category:** Set difference (EXCEPT/NOT IN), Filtering, Listing
+- **Type:** Set difference + Filter + List
+
+### 9. "Show the id, the date of account opened, the account name, and other account detail for all accounts."
+- **Category:** Listing
+  ## Question:
+    How many queries are there in each category?
+
+  ## Query:
+    select QCategory, count(*) qCount from OUQR group by QCategory 
+
+
+##### SBODemoUS - 78 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let's break down the question:
+
+**Question:**  
+"Show the Action for extension error, and the number of repetetive areas for documents that require conversion font for email (indicated by 'Y' value)."
+
+## Step 1: Identify relevant columns and tables
+
+- "Action for extension error":  
+  - "extension error" likely refers to an error type or code in a table related to extensions.
+  - "Action" is a column name.
+
+- "number of repetetive areas for documents that require conversion font for email (indicated by 'Y' value)":  
+  - "number of repetetive areas" → likely a count of something in a table related to documents.
+  - "require conversion font for email" → "conversion font for email" is likely a flag/column, with 'Y' meaning yes.
+
+Let's search for relevant columns/tables:
+
+### 1. "Action for extension error"
+- Table: **RDOC** (document templates/reports)
+  - Columns: DocCode, DocName, Author, ..., SwpInEmail, EmailFont, ..., ConversionFont, ..., NumRepArs, ...
+  - "NumRepArs" = Number of Repetitive Areas
+  - "SwpInEmail" = Swap in Email (maybe related to conversion font)
+  - "EmailFont" = Email Font
+  - "ConversionFont" = Conversion Font (likely a flag, possibly 'Y'/'N')
+- Table: **TAAS** (extension error table)
+  - Columns: Internal, TaxObjType, TaxAbsEntr, LineSeq, DocObjType, InvDocEntr, DocDate, SrcArrType, SrcLineNum, TaxCode, StaCode, StaType, IsOK, ErrorType, ErrorDescr, IsLiable, BaseSum, Tax1Rate, TaasRate, Tax1VatSum, TaasVatSum
+  - "ErrorType", "ErrorDescr", "IsOK" -- likely related to extension errors
+  - "Action" is not a column here, but "ErrorType" and "ErrorDescr" are.
+
+- Table: **RDOC** does not have "Action" column, but has "NumRepArs" and "SwpInEmail", "EmailFont", "ConversionFont".
+
+- Table: **TAAS** has "ErrorType", "ErrorDescr", "IsOK", but not "Action".
+
+- Table: **OALR** (alerts) has "Action" as a column, but is for alerts, not errors.
+
+- Table: **TAASF** (extension error log) has: LogInstanc, Internal, TaxCode, DocDate, StaCode, StaType, OldRate, NewRate, FixType, IsOK, Descr
+
+- Table: **TAAS** and **TAASF** are the only ones with "ErrorType" and "ErrorDescr".
+
+
+  ## Question:
+    Show the Action for extension error, and the number of repetetive areas for documents that require conversion font for email (indicated by 'Y' value).
+
+  ## Query:
+    select ExtOnErr, NumRepArs from RDOC where SwpInEmail = 'Y' 
+
+
+##### SBODemoUS - 80 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question:
+
+**Question:** "Show the average potential max sales opportunity amount in local currency for each card group"
+
+## 1. Identify the key elements in the question
+
+- "average potential max sales opportunity amount in local currency"
+    - "potential max sales opportunity amount" → likely refers to the maximum sales opportunity amount, in local currency, for each opportunity.
+    - "average ... for each card group" → group by card group.
+
+- "for each card group"
+    - "card group" → likely refers to a grouping of business partners (customers/vendors), which is often called "CardGroup" or "GroupCode" in SAP B1 schemas.
+
+## 2. Find relevant tables and columns
+
+### a. Table for Opportunities
+
+Looking for a table that stores sales opportunities:
+
+- OOPR (OpprId, CardCode, ... MaxSumLoc, MaxSumSys, ... CardGroup, ...)
+
+From the schema:
+- OOPR, columns = [*,OpprId,CardCode,SlpCode,CprCode,Source,IntCat1,IntCat2,IntCat3,IntRate,OpenDate,DifType,PredDate,MaxSumLoc,MaxSumSys,Memo,Status,StatusRem,Reason,RealSumLoc,RealSumSys,RealProfL,RealProfS,CloPrcnt,StepLast,UserSign,Transfered,Instance,CardName,CloseDate,LastSlp,Name,Territory,Industry,ChnCrdCode,ChnCrdName,PrjCode,CardGroup,ChnCrdCon,Owner,attachment,DocType,DocNum,DocEntry,DocChkbox,AtcEntry,LogInstanc,UserSign2,UpdateDate,OpprType,UpdateTS,DPPStatus,CreateDate,EncryptIV,DataVers]
+
+- MaxSumLoc: Potential max sales opportunity amount in local currency
+- CardGroup: Card group
+
+### b. Table for Card Group
+
+Is there a table that maps CardGroup to a name?
+
+- OCRG, columns = [*,GroupCode,GroupName,GroupType,Locked,DataSource,UserSign,PriceList,DiscRel,EffecPrice]
+
+So, OOPR.CardGroup = OCRG.GroupCode
+
+## 3. Foreign Keys
+
+- OOPR.CardGroup = OCRG.GroupCode
+
+## 4. Schema Links
+
+- OOPR.MaxSumLoc (potential max sales opportunity amount in local currency)
+- OOPR.CardGroup (card group code)
+- OCRG.GroupCode, OCRG.GroupName (card group name)
+- OOPR.CardGroup = OCRG.GroupCode (foreign key)
+
+## 5. Final Schema Links
+
+**Schema_links:**
+- OOPR.MaxSumLoc
+- OOPR.CardGroup
+- OCRG.GroupCode
+- OCRG.GroupName
+
+  ## Question:
+    Show the average potential max sales opportunity amount in local currency for each card group
+
+  ## Query:
+    select CardGroup, avg(MaxSumLoc) avgMax from OOPR group by CardGroup 
+
+
+##### SBODemoUS - 83 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let's break down the question:
+
+**Question:**  
+"For row-level sales opportunity data, show the weighted amount in both system and local currency for rows with the close date occurring in 2014."
+
+## Step 1: Identify the relevant tables and columns
+
+- "row-level sales opportunity data" → This refers to the details of sales opportunities, likely in a table with opportunity line items.
+- "weighted amount in both system and local currency" → We need columns for weighted amount in system currency and local currency.
+- "close date occurring in 2014" → We need a close date column to filter by year 2014.
+
+### Searching for relevant tables
+
+#### Table: OPR1
+- Columns: OpprId, Line, SlpCode, CntctCode, OpenDate, CloseDate, Step_Id, ClosePrcnt, MaxSumLoc, MaxSumSys, Memo, DocId, ObjType, Status, Linked, WtSumLoc, WtSumSys, UserSign, ChnCrdCode, ChnCrdName, ChnCrdCon, DocChkbox, Owner, DocNumber, EncryptIV
+
+**Relevant columns:**
+- CloseDate (date of closing)
+- WtSumLoc (weighted amount in local currency)
+- WtSumSys (weighted amount in system currency)
+
+#### Table: OOPR
+- Columns: OpprId, CardCode, SlpCode, CprCode, Source, IntCat1, IntCat2, IntCat3, IntRate, OpenDate, DifType, PredDate, MaxSumLoc, MaxSumSys, WtSumLoc, WtSumSys, PrcnProf, SumProfL, SumProfS, Memo, Status, StatusRem, Reason, RealSumLoc, RealSumSys, RealProfL, RealProfS, CloPrcnt, StepLast, UserSign, Transfered, Instance, CardName, CloseDate, LastSlp, Name, Territory, Industry, ChnCrdCode, ChnCrdName, PrjCode, CardGroup, ChnCrdCon, Owner, attachment, DocType, DocNum, DocEntry, DocChkbox, AtcEntry, LogInstanc, UserSign2, UpdateDate, OpprType, UpdateTS, DPPStatus, CreateDate, EncryptIV, DataVers
+
+**Relevant columns:**
+- CloseDate (date of closing)
+- WtSumLoc (weighted amount in local currency)
+- WtSumSys (weighted amount in system currency)
+
+#### Table: OPR1 vs OOPR
+- OOPR is the header (opportunity), OPR1 is the line-level (row-level) data.
+
+## Step 2: Foreign keys/relationships
+
+- OPR1.OpprId = OOPR.OpprId (to get opportunity header data if needed)
+- But for row-level, O
+  ## Question:
+    For row-level sales opportunity data, show the weighted amount in both system and local currency for rows with the close date occuring in 2014.
+
+  ## Query:
+    select WtSumLoc, WtSumSys from OPR1 where year(CloseDate) = 2014 
+
+
+##### SBODemoUS - 91 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question:
+
+**Question:**  
+"What is the renewal status of the contracts with the customer named 'Maxi-Teq'? Include the contract ID and the status in the result."
+
+## Step 1: Identify the relevant tables and columns
+
+- "renewal status of the contracts" → contract renewal status, contract ID, contract status
+- "contracts with the customer named 'Maxi-Teq'" → need to find contracts where the customer name is 'Maxi-Teq'
+
+From the schema, the relevant table is likely **ACTR** (contracts):
+
+**Table ACTR, columns = [*,ContractID,Line,ManufSN,InternalSN,ItemCode,ItemName,ItemGroup,StartDate,EndDate,ItmGrpName,InsID,TermDate,LogInstanc,EncryptIV, CstmrCode, CstmrName, CntctCode, Owner, Status, CntrcTmplt, CntrcType, Renewal, RemindVal, RemindUnit, Duration, StartDate, EndDate, ResponsVal, ResponsUnt, Descriptio, SrcDocType, DocNum, MonEnabled, TueEnabled, WedEnabled, ThuEnabled, FriEnabled, SatEnabled, SunEnabled, MonStart, MonEnd, TueStart, TueEnd, WedStart, WedEnd, ThuStart, ThuEnd, FriStart, FriEnd, SatStart, SatEnd, SunStrart, SunEnd, InclParts, InclWork, InclTravel, Attachment, CreateDate, Remarks1, Remarks2, RemindFlg, CTR1Count, DocEntry, RemTmDays, ResTmHours, InclHldays, SrvcType, TermDate, ResponseV, ResponseU, AtcEntry, Transfered, Instance, BPType, OwnerCode, UserSign, ObjType, LogInstanc, UserSign2, UpdateDate, DPPStatus, EncryptIV, Printed]**
+
+- ContractID: contract ID
+- CstmrName: customer name
+- Renewal: renewal status
+- Status: contract status
+
+## Step 2: Identify the schema links
+
+- "contract ID" → ACTR.ContractID
+- "renewal status" → ACTR.Renewal
+- "status" → ACTR.Status
+- "customer named 'Maxi-Teq'" → ACTR.CstmrName, 'Maxi-Teq'
+
+## Step 3: Foreign keys
+
+- There are no foreign keys needed for this query, as all required columns are in the ACTR table.
+
+## Step 4: Cell values
+
+- 'Maxi-Teq' (customer name)
+
+## Step 5: Schema_links
+
+**Schema_links:**
+- ACTR.ContractID
+- ACTR.Renewal
+- ACTR.Status
+- ACTR.CstmrName
+- 'Maxi-Teq'
+
+
+  ## Question:
+    What is the renewal status of the contracts with the customer named 'Maxi-Teq'? Include the contract ID and the status in the result.
+
+  ## Query:
+    select ContractID, Renewal from OCTR where CstmrName = 'Maxi-Teq' 
+
+
+##### SBODemoUS - 99 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let's break down the question:
+
+**Question:**  
+"What are the internal serial numbers of the service contract with the customer named microhips and the item code A00006?"
+
+**Step 1: Identify the required information and columns**
+- "internal serial numbers" → likely refers to a serial number field, possibly "internalSN" or "SerialNum" or similar.
+- "service contract" → refers to service contract records, likely in a table related to contracts or service contracts.
+- "customer named microhips" → need to filter by customer name = 'microhips'
+- "item code A00006" → need to filter by item code = 'A00006'
+
+**Step 2: Find relevant tables and columns**
+- Table: There are several tables related to contracts and service:
+  - `OSCL` (service calls), `CTR1` (contract lines), `ACTR` (contracts), `OINS` (installed base), `AINS` (installed base), `ASCL` (service calls), `OCPR` (contacts), `OCRD` (business partners), etc.
+- For "internal serial number", the most likely columns are: `internalSN`, `SerialNum`, `internalSN` (in OINS, AINS, OSCL, etc.)
+- For "customer name", look for `custmrName`, `customer`, `CardName`, `CardCode`, etc.
+- For "item code", look for `itemCode`, `ItemCode`, etc.
+
+**Step 3: Find the best path**
+- The question is about a service contract (so, a contract table), with a customer name and an item code, and we want the internal serial numbers.
+- Table `OINS` (Installed Base) has: `insID, customer, custmrName, ... internalSN, itemCode, ... contract`
+- Table `AINS` is similar.
+- Table `OSCL` (service calls) has: `customer, custmrName, contractID, itemCode, ...`
+- Table `ACTR` (contracts) has: `ContractID, CstmrCode, CstmrName, ...`
+- Table `CTR1` (contract lines) has: `ContractID, ... ItemCode, InternalSN, ...`
+
+But the most direct is `OINS` or `AINS`, which have both `custmrName`, `itemCode`, `internalSN`, and `contract`.
+
+**Step 4: Schema_links**
+- Columns needed:
+  - OINS.internalSN (the answer)
+  - OINS.custmrName (for filtering by 'microhips')
+  - OINS.itemCode (for filtering by 'A00006')
+  - OINS.contract (to ensure it's a service contract, but if all OINS rows are for contracts, this may not be needed)
+- Possible value cells: 'microhips', 'A000
+  ## Question:
+    What are the internal serial numbers of the service contract with the customer named microhips and the iten code A00006?
+
+  ## Query:
+    select internalSN from OINS where custmrName = 'Microchips' and itemCode = 'A00006' 
+
+

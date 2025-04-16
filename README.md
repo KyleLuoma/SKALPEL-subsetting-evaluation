@@ -51,7 +51,12 @@ python ./src/main.py --subsetter_name chess --benchmark_name snails --filename_c
 python ./src/main.py --subsetter_name chess --benchmark_name spider2 --filename_comments gpt4o --max_col_count 2500 --recover_previous
 ```
 
-## DINSQL with GPT4.1o
+## DINSQL with GPT4.1
+```bash
+python ./src/main.py --subsetter_name DINSQL --benchmark_name bird --filename_comments gpt41 --recover_previous
+python ./src/main.py --subsetter_name DINSQL --benchmark_name snails --filename_comments gpt41 --recover_previous
+python ./src/main.py --subsetter_name DINSQL --benchmark_name spider2 --filename_comments gpt41 --recover_previous
+```
 
 
 # Modifications made to subsetting methods
@@ -75,5 +80,7 @@ We did our best to faithfully implement the subsetting methods. However, in some
 
 # DINSQL Modifications
 - Updated OpenAI API calls to current OpenAI library standards.
-- Switched from legacy GPT4 to GPT4o for cost purposes
+- Switched from legacy GPT4 to GPT4.1 for cost and recency purposes. This required minor adjustments to the output parsing methods based on GPT4.1 tendencies (e.g., had to account for unrequested markdown and whitespace in the linking response).
 - Isolated the subsetter agent functionality and faithfully represented its implementation in the Skalpel DinSqlSubsetter class.
+- Added additional response parsing to extract the links returned by the LLM. This addition is necessary because in the DINSQL pipeline, the response is simply passed as a string to the next agent whereas we need it to be processed and evaluated in the skalpel Schema format.
+- Increased max tokens to generate to accomodate reasoning over larger schemas

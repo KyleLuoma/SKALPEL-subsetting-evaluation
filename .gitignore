@@ -19,7 +19,7 @@ skalpel_tmm_nfs/
 temp_data/
 bin/
 benchmarks/
-
+scratch.*
 src/SchemaSubsetter/CodeS/sic_ckpts/
 src/SchemaSubsetter/CHESS/processed_db
 src/BenchmarkEmbedding/pgvector/pgdata/*
