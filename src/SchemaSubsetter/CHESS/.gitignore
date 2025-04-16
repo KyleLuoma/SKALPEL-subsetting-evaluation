@@ -2,6 +2,7 @@ venv/
 .env
 results/
 data/
+data_local/
 src/__pycache__/
 .DS_Store
 *.pyc

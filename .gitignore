@@ -8,6 +8,7 @@ venv_linux/
 .cache/*
 ~*
 __pycache__/
+skalpel_tmm_nfs/
 *.pickle
 *.pkl
 .env
@@ -24,4 +25,6 @@ src/SchemaSubsetter/CHESS/processed_db
 src/BenchmarkEmbedding/pgvector/pgdata/*
 src/SubsetEvaluator/correct_subsets/*
 src/SchemaSubsetter/CRUSH4SQL/data/*
+src/SchemaSubsetter/CRUSH4SQL/processed_local
+src/SchemaSubsetter/CRUSH4SQL/processed/*
 src/SchemaSubsetter/CRUSH4SQL/demo/CRUSH_demo

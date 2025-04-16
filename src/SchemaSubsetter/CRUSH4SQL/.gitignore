@@ -1,1 +1,2 @@
 demo/utils/openai_docs_unclean_embedding.pickle
+./processed/*

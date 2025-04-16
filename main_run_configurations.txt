@@ -1,7 +1,0 @@
-
-# Do preprocessing without subsetting
-python ./src/main.py --subsetter_name crush4sql --benchmark_name bird --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
-
-
-# Do subsetting without preprocessing
-python ./src/main.py --subsetter_name crush4sql --benchmark_name bird --filename_comments lambda1-debug
