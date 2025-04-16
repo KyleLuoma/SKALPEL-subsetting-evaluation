@@ -1,4 +1,5 @@
 from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
+from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
@@ -47,15 +48,15 @@ A: Let's think step by step."""
 
 def get_schema_subset_mock_openai_call_test():
 
-    def mock_GPT4_generation(prompt: str):
-        return """
+    def mock_GPT4_generation(prompt: str, model: str = "gpt-4.1"):
+        return ("""
 In the question "How many gas stations in CZE has Premium gas?", we are asked:
 "gas stations in CZE" so we need column = [gasstations.GasStationID,gasstations.Country]
 "Premium gas" so we need column = [products.Description]
 Based on the columns and tables, we need these Foreign_keys = [transactions_1k.GasStationID = gasstations.GasStationID, transactions_1k.ProductID = products.ProductID].
 Based on the tables, columns, and Foreign_keys, The set of possible cell values are = ['CZE', 'Premium']. So the Schema_links are:
 Schema_links: [gasstations.GasStationID,gasstations.Country,products.Description,transactions_1k.GasStationID = gasstations.GasStationID, transactions_1k.ProductID = products.ProductID,'CZE', 'Premium']
-"""
+""", 100)
 
     correct_subset = Schema(
         database="debit_card_specializing",
@@ -89,15 +90,14 @@ Schema_links: [gasstations.GasStationID,gasstations.Country,products.Description
             )
         ]
     )
-
     din_ss = DinSqlSubsetter(benchmark=BirdNlSqlBenchmark())
 
     din_ss.GPT4_generation = mock_GPT4_generation
 
-    subset = din_ss.get_schema_subset(
+    subset_result = din_ss.get_schema_subset(
         benchmark_question=din_ss.benchmark.get_active_question()
         )
-    return subset == correct_subset
+    return subset_result.schema_subset == correct_subset
 
 
 def transform_schema_to_din_sql_format_test():
@@ -124,3 +124,11 @@ def schema_linking_prompt_maker_test():
         and "[yearmonth.CustomerID = customers.CustomerID]" in prompt
         and "Table transactions_1k, columns = [*,TransactionID,Date,Time,CustomerID,CardID,GasStationID,ProductID,Amount,Price]" in prompt
         )
+
+
+def get_schema_subset_test():
+    din_ss = DinSqlSubsetter(benchmark=BirdNlSqlBenchmark())
+    bm = BirdNlSqlBenchmark()
+    question = bm.get_active_question()
+    ss_result = din_ss.get_schema_subset(benchmark_question=question)
+    return type(ss_result) == SchemaSubsetterResult

@@ -115,7 +115,7 @@ def query_bigquery_information_schema_test():
     """
     bm = Spider2NlSqlBenchmark()
     result = bm.query_bigquery(query, database="")
-    return False
+    return result.error_message == None
 
 
 def execute_query_sqlite_db_test():
@@ -165,5 +165,4 @@ def get_unique_values_test():
 def make_bigquery_schema_lookup_test():
     bm = Spider2NlSqlBenchmark()
     lookup = bm._make_bigquery_schema_lookup()
-    print(lookup)
-    return False
+    return lookup["cms_data"] == {'cms_synthetic_patient_data_omop', 'cms_medicare'}

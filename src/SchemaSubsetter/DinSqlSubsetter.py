@@ -23,13 +23,15 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
 
     def __init__(
             self,
-            benchmark: NlSqlBenchmark.NlSqlBenchmark
+            benchmark: NlSqlBenchmark.NlSqlBenchmark,
+            model: str = "gpt-4.1"
             ):
         self.benchmark = benchmark
         with open("./.local/openai.json", "r") as openai_file:
             openai_info = json.loads(openai_file.read())
         self.openai_key = openai_info["api_key"]
         openai.api_key = self.openai_key
+        self.model = model
         # self.schema_linking_prompt = DINSQL.schema_linking_prompt
 
     def get_schema_subset(
@@ -46,17 +48,24 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
             print(prompt)
             print("---- Subsetting prompt ----")
         schema_links = None
+        error_message = None
+        raw_llm_response = "" 
         while schema_links is None:
             try:
-                schema_links, tokens = self.GPT4_generation(prompt=prompt)
+                gpt_result = self.GPT4_generation(prompt=prompt, model=self.model)
+                schema_links = gpt_result[0]
+                tokens = gpt_result[1]
             except IndexError:
                 time.sleep(3)
                 print(".")
                 pass
         try:
-            schema_links = schema_links.split("Schema_links: ")[1]
+            schema_links = schema_links.split("Schema_links:")[-1]
+            schema_links = schema_links[schema_links.index("["):]
         except:
-            print("Slicing error for the schema_linking module")
+            error_message = "Slicing error for the schema_linking module"
+            raw_llm_response = gpt_result[0]
+            print(error_message)
             schema_links = "[]"
         schema_links = schema_links.replace("[", "").replace("]", "")
         schema_links = schema_links.split(",")
@@ -68,15 +77,16 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
         for link in schema_links:
             if "." in link and "=" not in link: #indicates table.column pair
                 table_column_pairs.append(
-                    (link.split(".")[0], link.split(".")[1])
+                    (link.split(".")[0].strip(), link.split(".")[1].strip())
                 )
             elif "=" in link: #indicates dependency constraint
                 left = link.split("=")[0].strip()
                 right = link.split("=")[1].strip()
-                table_column_pairs += [
-                    (left.split(".")[0], left.split(".")[1]),
-                    (right.split(".")[0], right.split(".")[1])
-                ]
+                if "." in left:
+                    table_column_pairs.append((left.split(".")[0].strip(), left.split(".")[1].strip()))
+                if "." in right:
+                    table_column_pairs.append((right.split(".")[0].strip(), right.split(".")[1].strip()))
+                
         for pair in table_column_pairs:
                 table = pair[0]
                 column = pair[1]
@@ -98,7 +108,12 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
                             schema_subset["tables"][ix]["columns"].append(
                                 TableColumn(name=column, data_type=None)
                             )
-        return SchemaSubsetterResult(schema_subset=schema_subset, prompt_tokens=tokens)
+        return SchemaSubsetterResult(
+            schema_subset=schema_subset, 
+            prompt_tokens=tokens,
+            error_message=error_message,
+            raw_llm_response=raw_llm_response
+            )
         
 
 
@@ -135,19 +150,19 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
     
 
 
-    def GPT4_generation(self, prompt) -> tuple[str, int]:
+    def GPT4_generation(self, prompt, model: str = "gpt-4") -> tuple[str, int]:
 
         response = openai.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4.1",
             messages=[{"role": "user", "content": prompt}],
             n = 1,
             stream = False,
             temperature=0.0,
-            max_tokens=600,
+            max_tokens=20000,
             top_p = 1.0,
             frequency_penalty=0.0,
             presence_penalty=0.0,
             stop = ["Q:"]
         )
         tokens = response.usage.total_tokens
-        return response.choices[0].message.content, tokens
+        return (response.choices[0].message.content, tokens)

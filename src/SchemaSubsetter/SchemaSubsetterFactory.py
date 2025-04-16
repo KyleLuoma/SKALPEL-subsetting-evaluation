@@ -25,7 +25,7 @@ class SchemaSubsetterFactory:
         "chess": (ChessSubsetter, {}),
         "CodeS": (CodeSSubsetter, {}),
         "crush4sql": (Crush4SqlSubsetter, {}),
-        "DINSQL": (DinSqlSubsetter, {}),
+        "DINSQL": (DinSqlSubsetter, {"model":"gpt-4.1"}),
         "perfect_subsetter": (PerfectSchemaSubsetter, {}),
         "perfect_table_subsetter": (PerfectTableSchemaSubsetter, {})
     }

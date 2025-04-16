@@ -167,7 +167,8 @@ def generate_subsets(
         if recover_previous:
             try:
                 with open(recovery_filename, "rb") as load_file:
-                    loaded_result = pickle.loads(load_file.read())
+                    loaded_result: dict = pickle.loads(load_file.read())
+                    assert len(loaded_result["subset"].tables) > 0 # Prior subsetting failed
                     subsets_questions.append((loaded_result["subset"], loaded_result["question"]))
                     for key in results.keys():
                         results[key].append(loaded_result[key])
@@ -185,6 +186,8 @@ def generate_subsets(
             subset = result.schema_subset
         except UnboundLocalError as e:
             failures.append((question, str(e)))
+        if result.error_message != None:
+            failures.append((question, f"Error: {result.error_message}\nPrompt: {str(result.raw_llm_response)}"))
         t_end = time.perf_counter()
         v_print("Subsetting time:", str(t_end - t_start))
         subsets_questions.append((subset, question))
