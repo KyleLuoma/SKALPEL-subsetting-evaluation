@@ -297,9 +297,19 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         if dialect == "sqlite":
             result = self.query_sqlite(query=query, database=database)
         elif dialect == "bigquery":
-            result = self.query_bigquery(query=query, database=database, use_result_caching=use_result_caching)
+            result = self.query_bigquery(
+                query=query, 
+                database=database, 
+                use_result_caching=use_result_caching,
+                simulate_exec_time_on_cache_retrieval=simulate_exec_time_with_cache
+                )
         elif dialect == "snowflake":
-            result = self.query_snowflake(query=query, database=database, use_result_caching=use_result_caching)
+            result = self.query_snowflake(
+                query=query, 
+                database=database, 
+                use_result_caching=use_result_caching,
+                simulate_exec_time_on_cache_retrieval=simulate_exec_time_with_cache
+                )
         result.question = question
         return result
     

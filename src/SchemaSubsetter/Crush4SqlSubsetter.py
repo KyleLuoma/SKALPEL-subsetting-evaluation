@@ -116,27 +116,39 @@ class Crush4SqlSubsetter(SchemaSubsetter):
             ) -> dict[str, float]:
         processing_times = {}
         for db in self.benchmark.databases:
-            performance_time_file = f"./subsetting_results/preprocessing_times/{self.name}_{self.benchmark.name}_{db}_{filename_comments}_processing.json"
-            if skip_already_processed and Path(performance_time_file).exists():
-                print(f"Skipping {db} as processing time file already exists.")
-                continue
-
             print("Crush4Sql preprocessing", db)
             s_time = time.perf_counter()
             schema = self.benchmark.get_active_schema(database=db)
-
+            performance_time_file = f"./subsetting_results/preprocessing_times/{self.name}_{self.benchmark.name}_{db}_{filename_comments}_processing.json"
             processed_path = self.processed_db_dir / schema.database
+
+            super_flat_unclean_path = processed_path / f"{db}_super_flat_unclean.txt"
+            relation_map_path = processed_path / f"{db}_relation_map_for_unclean.json"
+            embedding_path = processed_path / f"{db}_openai_docs_unclean_embedding.pickle"
+            super_flat_unclean_exists = super_flat_unclean_path.exists()
+            relation_map_exists = relation_map_path.exists()
+            embedding_exists = embedding_path.exists()
+
+            if skip_already_processed and (
+                Path(performance_time_file).exists()
+                and super_flat_unclean_exists
+                and relation_map_exists
+                and embedding_exists
+                ):
+                print(f"Skipping {db} as processing time file already exists.")
+                continue
+            
             try:
                 processed_path.mkdir(exist_ok=exist_ok, parents=True)
             except FileExistsError as e:
-                passd
+                pass
 
             flattened_schema = self._flatten_schema(schema=schema)
-            with open(processed_path / f"{db}_super_flat_unclean.txt", "w") as file:
+            with open(super_flat_unclean_path, "w") as file:
                 file.write("\n".join(flattened_schema))
 
             relation_map = self._make_relation_map(schema=schema)
-            with open(processed_path / f"{db}_relation_map_for_unclean.json", "wt") as file:
+            with open(relation_map_path, "wt") as file:
                 file.write("\n" + json.dumps(relation_map, indent=2))
 
             embeddings = []            
@@ -150,7 +162,7 @@ class Crush4SqlSubsetter(SchemaSubsetter):
                 )
                 embeddings.append(embedding)
             stacked_embeddings = torch.stack(embeddings)
-            with open(processed_path / f"{db}_openai_docs_unclean_embedding.pickle", "wb") as file:
+            with open(embedding_path, "wb") as file:
                 # for embedding in embeddings:
                 torch.save(stacked_embeddings, file)
             e_time = time.perf_counter()

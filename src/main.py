@@ -77,7 +77,7 @@ def main():
     if subsetter_preprocessing:
         s_time = time.perf_counter()
         db_processing_times = subsetter.preprocess_databases(
-            exist_ok=True, 
+            exist_ok=False, 
             filename_comments=filename_comments,
             skip_already_processed=True
             )

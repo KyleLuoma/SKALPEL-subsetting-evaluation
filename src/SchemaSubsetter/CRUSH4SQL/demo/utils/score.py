@@ -88,6 +88,9 @@ def get_scored_docs(
     Returns:
         list: A ranked list of the top 100 documents based on their similarity scores.
     """
+    # Skalpel mod: handle empty segments list:
+    if len(segments) == 0:
+        return []
     A = []
     for segment in segments:
         embedding = get_openai_embedding(segment, api_type, api_key, endpoint, api_version)
