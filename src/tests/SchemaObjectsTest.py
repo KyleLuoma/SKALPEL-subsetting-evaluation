@@ -93,4 +93,5 @@ def schema_as_bird_json_format_test():
         'column_types': ['INTEGER', 'TEXT', 'REAL', 'INTEGER'], 
         'column_names_original': [[-1, '*'], [0, 'id'], [0, 'name'], [0, 'value'], [1, 'id']], 
         'primary_keys': [0], 
-        'foreign_keys': [[2, 3]]}
+        'foreign_keys': [[2, 3]]
+        }

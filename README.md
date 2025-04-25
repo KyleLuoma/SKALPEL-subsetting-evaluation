@@ -85,3 +85,7 @@ We did our best to faithfully implement the subsetting methods. However, in some
 - Isolated the subsetter agent functionality and faithfully represented its implementation in the Skalpel DinSqlSubsetter class.
 - Added additional response parsing to extract the links returned by the LLM. This addition is necessary because in the DINSQL pipeline, the response is simply passed as a string to the next agent whereas we need it to be processed and evaluated in the skalpel Schema format.
 - Increased max tokens to generate to accomodate reasoning over larger schemas
+
+
+# RSLSQL Modifications
+- Modified db_op.py to interact with benchmark classes instead of directly with sqlite databases.
