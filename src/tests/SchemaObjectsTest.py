@@ -59,3 +59,38 @@ def schema_col_count_test():
     schema = snails.get_active_schema(database="NTSB")
     print(schema.get_column_count())
     return schema.get_column_count() == 1161
+
+
+def schema_as_bird_json_format_test():
+    schema = Schema(
+        database="pickle_me",
+        tables=[
+            SchemaTable(
+                name="dill",
+                columns=
+            [
+                TableColumn(name="id", data_type="INTEGER"),
+                TableColumn(name="name", data_type="TEXT"),
+                TableColumn(name="value", data_type="REAL")
+            ],
+            primary_keys=["id"],
+            foreign_keys=[ForeignKey(columns=["value"], references=("relish", ["id"]))]
+            ),
+            SchemaTable(
+                name="relish",
+                columns=[
+                    TableColumn(name="id", data_type="INTEGER")
+                ]
+            )
+        ]
+    )
+    schema_dict = schema.as_bird_json_format()
+    return schema_dict == {
+        'db_id': 'pickle_me', 
+        'table_names': ['dill', 'relish'], 
+        'table_names_original': ['dill', 'relish'], 
+        'column_names': [[-1, '*'], [0, 'id'], [0, 'name'], [0, 'value'], [1, 'id']], 
+        'column_types': ['INTEGER', 'TEXT', 'REAL', 'INTEGER'], 
+        'column_names_original': [[-1, '*'], [0, 'id'], [0, 'name'], [0, 'value'], [1, 'id']], 
+        'primary_keys': [0], 
+        'foreign_keys': [[2, 3]]}

@@ -117,8 +117,8 @@ class ForeignKey:
 
     def __init__(
             self,
-            columns: list,
-            references: tuple #("table1": ["column1" ...])
+            columns: list[str],
+            references: tuple[str, list[str]] #("table1": ["column1" ...])
             ):
         self.columns = columns
         self.references = references
@@ -321,6 +321,43 @@ class Schema:
         for table in self.tables:
             col_count += table.get_column_count()
         return col_count
+    
+
+    def as_bird_json_format(self) -> dict:
+        schema_dict = {"db_id": self.database} 
+        schema_dict["table_names"] = [table.name for table in self.tables]
+        schema_dict["table_names_original"] = schema_dict["table_names"]
+        schema_dict["column_names"] = [[-1, "*"]]
+        schema_dict["column_types"] = []
+        col_ix_lookup = {}
+        col_ix = 0
+        for ix, table in enumerate(self.tables):
+            for column in table.columns:
+                schema_dict["column_names"].append([ix, column.name])
+                schema_dict["column_types"].append(column.data_type)
+                col_ix_lookup[(table.name, column.name)] = col_ix
+                col_ix += 1
+        schema_dict["column_names_original"] = schema_dict["column_names"]
+        schema_dict["primary_keys"] = []
+        for table in self.tables:
+            if len(table.primary_keys) == 0:
+                continue
+            if len(table.primary_keys) == 1:
+                schema_dict["primary_keys"].append(col_ix_lookup[(table.name, table.primary_keys[0])])
+            else:
+                composite_key = [col_ix_lookup[(table.name, col_name)] for col_name in table.primary_keys]
+                schema_dict["primary_keys"].append(composite_key)
+        schema_dict["foreign_keys"] = []
+        for table in self.tables:
+            if not table.foreign_keys or len(table.foreign_keys) == 0:
+                continue
+            for fk in table.foreign_keys:
+                for ix in range(len(fk.columns)):
+                    schema_dict["foreign_keys"].append([
+                        col_ix_lookup[(table.name, fk.columns[ix])],
+                        col_ix_lookup[(fk.references[0], fk.references[1][ix])]
+                    ])
+        return schema_dict
 
 
 
