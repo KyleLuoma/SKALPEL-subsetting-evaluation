@@ -89,3 +89,4 @@ We did our best to faithfully implement the subsetting methods. However, in some
 
 # RSLSQL Modifications
 - Modified db_op.py to interact with benchmark classes instead of directly with sqlite databases.
+- Made a change to backwards schema linking to reflect the methodology described in the paper: the authors describe this process as generating preliminary SQL using the full schema, then extracting identifiers from the SQL that match to identifiers in the schema. However, in the code the preliminary SQL is generated using the subset (in step_1_preliminary.py).

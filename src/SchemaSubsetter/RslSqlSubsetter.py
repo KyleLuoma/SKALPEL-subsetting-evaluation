@@ -1,4 +1,8 @@
 from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
+from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
+from NlSqlBenchmark.SchemaObjects import (
+    Schema, SchemaTable, TableColumn, ForeignKey
+)
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 
@@ -10,6 +14,8 @@ from SchemaSubsetter.RSLSQL.few_shot import (
     construct_QA as cqa,
     slg_main as slg
     )
+from SchemaSubsetter.RSLSQL.src import step_1_preliminary_sql
+from SchemaSubsetter.RSLSQL.src import bid_schema_linking
 import os
 
 class RslSqlSubsetter(SchemaSubsetter):
@@ -23,6 +29,7 @@ class RslSqlSubsetter(SchemaSubsetter):
         self.benchmark = benchmark
         self.data_folder = "src/SchemaSubsetter/RSLSQL/data"
         self.k_shot = 3
+        self.preprocess_databases(filename_comments="on_init_not_for_performance_evaluation")
 
 
     def preprocess_databases(
@@ -102,6 +109,49 @@ class RslSqlSubsetter(SchemaSubsetter):
     def get_schema_subset(
             self, 
             benchmark_question: BenchmarkQuestion
-            ):
-        raise NotImplementedError
-    
+            ) -> SchemaSubsetterResult:
+        
+        information = {}
+        ppl = {
+            "question_id": benchmark_question.question_number,
+            "db_id": benchmark_question.schema.database,
+            "question": benchmark_question.question,
+            "evidence": "",
+            "SQL": benchmark_question.query,
+            "difficulty": ""
+        }
+        # Forward schema linking: using LLM with a prompt to find tables and columns:
+        table_info = step_1_preliminary_sql.table_info_construct(ppl)
+        table_column_subset = step_1_preliminary_sql.table_column_selection(table_info=table_info, ppl=ppl)
+        information['tables'] = table_column_subset['tables']
+        information['columns'] = table_column_subset['columns']
+        # Then we generate a preliminary SQL statement
+        # This is a modification of the RSSQL code because in the arxiv paper, preliminary sql is generated
+        # by using the entire schema whereas the demonstration code uses the LLM-generated subset for
+        # the preliminary sql.
+        table_column = {
+            "tables": [table.name for table in benchmark_question.schema.tables],
+            "columns": []
+        }
+        for table in benchmark_question.schema.tables:
+            for column in table.columns:
+                table_column["columns"].append(f"{table.name}.{column.name}")
+        pre_sql = step_1_preliminary_sql.preliminary_sql(table_info=table_info, table_column=table_column, ppl=ppl)
+        # Backwards schema linking: Match identifiers in the question schema to identifiers in the sql statement:
+        idents_from_sql = self._extract_from_sql(sql=pre_sql, question=benchmark_question)
+
+
+        
+    def _extract_from_sql(self, sql: str, question: BenchmarkQuestion) -> list:
+        """
+        Derived from RSLSQL.src.bid_schema_linking.extract_from_sql method 
+        by replicating the string matching functionality of the original method.
+        """
+        pred_truth = []
+        sql = sql.lower()
+        for table in question.schema.tables:
+            if table.name.lower() == "sqlite_sequence":
+                continue
+            for column in table.columns:
+                if column.name.lower() in sql:
+                    pred_truth.append(f"{table.name}.{column.name}")
