@@ -1,6 +1,6 @@
 import openai
 import json
-from configs.config import api, base_url, model
+from SchemaSubsetter.RSLSQL.src.configs.config import api, base_url, model
 
 
 class GPT:
@@ -32,5 +32,5 @@ class GPT:
             except:
                 flag = True
                 num += 1
-
-        return response.choices[0].message.content
+        total_tokens = response.usage.total_tokens
+        return response.choices[0].message.content, total_tokens

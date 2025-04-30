@@ -212,7 +212,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
 
     def get_sample_values(self,  table_name: str, column_name: str, database: str = None, num_values: int = 2) -> list[str]:
         if database == None:
-            database = self.active_database
+            database = self.databases[self.active_database]
         con = sqlite3.connect(
             f"{self.benchmark_folder}/dev_databases/dev_databases/{database}/{database}.sqlite"
             )

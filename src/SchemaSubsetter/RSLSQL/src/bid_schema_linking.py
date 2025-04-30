@@ -3,7 +3,7 @@ import sqlite3
 import json
 import copy
 import argparse
-from configs.config import dev_databases_path, dev_json_path
+from SchemaSubsetter.RSLSQL.src.configs.config import dev_databases_path, dev_json_path
 
 
 def get_tables_and_columns(sqlite_db_path):

@@ -1,7 +1,7 @@
-from llm.LLM import GPT as model
+from SchemaSubsetter.RSLSQL.src.llm.LLM import GPT as model
 import json
 from tqdm import tqdm
-from configs.Instruction import TABLE_AUG_INSTRUCTION, SQL_GENERATION_INSTRUCTION
+from SchemaSubsetter.RSLSQL.src.configs.Instruction import TABLE_AUG_INSTRUCTION, SQL_GENERATION_INSTRUCTION
 import argparse
 
 
@@ -22,9 +22,9 @@ def table_column_selection(table_info, ppl):
     evidence = ppl['evidence'].strip()
     question = ppl['question'].strip()
     prompt_table = table_info.strip() + '\n\n' + '### definition: ' + evidence + "\n### Question: " + question
-    table_column = gpt(TABLE_AUG_INSTRUCTION, prompt_table)
+    table_column, total_tokens = gpt(TABLE_AUG_INSTRUCTION, prompt_table)
     table_column = json.loads(table_column)
-    return table_column
+    return table_column, total_tokens
 
 
 def preliminary_sql(table_info, table_column, ppl):
@@ -37,7 +37,7 @@ def preliminary_sql(table_info, table_column, ppl):
 
     table_info = example.strip() + "\n\n### Answer the question by sqlite SQL query only and with no explanation. You must minimize SQL execution time while ensuring correctness.\n" + table_info.strip() + '\n\n### definition: ' + evidence + "\n### Question: " + question
 
-    answer = gpt(SQL_GENERATION_INSTRUCTION, table_info)
+    answer, total_tokens = gpt(SQL_GENERATION_INSTRUCTION, table_info)
     try:
         answer = json.loads(answer)
     except Exception as e:
@@ -45,7 +45,7 @@ def preliminary_sql(table_info, table_column, ppl):
         answer = answer.replace("\\", "\\\\")
         answer = json.loads(answer)
     answer = answer['sql'].replace('\n', ' ')
-    return answer
+    return answer, total_tokens
 
 
 def main(ppl_file, output_file, info_file, x=0):

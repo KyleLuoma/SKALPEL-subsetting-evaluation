@@ -2,6 +2,7 @@ import argparse
 import json
 from SchemaSubsetter.RSLSQL.few_shot.get_example_modules import EuclideanDistanceQuestionMaskSelector
 from tqdm import tqdm
+import time
 
 def get_example_prefix():
     return "### Some example pairs of question and corresponding SQL query are provided based on similar problems:\n"
@@ -16,6 +17,10 @@ def format_example(example: dict):
 
 def run_sql_generation(input_data,out_file,k_shot=0,):
 
+    # Skalpel mod: return dict of processing times by database
+    processing_times = {}
+    timing_db = ""
+
     # load_libray
     if k_shot != 0:
         examples_libary = EuclideanDistanceQuestionMaskSelector()
@@ -24,18 +29,26 @@ def run_sql_generation(input_data,out_file,k_shot=0,):
     all_prompts = []
     # get all prompts for parallel
     print('Generating ...')
-    for i, sample in tqdm(enumerate(input_data)):
+    for i, sample in tqdm(enumerate(input_data), total=len(input_data)):
+        db_name = sample["db"]
+        # Skalpel mod: return dict of processing times by database
+        if db_name not in processing_times.keys():
+            processing_times[db_name] = time.perf_counter()
+            if timing_db != "":
+                processing_times[timing_db] = time.perf_counter() - processing_times[timing_db]
+            timing_db = db_name
+
         if k_shot != 0:
             examples = examples_libary.get_examples(sample,k_shot)
             answer = "### Some example pairs of question and corresponding SQL query are provided based on similar problems:"
             for example in examples:
                 answer += format_example(example)
-        
         all_prompts.append(answer)
 
-
+    processing_times[timing_db] = time.perf_counter() - processing_times[timing_db]
     with open(out_file, 'w', encoding='utf-8') as file:
         json.dump(all_prompts, file, ensure_ascii=False, indent=4)
+    return processing_times
 
 
 

@@ -2,6 +2,7 @@ import json
 from tqdm import tqdm
 from SchemaSubsetter.RSLSQL.src.utils.db_op import get_table_infos, get_foreign_key_infos, get_throw_row_data
 import os
+import time
 from SchemaSubsetter.RSLSQL.src.configs.config import dev_json_path
 
 
@@ -34,18 +35,38 @@ def generate_table_infos(db_list):
     return table_str_list
 
 
+
 def create_output_structure(ppls, table_infos):
     outputs = []
-    for i in tqdm(range(len(ppls))):
+    # Skalpel mod: return dict of processing times by database
+    processing_times = {}
+    timing_db = ""
+    # Skalpel mod: cache ddl data for each db to avoid reprocessing
+    # for every question
+    ddl_cache = {}
+
+    for i in tqdm(range(len(ppls)), desc="Creating output structure."):
         ppl = ppls[i]
         evidence = ppl['evidence']
         db_name = ppl['db_id']
+
+        # Skalpel mod: return dict of processing times by database
+        if db_name not in processing_times.keys():
+            processing_times[db_name] = time.perf_counter()
+            if timing_db != "":
+                processing_times[timing_db] = time.perf_counter() - processing_times[timing_db]
+            timing_db = db_name
+
         question = ppl['question']
         # SQL = ppl['SQL']
         foreign_str = get_foreign_key_infos(db_name)
 
         table_str = next((info['simplified_ddl'] for info in table_infos if info['db'] == db_name), None)
-        ddl_data = "#\n" + get_throw_row_data(db_name).strip() + "\n# "
+        if db_name not in ddl_cache.keys():
+            ddl_data = "#\n" + get_throw_row_data(db_name).strip() + "\n# "
+            ddl_cache[db_name] = ddl_data
+        else:
+            ddl_data = ddl_cache[db_name]
 
         output = {
             'db': db_name,
@@ -56,7 +77,8 @@ def create_output_structure(ppls, table_infos):
             'foreign_key': foreign_str
         }
         outputs.append(output)
-    return outputs
+    processing_times[timing_db] = time.perf_counter() - processing_times[timing_db]
+    return outputs, processing_times
 
 
 def generate_ppl_dev_json(dev_file, out_file):
@@ -68,11 +90,13 @@ def generate_ppl_dev_json(dev_file, out_file):
     save_json(all_table_info, 'src/SchemaSubsetter/RSLSQL/src/information/describle.json')
 
     table_infos = load_json('src/SchemaSubsetter/RSLSQL/src/information/describle.json')
-    outputs = create_output_structure(ppls, table_infos)
+    outputs, processing_times = create_output_structure(ppls, table_infos)
 
     save_json(outputs, out_file)
 
     os.remove('src/SchemaSubsetter/RSLSQL/src/information/describle.json')
+
+    return processing_times
 
 #Skalpel mod, prevent exec on import
 if __name__ == "__main__":

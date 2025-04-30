@@ -145,10 +145,12 @@ def get_throw_row_data(db_name):
     bm_name = bm_fact.lookup_benchmark_by_db_name(db_name=db_name)
     bm = bm_fact.build_benchmark(bm_name)
     simplified_ddl_data = []
+    bm.set_active_schema(database_name=db_name)
     for table in bm.get_active_schema(database=db_name).tables:
         test = ""
         for column in table.columns:
             col_vals = bm.get_sample_values(table_name=table.name, column_name=column.name, num_values=3)
+            col_vals = [str(c) for c in col_vals]
             try:
                 test += f"`{column.name}`[{','.join(col_vals)}],"
             except:

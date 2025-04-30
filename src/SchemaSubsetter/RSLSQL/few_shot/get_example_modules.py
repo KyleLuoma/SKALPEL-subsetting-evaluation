@@ -26,7 +26,7 @@ class EuclideanDistanceQuestionMaskSelector(BasicExampleSelector):
 
         ### 得到所有的问题
         train_mask_questions = self.train_questions
-        self.bert_model = SentenceTransformer(self.SELECT_MODEL, device="cpu")
+        self.bert_model = SentenceTransformer(self.SELECT_MODEL, device="cuda")
         self.train_embeddings = self.bert_model.encode(train_mask_questions, show_progress_bar=False)
 
     def get_examples(self, target, num_example):

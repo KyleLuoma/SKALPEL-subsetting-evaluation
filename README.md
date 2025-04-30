@@ -22,11 +22,20 @@ tmux new -s <session_name>
 tmux attach -t <session_name>
 ```
 
+# Do preprocessing without subsetting
+
 ## crush4sql on Lambda1
 ```bash
 python ./src/main.py --subsetter_name crush4sql --benchmark_name bird --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
 python ./src/main.py --subsetter_name crush4sql --benchmark_name snails --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
 python ./src/main.py --subsetter_name crush4sql --benchmark_name spider2 --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
+```
+
+## rslsql on Lambda1
+```bash
+python ./src/main.py --subsetter_name rslsql --benchmark_name bird --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name rslsql --benchmark_name snails --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
 ```
 
 # Do subsetting without preprocessing
@@ -59,6 +68,10 @@ python ./src/main.py --subsetter_name DINSQL --benchmark_name snails --filename_
 python ./src/main.py --subsetter_name DINSQL --benchmark_name spider2 --filename_comments gpt41 --recover_previous
 ```
 
+## RSSQL with GPT4.1 nano
+```bash
+python ./src/main.py --subsetter_name rslsql --benchmark_name bird --filename_comments gpt41nano --recover_previous
+```
 
 # Modifications made to subsetting methods
 
