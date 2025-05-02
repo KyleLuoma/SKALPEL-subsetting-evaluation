@@ -150,18 +150,10 @@ class RslSqlSubsetter(SchemaSubsetter):
         table_column_subset, tc_tokens = step_1_preliminary_sql.table_column_selection(table_info=table_info, ppl=ppl)
         information['tables'] = table_column_subset['tables']
         information['columns'] = table_column_subset['columns']
-        # Then we generate a preliminary SQL statement
-        # This is a modification of the RSSQL code because in the arxiv paper, preliminary sql is generated
-        # by using the entire schema whereas the demonstration code uses the LLM-generated subset for
-        # the preliminary sql.
-        # table_column = {
-        #     "tables": [table.name for table in benchmark_question.schema.tables],
-        #     "columns": []
-        # }
-        # for table in benchmark_question.schema.tables:
-        #     for column in table.columns:
-        #         table_column["columns"].append(f"{table.name}.{column.name}")
-        pre_sql, prelim_tokens = step_1_preliminary_sql.preliminary_sql(table_info=table_info, table_column=table_column_subset, ppl=ppl)
+        pre_sql, prelim_tokens = step_1_preliminary_sql.preliminary_sql(
+            table_info=table_info, 
+            table_column=table_column_subset, ppl=ppl
+            )
         # Backwards schema linking: Match identifiers in the question schema to identifiers in the sql statement:
         idents_from_sql = self._extract_from_sql(sql=pre_sql, question=benchmark_question)
         tables_in_subset: dict[str, SchemaTable] = {}
@@ -174,6 +166,8 @@ class RslSqlSubsetter(SchemaSubsetter):
             if table not in tables_in_subset.keys():
                 tables_in_subset[table] = SchemaTable(name=table, columns=[])
         for t_c in information["columns"]:
+            if "." not in t_c:
+                continue
             table = t_c.split(".")[0]
             column = t_c.split(".")[1].replace("`", "")
             if table not in tables_in_subset.keys():

@@ -23,7 +23,11 @@ def table_column_selection(table_info, ppl):
     question = ppl['question'].strip()
     prompt_table = table_info.strip() + '\n\n' + '### definition: ' + evidence + "\n### Question: " + question
     table_column, total_tokens = gpt(TABLE_AUG_INSTRUCTION, prompt_table)
-    table_column = json.loads(table_column)
+    # Skalpel mod: exception handling for bad response formats
+    try:
+        table_column = json.loads(table_column)
+    except json.decoder.JSONDecodeError as e:
+        table_column = {"tables": [], "columns": []}
     return table_column, total_tokens
 
 
@@ -42,8 +46,12 @@ def preliminary_sql(table_info, table_column, ppl):
         answer = json.loads(answer)
     except Exception as e:
         print(e)
-        answer = answer.replace("\\", "\\\\")
-        answer = json.loads(answer)
+        # Skalpel mod: handle the second attempt at json.loads
+        try:
+            answer = answer.replace("\\", "\\\\")
+            answer = json.loads(answer)
+        except json.decoder.JSONDecodeError as e_inner:
+            return "", total_tokens
     answer = answer['sql'].replace('\n', ' ')
     return answer, total_tokens
 
