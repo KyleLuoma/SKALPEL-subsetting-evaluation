@@ -72,6 +72,7 @@ python ./src/main.py --subsetter_name DINSQL --benchmark_name spider2 --filename
 ```bash
 python ./src/main.py --subsetter_name rslsql --benchmark_name bird --filename_comments gpt41nano --recover_previous
 python ./src/main.py --subsetter_name rslsql --benchmark_name snails --filename_comments gpt41nano --recover_previous
+python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename_comments gpt41nano --recover_previous
 ```
 
 # Modifications made to subsetting methods
