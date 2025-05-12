@@ -40,7 +40,9 @@ python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename
 
 ## TaSQL with gpt-4.1-nano
 ```bash
-python ./src/main.py --subsetter_name rslsql --benchmark_name bird --filename_comments gpt41nano --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name tasql --benchmark_name bird --filename_comments gpt41nano --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name tasql --benchmark_name snails --filename_comments gpt41nano --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_comments gpt41nano --no_subset_generation --subsetter_preprocessing
 ```
 
 # Do subsetting without preprocessing
