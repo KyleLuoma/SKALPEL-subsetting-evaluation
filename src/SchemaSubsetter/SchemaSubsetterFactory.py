@@ -4,6 +4,7 @@ from SchemaSubsetter.CodeSSubsetter import CodeSSubsetter
 from SchemaSubsetter.Crush4SqlSubsetter import Crush4SqlSubsetter
 from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
 from SchemaSubsetter.RslSqlSubsetter import RslSqlSubsetter
+from SchemaSubsetter.TaSqlSubsetter import TaSqlSubsetter
 from SchemaSubsetter.Perfect.PerfectSchemaSubsetter import PerfectSchemaSubsetter
 from SchemaSubsetter.Perfect.PerfectTableSchemaSubsetter import PerfectTableSchemaSubsetter
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
@@ -18,6 +19,7 @@ class SchemaSubsetterFactory:
         "crush4sql",
         "DINSQL",
         "rslsql",
+        "tasql",
         "perfect_subsetter",
         "perfect_table_subsetter"
     ]
@@ -29,6 +31,7 @@ class SchemaSubsetterFactory:
         "crush4sql": (Crush4SqlSubsetter, {}),
         "DINSQL": (DinSqlSubsetter, {"model":"gpt-4.1"}),
         "rslsql": (RslSqlSubsetter, {}),
+        "tasql": (TaSqlSubsetter, {}),
         "perfect_subsetter": (PerfectSchemaSubsetter, {}),
         "perfect_table_subsetter": (PerfectTableSchemaSubsetter, {})
     }
