@@ -353,9 +353,13 @@ class Schema:
                 continue
             for fk in table.foreign_keys:
                 for ix in range(len(fk.columns)):
+                    if type(fk.references[1]) == list:
+                        references_col = fk.references[1][ix]
+                    else:
+                        references_col = fk.references[1]
                     schema_dict["foreign_keys"].append([
                         col_ix_lookup[(table.name, fk.columns[ix])],
-                        col_ix_lookup[(fk.references[0], fk.references[1][ix])]
+                        col_ix_lookup[(fk.references[0], references_col)]
                     ])
         return schema_dict
 

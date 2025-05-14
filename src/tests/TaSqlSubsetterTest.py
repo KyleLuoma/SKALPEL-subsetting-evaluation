@@ -1,6 +1,7 @@
 from SchemaSubsetter.TaSqlSubsetter import TaSqlSubsetter
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.snails.SnailsNlSqlBenchmark import SnailsNlSqlBenchmark
 from NlSqlBenchmark.SchemaObjects import (
     Schema
 )

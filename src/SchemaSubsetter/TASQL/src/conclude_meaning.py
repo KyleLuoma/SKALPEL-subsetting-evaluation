@@ -110,14 +110,12 @@ def get_prompts_skalpel(benchmark: NlSqlBenchmark):
 def conclude_each_column(prompt_dic, output_path, skip_already_processed: bool = True):
     output_dic = {}
     processing_times = {}
-    timing_db = None
+
     for column, prompt in tqdm.tqdm(prompt_dic.items(), desc="Generating column descriptions"):
+        s_time = time.perf_counter()
         db = column.split("|")[0]
         if db not in processing_times.keys():
-            processing_times[db] = time.perf_counter()
-            if timing_db != None:
-                processing_times[timing_db] = time.perf_counter() - processing_times[timing_db]
-            timing_db = db
+            processing_times[db] = 0
 
         output = collect_response(prompt, max_tokens = 800, stop = '\n')
         output_dic[column] = output
@@ -130,7 +128,8 @@ def conclude_each_column(prompt_dic, output_path, skip_already_processed: bool =
                 contents = {}
         contents.update(output_dic)
         json.dump(output_dic, open(output_path, 'w'), indent=4)
-    processing_times[timing_db] = time.perf_counter() - processing_times[timing_db]
+        e_time = time.perf_counter()
+        processing_times[db] += e_time - s_time
     return processing_times
 
 

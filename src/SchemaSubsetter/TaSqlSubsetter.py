@@ -12,6 +12,7 @@ from SchemaSubsetter.TASQL.src.modules import TASL
 import time
 import os
 import json
+import multiprocessing as mp
 from pathlib import Path
 
 
@@ -33,6 +34,7 @@ class TaSqlSubsetter(SchemaSubsetter):
             exist_ok: bool = True, 
             filename_comments: str = "", 
             skip_already_processed: bool = False, 
+            do_multiprocessing: bool = False,
             **args
             ) -> dict[str, float]:
         try:
@@ -47,21 +49,48 @@ class TaSqlSubsetter(SchemaSubsetter):
         prompt_dic, prompt_make_times = conclude_meaning.get_prompts_skalpel(self.benchmark)
 
         if not os.path.exists(self.column_meaning_path / "column_meaning.json") and not skip_already_processed:
-            conclude_columns_times = conclude_meaning.conclude_each_column(
-                prompt_dic, 
-                str(self.column_meaning_path / "column_meaning.json"),
-                skip_already_processed=skip_already_processed
-                )
+
+            if do_multiprocessing:
+
+                num_processors = min(128, os.cpu_count() or 1)
+                split_prompt_dics = [{} for i in range(num_processors)]
+                for i, k in enumerate(prompt_dic.keys()):
+                    split_prompt_dics[i % num_processors][k] = prompt_dic[k]
+
+                with mp.Pool(processes=num_processors) as pool:
+                    results = [
+                        pool.apply_async(
+                            conclude_meaning.conclude_each_column,
+                            args=(
+                                split_prompt_dics[i],
+                                str(self.column_meaning_path / f"column_meaning_{i}.json")
+                            ),
+                            kwds={"skip_already_processed": skip_already_processed},
+                        )
+                        for i in range(num_processors)
+                    ]
+                    conclude_columns_times_list = [result.get() for result in results]
+
+                conclude_columns_times = {}
+                for times in conclude_columns_times_list:
+                    conclude_columns_times.update(times)
+
+            else:
+                conclude_columns_times = conclude_meaning.conclude_each_column(
+                    prompt_dic, 
+                    str(self.column_meaning_path / "column_meaning.json"),
+                    skip_already_processed=skip_already_processed
+                    )
         else:
             conclude_columns_times = {db: 0 for db in prompt_make_times.keys()}
-            
-        processing_times = {}
-        for db in prompt_make_times.keys():
-            processing_times[db] = prompt_make_times[db] + conclude_columns_times[db]
-            performance_time_file = f"./subsetting_results/preprocessing_times/{self.name}_{self.benchmark.name}_{db}_{filename_comments}_processing.json"
-            with open(performance_time_file, "wt") as f:
-                f.write(json.dumps({db: processing_times[db]}, indent=2))
 
+        processing_times = {}
+        if not skip_already_processed:
+            for db in prompt_make_times.keys():
+                processing_times[db] = prompt_make_times[db] + conclude_columns_times[db]
+                performance_time_file = f"./subsetting_results/preprocessing_times/{self.name}_{self.benchmark.name}_{db}_{filename_comments}_processing.json"
+                with open(performance_time_file, "wt") as f:
+                    f.write(json.dumps({db: processing_times[db]}, indent=2))
         self._make_table_json()
         self._make_question_json()
         return processing_times

@@ -79,7 +79,8 @@ def main():
         db_processing_times = subsetter.preprocess_databases(
             exist_ok=False, 
             filename_comments=filename_comments,
-            skip_already_processed=False
+            skip_already_processed=False,
+            do_multiprocessing=True
             )
         e_time = time.perf_counter()
         total_time = e_time - s_time

@@ -108,6 +108,8 @@ class TASL(BaseModule):
         
         for key, value in self.column_meanings.items():
             db_id, otn, ocn = key.split('|')
+            if type(value) == list:
+                value = value[0]
             value = value.replace('#', '')
             value = value.replace('\n', ',  ')
             schema_item_dic[db_id][otn][ocn] = value
