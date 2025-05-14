@@ -76,6 +76,7 @@ def get_prompts_skalpel(benchmark: NlSqlBenchmark):
         table_json.append(benchmark.get_active_schema().as_bird_json_format())
     prompt_dic = {}
     processing_times = {}
+    start_schema = benchmark.get_active_schema().database
     for db in benchmark.databases:
         s_time = time.perf_counter()
         benchmark.set_active_schema(db)
@@ -104,6 +105,7 @@ def get_prompts_skalpel(benchmark: NlSqlBenchmark):
                 prompt_dic[f'{db}|{table.name}|{column.name}'] = column_meaning_prompt.format(input_paras = input_paras)
         e_time = time.perf_counter()
         processing_times[db] = e_time - s_time
+    benchmark.set_active_schema(start_schema)
     return prompt_dic, processing_times
 
 # Skalpel mod: added performance timing for each db, and skip already processed boolean

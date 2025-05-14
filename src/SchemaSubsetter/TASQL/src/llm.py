@@ -27,6 +27,7 @@ def connect_gpt4(message, prompt):
     return response['choices'][0]['message']['content']
 
 # Skalpel mod: updated openai call to newer version and added model selection parameter, returns token count
+# Skalpel mod: Added handling for prompts that exceet context window
 def collect_response(prompt, max_tokens = 800, stop = None, model = model) -> tuple[str, int]:
     while 1:
             flag = 0
@@ -48,6 +49,10 @@ def collect_response(prompt, max_tokens = 800, stop = None, model = model) -> tu
                 
             except Exception as e:
                 print(e)
+                if "string too long" in str(e) or "maximum context length" in str(e):
+                    response_text = ""
+                    response_tokens = -1
+                    flag = 1
                 time.sleep(1)
             if flag == 1:
                 break

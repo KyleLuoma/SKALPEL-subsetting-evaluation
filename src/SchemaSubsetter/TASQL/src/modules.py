@@ -91,7 +91,17 @@ class BaseModule():
 class TASL(BaseModule):
     def __init__(self, db_root_path, mode, column_meaning_path):
         super().__init__(db_root_path, mode)
-        self.column_meanings = json.load(open(column_meaning_path, 'r'))
+        if "spider2" in column_meaning_path:
+            self.column_meanings = {}
+            filename_ix = 0
+            filename = column_meaning_path.replace("meaning.json", f"meaning_{filename_ix}.json")
+            while os.path.exists(filename):
+                partial_column_meanings = json.load(open(filename, 'r'))
+                self.column_meanings.update(partial_column_meanings)
+                filename_ix += 1
+                filename = column_meaning_path.replace("meaning.json", f"meaning_{filename_ix}.json")
+        else:
+            self.column_meanings = json.load(open(column_meaning_path, 'r'))
         self.mode = mode
         self.schema_item_dic = self._reconstruct_schema()
         

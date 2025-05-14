@@ -96,6 +96,13 @@ def iter_test():
     return found_databases == snails_databases and len(questions) == 503
 
 
+def iter_reset_test():
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
+    for q in snails:
+        pass
+    question = snails.get_active_question()
+    return question.question_number == 0 and question.schema.database == snails.databases[snails.active_database]
+
 def get_sample_values_test():
     correct_result = ['1', '2']
     snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)

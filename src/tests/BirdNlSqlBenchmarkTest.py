@@ -32,6 +32,12 @@ def iter_test():
     return found_databases == bird_databases and len(questions) == 1534
 
 
+def iter_reset_test():
+    bird = BirdNlSqlBenchmark()
+    for q in bird:
+        pass
+    return bird.active_database == 0 and bird.active_question_no == 0
+
 
 def execute_query_valid_query_test():
     bird = BirdNlSqlBenchmark()

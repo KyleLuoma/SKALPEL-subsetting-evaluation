@@ -80,7 +80,7 @@ def main():
             exist_ok=False, 
             filename_comments=filename_comments,
             skip_already_processed=False,
-            do_multiprocessing=True
+            do_multiprocessing=False
             )
         e_time = time.perf_counter()
         total_time = e_time - s_time

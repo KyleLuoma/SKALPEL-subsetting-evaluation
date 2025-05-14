@@ -91,8 +91,10 @@ class TaSqlSubsetter(SchemaSubsetter):
                 performance_time_file = f"./subsetting_results/preprocessing_times/{self.name}_{self.benchmark.name}_{db}_{filename_comments}_processing.json"
                 with open(performance_time_file, "wt") as f:
                     f.write(json.dumps({db: processing_times[db]}, indent=2))
+
         self._make_table_json()
         self._make_question_json()
+
         return processing_times
     
 
@@ -113,7 +115,7 @@ class TaSqlSubsetter(SchemaSubsetter):
                 "question": question.question,
                 "evidence": "",
                 "SQL": question.query,
-                "difficulty": ""
+                "difficulty": "ggg"
             })
         json.dump(question_json, open(self.dummy_db_root_path / "dev.json", "w"), indent=4)
 

@@ -98,6 +98,8 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
             self.active_question_no = 0
             if self.active_database >= len(self.databases):
                 self.__init__(db_host_profile=self.db_host_profile, sql_dialect=self.sql_dialect)
+                # self.active_database = 0
+                # self.active_question_no = 0
                 raise StopIteration
             self.active_database_questions = self.__load_active_database_questions()
             self.active_database_queries = self.__load_active_database_queries()

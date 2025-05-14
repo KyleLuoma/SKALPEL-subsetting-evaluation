@@ -161,6 +161,8 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             self.active_question_no = 0
             if self.active_database >= len(self.databases):
                 self.__init__()
+                self.active_question_no = 0
+                self.active_database = 0
                 raise StopIteration
             self.active_database_questions = self.__load_active_database_questions()
             self.active_database_queries = self.__load_active_database_queries()

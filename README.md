@@ -89,6 +89,13 @@ python ./src/main.py --subsetter_name rslsql --benchmark_name snails --filename_
 python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename_comments gpt4o --recover_previous
 ```
 
+## TASQL with GPT4.1 nano
+```bash
+python ./src/main.py --subsetter_name tasql --benchmark_name bird --filename_comments gpt41nano --recover_previous
+python ./src/main.py --subsetter_name tasql --benchmark_name snails --filename_comments gpt41nano --recover_previous
+python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_comments gpt41nano --recover_previous
+```
+
 # Modifications made to subsetting methods
 
 We did our best to faithfully implement the subsetting methods. However, in some cases modifications were required based on application of new benchmarks that resulted in failure states in the original code.
