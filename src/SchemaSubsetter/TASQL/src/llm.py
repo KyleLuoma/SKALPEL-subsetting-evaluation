@@ -10,7 +10,7 @@ import openai
 openai.api_key = "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"
 
 # Skalpel mod: adding model selection
-model="gpt-4.1-nano"
+model="gpt-4.1"
 
 def connect_gpt4(message, prompt):
     

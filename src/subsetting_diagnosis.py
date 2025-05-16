@@ -15,11 +15,28 @@ import os
 from tqdm import tqdm
 from util.StringObjectParser import StringObjectParser as sop
 
+
 def main():
+    results_folder = "./subsetting_results"
+    diagnosis_folder = f"{results_folder}/diagnosis"
+
+    if not os.path.exists(diagnosis_folder):
+        os.makedirs(diagnosis_folder)
+
+    for filename in os.listdir(results_folder):
+        if filename.endswith(".xlsx") and not filename.startswith("subsetting-diagnosis-"):
+            diagnosis_file = f"{diagnosis_folder}/{filename.replace('subsetting-', 'subsetting-diagnosis-')}"
+            if not os.path.exists(diagnosis_file):
+                diagnose_subsets(filename)
+
+
+def diagnose_subsets(
+        results_filename: str        
+):
     print(os.getcwd())
     naturalness = "Native"
     results_folder = "./subsetting_results"
-    results_filename = f"subsetting-CodeS-spider2-{naturalness}-NVIDIA_RTX_2000.xlsx"
+    # results_filename = f"subsetting-chess-bird-{naturalness}-gpt4o.xlsx"
     results_df = pd.read_excel(f"{results_folder}/{results_filename}")
     filename_params = results_filename.split("-")
     subsetter_name = filename_params[1]
@@ -37,12 +54,12 @@ def main():
 
     ### Benchmark encoding tasks, uncomment as-needed ###
 
-    benchmark_embedding.encode_benchmark(benchmark)
-    benchmark_embedding.encode_benchmark_questions(benchmark)
-    benchmark_embedding.encode_benchmark_gold_query_identifiers(benchmark=benchmark)
+    # benchmark_embedding.encode_benchmark(benchmark)
+    # benchmark_embedding.encode_benchmark_questions(benchmark)
+    # benchmark_embedding.encode_benchmark_gold_query_identifiers(benchmark=benchmark)
     # benchmark_embedding.encode_benchmark_values(benchmark=benchmark) #All values no longer needed
-    benchmark_embedding.encode_benchmark_gold_query_predicates(benchmark=benchmark)
-    return
+    # benchmark_embedding.encode_benchmark_gold_query_predicates(benchmark=benchmark)
+    # return
 
     results_dict = {
         "database": [],
@@ -63,7 +80,7 @@ def main():
         "nlq_ngram": []
     }
 
-    for row in tqdm(results_df.itertuples(), total=results_df.shape[0]):
+    for row in tqdm(results_df.itertuples(), total=results_df.shape[0], desc=f"Diagnosing {results_filename}"):
 
         correct_tables = set(sop.string_to_python_object(row.correct_tables))
         missing_tables = set(sop.string_to_python_object(row.missing_tables))
@@ -129,8 +146,8 @@ def main():
             naturalness=naturalness
         )
         
-        extra_tables = set(sop.string_to_python_object(row.extra_tables))
-        extra_columns = set(sop.string_to_python_object(row.extra_columns))
+        extra_tables = set(sop.string_to_python_object(row.extra_tables if row.extra_tables != "set()" else "{}", use_eval=True))
+        extra_columns = set(sop.string_to_python_object(row.extra_columns if row.extra_columns != "set()" else "{}", use_eval=True))
 
         ambiguous_columns = {}
         ambiguous_tables = {}
