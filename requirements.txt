@@ -1,6 +1,7 @@
 #Skalpel
 pandas
 openpyxl
+seaborn
 tqdm
 docker
 # torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
@@ -29,3 +30,6 @@ datasketch
 func_timeout
 sqlglot
 sqlvalidator
+
+
+
