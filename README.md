@@ -58,7 +58,7 @@ python ./src/main.py --subsetter_name crush4sql --benchmark_name spider2 --filen
 ```bash
 python ./src/main.py --subsetter_name CodeS --benchmark_name bird --filename_comments lambda1
 python ./src/main.py --subsetter_name CodeS --benchmark_name snails --filename_comments lambda1
-python ./src/main.py --subsetter_name CodeS --benchmark_name spider2 --filename_comments lambda1
+python ./src/main.py --subsetter_name CodeS --benchmark_name spider2 --filename_comments lambda1 --recover_previous
 ```
 
 ## Chess with GPT4o

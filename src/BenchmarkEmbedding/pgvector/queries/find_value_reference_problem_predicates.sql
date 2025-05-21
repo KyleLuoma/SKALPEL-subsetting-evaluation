@@ -1,4 +1,4 @@
-with w_a_matches as (
+with word_column_matches as (
 	select ngram, column_name 
 	from benchmark_question_natural_language_question_word_embeddings qnl
 	join benchmark_gold_query_predicates gqp on qnl.embedding <=> gqp.column_embedding <= 0.35
@@ -23,7 +23,7 @@ join benchmark_gold_query_predicates gqp on qnl.embedding <=> gqp.literal_embedd
 join question_identifiers qi on gqp.column_name = qi.column_name
 	and gqp.question_number = qi.question_number
 	and gqp.database_name = qi.database_name
-where concat(ngram, gqp.column_name) not in (select concat(ngram, column_name) from w_a_matches)
+where concat(ngram, gqp.column_name) not in (select concat(ngram, column_name) from word_column_matches)
 	and qnl.database_name = '__DATABASE_NAME__'
 	and gqp.naturalness = '__NATURALNESS__'
 	and qnl.question_number = __QUESTION_NUMBER__

@@ -23,6 +23,8 @@ def main():
     if not os.path.exists(diagnosis_folder):
         os.makedirs(diagnosis_folder)
 
+    # diagnose_subsets(f"subsetting-rslsql-bird-Native-gpt4o.xlsx")
+    # return
     for filename in os.listdir(results_folder):
         if filename.endswith(".xlsx") and not filename.startswith("subsetting-diagnosis-"):
             diagnosis_file = f"{diagnosis_folder}/{filename.replace('subsetting-', 'subsetting-diagnosis-')}"
@@ -82,8 +84,8 @@ def diagnose_subsets(
 
     for row in tqdm(results_df.itertuples(), total=results_df.shape[0], desc=f"Diagnosing {results_filename}"):
 
-        correct_tables = set(sop.string_to_python_object(row.correct_tables))
-        missing_tables = set(sop.string_to_python_object(row.missing_tables))
+        correct_tables = set(sop.string_to_python_object(row.correct_tables, use_eval=True))
+        missing_tables = set(sop.string_to_python_object(row.missing_tables, use_eval=True))
         results_dict["gold_query_tables"].append(
             correct_tables.union(missing_tables)
         )
@@ -95,8 +97,8 @@ def diagnose_subsets(
         else:
             results_dict["missing_tables"].append(missing_tables)
 
-        correct_attributes = set(sop.string_to_python_object(row.correct_columns))
-        missing_attributes = set(sop.string_to_python_object(row.missing_columns))
+        correct_attributes = set(sop.string_to_python_object(row.correct_columns, use_eval=True))
+        missing_attributes = set(sop.string_to_python_object(row.missing_columns, use_eval=True))
         results_dict["gold_query_columns"].append(
             correct_attributes.union(missing_attributes)
         )
@@ -127,7 +129,10 @@ def diagnose_subsets(
             value_reference_problem_results_dict[column] += question_vrp_items_dict[column]
 
         unmatched_attributes = {}
+        missing_columns_upper = [c.upper() for c in missing_attributes]
         for col in value_reference_problems.problem_columns:
+            if f"{col.table_name.upper()}.{col.column_name.upper()}" not in missing_columns_upper:
+                continue
             if f"{col.table_name}.{col.column_name}" not in unmatched_attributes.keys():
                 unmatched_attributes[f"{col.table_name}.{col.column_name}"] = [(col.nlq_ngram, col.db_text_value)]
             else:

@@ -47,6 +47,9 @@ class StringObjectParser:
             AssertionError: If use_eval is True and the input string is not properly encased with matching symbols.
         """
 
+        if input_string == "set()":
+            return set()
+
         if use_eval:
             warnings.warn("Using eval can be dangerous. Make sure the input string is from a trusted source.")
 

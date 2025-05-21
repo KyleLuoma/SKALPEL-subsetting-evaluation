@@ -26,7 +26,39 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
     exclude_from_eval = [
         "bq032.sql", # Contains * EXCEPT clause
         "bq119.sql", # Contains * EXCEPT clause
-        "bq098.sql"  # Unable to parse, reason unknown
+        "bq098.sql", # Unable to parse, reason unknown
+        "bq001.sql", # Has identifier * regex
+        "bq002.sql", # Has identifier * regex
+        "bq003.sql", # Has identifier * regex
+        "bq004.sql", # Has identifier * regex
+        "bq008.sql", # Has identifier * regex
+        "bq009.sql", # Has identifier * regex
+        "bq010.sql", # Has identifier * regex
+        "bq011.sql", # Has identifier * regex
+        "bq031.sql", # Has identifier * regex
+        "bq042.sql", # Has identifier * regex
+        "bq112.sql", # Has identifier * regex
+        "bq113.sql", # Has identifier * regex
+        "bq268.sql", # Has identifier * regex
+        "bq269.sql", # Has identifier * regex
+        "bq270.sql", # Has identifier * regex
+        "bq275.sql", # Has identifier * regex
+        "bq357.sql", # Has identifier * regex
+        "bq374.sql", # Has identifier * regex
+        "bq394.sql", # Has identifier * regex
+        "bq403.sql", # Has identifier * regex
+        "ga001.sql", # Has identifier * regex
+        "ga002.sql", # Has identifier * regex
+        "ga004.sql", # Has identifier * regex
+        "ga008.sql", # Has identifier * regex
+        "ga010.sql", # Has identifier * regex
+        "ga017.sql", # Has identifier * regex
+        "ga018.sql", # Has identifier * regex
+        "ga019.sql", # Has identifier * regex
+        "ga020.sql", # Has identifier * regex
+        "ga021.sql", # Has identifier * regex
+        "ga022.sql", # Has identifier * regex
+        "ga028.sql", # Has identifier * regex
     ]   
 
     def __init__(self):
