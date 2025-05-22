@@ -1,0 +1,422 @@
+{
+    "PATENTS": {
+        "table_count": 3,
+        "column_count": 79
+    },
+    "PATENTS_GOOGLE": {
+        "table_count": 4,
+        "column_count": 87
+    },
+    "PATENTSVIEW": {
+        "table_count": 59,
+        "column_count": 304
+    },
+    "GITHUB_REPOS_DATE": {
+        "table_count": 36,
+        "column_count": 304
+    },
+    "GITHUB_REPOS": {
+        "table_count": 6,
+        "column_count": 34
+    },
+    "cms_data": {
+        "table_count": 52,
+        "column_count": 865
+    },
+    "noaa_data": {
+        "table_count": 218,
+        "column_count": 7275
+    },
+    "NOAA_DATA_PLUS": {
+        "table_count": 234,
+        "column_count": 7450
+    },
+    "NEW_YORK_CITIBIKE_1": {
+        "table_count": 117,
+        "column_count": 3303
+    },
+    "noaa_gsod": {
+        "table_count": 97,
+        "column_count": 3088
+    },
+    "NOAA_GLOBAL_FORECAST_SYSTEM": {
+        "table_count": 11,
+        "column_count": 90
+    },
+    "GEO_OPENSTREETMAP": {
+        "table_count": 10,
+        "column_count": 86
+    },
+    "CENSUS_BUREAU_ACS_2": {
+        "table_count": 296,
+        "column_count": 68434
+    },
+    "GEO_OPENSTREETMAP_CENSUS_PLACES": {
+        "table_count": 67,
+        "column_count": 1056
+    },
+    "GEO_OPENSTREETMAP_WORLDPOP": {
+        "table_count": 11,
+        "column_count": 94
+    },
+    "CRYPTO": {
+        "table_count": 39,
+        "column_count": 497
+    },
+    "HUMAN_GENOME_VARIANTS": {
+        "table_count": 8,
+        "column_count": 202
+    },
+    "ETHEREUM_BLOCKCHAIN": {
+        "table_count": 7,
+        "column_count": 88
+    },
+    "ghcn_d": {
+        "table_count": 266,
+        "column_count": 2141
+    },
+    "new_york": {
+        "table_count": 22,
+        "column_count": 483
+    },
+    "new_york_plus": {
+        "table_count": 43,
+        "column_count": 845
+    },
+    "san_francisco": {
+        "table_count": 8,
+        "column_count": 118
+    },
+    "san_francisco_plus": {
+        "table_count": 19,
+        "column_count": 278
+    },
+    "SAN_FRANCISCO_PLUS": {
+        "table_count": 19,
+        "column_count": 278
+    },
+    "THELOOK_ECOMMERCE": {
+        "table_count": 7,
+        "column_count": 73
+    },
+    "census_bureau_international": {
+        "table_count": 8,
+        "column_count": 165
+    },
+    "covid19_open_data": {
+        "table_count": 1,
+        "column_count": 701
+    },
+    "covid19_open_world_bank": {
+        "table_count": 22,
+        "column_count": 1014
+    },
+    "covid19_jhu_world_bank": {
+        "table_count": 25,
+        "column_count": 3770
+    },
+    "covid19_nyt": {
+        "table_count": 4,
+        "column_count": 29
+    },
+    "covid19_symptom_search": {
+        "table_count": 6,
+        "column_count": 2580
+    },
+    "covid19_usa": {
+        "table_count": 285,
+        "column_count": 70858
+    },
+    "census_bureau_acs_1": {
+        "table_count": 351,
+        "column_count": 69170
+    },
+    "ncaa_basketball": {
+        "table_count": 10,
+        "column_count": 505
+    },
+    "ncaa_insights": {
+        "table_count": 15,
+        "column_count": 552
+    },
+    "google_dei": {
+        "table_count": 141,
+        "column_count": 23134
+    },
+    "DEPS_DEV_V1": {
+        "table_count": 10,
+        "column_count": 78
+    },
+    "chicago": {
+        "table_count": 2,
+        "column_count": 45
+    },
+    "open_targets_platform_1": {
+        "table_count": 27,
+        "column_count": 791
+    },
+    "open_targets_platform_2": {
+        "table_count": 29,
+        "column_count": 826
+    },
+    "open_targets_genetics_1": {
+        "table_count": 13,
+        "column_count": 332
+    },
+    "CYMBAL_INVESTMENTS": {
+        "table_count": 1,
+        "column_count": 20
+    },
+    "gbif": {
+        "table_count": 1,
+        "column_count": 60
+    },
+    "gnomAD": {
+        "table_count": 71,
+        "column_count": 42071
+    },
+    "GOOGLE_TRENDS": {
+        "table_count": 4,
+        "column_count": 34
+    },
+    "nhtsa_traffic_fatalities_plus": {
+        "table_count": 34,
+        "column_count": 498
+    },
+    "nhtsa_traffic_fatalities": {
+        "table_count": 20,
+        "column_count": 366
+    },
+    "sdoh": {
+        "table_count": 294,
+        "column_count": 68863
+    },
+    "openaq": {
+        "table_count": 33,
+        "column_count": 891
+    },
+    "STACKOVERFLOW": {
+        "table_count": 16,
+        "column_count": 228
+    },
+    "stackoverflow": {
+        "table_count": 16,
+        "column_count": 228
+    },
+    "fhir_synthea": {
+        "table_count": 17,
+        "column_count": 11638
+    },
+    "the_met": {
+        "table_count": 3,
+        "column_count": 140
+    },
+    "eclipse_megamovie": {
+        "table_count": 7,
+        "column_count": 138
+    },
+    "epa_historical_air_quality": {
+        "table_count": 32,
+        "column_count": 879
+    },
+    "IDC": {
+        "table_count": 16,
+        "column_count": 2100
+    },
+    "IOWA_LIQUOR_SALES": {
+        "table_count": 1,
+        "column_count": 24
+    },
+    "iowa_liquor_sales": {
+        "table_count": 1,
+        "column_count": 24
+    },
+    "iowa_liquor_sales_plus": {
+        "table_count": 3,
+        "column_count": 36
+    },
+    "nppes": {
+        "table_count": 20,
+        "column_count": 918
+    },
+    "usa_names": {
+        "table_count": 2,
+        "column_count": 10
+    },
+    "TCGA": {
+        "table_count": 157,
+        "column_count": 4107
+    },
+    "CPTAC_PDC": {
+        "table_count": 79,
+        "column_count": 1451
+    },
+    "TCGA_MITELMAN": {
+        "table_count": 176,
+        "column_count": 4272
+    },
+    "TCGA_HG19_DATA_V0": {
+        "table_count": 33,
+        "column_count": 401
+    },
+    "TCGA_HG38_DATA_V0": {
+        "table_count": 50,
+        "column_count": 1145
+    },
+    "PANCANCER_ATLAS_1": {
+        "table_count": 10,
+        "column_count": 833
+    },
+    "pancancer_atlas_2": {
+        "table_count": 21,
+        "column_count": 1634
+    },
+    "_1000_genomes": {
+        "table_count": 3,
+        "column_count": 125
+    },
+    "austin": {
+        "table_count": 10,
+        "column_count": 117
+    },
+    "bbc": {
+        "table_count": 1,
+        "column_count": 4
+    },
+    "dimensions_ai_covid19": {
+        "table_count": 6,
+        "column_count": 1338
+    },
+    "ebi_chembl": {
+        "table_count": 785,
+        "column_count": 5337
+    },
+    "fda": {
+        "table_count": 83,
+        "column_count": 1189
+    },
+    "GOOGLE_ADS": {
+        "table_count": 2,
+        "column_count": 16
+    },
+    "world_bank": {
+        "table_count": 21,
+        "column_count": 313
+    },
+    "london": {
+        "table_count": 2,
+        "column_count": 39
+    },
+    "ecommerce": {
+        "table_count": 15,
+        "column_count": 477
+    },
+    "META_KAGGLE": {
+        "table_count": 29,
+        "column_count": 237
+    },
+    "DEATH": {
+        "table_count": 28,
+        "column_count": 99
+    },
+    "firebase": {
+        "table_count": 114,
+        "column_count": 6827
+    },
+    "ga4": {
+        "table_count": 92,
+        "column_count": 9936
+    },
+    "E_commerce": {
+        "table_count": 11,
+        "column_count": 70
+    },
+    "Baseball": {
+        "table_count": 26,
+        "column_count": 352
+    },
+    "California_Traffic_Collision": {
+        "table_count": 4,
+        "column_count": 120
+    },
+    "WWE": {
+        "table_count": 10,
+        "column_count": 35
+    },
+    "IPL": {
+        "table_count": 8,
+        "column_count": 52
+    },
+    "Brazilian_E_Commerce": {
+        "table_count": 10,
+        "column_count": 62
+    },
+    "Pagila": {
+        "table_count": 21,
+        "column_count": 120
+    },
+    "education_business": {
+        "table_count": 18,
+        "column_count": 98
+    },
+    "modern_data": {
+        "table_count": 17,
+        "column_count": 77
+    },
+    "bank_sales_trading": {
+        "table_count": 19,
+        "column_count": 106
+    },
+    "DB_IMDB": {
+        "table_count": 13,
+        "column_count": 50
+    },
+    "EntertainmentAgency": {
+        "table_count": 13,
+        "column_count": 76
+    },
+    "SQLITE_SAKILA": {
+        "table_count": 21,
+        "column_count": 120
+    },
+    "delivery_center": {
+        "table_count": 7,
+        "column_count": 59
+    },
+    "EU_soccer": {
+        "table_count": 9,
+        "column_count": 233
+    },
+    "f1": {
+        "table_count": 29,
+        "column_count": 228
+    },
+    "GLOBAL_WEATHER__CLIMATE_DATA_FOR_BI": {
+        "table_count": 3,
+        "column_count": 215
+    },
+    "FINANCE__ECONOMICS": {
+        "table_count": 50,
+        "column_count": 441
+    },
+    "WEATHER__ENVIRONMENT": {
+        "table_count": 22,
+        "column_count": 313
+    },
+    "BRAZE_USER_EVENT_DEMO_DATASET": {
+        "table_count": 62,
+        "column_count": 1780
+    },
+    "US_ADDRESSES__POI": {
+        "table_count": 7,
+        "column_count": 61
+    },
+    "CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE": {
+        "table_count": 8,
+        "column_count": 57
+    },
+    "CENSUS_GALAXY__AIML_MODEL_DATA_ENRICHMENT_SAMPLE": {
+        "table_count": 8,
+        "column_count": 57
+    }
+}

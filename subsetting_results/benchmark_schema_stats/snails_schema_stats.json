@@ -1,0 +1,38 @@
+{
+    "ASIS_20161108_HerpInv_Database": {
+        "table_count": 36,
+        "column_count": 245
+    },
+    "ATBI": {
+        "table_count": 28,
+        "column_count": 192
+    },
+    "CratersWildlifeObservations": {
+        "table_count": 13,
+        "column_count": 71
+    },
+    "KlamathInvasiveSpecies": {
+        "table_count": 18,
+        "column_count": 157
+    },
+    "NorthernPlainsFireManagement": {
+        "table_count": 27,
+        "column_count": 190
+    },
+    "NTSB": {
+        "table_count": 40,
+        "column_count": 1161
+    },
+    "NYSED_SRC2022": {
+        "table_count": 27,
+        "column_count": 423
+    },
+    "PacificIslandLandbirds": {
+        "table_count": 21,
+        "column_count": 196
+    },
+    "SBODemoUS": {
+        "table_count": 2588,
+        "column_count": 90477
+    }
+}

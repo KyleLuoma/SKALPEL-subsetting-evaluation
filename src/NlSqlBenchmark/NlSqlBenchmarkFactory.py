@@ -9,7 +9,7 @@ class NlSqlBenchmarkFactory:
     
     benchmark_register = [
         "snails",
-        "spider",
+        # "spider",
         "spider2",
         "bird",
         "abstract"

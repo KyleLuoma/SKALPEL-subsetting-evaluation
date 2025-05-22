@@ -1,0 +1,46 @@
+{
+    "debit_card_specializing": {
+        "table_count": 5,
+        "column_count": 21
+    },
+    "financial": {
+        "table_count": 8,
+        "column_count": 55
+    },
+    "formula_1": {
+        "table_count": 13,
+        "column_count": 94
+    },
+    "california_schools": {
+        "table_count": 3,
+        "column_count": 89
+    },
+    "card_games": {
+        "table_count": 6,
+        "column_count": 115
+    },
+    "european_football_2": {
+        "table_count": 7,
+        "column_count": 199
+    },
+    "thrombosis_prediction": {
+        "table_count": 3,
+        "column_count": 64
+    },
+    "toxicology": {
+        "table_count": 4,
+        "column_count": 11
+    },
+    "student_club": {
+        "table_count": 8,
+        "column_count": 48
+    },
+    "superhero": {
+        "table_count": 10,
+        "column_count": 31
+    },
+    "codebase_community": {
+        "table_count": 8,
+        "column_count": 71
+    }
+}

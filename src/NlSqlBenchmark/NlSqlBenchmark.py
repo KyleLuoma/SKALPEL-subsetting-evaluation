@@ -2,6 +2,7 @@ from NlSqlBenchmark.QueryResult import QueryResult
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 import os
 import pickle
+import json
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
     SchemaTable,
@@ -150,6 +151,18 @@ SELECT ? FROM ? LIMIT ?
             database: str = None
             ) -> set[str]:
         return set()
+    
+
+    def save_stats_to_disk(self, save_path: str):
+        db_stats = {}
+        for database in self.databases:
+            schema = self.get_active_schema(database=database)
+            db_stats[database] = {
+                "table_count": schema.get_table_count(),
+                "column_count": schema.get_column_count()
+            }
+        with open(f"{save_path}/{self.name}_schema_stats.json", "wt") as f:
+            f.write(json.dumps(db_stats, indent=4))
 
     
     def set_active_question_number(self, number: int = 0):
