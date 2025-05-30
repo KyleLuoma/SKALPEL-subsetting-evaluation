@@ -24,7 +24,8 @@ import tests
 # from tests import ChessSubsetterTest
 # from tests import Crush4SqlSubsetterTest
 # from tests import RslSqlSubsetterTest
-from tests import TaSqlSubsetterTest
+# from tests import TaSqlSubsetterTest
+from tests import DtsSubsetterTest
 
 # from tests import SchemaSubsetterEvaluatorTest
 # from tests import BenchmarkEmbeddingTest

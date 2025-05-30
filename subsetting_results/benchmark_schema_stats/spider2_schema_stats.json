@@ -1,422 +1,632 @@
 {
     "PATENTS": {
         "table_count": 3,
-        "column_count": 79
+        "column_count": 79,
+        "total_rows": 822932,
+        "total_vals": 25765431
     },
     "PATENTS_GOOGLE": {
         "table_count": 4,
-        "column_count": 87
+        "column_count": 87,
+        "total_rows": 1244366,
+        "total_vals": 27754031
     },
     "PATENTSVIEW": {
         "table_count": 59,
-        "column_count": 304
+        "column_count": 304,
+        "total_rows": 126201879,
+        "total_vals": 789875857
     },
     "GITHUB_REPOS_DATE": {
         "table_count": 36,
-        "column_count": 304
+        "column_count": 304,
+        "total_rows": 56900800,
+        "total_vals": 461254307
     },
     "GITHUB_REPOS": {
         "table_count": 6,
-        "column_count": 34
+        "column_count": 34,
+        "total_rows": 7617607,
+        "total_vals": 17705570
     },
     "cms_data": {
         "table_count": 52,
-        "column_count": 865
+        "column_count": 865,
+        "total_rows": 2181075029,
+        "total_vals": 34167340194
     },
     "noaa_data": {
         "table_count": 218,
-        "column_count": 7275
+        "column_count": 7275,
+        "total_rows": 742934535,
+        "total_vals": 48042810453
     },
     "NOAA_DATA_PLUS": {
         "table_count": 234,
-        "column_count": 7450
+        "column_count": 7450,
+        "total_rows": 742276079,
+        "total_vals": 48016254418
     },
     "NEW_YORK_CITIBIKE_1": {
         "table_count": 117,
-        "column_count": 3303
+        "column_count": 3303,
+        "total_rows": 233111096,
+        "total_vals": 6530516955
     },
     "noaa_gsod": {
         "table_count": 97,
-        "column_count": 3088
+        "column_count": 3088,
+        "total_rows": 174805246,
+        "total_vals": 5613257102
     },
     "NOAA_GLOBAL_FORECAST_SYSTEM": {
         "table_count": 11,
-        "column_count": 90
+        "column_count": 90,
+        "total_rows": 218374323,
+        "total_vals": 2062731455
     },
     "GEO_OPENSTREETMAP": {
         "table_count": 10,
-        "column_count": 86
+        "column_count": 86,
+        "total_rows": 217137548,
+        "total_vals": 2057784355
     },
     "CENSUS_BUREAU_ACS_2": {
         "table_count": 296,
-        "column_count": 68434
+        "column_count": 68434,
+        "total_rows": 4267221,
+        "total_vals": 842046084
     },
     "GEO_OPENSTREETMAP_CENSUS_PLACES": {
         "table_count": 67,
-        "column_count": 1056
+        "column_count": 1056,
+        "total_rows": 217197254,
+        "total_vals": 2058829210
     },
     "GEO_OPENSTREETMAP_WORLDPOP": {
         "table_count": 11,
-        "column_count": 94
+        "column_count": 94,
+        "total_rows": 217152521,
+        "total_vals": 2057904139
     },
     "CRYPTO": {
         "table_count": 39,
-        "column_count": 497
+        "column_count": 497,
+        "total_rows": 158782141,
+        "total_vals": 2348131472
     },
     "HUMAN_GENOME_VARIANTS": {
         "table_count": 8,
-        "column_count": 202
+        "column_count": 202,
+        "total_rows": 234739,
+        "total_vals": 4813599
     },
     "ETHEREUM_BLOCKCHAIN": {
         "table_count": 7,
-        "column_count": 88
+        "column_count": 88,
+        "total_rows": 3556490,
+        "total_vals": 57164326
     },
     "ghcn_d": {
         "table_count": 266,
-        "column_count": 2141
+        "column_count": 2141,
+        "total_rows": 2899463581,
+        "total_vals": 23860552719
     },
     "new_york": {
         "table_count": 22,
-        "column_count": 483
+        "column_count": 483,
+        "total_rows": 1627506185,
+        "total_vals": 29158847317
     },
     "new_york_plus": {
         "table_count": 43,
-        "column_count": 845
+        "column_count": 845,
+        "total_rows": 2126692903,
+        "total_vals": 38754112497
     },
     "san_francisco": {
         "table_count": 8,
-        "column_count": 118
+        "column_count": 118,
+        "total_rows": 118187387,
+        "total_vals": 687237911
     },
     "san_francisco_plus": {
         "table_count": 19,
-        "column_count": 278
+        "column_count": 278,
+        "total_rows": 46129806,
+        "total_vals": 866321947
     },
     "SAN_FRANCISCO_PLUS": {
         "table_count": 19,
-        "column_count": 278
+        "column_count": 278,
+        "total_rows": 43298246,
+        "total_vals": 823658777
     },
     "THELOOK_ECOMMERCE": {
         "table_count": 7,
-        "column_count": 73
+        "column_count": 73,
+        "total_rows": 3339950,
+        "total_vals": 42154190
     },
     "census_bureau_international": {
         "table_count": 8,
-        "column_count": 165
+        "column_count": 165,
+        "total_rows": 3469833,
+        "total_vals": 25377240
     },
     "covid19_open_data": {
         "table_count": 1,
-        "column_count": 701
+        "column_count": 701,
+        "total_rows": 22756333,
+        "total_vals": 15952189433
     },
     "covid19_open_world_bank": {
         "table_count": 22,
-        "column_count": 1014
+        "column_count": 1014,
+        "total_rows": 42905194,
+        "total_vals": 16071736131
     },
     "covid19_jhu_world_bank": {
         "table_count": 25,
-        "column_count": 3770
+        "column_count": 3770,
+        "total_rows": 24413793,
+        "total_vals": 175957834
     },
     "covid19_nyt": {
         "table_count": 4,
-        "column_count": 29
+        "column_count": 29,
+        "total_rows": 3330494,
+        "total_vals": 19964570
     },
     "covid19_symptom_search": {
         "table_count": 6,
-        "column_count": 2580
+        "column_count": 2580,
+        "total_rows": 11441069,
+        "total_vals": 4919659670
     },
     "covid19_usa": {
         "table_count": 285,
-        "column_count": 70858
+        "column_count": 70858,
+        "total_rows": 9289501,
+        "total_vals": 894611887
     },
     "census_bureau_acs_1": {
         "table_count": 351,
-        "column_count": 69170
+        "column_count": 69170,
+        "total_rows": 4414432,
+        "total_vals": 844044510
     },
     "ncaa_basketball": {
         "table_count": 10,
-        "column_count": 505
+        "column_count": 505,
+        "total_rows": 5768154,
+        "total_vals": 376818182
     },
     "ncaa_insights": {
         "table_count": 15,
-        "column_count": 552
+        "column_count": 552,
+        "total_rows": 0,
+        "total_vals": 0
     },
     "google_dei": {
         "table_count": 141,
-        "column_count": 23134
+        "column_count": 23134,
+        "total_rows": 18024597,
+        "total_vals": 209866881
     },
     "DEPS_DEV_V1": {
         "table_count": 10,
-        "column_count": 78
+        "column_count": 78,
+        "total_rows": 80030681,
+        "total_vals": 671660966
     },
     "chicago": {
         "table_count": 2,
-        "column_count": 45
+        "column_count": 45,
+        "total_rows": 219974255,
+        "total_vals": 5051089069
     },
     "open_targets_platform_1": {
         "table_count": 27,
-        "column_count": 791
+        "column_count": 791,
+        "total_rows": 41374531,
+        "total_vals": 4517016280
     },
     "open_targets_platform_2": {
         "table_count": 29,
-        "column_count": 826
+        "column_count": 826,
+        "total_rows": 41374531,
+        "total_vals": 4517016280
     },
     "open_targets_genetics_1": {
         "table_count": 13,
-        "column_count": 332
+        "column_count": 332,
+        "total_rows": 4129628057,
+        "total_vals": 182216257051
     },
     "CYMBAL_INVESTMENTS": {
         "table_count": 1,
-        "column_count": 20
+        "column_count": 20,
+        "total_rows": 1222562,
+        "total_vals": 24451240
     },
     "gbif": {
         "table_count": 1,
-        "column_count": 60
+        "column_count": 60,
+        "total_rows": 3145677101,
+        "total_vals": 188740626060
     },
     "gnomAD": {
         "table_count": 71,
-        "column_count": 42071
+        "column_count": 42071,
+        "total_rows": 987103251,
+        "total_vals": 314489170147
     },
     "GOOGLE_TRENDS": {
         "table_count": 4,
-        "column_count": 34
+        "column_count": 34,
+        "total_rows": 498463514,
+        "total_vals": 4560737151
     },
     "nhtsa_traffic_fatalities_plus": {
         "table_count": 34,
-        "column_count": 498
+        "column_count": 498,
+        "total_rows": 5622067,
+        "total_vals": 46498471
     },
     "nhtsa_traffic_fatalities": {
         "table_count": 20,
-        "column_count": 366
+        "column_count": 366,
+        "total_rows": 1055583,
+        "total_vals": 19693681
     },
     "sdoh": {
         "table_count": 294,
-        "column_count": 68863
+        "column_count": 68863,
+        "total_rows": 4417166,
+        "total_vals": 857353618
     },
     "openaq": {
         "table_count": 33,
-        "column_count": 891
+        "column_count": 891,
+        "total_rows": 2443320195,
+        "total_vals": 59694265111
     },
     "STACKOVERFLOW": {
         "table_count": 16,
-        "column_count": 228
+        "column_count": 228,
+        "total_rows": 637122277,
+        "total_vals": 5098400812
     },
     "stackoverflow": {
         "table_count": 16,
-        "column_count": 228
+        "column_count": 228,
+        "total_rows": 637122277,
+        "total_vals": 5098400812
     },
     "fhir_synthea": {
         "table_count": 17,
-        "column_count": 11638
+        "column_count": 11638,
+        "total_rows": 433945069,
+        "total_vals": 396252382319
     },
     "the_met": {
         "table_count": 3,
-        "column_count": 140
+        "column_count": 140,
+        "total_rows": 801761,
+        "total_vals": 29422544
     },
     "eclipse_megamovie": {
         "table_count": 7,
-        "column_count": 138
+        "column_count": 138,
+        "total_rows": 200878,
+        "total_vals": 3979627
     },
     "epa_historical_air_quality": {
         "table_count": 32,
-        "column_count": 879
+        "column_count": 879,
+        "total_rows": 2437725581,
+        "total_vals": 59627129743
     },
     "IDC": {
         "table_count": 16,
-        "column_count": 2100
+        "column_count": 2100,
+        "total_rows": 4823128,
+        "total_vals": 1717881149
     },
     "IOWA_LIQUOR_SALES": {
         "table_count": 1,
-        "column_count": 24
+        "column_count": 24,
+        "total_rows": 30082002,
+        "total_vals": 721968048
     },
     "iowa_liquor_sales": {
         "table_count": 1,
-        "column_count": 24
+        "column_count": 24,
+        "total_rows": 31550621,
+        "total_vals": 757214904
     },
     "iowa_liquor_sales_plus": {
         "table_count": 3,
-        "column_count": 36
+        "column_count": 36,
+        "total_rows": 34759582,
+        "total_vals": 776468670
     },
     "nppes": {
         "table_count": 20,
-        "column_count": 918
+        "column_count": 918,
+        "total_rows": 12958600,
+        "total_vals": 5163045966
     },
     "usa_names": {
         "table_count": 2,
-        "column_count": 10
+        "column_count": 10,
+        "total_rows": 11863956,
+        "total_vals": 59319780
     },
     "TCGA": {
         "table_count": 157,
-        "column_count": 4107
+        "column_count": 4107,
+        "total_rows": 132611047,
+        "total_vals": 1827909627
     },
     "CPTAC_PDC": {
         "table_count": 79,
-        "column_count": 1451
+        "column_count": 1451,
+        "total_rows": 389662735,
+        "total_vals": 6824443267
     },
     "TCGA_MITELMAN": {
         "table_count": 176,
-        "column_count": 4272
+        "column_count": 4272,
+        "total_rows": 135541478,
+        "total_vals": 1849561760
     },
     "TCGA_HG19_DATA_V0": {
         "table_count": 33,
-        "column_count": 401
+        "column_count": 401,
+        "total_rows": 51298241,
+        "total_vals": 475212434
     },
     "TCGA_HG38_DATA_V0": {
         "table_count": 50,
-        "column_count": 1145
+        "column_count": 1145,
+        "total_rows": 99538340,
+        "total_vals": 1141464167
     },
     "PANCANCER_ATLAS_1": {
         "table_count": 10,
-        "column_count": 833
+        "column_count": 833,
+        "total_rows": 18945946,
+        "total_vals": 183091654
     },
     "pancancer_atlas_2": {
         "table_count": 21,
-        "column_count": 1634
+        "column_count": 1634,
+        "total_rows": 8852666073,
+        "total_vals": 50076564609
     },
     "_1000_genomes": {
         "table_count": 3,
-        "column_count": 125
+        "column_count": 125,
+        "total_rows": 0,
+        "total_vals": 0
     },
     "austin": {
         "table_count": 10,
-        "column_count": 117
+        "column_count": 117,
+        "total_rows": 6080148,
+        "total_vals": 85362093
     },
     "bbc": {
         "table_count": 1,
-        "column_count": 4
+        "column_count": 4,
+        "total_rows": 2225,
+        "total_vals": 8900
     },
     "dimensions_ai_covid19": {
         "table_count": 6,
-        "column_count": 1338
+        "column_count": 1338,
+        "total_rows": 1399321,
+        "total_vals": 411860042
     },
     "ebi_chembl": {
         "table_count": 785,
-        "column_count": 5337
+        "column_count": 5337,
+        "total_rows": 522698820,
+        "total_vals": 8150056628
     },
     "fda": {
         "table_count": 83,
-        "column_count": 1189
+        "column_count": 1189,
+        "total_rows": 986366,
+        "total_vals": 16997192
     },
     "GOOGLE_ADS": {
         "table_count": 2,
-        "column_count": 16
+        "column_count": 16,
+        "total_rows": 480945,
+        "total_vals": 5686516
     },
     "world_bank": {
         "table_count": 21,
-        "column_count": 313
+        "column_count": 313,
+        "total_rows": 20148861,
+        "total_vals": 119546698
     },
     "london": {
         "table_count": 2,
-        "column_count": 39
+        "column_count": 39,
+        "total_rows": 13522851,
+        "total_vals": 95466132
     },
     "ecommerce": {
         "table_count": 15,
-        "column_count": 477
+        "column_count": 477,
+        "total_rows": 0,
+        "total_vals": 0
     },
     "META_KAGGLE": {
         "table_count": 29,
-        "column_count": 237
+        "column_count": 237,
+        "total_rows": 344683452,
+        "total_vals": 3089402362
     },
     "DEATH": {
         "table_count": 28,
-        "column_count": 99
+        "column_count": 99,
+        "total_rows": 18358312,
+        "total_vals": 171311962
     },
     "firebase": {
         "table_count": 114,
-        "column_count": 6827
+        "column_count": 6827,
+        "total_rows": 5700000,
+        "total_vals": 341350000
     },
     "ga4": {
         "table_count": 92,
-        "column_count": 9936
+        "column_count": 9936,
+        "total_rows": 4295584,
+        "total_vals": 463923072
     },
     "E_commerce": {
         "table_count": 11,
-        "column_count": 70
+        "column_count": 70,
+        "total_rows": 1559764,
+        "total_vals": 8648965
     },
     "Baseball": {
         "table_count": 26,
-        "column_count": 352
+        "column_count": 352,
+        "total_rows": 553693,
+        "total_vals": 10440086
     },
     "California_Traffic_Collision": {
         "table_count": 4,
-        "column_count": 120
+        "column_count": 120,
+        "total_rows": 471571,
+        "total_vals": 14291178
     },
     "WWE": {
         "table_count": 10,
-        "column_count": 35
+        "column_count": 35,
+        "total_rows": 578899,
+        "total_vals": 5033141
     },
     "IPL": {
         "table_count": 8,
-        "column_count": 52
+        "column_count": 52,
+        "total_rows": 293471,
+        "total_vals": 2147310
     },
     "Brazilian_E_Commerce": {
         "table_count": 10,
-        "column_count": 62
+        "column_count": 62,
+        "total_rows": 1583873,
+        "total_vals": 8934687
     },
     "Pagila": {
         "table_count": 21,
-        "column_count": 120
+        "column_count": 120,
+        "total_rows": 52354,
+        "total_vals": 338342
     },
     "education_business": {
         "table_count": 18,
-        "column_count": 98
+        "column_count": 98,
+        "total_rows": 994859,
+        "total_vals": 5009098
     },
     "modern_data": {
         "table_count": 17,
-        "column_count": 77
+        "column_count": 77,
+        "total_rows": 1068993,
+        "total_vals": 11439533
     },
     "bank_sales_trading": {
         "table_count": 19,
-        "column_count": 106
+        "column_count": 106,
+        "total_rows": 1054949,
+        "total_vals": 9065827
     },
     "DB_IMDB": {
         "table_count": 13,
-        "column_count": 50
+        "column_count": 50,
+        "total_rows": 0,
+        "total_vals": 0
     },
     "EntertainmentAgency": {
         "table_count": 13,
-        "column_count": 76
+        "column_count": 76,
+        "total_rows": 1654,
+        "total_vals": 3940
     },
     "SQLITE_SAKILA": {
         "table_count": 21,
-        "column_count": 120
+        "column_count": 120,
+        "total_rows": 0,
+        "total_vals": 0
     },
     "delivery_center": {
         "table_count": 7,
-        "column_count": 59
+        "column_count": 59,
+        "total_rows": 1154523,
+        "total_vals": 15021631
     },
     "EU_soccer": {
         "table_count": 9,
-        "column_count": 233
+        "column_count": 233,
+        "total_rows": 248782,
+        "total_vals": 11661423
     },
     "f1": {
         "table_count": 29,
-        "column_count": 228
+        "column_count": 228,
+        "total_rows": 1941243,
+        "total_vals": 12662126
     },
     "GLOBAL_WEATHER__CLIMATE_DATA_FOR_BI": {
         "table_count": 3,
-        "column_count": 215
+        "column_count": 215,
+        "total_rows": 1118229,
+        "total_vals": 80233399
     },
     "FINANCE__ECONOMICS": {
         "table_count": 50,
-        "column_count": 441
+        "column_count": 441,
+        "total_rows": 3305962731,
+        "total_vals": 20257889637
     },
     "WEATHER__ENVIRONMENT": {
         "table_count": 22,
-        "column_count": 313
+        "column_count": 313,
+        "total_rows": 1133400047,
+        "total_vals": 11766550137
     },
     "BRAZE_USER_EVENT_DEMO_DATASET": {
         "table_count": 62,
-        "column_count": 1780
+        "column_count": 1780,
+        "total_rows": 4350536790,
+        "total_vals": 82948131721
     },
     "US_ADDRESSES__POI": {
         "table_count": 7,
-        "column_count": 61
+        "column_count": 61,
+        "total_rows": 191279938,
+        "total_vals": 2710556829
     },
     "CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE": {
         "table_count": 8,
-        "column_count": 57
+        "column_count": 57,
+        "total_rows": 0,
+        "total_vals": 0
     },
     "CENSUS_GALAXY__AIML_MODEL_DATA_ENRICHMENT_SAMPLE": {
         "table_count": 8,
-        "column_count": 57
+        "column_count": 57,
+        "total_rows": 0,
+        "total_vals": 0
     }
 }

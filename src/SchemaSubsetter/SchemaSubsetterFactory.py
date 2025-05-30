@@ -1,6 +1,7 @@
 from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
 # from SchemaSubsetter.ChessSubsetter import ChessSubsetter
 from SchemaSubsetter.CodeSSubsetter import CodeSSubsetter
+from SchemaSubsetter.DtsSubsetter import DtsSubsetter
 from SchemaSubsetter.Crush4SqlSubsetter import Crush4SqlSubsetter
 from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
 from SchemaSubsetter.RslSqlSubsetter import RslSqlSubsetter
@@ -20,6 +21,7 @@ class SchemaSubsetterFactory:
         "DINSQL",
         "rslsql",
         "tasql",
+        "dtssql",
         "perfect_subsetter",
         "perfect_table_subsetter"
     ]
@@ -32,6 +34,7 @@ class SchemaSubsetterFactory:
         "DINSQL": (DinSqlSubsetter, {"model":"gpt-4.1"}),
         "rslsql": (RslSqlSubsetter, {}),
         "tasql": (TaSqlSubsetter, {}),
+        "dtssql": (DtsSubsetter, {}),
         "perfect_subsetter": (PerfectSchemaSubsetter, {}),
         "perfect_table_subsetter": (PerfectTableSchemaSubsetter, {})
     }

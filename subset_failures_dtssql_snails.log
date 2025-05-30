@@ -1,0 +1,4230 @@
+##### ASIS_20161108_HerpInv_Database - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many five year old turtles were measured?
+
+  ## Query:
+    select count(*) turtleCount  from tblFieldDataTurtleMeasurements where age = '5' 
+
+
+##### ASIS_20161108_HerpInv_Database - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many turtles were measured at each location where turtles were measured?
+
+  ## Query:
+    select locationID, count(*) turtleCount from tblFieldDataTurtleMeasurements group by locationID 
+
+
+##### ASIS_20161108_HerpInv_Database - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what is the average weight of all turtles?
+
+  ## Query:
+    select avg(weight) turtleWeight from tblFieldDataTurtleMeasurements 
+
+
+##### ASIS_20161108_HerpInv_Database - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    at which locations were both snakes and turtles measured?
+
+  ## Query:
+    select distinct t.locationID from tblFieldDataTurtleMeasurements t join tblFieldDataSnakeDataCollection s on t.LocationID = s.LocationID 
+
+
+##### ASIS_20161108_HerpInv_Database - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many minnow traps are there at each location?
+
+  ## Query:
+    select locationID, count(distinct [trap_#]) trapCount from tblFieldDataMinnowTrapSurveys group by locationID 
+
+
+##### ASIS_20161108_HerpInv_Database - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    show the total number of minnows counted at each location
+
+  ## Query:
+    select locationid, sum(count) minnowCountSum from tblFieldDataMinnowTrapSurveys group by LocationID 
+
+
+##### ASIS_20161108_HerpInv_Database - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    show the total number of minnows counted at each trap by location. Each location has multiple traps.
+
+  ## Query:
+    select locationID, [Trap_#], sum(count) minnowCountSum from tblFieldDataMinnowTrapSurveys group by locationID, [Trap_#] 
+
+
+##### ASIS_20161108_HerpInv_Database - 7 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    show how many minnows of each stage were counted at the location ASIS_HERPS_20H
+
+  ## Query:
+    select stage, sum(count) minnowCountSum from tblFieldDataMinnowTrapSurveys where locationID = 'ASIS_HERPS_20H' group by stage 
+
+
+##### ASIS_20161108_HerpInv_Database - 8 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average water temperature (celcius) at locations where amphibians were counted?
+
+  ## Query:
+    select avg(tempc) avgTemp from tblFieldDataWaterProperties where locationId in ( 	select locationId  	from tblFieldDataAmphibianCallCounts ) 
+
+
+##### ASIS_20161108_HerpInv_Database - 9 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the average temperature, salinity, conductivity, and pH level of the water at locations corresponding to turtle observation records.
+
+  ## Query:
+    select avg(tempc) avgTempC, avg(salinity) avgSalinity, avg(conductivity) avgConduct, avg(pH) avgPH from tblFieldDataWaterProperties w, tblFieldDataTurtleTrapSurveys t where w. recordid in ( 	select recordid from tblFieldDataTurtleTrapSurveys )  
+
+
+##### ASIS_20161108_HerpInv_Database - 10 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Make a list of turtle record IDs and measurement comments where the trap survey sex data did not match the measurement sex data.
+
+  ## Query:
+    select t.RecordID, m.comments from tblFieldDataTurtleTrapSurveys t join tblFieldDataTurtleMeasurements m on t.RecordID = m.RecordID  	and m.sex <> t.sex 
+
+
+##### ASIS_20161108_HerpInv_Database - 11 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    show the heaviest turtle for each sex
+
+  ## Query:
+    select sex, max(weight) heaviestWeight from tblFieldDataTurtleMeasurements group by sex 
+
+
+##### ASIS_20161108_HerpInv_Database - 12 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what is the highest snake snout-to-vent length recorded?
+
+  ## Query:
+    select top 1 svl  from tblFieldDataSnakeDataCollection order by svl desc 
+
+
+##### ASIS_20161108_HerpInv_Database - 13 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the average snake weight and snout-to-vent length by sex.
+
+  ## Query:
+    select sex, avg(weight) avgWeight, avg(svl) avgSvl from tblFieldDataSnakeDataCollection group by sex 
+
+
+##### ASIS_20161108_HerpInv_Database - 14 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    show the average snake total length and weight by species.
+
+  ## Query:
+    select [Species_Code], avg(TLength) avgTLength, avg(Weight) avgWeight from tblFieldDataSnakeDataCollection group by [Species_Code] 
+
+
+##### ASIS_20161108_HerpInv_Database - 15 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of turtle measurements made by each agency.
+
+  ## Query:
+    select [Agency/Title], count(distinct recordID) from tblFieldDataTurtleMeasurements t join tlinkObservers ol on t.EventID = ol.EventID join Observer_LU o on o.obsinits = ol.obsinits group by [Agency/Title] 
+
+
+##### ASIS_20161108_HerpInv_Database - 16 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Make a list of all event IDs from 2004 that were observed by Allison Turner
+
+  ## Query:
+    select e.Eventid  from tblEvents e join tblEventDataHerps ed on e.eventid = ed.EventID join tlinkObservers ol on ed.EventID = ol.EventID join Observer_LU o on ol.ObsInits = o.ObsInits where year = 2004  	and firstName = 'allison' 	and lastName = 'turner' 
+
+
+##### ASIS_20161108_HerpInv_Database - 17 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which observers participated in events where measurements of turtle were made? Show their initials, and first and last names.
+
+  ## Query:
+    select distinct o.ObsInits, firstName, lastName  from tlinkObservers ol join Observer_LU o on ol.ObsInits = o.ObsInits join tblFieldDataTurtleMeasurements tm on tm.EventID = ol.EventID 
+
+
+##### ASIS_20161108_HerpInv_Database - 18 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    how many distinct species were documented on a reptile survey green card?
+
+  ## Query:
+    select count(distinct [species_code]) speciesCount from tblFieldDataGreenCardObservations 
+
+
+##### ASIS_20161108_HerpInv_Database - 19 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what are the Universal Transverse Mercator x and y coordinates for locations where time constrained searches were conducted? Include the location ID and x and y point coordinate averages in the result.
+
+  ## Query:
+    select l.locationId, avg(UTMX) X, avg(UTMY) Y from tblFieldDataTimeConstrainedSearches df join tblLocationsPoints l on df.LocationID = l.LocationID group by l.locationId 
+
+
+##### ASIS_20161108_HerpInv_Database - 20 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    show a count of minnow measurements by stage description
+
+  ## Query:
+    select description, count(*) minnowCount from tlustage s join tblFieldDataMinnowTrapSurveys m on s.stage = m.stage group by description 
+
+
+##### ASIS_20161108_HerpInv_Database - 21 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the ID and description of the occasional abundance category?
+
+  ## Query:
+    select AbundanceID, AbundanceText from tblAbundance_LU where Abundance = 'Occasional' 
+
+
+##### ASIS_20161108_HerpInv_Database - 22 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the location IDs of locations that have covers made out of wood? Only include one row per location ID.
+
+  ## Query:
+    select distinct LocationID  from tblFieldDataCoverBoard where type = 'Wood' 
+
+
+##### ASIS_20161108_HerpInv_Database - 23 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the board number and types for boards at site with ID 18CB1. Ignore boards with a number 0.
+
+  ## Query:
+    select [Board_#], type  from tblFieldDataCoverBoard cb join tblLocations l on cb.LocationID = l.LocationID where siteid = '18CB1' and [Board_#] <> 0 
+
+
+##### ASIS_20161108_HerpInv_Database - 24 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the average air temperature on cloudy days that correspond to cover board  data where the board material is wood at the site with id 30CB2
+
+  ## Query:
+    select avg(AirTemp) as avgTemp  from tblFieldDataCoverBoard cb join tblEventDataHerps ev on cb.EventID = ev.EventID join tblLocations l on cb.LocationID = l.LocationID where Type = 'Metal' and SiteId = '30CB2' and weather = 'cloudy' 
+
+
+##### ASIS_20161108_HerpInv_Database - 25 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each behavior type, how many records were documented for snakes captured using the coverboard method?
+
+  ## Query:
+    select behavior, count(*) as recordCount from tblFieldDataSnakeDataCollection where capturemethod = 'coverboard' group by behavior 
+
+
+##### ASIS_20161108_HerpInv_Database - 26 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what were the behaviors and capture methods of snakes where the record notes include the word rafters?
+
+  ## Query:
+    select Behavior, CaptureMethod  from tblFieldDataSnakeDataCollection where notes like '%rafters%' 
+
+
+##### ASIS_20161108_HerpInv_Database - 27 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    for location points associated with records relating to cover boards, at the site with id 18CB1, what are the point IDs, snake ids, board numbers, and UTM X and Y coordinates?
+
+  ## Query:
+    select PointID, SnakeID, [Board_#], UTMX, UTMY from tblFieldDataCoverBoard cb join tblLocations l on cb.LocationID = l.LocationID join tblLocationsPoints lp on l.LocationID = lp.LocationID where Recapture = 'new' and siteid = '18CB1' 
+
+
+##### ASIS_20161108_HerpInv_Database - 28 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the initials of observers who logged events relating to cover board observations? Include only one row per initials.
+
+  ## Query:
+    select distinct o.ObsInits from Observer_LU o join tlinkObservers tlo on o.ObsInits = tlo.ObsInits join tblEvents e on tlo.EventID = e.EventID join tblFieldDataCoverBoard cb on e.EventID = cb.EventID 
+
+
+##### ASIS_20161108_HerpInv_Database - 29 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of events in the herpetological survey table, group the counts by weather condition. Also include the average air and water temperatures.
+
+  ## Query:
+    select weather, count(*) eventCount, avg(airtemp) avgAirTemp, avg(watertemp) avgWaterTemp  from tblEventDataHerps group by weather 
+
+
+##### ASIS_20161108_HerpInv_Database - 30 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the average air temperature for herpetological surveys for each observer. Group them by the initials of the observer who logged the event.
+
+  ## Query:
+    select o.ObsInits, avg(airtemp) avgAirTemp from Observer_LU o join tlinkObservers tlo on o.ObsInits = tlo.ObsInits join tblEventDataHerps e on tlo.EventID = e.EventID group by o.ObsInits 
+
+
+##### ASIS_20161108_HerpInv_Database - 31 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what is the average air temperature for each weather type for herpetological survey events?
+
+  ## Query:
+    select weather, avg(airtemp) avgAirTemp  from tblEventDataHerps group by weather 
+
+
+##### ASIS_20161108_HerpInv_Database - 32 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what is the description of project code WQ?
+
+  ## Query:
+    select description  from tluProject where project = 'WQ' 
+
+
+##### ASIS_20161108_HerpInv_Database - 33 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What type of park is the park with code ASIS?
+
+  ## Query:
+    select parktype  from tluParkCode where parkcode = 'ASIS' 
+
+
+##### ASIS_20161108_HerpInv_Database - 34 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What does the evidence code DOR mean?
+
+  ## Query:
+    select text  from tluEvidenceCode where [evidence_code] = 'DOR' 
+
+
+##### ASIS_20161108_HerpInv_Database - 35 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the habitat names and descriptions of the 'Temporary Pond' and 'Permanent Pond' micro habitats.
+
+  ## Query:
+    select habitat, description  from tluMicroHabitat where habitat in ('Temporary Pond', 'Permanent Pond') 
+
+
+##### ASIS_20161108_HerpInv_Database - 36 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many records are logged for each turtle trap type?
+
+  ## Query:
+    select [trap_type], count(*) recordCount from tblFieldDataTurtleTrapSurveys group by [Trap_Type] 
+
+
+##### ASIS_20161108_HerpInv_Database - 37 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which location IDs have crab type turtle traps? Include only one row per location.
+
+  ## Query:
+    select distinct t.locationid from tblLocations l join tblFieldDataTurtleTrapSurveys t on l.LocationID = t.LocationID where [trap_type] = 'crab' 
+
+
+##### ASIS_20161108_HerpInv_Database - 38 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the average turtle dimensions by sex? Include carapace length and width, plastron length and width, and weight.
+
+  ## Query:
+    select sex, avg([carapace_length]) avgCarLen, avg([carapace_width]) avgCarWid,  			avg([plastron_length]) avgPlasLen, avg([plastron_width]) avgPlasWid, 			avg(weight) avgWeight from tblFieldDataTurtleMeasurements group by sex 
+
+
+##### ASIS_20161108_HerpInv_Database - 39 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    how many turtle measurements were of turtles carrying eggs or young? This is indicated by the value 1.
+
+  ## Query:
+    select count(*) gravidCount from tblFieldDataTurtleMeasurements where gravid = 1 
+
+
+##### ATBI - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What tree species have been observed within nested subplots? Show the species code, genus, sub genus, and common name.
+
+  ## Query:
+    select distinct CommonName, SpCode, genus, subgenus  from tbl_Nests join tlu_PlantSpecies on tbl_Nests.SpCode = tlu_PlantSpecies.SpeciesCode order by CommonName 
+
+
+##### ATBI - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Are there any tree species that have not been observed within nested subplots? What are their common names?
+
+  ## Query:
+    select distinct CommonName  from tlu_PlantSpecies where SpeciesCode not in ( 	select distinct SpCode from tbl_Nests 	) 
+
+
+##### ATBI - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the five most common geni observed in nested subplots and how many nested subplotes have they been observed in?
+
+  ## Query:
+    select TOP 5 genus, count(*) as NestCount  from tlu_PlantSpecies join tbl_Nests on tlu_PlantSpecies.SpeciesCode = tbl_Nests.SpCode group by genus order by NestCount desc 
+
+
+##### ATBI - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show me the different decay stages and their descriptions
+
+  ## Query:
+    select *  from tlu_DecayStage 
+
+
+##### ATBI - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many events observed at least some stage of decay?
+
+  ## Query:
+    select count(distinct Event_ID)  from tbl_Deadwood 
+
+
+##### ATBI - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many different decayed logs were found in each event where decay was observed?
+
+  ## Query:
+    select Event_ID, count(*)  from tbl_Deadwood  group by Event_ID 
+
+
+##### ATBI - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the event that observed the most decayed logs, how many of each stage of decay were observed? Show the description of each decay stage in the result.
+
+  ## Query:
+    select DecayStage_Descr, count(*) as numLogs  from tbl_Deadwood join tlu_DecayStage on tbl_Deadwood.Decay = tlu_DecayStage.DecayStage_ID where Event_ID in ( 	select TOP 1 Event_ID from tbl_Deadwood group by Event_ID order by count(*) desc ) group by DecayStage_Descr 
+
+
+##### ATBI - 7 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show me the events where both nested subplots and decayed logs were observed. Include the number of decayed logs, and the number of nested subplots were observed.
+
+  ## Query:
+    SELECT e.Event_ID, Deadwood_Count, Nest_Count  FROM tbl_Events AS e JOIN (     SELECT Event_ID, COUNT(*) AS Deadwood_Count     FROM tbl_Deadwood     GROUP BY Event_ID ) AS dw ON e.Event_ID = dw.Event_ID JOIN (     SELECT Event_ID, COUNT(*) AS Nest_Count     FROM tbl_Nests     GROUP BY Event_ID ) AS ne ON e.Event_ID = ne.Event_ID order by Deadwood_Count desc 
+
+
+##### ATBI - 8 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Get the Plot ID, x and y coordinates, and directions for the location with the event that has the most nested subplot observations
+
+  ## Query:
+    SELECT Plot_ID, X_Coord, Y_Coord, Directions  from tbl_Locations l JOIN tbl_Events e on e.Location_ID = l.Location_ID WHERE e.Event_ID in ( 	SELECT TOP 1 Event_ID  	from tbl_Nests  	group by Event_ID  	order by count(*)  ) 
+
+
+##### ATBI - 9 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average diameter at breast height for  trees of the Acer genus?
+
+  ## Query:
+    select avg(DBH) AvgDBH from tbl_Overstory o join tlu_PlantSpecies p on o.SpCode = p.SpeciesCode where genus = 'Acer' 
+
+
+##### ATBI - 10 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the canopy position name and the count of trees for each canopy position
+
+  ## Query:
+    select CanPos_Name, count(*) as treeCount from tlu_Can_Pos p join tbl_Overstory o on p.CanPos_Num = o.CanPos group by CanPos_Name 
+
+
+##### ATBI - 11 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Create a list of trees where their condition is 'down'. Include the tree tag number, and species common name.
+
+  ## Query:
+    select CommonName, TreeTag from tlu_PlantSpecies s join tbl_Overstory o on s.SpeciesCode = o.SpCode join tlu_Tree_Cond c on o.TreeCond = c.TreeCond_Num where TreeCond_Text = 'down' 
+
+
+##### ATBI - 12 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Get a count of saplings entries for each species code for species with more than 20 saplings entries
+
+  ## Query:
+    select spcode, count(*) as saplingCount from tbl_Saplings group by spcode having count(*) > 20 
+
+
+##### ATBI - 13 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many saplings records are there that have an entry higher than 10 in the diameter class 3 field?
+
+  ## Query:
+    select count(*) as SaplingCount from tbl_Saplings where DClass3 > 10 
+
+
+##### ATBI - 14 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the highest seedling density for each species code?
+
+  ## Query:
+    select SpCode, max(Density) seedlingDensity from tbl_Seedlings group by SpCode 
+
+
+##### ATBI - 15 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many events recorded seedling density data?
+
+  ## Query:
+    select count(distinct Event_ID) EventCount from tbl_Seedlings 
+
+
+##### ATBI - 16 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the directions to the plot where the tree with tag number 6 is located?
+
+  ## Query:
+    select directions  from tbl_Tree_Tags t join tbl_Locations l on t.Location_ID = l.Location_ID where Tree_Tag_ID = 6 
+
+
+##### ATBI - 17 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the description and location notes for locations higher than 4000 feet in elevation
+
+  ## Query:
+    select SiteDescription, Loc_Notes  from tbl_locations where Elevation > 4000 
+
+
+##### ATBI - 18 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each event ID, show the count of nested sub plots for each cover class text description.
+
+  ## Query:
+    select Event_ID, CoverClass_Text, count(*) NestCount from tlu_Cover_Cls cc join tbl_Nests n on cc.CoverClass_Num = n.Cover group by Event_ID, CoverClass_Text 
+
+
+##### ATBI - 19 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the azimuth and distance from the witness tree stake to the tree for trees with a diameter at breast height of less than 30
+
+  ## Query:
+    select Witness_Azimuth, Witness_stake from tbl_WitnessTrees where Witness_DBH < 30 
+
+
+##### ATBI - 20 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each genus and species, get the total number of witness trees observed.
+
+  ## Query:
+    select genus, species, count(*) treeCount from tlu_PlantSpecies s join tbl_WitnessTrees w on s.SpeciesCode = w.Witness_SpCode group by genus, species 
+
+
+##### ATBI - 21 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the listed and valid names of the trail adjacent to the location associated with event id 2?
+
+  ## Query:
+    select ListedName, ValidName  from tlu_Roads_and_Trails rt join tbl_locations l on l.Trail = rt.ListedName join tbl_Events e on e.Location_ID = l.Location_ID where e.Event_ID = 2 
+
+
+##### ATBI - 22 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of tree tags by state and county.
+
+  ## Query:
+    select State, County, count(*) tagCount from tlu_PlaceNames pn join tbl_locations l on pn.id = l.PlaceNameID join tbl_Tree_Tags tg on l.Location_ID = tg.Location_ID group by State, County 
+
+
+##### ATBI - 23 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the East and North Universal Transverse Mercator coordinates for the locations in Blount county? Include the location name.
+
+  ## Query:
+     select Name, utmE, utmN   from tlu_PlaceNames  where county = 'Blount' 
+
+
+##### ATBI - 24 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the topographic position description from the topographic position lookup table for the location with X coordinate 269647 and Y coordinate 3943851
+
+  ## Query:
+    select t.TopoPosition from tlu_topo_position t join tbl_Locations l on l.Topo_Position = t.ID where x_coord = 269647 and y_coord = 3943851 
+
+
+##### ATBI - 25 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what is the condition number for the 'Dead' condition text entry?
+
+  ## Query:
+    select Cond_Num from tlu_live_dead where Cond_Text = 'Dead' 
+
+
+##### ATBI - 26 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the text entry for presence number 3?
+
+  ## Query:
+    select pres_text  from tlu_presence where pres_num = 3 
+
+
+##### ATBI - 27 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the default datum for this project?
+
+  ## Query:
+    select Datum  from tsys_App_Defaults  
+
+
+##### ATBI - 28 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Make a list of genus, species, and common name, for overstory (trees) in Swain county. Include only one row per distinct combination.
+
+  ## Query:
+    select distinct genus, species, CommonName from tlu_PlantSpecies sp join tbl_Overstory os on sp.SpeciesCode = os.SpCode join tbl_Tree_Tags tt on tt.Tree_Tag_ID = os.TreeTag join tbl_locations l on l.Location_ID = tt.Location_ID join tlu_PlaceNames pn on pn.ID = l.PlaceNameID where county = 'Swain' 
+
+
+##### ATBI - 29 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which tree species were recorded as mature overstory but not as saplings? Include the species name and common name.
+
+  ## Query:
+    select species, CommonName from tlu_PlantSpecies sp where exists( 	select overstory_id  	from tbl_Overstory  	where SpCode = sp.SpeciesCode ) and not exists ( 	select Seedlings_ID  	from tbl_Seedlings  	where SpCode = sp.SpeciesCode ) 
+
+
+##### ATBI - 30 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the x an y coordinates for the tree with tag 652?
+
+  ## Query:
+    select Xcoord, Ycoord  from tbl_Tree_Tags where tag = 652 
+
+
+##### ATBI - 31 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each cover class text description, how many nested subplots records are there?
+
+  ## Query:
+    select CoverClass_Text, count(*) NestedSubplotCount from tbl_nests n join tlu_Cover_Cls r2 on n.r2 = r2.CoverClass_Num group by CoverClass_Text 
+
+
+##### ATBI - 32 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each presence class text description, how many nested subplots records are there where the presence class is the presence class of species in the firsted nested corner within a module?
+
+  ## Query:
+    select pres_text, count(*) NestedSubplotCount from tbl_nests n join tlu_Presence p on n.Presence_First = p.Pres_Num group by pres_text 
+
+
+##### ATBI - 33 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the highest midpoint diameter (in meters) for each type of deadwood decay?
+
+  ## Query:
+    select decay, max(MPD) maxMPD from tbl_Deadwood group by decay 
+
+
+##### ATBI - 34 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the longest length for each type of deadwood decay?
+
+  ## Query:
+    select decay, max(length) maxLength from tbl_Deadwood group by decay 
+
+
+##### ATBI - 35 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the decay stage description for the decay stage associated with the lowest recorded midpoint diameter (in meters)?
+
+  ## Query:
+    select DecayStage_Descr from tlu_DecayStage ds where ds.DecayStage_ID in ( 	select top 1 decay 	from tbl_Deadwood 	order by MPD asc ) 
+
+
+##### ATBI - 36 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the decay stage description for the decay stage associated with the shortest recorded length?
+
+  ## Query:
+    select DecayStage_Descr from tlu_DecayStage ds where ds.DecayStage_ID in ( 	select top 1 decay 	from tbl_Deadwood 	order by Length asc ) 
+
+
+##### ATBI - 37 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the site description, slope, aspect, location notes, and accuracy notes, for locations with a convex slope shape.
+
+  ## Query:
+    select SiteDescription, slope, Aspect, Loc_Notes, Accuracy_Notes from tbl_Locations where slope_shape = 'convex' 
+
+
+##### ATBI - 38 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the quad name for the location with a topographic position of 7?
+
+  ## Query:
+    select QuadName from tbl_Locations where Topo_Position = 7 
+
+
+##### ATBI - 39 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each tree condition text description, show a count of the number of sapling records.
+
+  ## Query:
+    select TreeCond_Text, count(*) saplingCount from tbl_Saplings s join tlu_Tree_Cond c on s.Condition = c.TreeCond_Num group by TreeCond_Text 
+
+
+##### NorthernPlainsFireManagement - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many events were logged in each year?
+
+  ## Query:
+    select year(Event_Date) EventsYear, count(*) eventCount from tbl_events group by year(Event_Date) 
+
+
+##### NorthernPlainsFireManagement - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average midpoint diameter of deadwood in decay stage 2a?
+
+  ## Query:
+    select avg(MPD) avgDiameter from tbl_Deadwood where decay = '2a' 
+
+
+##### NorthernPlainsFireManagement - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the directions to the Maddron Bald Trail?
+
+  ## Query:
+    select directions from tbl_Locations where trail = 'maddron bald trail' 
+
+
+##### NorthernPlainsFireManagement - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the site description of locations at plots that were in events in 2001
+
+  ## Query:
+    select SiteDescription from tbl_locations l  join tbl_events e on e.Location_ID = l.Location_ID  where year(event_date) = 2001 
+
+
+##### NorthernPlainsFireManagement - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the genus, species, and common name of plant species observed in nested subpluts of event 30. Include only one row per type
+
+  ## Query:
+    select distinct genus, species, CommonName from tbl_Nests n join tlu_PlantSpecies s on n.SpCode = s.SpeciesCode where Event_ID = 30 
+
+
+##### NorthernPlainsFireManagement - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average diamater of overstory of the montana species observed in events 15 and 16
+
+  ## Query:
+    select avg(DBH) avgDiameter from tbl_events e join tbl_Overstory o on e.Event_ID = o.Event_ID join tlu_PlantSpecies s on o.SpCode = s.SpeciesCode where species = 'montana' 	and e.Event_ID in (15, 16) 
+
+
+##### NorthernPlainsFireManagement - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show all the diamater class 1, 2, 3 and 4 entries for sapplings with species code Abiefra
+
+  ## Query:
+    select spcode, DClass1, DClass2, DClass3, DClass4 from tbl_Saplings where spcode = 'Abiefra' 
+
+
+##### NorthernPlainsFireManagement - 7 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average seedling density of the Acer genus?
+
+  ## Query:
+    select avg(Density) avgSeedlingDensity from tbl_seedlings s join tlu_PlantSpecies sp on s.SpCode = sp.SpeciesCode where genus = 'Acer' 
+
+
+##### NorthernPlainsFireManagement - 8 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each location ID, show the average seedling density of the Acer genus.
+
+  ## Query:
+    select Location_ID, avg(Density) avgSeedlingDensity from tbl_seedlings s join tlu_PlantSpecies sp on s.SpCode = sp.SpeciesCode join tbl_Events e on e.Event_ID = s.Event_ID where genus = 'Acer' group by Location_ID 
+
+
+##### NorthernPlainsFireManagement - 9 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the average north and east universal transvserse mercator coordinates of Sevier County TN?
+
+  ## Query:
+    select avg(utmE) ECentroid, avg(utmN) NCentroid from tlu_PlaceNames where County = 'Sevier' and State = 'TN' 
+
+
+##### NorthernPlainsFireManagement - 10 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the X and Y coordinates, and the species code, of the tree with tag ID 144
+
+  ## Query:
+    select XCoord, Ycoord, SpCode from tbl_Tree_Tags where Tree_Tag_ID = 144 
+
+
+##### NorthernPlainsFireManagement - 11 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each tree condition, show the number of trees for trees with a tag number (not tag ID) greater than 220.
+
+  ## Query:
+    select TreeCond, count(*) treeCount from tbl_Tree_Tags tt join tbl_Overstory o on o.TreeTag = tt.Tree_Tag_ID where Tag > 220 group by TreeCond 
+
+
+##### NorthernPlainsFireManagement - 12 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the tree condition description and the total count of overstory in each condition category.
+
+  ## Query:
+    select TreeCond_Text, count(*) TreeCount from tlu_Tree_Cond tc join tbl_Overstory o on o.TreeCond = tc.TreeCond_Num group by TreeCond_Text 
+
+
+##### NorthernPlainsFireManagement - 13 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the species code and diameter at breast height of the witness tree that is furthest from the marking stake? Exclude location ID 4 from the result.
+
+  ## Query:
+    select top 1 Witness_SpCode, Witness_DBH from tbl_WitnessTrees where Location_ID <> 4 order by Witness_stake desc 
+
+
+##### NorthernPlainsFireManagement - 14 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many overstory's have a codominant canopy position?
+
+  ## Query:
+    select count(*) OverstoryCount from tlu_Can_Pos c join tbl_Overstory o on c.CanPos_Num = o.CanPos where CanPos_Name = 'codominant' 
+
+
+##### NorthernPlainsFireManagement - 15 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each canopy position name, show how many overstory were classified for each position for the species with the common name 'Red Maple'
+
+  ## Query:
+    select CanPos_Name, count(*) OverstoryCount from tlu_Can_Pos c join tbl_Overstory o on c.CanPos_Num = o.CanPos join tlu_PlantSpecies s on s.SpeciesCode = o.SpCode where CommonName = 'Red maple' group by CanPos_Name 
+
+
+##### NorthernPlainsFireManagement - 16 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For all of the locations with a Midslope topographical position, show the site description, slope, aspect, slope shape, and elevation
+
+  ## Query:
+    select SiteDescription, Slope, Aspect, Slope_shape, Elevation from tbl_Locations l join tlu_topo_position p on l.Topo_Position = p.ID where TopoPosition = 'Midslope' 
+
+
+##### NorthernPlainsFireManagement - 17 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the species code and cover class text description of the nested subplot with ID 48?
+
+  ## Query:
+    select SpCode, CoverClass_Text from tbl_Nests n join tlu_Cover_Cls cc on n.cover = cc.CoverClass_Num where Nest_ID = 48 
+
+
+##### NorthernPlainsFireManagement - 18 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each decay stage, show the description and the count of dead wood observations
+
+  ## Query:
+    select DecayStage_Descr, count(*) DeadWoodCount from tlu_DecayStage dc join tbl_Deadwood dw on dc.DecayStage_ID = dw.Decay group by DecayStage_Descr 
+
+
+##### NorthernPlainsFireManagement - 19 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many decay stages are there?
+
+  ## Query:
+    select count(*) from tlu_DecayStage 
+
+
+##### NorthernPlainsFireManagement - 20 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the length and midpoint diameter of dead wood in the decay stage that has 'log is flat' in the description?
+
+  ## Query:
+    select length, mpd from tbl_Deadwood dw join tlu_DecayStage dc on dw.Decay = dc.DecayStage_ID where DecayStage_Descr like '%log is flat%' 
+
+
+##### NorthernPlainsFireManagement - 21 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the genus of plant species observed in nested subplots where their presence description included the phrase 'species occurred in rest of plot'.
+
+  ## Query:
+    select genus from tlu_PlantSpecies sp join tbl_Nests n on n.SpCode = sp.SpeciesCode join tlu_R1_RestOfPlot r on n.R1 = r.Pres_Num where Pres_Text like '%species occurred in rest of plot%' 
+
+
+##### NorthernPlainsFireManagement - 22 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many plant species have the term 'native' in their notes? Show a count of these species by their genus. Only include the five highest results.
+
+  ## Query:
+    select top 5 genus, count(*) speciesCount from tlu_PlantSpecies where SpeciesNotes like '%native%' group by genus order by count(*) desc 
+
+
+##### NorthernPlainsFireManagement - 23 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the database title, file name, release notes, author email, and organization name, for the application release that occurred in 2015
+
+  ## Query:
+    select Database_title, File_name, Release_notes, Author_email, Author_org_name from tsys_App_Releases where year(release_date) = 2015 
+
+
+##### NorthernPlainsFireManagement - 24 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many different slope shapes are there in the lookup table?
+
+  ## Query:
+    select count(*) from tlu_Slope_Shape 
+
+
+##### NorthernPlainsFireManagement - 25 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For events that occurred in 1999, show the average seedling density by location ID.
+
+  ## Query:
+    select Location_ID, avg(density) seedlingDensity from tbl_Seedlings s join tbl_Events e on s.Event_ID = e.Event_ID  where year(Event_Date) = 1999 group by Location_ID 
+
+
+##### NorthernPlainsFireManagement - 26 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average diameter of the fraseri overstory species measurement in each month with an event that measured one?
+
+  ## Query:
+    select month(e.Event_Date) Mon, avg(DBH) avgFraseriDiam from tbl_Overstory o join tbl_events e on e.event_id = o.event_id join tlu_PlantSpecies s on o.SpCode = s.SpeciesCode where s.species = 'fraseri' group by month(e.Event_Date) 
+
+
+##### NorthernPlainsFireManagement - 27 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of roads and trails by layer.
+
+  ## Query:
+    select layer, count(*) from tlu_Roads_and_Trails group by layer 
+
+
+##### NorthernPlainsFireManagement - 28 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of roads and trails by layer for entries that have the word Balsam in their valid name.
+
+  ## Query:
+    select layer, count(*) from tlu_Roads_and_Trails where ValidName like '%Balsam%' group by layer 
+
+
+##### NorthernPlainsFireManagement - 29 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many places are in each state?
+
+  ## Query:
+    select State, count(*) placeCount from tlu_PlaceNames group by state 
+
+
+##### NorthernPlainsFireManagement - 30 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the name, county, state, and E and N coordinates of the northmost place?
+
+  ## Query:
+    select top 1 Name, County, State, utmE, utmN from tlu_PlaceNames order by utmN desc 
+
+
+##### NorthernPlainsFireManagement - 31 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each first presence description text entry, show the number of nested subplots in the event with id 30.
+
+  ## Query:
+    select Pres_Text, count(*) nestCount from tlu_Presence p join tbl_Nests n on p.Pres_Num = n.Presence_First where Event_ID = 30 group by Pres_text 
+
+
+##### NorthernPlainsFireManagement - 32 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the distance between the highest and lowest X coordinate locations, and the distance between highest and lowest Y coordinate locations?
+
+  ## Query:
+    select max(X_Coord) - min(X_Coord) xDist, max(Y_Coord) - min(Y_Coord) yDist from tbl_Locations 
+
+
+##### NorthernPlainsFireManagement - 33 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the Genus, species, and common name of the species with the highest seedling density?
+
+  ## Query:
+    select top 1 Genus, species, CommonName from tbl_Seedlings s join tlu_PlantSpecies sp on s.SpCode = sp.SpeciesCode order by density desc 
+
+
+##### NorthernPlainsFireManagement - 34 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which month has the highest average seedling density?
+
+  ## Query:
+    select top 1 month(Event_Date) from tbl_seedlings s join tbl_Events e on s.Event_ID = e.Event_ID group by month(Event_Date) order by avg(Density) desc 
+
+
+##### NorthernPlainsFireManagement - 35 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many of each tree species have tree tags at location with ID 2? Show the counts by common species name.
+
+  ## Query:
+    select CommonName, count(*) tagCount from tbl_Tree_Tags tg join tlu_PlantSpecies sp on tg.SpCode = sp.SpeciesCode where Location_ID = 2 group by CommonName 
+
+
+##### NorthernPlainsFireManagement - 36 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many of each tree species have tree tags at locations abobe 4000 feet? Show the counts by genus and common species name.
+
+  ## Query:
+    select genus, CommonName, count(*) tagCount from tbl_Tree_Tags tg join tlu_PlantSpecies sp on tg.SpCode = sp.SpeciesCode join tbl_Locations l on tg.Location_ID = l.Location_ID where Elevation > 4000 group by genus, CommonName 
+
+
+##### NorthernPlainsFireManagement - 37 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the ecology notes, coordinate units, coordinate system, and datum for the location on plot A14_1
+
+  ## Query:
+    select Eco_notes, coord_units, Coord_system, datum from tbl_locations where Plot_ID = 'A14_1' 
+
+
+##### NorthernPlainsFireManagement - 38 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the location notes for the location that has the phrase 'probably post logging' in the other disturbance entry?
+
+  ## Query:
+    select loc_notes from tbl_locations where Other_Disturbance like '%probably post logging%' 
+
+
+##### NorthernPlainsFireManagement - 39 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many events had both overstory and deadwood entries?
+
+  ## Query:
+    select count(distinct Event_ID) eventCount from tbl_Deadwood d where d.Event_ID in (select event_id from tbl_Overstory) 
+
+
+##### NTSB - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many different vehicles are there?
+
+  ## Query:
+    SELECT COUNT(DISTINCT VIN) VEHCOUNT FROM GV 
+
+
+##### NTSB - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many crashes had a reported fire?
+
+  ## Query:
+    SELECT COUNT(DISTINCT CASEID) CRASHCOUNT FROM FIRE 
+
+
+##### NTSB - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What years does this data span?
+
+  ## Query:
+    SELECT DISTINCT CRASHYEAR FROM CRASH 
+
+
+##### NTSB - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many events were recorded by an event data recorder?
+
+  ## Query:
+    SELECT COUNT(*) AS RECORDEDEVENTCOUNT FROM EDREVENT 
+
+
+##### NTSB - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicle occupants received attention from emergency services?
+
+  ## Query:
+    SELECT COUNT(*) OCCCOUNT FROM OCC WHERE EMSDATA = 1 
+
+
+##### NTSB - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many adjusted jackknife replicate weight entries are there for cases in category 3?
+
+  ## Query:
+    SELECT COUNT(*) CASECOUNT FROM JKWGT WHERE CATEGORY = 3 
+
+
+##### NTSB - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average weight of adjusted jackknife replicate weight 3
+
+  ## Query:
+    SELECT AVG(JKWGT3) WGT3AVG FROM JKWGT 
+
+
+##### NTSB - 7 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the average weight of the adjusted jackknife replicate weight 5 by case category
+
+  ## Query:
+    SELECT CATEGORY, AVG(JKWGT5) WGT5AVG FROM JKWGT GROUP BY CATEGORY 
+
+
+##### NTSB - 8 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many crashes involved a driver with a blood alcohol concentration greater than 250 mg/DL? Actual values range from 0-499. Exclude values greater than 499.
+
+  ## Query:
+    SELECT COUNT(DISTINCT CASEID) CRASHCOUNT FROM GV WHERE ALCTESTRESULT > 250 AND ALCTESTRESULT < 500 
+
+
+##### NTSB - 9 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a list of vehicle make, model, and curb weight for all vehicles with a curb weight between 2000 and 3000 kg.
+
+  ## Query:
+    SELECT V.MAKE, V.MODEL, CURBWT FROM GV  JOIN VPICDECODE V ON GV.CASEID = V.CASEID AND GV.VEHNO = V.VEHNO WHERE CURBWT >= 2000 AND CURBWT <= 3000 
+
+
+##### NTSB - 10 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Display a count of vehicle inspections by inspection type
+
+  ## Query:
+    SELECT INSPTYPE, COUNT(*) AS VEHCOUNT FROM GV GROUP BY INSPTYPE 
+
+
+##### NTSB - 11 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Display a count of crashes by lighting condition
+
+  ## Query:
+    SELECT LIGHTCOND, COUNT(DISTINCT CASEID) FROM GV GROUP BY LIGHTCOND 
+
+
+##### NTSB - 12 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles are there where drugs were present (presence code value is 1) and the vehicle was towed for a reason not due to disabling damage (towed code is 3)
+
+  ## Query:
+    SELECT COUNT(*) VEHCOUNT FROM GV WHERE PARDRUG = 1 AND TOWED = 3 
+
+
+##### NTSB - 13 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of vehicles for each type of road rumble strip presence.
+
+  ## Query:
+    SELECT RUMBROAD, COUNT(*) VEHCOUNT FROM GV GROUP BY RUMBROAD 
+
+
+##### NTSB - 14 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each vehicle, show the road speed limit, the highest speed the vehicle was recorded by the event data recorder, and how much higher or lower than the speed limit the vehicle was traveling. Limit travel speed and speedlimit to values less than 300 kph.
+
+  ## Query:
+    SELECT SPEEDLIMIT, MAXSPEED, MAXSPEED - SPEEDLIMIT DIFF FROM GV JOIN ( 	SELECT CASEID, VEHNO, MAX(PVALUE) MAXSPEED FROM EDRPRECRASH 	WHERE PCODE = 1010 AND PVALUE < 300 	GROUP BY CASEID, VEHNO ) S ON GV.CASEID = S.CASEID AND GV.VEHNO = S.VEHNO WHERE SPEEDLIMIT < 300 
+
+
+##### NTSB - 15 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average length of the first object stuck after the vehicle departs the shoulder or roadway? Valid values range from 0 to 120 centimeters. Ignore values outside of this range.
+
+  ## Query:
+    SELECT AVG(STRKLENGTH) AVGLENGTH FROM GV WHERE STRKLENGTH BETWEEN 0 AND 120 
+
+
+##### NTSB - 16 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles are there where there was a yield sign in their environment just prior to the crash? The lookup code for yield sign is 3.
+
+  ## Query:
+    SELECT COUNT(*) VEHCOUNT FROM GV WHERE TRAFDEV = 3 
+
+
+##### NTSB - 17 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the number of vehicles in each intrusion magnitude category
+
+  ## Query:
+    SELECT INTMAG, COUNT(DISTINCT(CONCAT(CASEID, VEHNO))) VEHCOUNT FROM INTRUSION GROUP BY INTMAG 
+
+
+##### NTSB - 18 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the number of crashes in each intrusion magnitude category
+
+  ## Query:
+    SELECT INTMAG, (COUNT(DISTINCT CASEID)) CRASHCOUNT FROM INTRUSION GROUP BY INTMAG 
+
+
+##### NTSB - 19 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Display the Case ID, vehicle number, intrusion components, intrusion magnitude, and intrusion direction for cases with an ID less than 20392
+
+  ## Query:
+    SELECT CASEID, VEHNO, INTCOMP, INTMAG, INTDIRECT FROM INTRUSION WHERE CASEID < 20392 
+
+
+##### NTSB - 20 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the intrusion directions for all vehicles in case 20387? Include vehicle number and intrusion direction in the result set.
+
+  ## Query:
+    SELECT VEHNO, INTDIRECT FROM INTRUSION WHERE CASEID = 20387 
+
+
+##### NTSB - 21 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of injuries by body region
+
+  ## Query:
+    SELECT REGION, COUNT(*) INJCOUNT FROM INJURY GROUP BY REGION 
+
+
+##### NTSB - 22 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of injuries by injury severity
+
+  ## Query:
+    SELECT AIS, COUNT(*) INJCOUNT FROM INJURY GROUP BY AIS 
+
+
+##### NTSB - 23 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many injuries were caused by an unknown energy source? The lookup code unknown is 999.
+
+  ## Query:
+    SELECT COUNT(*) INJCOUNT FROM ICS WHERE SOE = 999 
+
+
+##### NTSB - 24 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of injuries by body region where the injury severity is critical. The lookup code for critical injury is 5.
+
+  ## Query:
+    SELECT REGION, COUNT(*) INJCOUNT FROM INJURY WHERE AIS = 5 GROUP BY REGION 
+
+
+##### NTSB - 25 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of injuries by severity where the body region is the spine. The lookup code for spine is 6.
+
+  ## Query:
+    SELECT AIS, COUNT(*) INJCOUNT FROM INJURY WHERE REGION = 6 GROUP BY AIS 
+
+
+##### NTSB - 26 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of minor injuries by vehicle make. The lookup code for minor injuries is 1.
+
+  ## Query:
+    SELECT MAKE, COUNT(*) MINORINJURIES FROM VPICDECODE V JOIN INJURY I ON  V.CASEID = I.CASEID AND V.VEHNO = I.VEHNO WHERE AIS = 1 GROUP BY MAKE 
+
+
+##### NTSB - 27 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which vehicle manufacturer has the most neck injuries?
+
+  ## Query:
+    SELECT TOP 1 MAKE FROM VPICDECODE V JOIN INJURY I ON  V.CASEID = I.CASEID AND V.VEHNO = I.VEHNO WHERE REGION = 3 GROUP BY MAKE ORDER BY COUNT(*) 
+
+
+##### NTSB - 28 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average time it takes for emergency services to be notified after a crash occurs? Exclude values greater than 1000
+
+  ## Query:
+    SELECT AVG(NOTIFIED) AVGNOTIFICATIONTIME FROM EMSCARE WHERE NOTIFIED <= 1000 
+
+
+##### NTSB - 29 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average time it takes for emergency services to arrive at the scene after a crash occurs? Exclude values greater than 1600.
+
+  ## Query:
+    SELECT AVG(SCENEARR) AVGARRIVALTIME FROM EMSCARE WHERE SCENEARR <= 1600 
+
+
+##### NTSB - 30 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average total time from the time an accident occurs to the time that emergency services depart the scene of an accident? Exclude values greater than 1600.
+
+  ## Query:
+    SELECT AVG(SCENEDEP) AVGDEPTIME FROM EMSCARE WHERE SCENEDEP <= 1600 
+
+
+##### NTSB - 31 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average total time from the time an accident occurs to the time that emergency medical services arrive at the medical facility? Exclude values greater than 1600.
+
+  ## Query:
+    SELECT AVG(ARRMEDICAL) AVGMEDARRIVE FROM EMSCARE WHERE ARRMEDICAL <= 1600 
+
+
+##### NTSB - 32 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Make a list that shows the time it took for emergency services to be notified after an accident, the time it took for emergency services to arrive at the scene, the time it took for them to depart the scene, and the time it took for them to arrive at the hospital. Show these times for each crash by case id. Only show cases where an ambulance responded. The lookupcode for ambulance is 1.
+
+  ## Query:
+    SELECT CASEID, NOTIFIED, SCENEARR, SCENEDEP, ARRMEDICAL FROM EMSCARE WHERE EMSTYPE = 1 
+
+
+##### NTSB - 33 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many toyota tacomas are there in the data?
+
+  ## Query:
+    SELECT COUNT(*) TACOMACOUNT FROM VPICDECODE WHERE MAKE = 'TOYOTA' AND MODEL = 'TACOMA' 
+
+
+##### NTSB - 34 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many of each model year vehicle are there? Present them from oldest to newest.
+
+  ## Query:
+    SELECT MODELYR, COUNT(*) VEHCOUNT FROM GV GROUP BY MODELYR ORDER BY MODELYR 
+
+
+##### NTSB - 35 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What vehicle make has the oldest average model year?
+
+  ## Query:
+    SELECT TOP 1 MAKE, AVG(MODELYEAR) AVGYEAR FROM VPICDECODE GROUP BY MAKE ORDER BY AVGYEAR ASC 
+
+
+##### NTSB - 36 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles had no driver present?
+
+  ## Query:
+    SELECT COUNT(*) VEHCOUNT FROM GV WHERE DRPRESENT = 0 
+
+
+##### NTSB - 37 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles are there with the driver's current residence ZIP as 95020?
+
+  ## Query:
+    SELECT COUNT(*) VEHCOUNT FROM GV  WHERE ZIP = 95020 
+
+
+##### NTSB - 38 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of vehicles by drug test result
+
+  ## Query:
+    SELECT DRUGTEST, COUNT(*) FROM GV GROUP BY DRUGTEST 
+
+
+##### NTSB - 39 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the unique category codes for glazing (glass) pre-crash status?
+
+  ## Query:
+    SELECT DISTINCT GLAZPRE FROM GLAZING 
+
+
+##### NTSB - 40 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of all vehicles grouped by plane of impact
+
+  ## Query:
+    SELECT CDCPLANE, COUNT(DISTINCT CONCAT(CASEID, VEHNO)) VEHICLECOUNT FROM CDC GROUP BY CDCPLANE 
+
+
+##### NTSB - 41 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many accidents involved occupant contact with vehicle glazing (aka glass)?
+
+  ## Query:
+    SELECT COUNT(DISTINCT CASEID) ACCIDENTCOUNT FROM INTERIOR WHERE GLAZINGCONT = 1 
+
+
+##### NTSB - 42 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the most common first manufacture-recommended front tire size? Exclude tire size values of '9999999999'
+
+  ## Query:
+    SELECT TOP 1 RECFRONT1 FROM TIREPLAC T WHERE RECFRONT1 <> '9999999999' GROUP BY RECFRONT1 ORDER BY COUNT(*) DESC 
+
+
+##### NTSB - 43 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles had damage to the windshield glazing?
+
+  ## Query:
+    SELECT COUNT(*) AS WINDSHIELD_DAMAGE_COUNT FROM GLAZING WHERE GLAZLOC = 1 
+
+
+##### NTSB - 44 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Display a count of all vehicles by glazing (glass) impact damage category
+
+  ## Query:
+    SELECT GLAZIMP, COUNT(DISTINCT VIN) AS VEHCOUNT FROM GLAZING GZ JOIN GV ON GV.CASEID = GZ.CASEID AND GV.VEHNO = GZ.VEHNO GROUP BY GLAZIMP ORDER BY GLAZIMP 
+
+
+##### NTSB - 45 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many crashes involved vehicles with after-marked adaptive driving equipment?
+
+  ## Query:
+    SELECT COUNT(*) CRASHCOUNT FROM ADAPT 
+
+
+##### NTSB - 46 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the highest roll angle recorded post-crash by an event data recorder?
+
+  ## Query:
+    SELECT TOP 1 PVALUE FROM EDRPOSTCRASH WHERE PCODE = 2060 ORDER BY PVALUE DESC 
+
+
+##### NTSB - 47 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show number of crashes by month in month order
+
+  ## Query:
+    SELECT CRASHMONTH, COUNT(*) AS CRASHCOUNT  FROM CRASH GROUP BY CRASHMONTH ORDER BY CRASHMONTH 
+
+
+##### NTSB - 48 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the highest speed recorded by the event data recorder for each case for cases where at least one vehicle exceeded 100 (but no more than 200).
+
+  ## Query:
+    SELECT CASEID, MAX(PVALUE) MAXSPEED FROM EDRPRECRASH WHERE PCODE = 1010 AND PVALUE > 100 AND PVALUE < 200 GROUP BY CASEID 
+
+
+##### NTSB - 49 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the highest speed recorded by the event data recorder for each case for cases where at least one vehicle exceeded 160 (but no more than 300). Include the case id, vehicle make and model. Sort from fastest to slowest.
+
+  ## Query:
+    SELECT PR.CASEID, MAKE, MODEL, MAX(PVALUE) MAXSPEED  FROM EDRPRECRASH PR JOIN VPICDECODE V ON PR.CASEID = V.CASEID AND V.VEHNO = PR.VEHNO WHERE PCODE = 1010 AND PVALUE > 160 AND PVALUE < 300 GROUP BY PR.CASEID, PR.VEHNO, MAKE, MODEL ORDER BY MAX(PVALUE) DESC 
+
+
+##### NTSB - 50 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are all the makes of vehicles in the database?
+
+  ## Query:
+    SELECT DISTINCT MAKE FROM VPICDECODE 
+
+
+##### NTSB - 51 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many different types of injury causation scenarios are there?
+
+  ## Query:
+    SELECT COUNT(DISTINCT ICS_TYPE) TYPECOUNT FROM ICS 
+
+
+##### NTSB - 52 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many injuries are there for each body region?
+
+  ## Query:
+    SELECT BRI, COUNT(*) AS INJURY_COUNT  FROM ICS GROUP BY BRI 
+
+
+##### NTSB - 53 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average age of all vehicle occupants? Ignore values higher than 130.
+
+  ## Query:
+    SELECT AVG(AGE) AVGAGE FROM OCC WHERE AGE <= 130 
+
+
+##### NTSB - 54 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the average height of all occupants by age. Ignore height values higher than 220 and age values higher than 120. Show in age order from youngest to oldest.
+
+  ## Query:
+    SELECT AGE, AVG(HEIGHT) AVGHEIGHT FROM OCC WHERE AGE <= 120 AND HEIGHT <= 220 GROUP BY AGE ORDER BY AGE ASC 
+
+
+##### NTSB - 55 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many crashes resulted in the death of a fetus? The lookup value for fetal mortality is 1.
+
+  ## Query:
+    SELECT COUNT(DISTINCT CASEID) DEATHCOUNT FROM OCC WHERE FETALMORT = 1 
+
+
+##### NTSB - 56 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many crashes had vehicles where no seatbelt was available because it was removed or destroyed? The lookup value for no belt available due to removal or destruction is 1.
+
+  ## Query:
+    SELECT COUNT(DISTINCT CASEID) NOBELTCOUNT FROM OCC WHERE BELTAVAIL = 1 
+
+
+##### NTSB - 57 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many crashes had an occupant that did not use a seat belt? The codes that correspond to no use are 0 and 1.
+
+  ## Query:
+    SELECT COUNT(DISTINCT CASEID) NOBELTCOUNT FROM OCC WHERE BELTUSE IN (0, 1) 
+
+
+##### NTSB - 58 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicle occupants did not wear a seatbelt even though there was one available? The codes that correspond to no use are 0 and 1. The codes that correspond to a belt being available are 2, 3, 4, 5, 6, 7 and 8.
+
+  ## Query:
+    SELECT COUNT(*) OCCCOUNT FROM OCC WHERE BELTUSE IN (0, 1) AND BELTAVAIL IN (2, 3, 4, 5, 6, 7, 8) 
+
+
+##### NTSB - 59 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show me occupant mortality counts by belt use category. A mortality occured (was fatal) indicated by lookup code 1.
+
+  ## Query:
+    SELECT BELTUSE, COUNT(*) MORTALCOUNT FROM OCC WHERE MORTALITY = 1 GROUP BY BELTUSE 
+
+
+##### NTSB - 60 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the total occupant count and the mortality count by belt use category. A mortality occured (was fatal) indicated by lookup code 1.
+
+  ## Query:
+    SELECT M.BELTUSE, TOTALCOUNT, MORTALCOUNT FROM ( 	SELECT BELTUSE, COUNT(*) MORTALCOUNT 	FROM OCC 	WHERE MORTALITY = 1 	GROUP BY BELTUSE ) M JOIN ( 	SELECT BELTUSE, COUNT(*) TOTALCOUNT 	FROM OCC 	GROUP BY BELTUSE ) T ON M.BELTUSE = T.BELTUSE 
+
+
+##### NTSB - 61 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles were documented as encountering a direction of force between 150 and 210 degrees inclusive?
+
+  ## Query:
+    SELECT COUNT(DISTINCT CONCAT(CASEID, VEHNO)) VEHCOUNT FROM CDC WHERE PDOF >= 150 AND PDOF <= 210 
+
+
+##### NTSB - 62 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many crashes are there where the vehicle-to-vehicle heading angle at impact was between 0 and 90 degrees inclusive?
+
+  ## Query:
+    SELECT COUNT(DISTINCT CASEID) CRASHCOUNT FROM CDC WHERE HEADINGANG >= 0 AND HEADINGANG <= 90 
+
+
+##### NTSB - 63 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the maximum depth of crush measured? Codes 888 and 999 should be ignored.
+
+  ## Query:
+    SELECT TOP 1 CMAX  FROM CDC WHERE CMAX NOT IN (888, 999) ORDER BY CMAX DESC 
+
+
+##### NTSB - 64 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles had A pillar damage?
+
+  ## Query:
+    SELECT COUNT(DISTINCT CONCAT(CASEID, VEHNO)) VEHICLECOUNT FROM CDC WHERE DAMAPILLAR = 1 
+
+
+##### NTSB - 65 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles had damage to a pillar other than an A, B, or C pillar?
+
+  ## Query:
+    SELECT COUNT(DISTINCT CONCAT(CASEID, VEHNO)) VEHICLECOUNT FROM CDC WHERE DAMOTHPILLAR = 1 
+
+
+##### NTSB - 66 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average difference in crush between the door sill and the door structure for all vehicles where this information was reported? Ignore the codes 888 and 999.
+
+  ## Query:
+    SELECT AVG(DOORSILLDIFF) AVGDIFF FROM CDC WHERE DOORSILLDIFF NOT IN (888, 999) 
+
+
+##### NTSB - 67 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the highest vehicle-to-object collision speed difference recorded? This would equivalent to the speed of the vehicle if it struck a fixed stationary obstacle. 999 indicates an unknown value.
+
+  ## Query:
+    SELECT TOP 1 DVBARRIER FROM CDC WHERE DVBARRIER <> 999 ORDER BY DVBARRIER DESC 
+
+
+##### NTSB - 68 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each case where measurements were performed, show the case ID, vehicle number, and all of the different crush measurements and the maximum. Codes 888 and 999 indicate that measurements are not available.
+
+  ## Query:
+    SELECT CASEID, VEHNO, CMAX, C1, C2, C3, C4, C5, C6 FROM CDC WHERE CMAX NOT IN (888, 999) 
+
+
+##### NTSB - 69 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the case ids, vehicle numbers, and event data recording summary numbers of the vehicles that had 10 events recorded in their event data recorder?
+
+  ## Query:
+    SELECT CASEID, VEHNO, EDRSUMMNO FROM EDREVENT GROUP BY CASEID, VEHNO, EDRSUMMNO HAVING COUNT(*) = 10 
+
+
+##### NTSB - 70 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each crash, show the case number, event number, and number of time-based datapoints recorded prior to the crash for each event data recorder event.
+
+  ## Query:
+    SELECT EV.CASEID, EV.EDREVENTNO, COUNT(*) AS PRECRASHTIMEPOINTS FROM EDRPRECRASH PC JOIN EDREVENT EV ON  	PC.CASEID = EV.CASEID 	AND PC.EDREVENTNO = EV.EDREVENTNO GROUP BY EV.CASEID, EV.EDREVENTNO ORDER BY CASEID 
+
+
+##### NTSB - 71 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the make, model, manufacture year, and number of ignition cycles of all vehicles with fewer than 200 ignition cycles registered in the event data recorder at the time of crash. Display them by model year older, with the newest models at the top.
+
+  ## Query:
+    SELECT DISTINCT MAKE, MODEL, MODELYEAR, IGCYCRASH  FROM EDREVENT E JOIN VPICDECODE V ON E.CASEID = V.CASEID AND E.VEHNO = V.VEHNO WHERE IGCYCRASH < 200 AND IGCYCRASH > 0 ORDER BY MODELYEAR DESC 
+
+
+##### NTSB - 72 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles with fewer than 400, but more than 0, ignition cycles are in the data?
+
+  ## Query:
+    SELECT COUNT(*) AS VEHICLECOUNT FROM ( 	SELECT DISTINCT CASEID, VEHNO, IGCYCRASH 	FROM EDREVENT ) E WHERE IGCYCRASH > 0 AND IGCYCRASH < 400 
+
+
+##### NTSB - 73 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    list all of the cases, vehicle number, occupant number, and number of injuries for cases with an occupant that sustained more than one injury
+
+  ## Query:
+    SELECT CASEID, VEHNO, OCCNO, COUNT(*) AS INJURY_COUNT FROM INJURY GROUP BY CASEID, VEHNO, OCCNO HAVING COUNT(INJNO) > 1 ORDER BY INJURY_COUNT DESC 
+
+
+##### NTSB - 74 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many fires were reported for each fuel type?
+
+  ## Query:
+    SELECT FUELTYPE, COUNT(*) FROM FIRE     JOIN FUEL ON FIRE.CASEID = FUEL.CASEID AND FIRE.VEHNO = FUEL.VEHNO GROUP BY FUELTYPE 
+
+
+##### NTSB - 75 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of occupant ejections by sex
+
+  ## Query:
+    SELECT SEX, COUNT(*) FROM OCC JOIN EJECT ON OCC.CASEID = EJECT.CASEID AND OCC.VEHNO = EJECT.VEHNO AND OCC.OCCNO = EJECT.VEHNO GROUP BY SEX 
+
+
+##### NTSB - 76 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the number of crashes by vehicle make from most to least
+
+  ## Query:
+    SELECT MAKE, COUNT(*) AS CRASHCOUNT FROM VPICDECODE GROUP BY MAKE ORDER BY CRASHCOUNT DESC 
+
+
+##### NTSB - 77 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many crashes involved vehicles that were equipped with crash avoidance features?
+
+  ## Query:
+    SELECT COUNT(DISTINCT CASEID) CRASHCOUNT FROM AVOID WHERE AVAIL = 1 
+
+
+##### NTSB - 78 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the most common crash avoidance equipment feature?
+
+  ## Query:
+    SELECT TOP 1 EQUIP FROM AVOID WHERE AVAIL = 1 GROUP BY EQUIP ORDER BY COUNT(*) DESC 
+
+
+##### NTSB - 79 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles have more than four crash avoidance features?
+
+  ## Query:
+    SELECT COUNT(*) VEHCOUNT FROM ( 	SELECT CASEID, VEHNO, COUNT(EQUIP) FEATURECOUNT 	FROM AVOID 	WHERE AVAIL = 1 	GROUP BY CASEID, VEHNO 	HAVING COUNT(*) > 4 ) SUBQUERY_T 
+
+
+##### NTSB - 80 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles had tire damage?
+
+  ## Query:
+    SELECT COUNT(*) VEHCOUNT FROM ( 	SELECT DISTINCT CASEID, VEHNO 	FROM TIREDAMAGE ) T 
+
+
+##### NTSB - 81 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles have a gross vehicle weight rating less than 4000?
+
+  ## Query:
+    SELECT COUNT(*) VEHCOUNT FROM TIREPLAC WHERE GVWR < 4000 
+
+
+##### NTSB - 82 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the Front and rear axle weight ratings for vehicles that have a gross vehicle weight rating between 4000 and 9000
+
+  ## Query:
+    SELECT GAWRFRONT, GAWRREAR FROM TIREPLAC WHERE GVWR BETWEEN 4000 AND 9000 
+
+
+##### NTSB - 83 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the average first manufacture recommended front and rear tire pressures for vehicles with a gross vehicle weight rating below 3000.
+
+  ## Query:
+    SELECT AVG(RECFRPRESS1) AVGFRONT, AVG(RECRRPRESS1) AVGREAR FROM TIREPLAC WHERE GVWR < 3000 
+
+
+##### NTSB - 84 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each of the first manufacturer's recommended front tire sizes, list the average first recommended pressure.
+
+  ## Query:
+    SELECT RECFRONT1, AVG(RECFRPRESS1) AVGPRESS FROM TIREPLAC GROUP BY RECFRONT1 
+
+
+##### NTSB - 85 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the first recommended front and rear tire sizes for all of the Subaru WRXs in the dataset.
+
+  ## Query:
+    SELECT RECFRONT1, RECREAR1 FROM VPICDECODE V JOIN TIREPLAC T ON V.CASEID = T.CASEID  AND V.VEHNO = T.VEHNO WHERE MAKE = 'SUBARU' AND MODEL = 'WRX' 
+
+
+##### NTSB - 86 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the first recommended front and rear tire sizes and pressure levels for all of the Honda Civics manufactured before 2012 in the dataset.
+
+  ## Query:
+    SELECT RECFRONT1, RECREAR1, RECFRPRESS1, RECRRPRESS1 FROM VPICDECODE V JOIN TIREPLAC T ON V.CASEID = T.CASEID  AND V.VEHNO = T.VEHNO WHERE MAKE = 'HONDA' AND MODEL = 'CIVIC' AND MODELYEAR < 2012 
+
+
+##### NTSB - 87 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many vehicles had wrangler model tires?
+
+  ## Query:
+    SELECT COUNT(DISTINCT CONCAT(CASEID, VEHNO)) VEHCOUNT FROM TIRE WHERE TIREMODEL = 'WRANGLER' 
+
+
+##### NTSB - 88 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the tire model names found on Jeep Wranglers. Ensure only one row per model name.
+
+  ## Query:
+    SELECT DISTINCT TIREMODEL FROM TIRE T JOIN VPICDECODE V ON T.CASEID = V.CASEID AND T.VEHNO = V.VEHNO WHERE MAKE = 'JEEP' AND MODEL = 'WRANGLER' 
+
+
+##### NTSB - 89 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Make a list of tire models and the number of vehicles that had them installed. Display them from most to least common models.
+
+  ## Query:
+    SELECT TIREMODEL, COUNT(DISTINCT CONCAT(CASEID, VEHNO)) VEHCOUNT FROM TIRE T GROUP BY TIREMODEL ORDER BY COUNT(DISTINCT CONCAT(CASEID, VEHNO)) DESC 
+
+
+##### NTSB - 90 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Make a list of tire models and the number of vehicles with those tires installed where tire damage was observed on at least one tire, as indicated by category values other than 0. Display them from most to least common models. Do not include the unknown damage category value 9.
+
+  ## Query:
+    SELECT TIREMODEL, COUNT(DISTINCT CONCAT(T.CASEID, T.VEHNO)) VEHCOUNT FROM TIRE T LEFT JOIN TIREDAMAGE TD ON T.CASEID = TD.CASEID AND T.VEHNO = TD.VEHNO WHERE DAMAGE > 0 AND DAMAGE <> 9 GROUP BY TIREMODEL ORDER BY COUNT(DISTINCT CONCAT(T.CASEID, T.VEHNO)) DESC 
+
+
+##### NTSB - 91 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the case IDs and vehicle number, recommended and actual tire sizes for vehicles that had a left front tire size that matched the manufacturers first recommended front tire size.
+
+  ## Query:
+    SELECT T.CASEID, T.VEHNO, TIRESIZE, RECFRONT1 FROM TIRE T JOIN TIREPLAC TP ON T.CASEID = TP.CASEID AND T.VEHNO = TP.VEHNO WHERE TIRELOC = 'LF' AND TIRESIZE = RECFRONT1 
+
+
+##### NTSB - 92 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the case IDs, make, model, recommended and actual tire sizes for vehicles that had a left front tire size that did not match the manufacturers first recommended front tire size.
+
+  ## Query:
+    SELECT T.CASEID, MAKE, MODEL, T.VEHNO, TIRESIZE, RECFRONT1 FROM TIRE T JOIN TIREPLAC TP ON T.CASEID = TP.CASEID AND T.VEHNO = TP.VEHNO JOIN VPICDECODE V ON T.CASEID = V.CASEID AND T.VEHNO = V.VEHNO WHERE TIRELOC = 'LF' AND TIRESIZE <> RECFRONT1 
+
+
+##### NTSB - 93 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which vehicle make has the most instances of mismatched front left tires? That is, where the left front tire size on the vehicle does not match the manufacturers first recommended front tire size.
+
+  ## Query:
+    SELECT TOP 1 MAKE FROM TIRE T JOIN TIREPLAC TP ON T.CASEID = TP.CASEID AND T.VEHNO = TP.VEHNO JOIN VPICDECODE V ON T.CASEID = V.CASEID AND T.VEHNO = V.VEHNO WHERE TIRELOC = 'LF' AND TIRESIZE <> RECFRONT1 GROUP BY MAKE ORDER BY COUNT(DISTINCT T.CASEID) DESC 
+
+
+##### NTSB - 94 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many accidents were related to distracted driving?
+
+  ## Query:
+    SELECT COUNT(DISTINCT CASEID) DISTRACTACCIDENTCOUNT FROM DISTRACT D 
+
+
+##### NTSB - 95 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many accidents with occupied child seats were related to distracted driving?
+
+  ## Query:
+    SELECT COUNT(DISTINCT D.CASEID) ACCIDENTCOUNT FROM DISTRACT D JOIN ( 	SELECT DISTINCT CASEID FROM CHILDSEAT WHERE OCCNO IS NOT NULL ) S ON D.CASEID = S.CASEID 
+
+
+##### NTSB - 96 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List vehicles by make and model and the count of the vehicles that had car seats; order from highest to lowest count.
+
+  ## Query:
+    SELECT MAKE, MODEL, COUNT(*) AS VEHICLE_COUNT FROM VPICDECODE V JOIN CHILDSEAT C ON V.CASEID = C.CASEID AND V.VEHNO = C.VEHNO  GROUP BY MAKE, MODEL ORDER BY VEHICLE_COUNT DESC 
+
+
+##### NTSB - 97 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List vehicles by make and model and the count of the vehicles that had child car seats; Provide a separate count of how many of these vehicles had distracted drivers.
+
+  ## Query:
+    SELECT MAKE, MODEL, COUNT(*) AS VEHICLE_COUNT, COUNT(DISTRACTN) AS DISTRACTION_COUNT FROM VPICDECODE V JOIN CHILDSEAT C ON V.CASEID = C.CASEID AND V.VEHNO = C.VEHNO  LEFT JOIN DISTRACT D ON D.CASEID = V.CASEID AND D.VEHNO = V.VEHNO GROUP BY MAKE, MODEL ORDER BY DISTRACTION_COUNT DESC 
+
+
+##### NTSB - 98 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which vehicle make with more than 5 vehicles in the database has the highest number of distracted drivers in proportion to the total number of the make and model in the data?
+
+  ## Query:
+    SELECT MAKE, COUNT(*) AS VEHICLE_COUNT, COUNT(DISTRACTN) AS DISTRACT_COUNT, 	CAST(COUNT(DISTRACTN) AS FLOAT) / CAST(COUNT(*) AS FLOAT) AS PROP_DISTRACT FROM VPICDECODE V LEFT JOIN DISTRACT D ON V.CASEID = D.CASEID AND V.VEHNO = D.VEHNO GROUP BY MAKE HAVING COUNT(*) > 5 ORDER BY PROP_DISTRACT DESC 
+
+
+##### NTSB - 99 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the number of crashes by vehicle make from most to least. Show how many of these crashes resulted in a fire. Calculate the proportion of total crashes by make to crashes with a fire
+
+  ## Query:
+    SELECT MAKE, COUNT(*) AS CASE_COUNT, SUM(FIRE) AS FIRE_COUNT, (CAST(SUM(FIRE) AS FLOAT)/ CAST(COUNT(*) AS FLOAT)) AS FIRE_PROPORTION FROM VPICDECODE VD 	JOIN FIRE F ON F.CASEID = VD.CASEID AND F.VEHNO = VD.VEHNO GROUP BY MAKE ORDER BY FIRE_PROPORTION DESC 
+
+
+##### NYSED_SRC2022 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the accountability level of the indicators 'HS Grad Rate' for the multiracial subgroup for all schools with the word friendship in their name? Include the institution ID, entity name, and accountability level in the result.
+
+  ## Query:
+    select institution_id, ENTITY_NAME, LEVEL from [Accountability_Levels] where SUBGROUP_NAME = 'Multiracial' and INDICATOR = 'HS Grad Rate' and entity_name like '%friendship%' 
+
+
+##### NYSED_SRC2022 - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the percent not tested in 2021 on english language assessment ELA4, for each demographic subgroup at PEMBROKE INTERMEDIATE SCHOOL
+
+  ## Query:
+    select SUBGROUP_NAME, pct_not_tested from [Annual_EM_ELA] where entity_name = 'PEMBROKE INTERMEDIATE SCHOOL'      and ASSESSMENT_NAME = 'ELA4'     and year = 2021 
+
+
+##### NYSED_SRC2022 - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the total number of new york state alternate assessment records for assessments performed in 2022
+
+  ## Query:
+    select count(*) entryCount from [Annual_NYSAA] where year = 2022 
+
+
+##### NYSED_SRC2022 - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the student count, federal expenditure, and federal expenditure per student in 2022 for the school named 'MONTESSORI MAGNET SCHOOL'.
+
+  ## Query:
+    select PUPIL_COUNT_TOT, FEDERAL_EXP, PER_FEDERAL_EXP from [Expenditures_per_Pupil] where entity_name = 'MONTESSORI MAGNET SCHOOL' and year = 2022 
+
+
+##### NYSED_SRC2022 - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the student count, federal expenditure, federal expenditure per student, subgroup name, and mean math assessment score for the MATH5 assessment in 2022 for the school named 'MONTESSORI MAGNET SCHOOL'.
+
+  ## Query:
+    select PUPIL_COUNT_TOT, FEDERAL_EXP, PER_FEDERAL_EXP, SUBGROUP_NAME, MEAN_SCORE from [Expenditures_per_Pupil] ex join [Annual_EM_MATH] mth on ex.ENTITY_CD = mth.ENTITY_CD and ex.YEAR = mth.YEAR where ex.entity_name = 'MONTESSORI MAGNET SCHOOL' and ASSESSMENT_NAME = 'MATH5' and ex.YEAR = 2022 
+
+
+##### NYSED_SRC2022 - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the 2022 high school participation rates and graduation rates for the subgroup 'All Students' who attended Brooklyn Collegiate.
+
+  ## Query:
+    select rate, grad_rate from [ACC_HS_Participation_Rate] p join [ACC_HS_Graduation_Rate] g  	on p.ENTITY_CD = g.ENTITY_CD  	and p.SUBGROUP_NAME = g.SUBGROUP_NAME  	and p.YEAR = g.YEAR  	and p.ENTITY_NAME = g.ENTITY_NAME 	and p.INSTITUTION_ID = g.INSTITUTION_ID where p.ENTITY_NAME = 'Brooklyn Collegiate' and p.SUBGROUP_NAME = 'All Students' and p.year = 2022 
+
+
+##### NYSED_SRC2022 - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is Kenney Middle School's 2021 enrollment, absentee count, and absentee rate for the subgroup of students with disabilities?
+
+  ## Query:
+    select enrollment, absent_count, absent_rate from [ACC_EM_Chronic_Absenteeism] where entity_name = 'KENNEY MIDDLE SCHOOL' and year = 2021 and SUBGROUP_NAME = 'Students with disabilities' 
+
+
+##### NYSED_SRC2022 - 7 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the annual regents exam percent of LONGWOOD HIGH SCHOOL students at each level from 1 to 5 for the Regents Common Core Algebra I subject taken in 2022. Include the subgroup name, number of students tested, and all of the appropriate percent level score columns.
+
+  ## Query:
+    select SUBGROUP_NAME, tested, PER_LEVEL1, PER_LEVEL2, PER_LEVEL3, PER_LEVEL4, PER_LEVEL5 from [Annual_Regents_Exams] where ENTITY_NAME like '%LONGWOOD HIGH SCHOOL%' 	and year = 2022 	and subject = 'Regents Common Core Algebra I' 
+
+
+##### NYSED_SRC2022 - 8 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many public school entities are in each accountability status in the year 2022?
+
+  ## Query:
+    select overall_status, count(*) statusCount from [Accountability_Status] where year = 2022 and ENTITY_CD in ( 	select entity_cd 	from [Institution_Grouping] 	where group_name = 'Public School' ) group by overall_status 
+
+
+##### NYSED_SRC2022 - 9 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the accountability status and progress status of the  bronx career and college prep HS in 2022?
+
+  ## Query:
+    select overall_status, made_progress from [Accountability_Status] where entity_name = 'bronx career and college prep hs' and year = 2022 
+
+
+##### NYSED_SRC2022 - 10 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what are the combined subject, core and weighted, performance scores for elementary students with disabilities who attended May Moore Primary School?
+
+  ## Query:
+    select core_cohort, weighted_cohort  from [ACC_EM_Core_and_Weighted_Performance] where entity_name = 'May Moore Primary School' 	and subject = 'combined' 	and SUBGROUP_NAME = 'Students with Disabilities' 
+
+
+##### NYSED_SRC2022 - 11 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Make a list of public elementary school entities that do not have the subgroup 'students with disabilities' in the elementary core and weighted performance data.
+
+  ## Query:
+    select distinct entity_name  from [ACC_EM_Core_and_Weighted_Performance] p where not exists ( 	select ENTITY_CD 	from [ACC_EM_Core_and_Weighted_Performance] q 	where subgroup_name = 'Students with Disabilities' and p.ENTITY_CD = q.ENTITY_CD ) 	and ENTITY_CD in ( 		select entity_cd 		from [Institution_Grouping] 		where group_name = 'Public School' 	) 
+
+
+##### NYSED_SRC2022 - 12 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many public elementary school entities have the subgroup 'multiracial' included in the core and weighted performance data?
+
+  ## Query:
+    select count(distinct ENTITY_CD) schoolCount from [ACC_EM_Core_and_Weighted_Performance] where SUBGROUP_NAME = 'multiracial' 	and ENTITY_CD in ( 		select entity_cd 		from [Institution_Grouping] 		where group_name = 'Public School' 	) 
+
+
+##### NYSED_SRC2022 - 13 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the school name and english language learner count for the subgroup 'all students' for public school entities that have the word preparatory in their name.
+
+  ## Query:
+    select ENTITY_NAME, ELL_COUNT from [ACC_EM_ELP] where SUBGROUP_NAME = 'all students' 	and ENTITY_NAME like '%preparatory%' 
+
+
+##### NYSED_SRC2022 - 14 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many public elementary school entities have white student subgroups who are english language learners?
+
+  ## Query:
+    select count(*) schoolCount from [ACC_EM_ELP] where subgroup_name = 'white' 	and ell_count <> '0' 	and ENTITY_CD in ( 		select entity_cd 		from [Institution_Grouping] 		where group_name = 'Public School' 	) 
+
+
+##### NYSED_SRC2022 - 15 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the english language learner count, benchmark, progress rate, and success ratio for the sub group all students at 'pine bush' elementary school?
+
+  ## Query:
+    select ell_count, benchmark, progress_rate, success_ratio from [ACC_EM_ELP] where ENTITY_NAME = 'PINE BUSH'  	and SUBGROUP_NAME = 'All Students' 
+
+
+##### NYSED_SRC2022 - 16 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many public elementary school entities had 0 participation in the new york state english as a second language achievement test?
+
+  ## Query:
+    select count(distinct entity_cd) noPartCount from [ACC_EM_NYSESLAT_for_Participation] where NYSESLAT_PART = '0' 	and ENTITY_CD in ( 		select entity_cd 		from [Institution_Grouping] 		where group_name = 'Public School' 	) 
+
+
+##### NYSED_SRC2022 - 17 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many different new york state english as a second language achievement test elementary school subjects are there?
+
+  ## Query:
+    select count(distinct subject) subjectCount from [ACC_EM_NYSESLAT_for_Participation] 
+
+
+##### NYSED_SRC2022 - 18 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the names of the public elementary school entities with level 2 english learner programs that have a non-zero number of english language learners in the all students subgroup, who did not participate in the new york state english as a second language achievement test. Include only one row per school name.
+
+  ## Query:
+    select distinct entity_name from [ACC_EM_ELP]  where entity_cd in ( 	select distinct entity_cd 	from [ACC_EM_NYSESLAT_for_Participation] 	where NYSESLAT_PART = '0' )  	and ELL_COUNT <> '0'  	and SUBGROUP_NAME = 'all students'  	and level = '2' 	and ENTITY_CD in ( 		select entity_cd 		from [Institution_Grouping] 		where group_name = 'Public School' 	) 
+
+
+##### NYSED_SRC2022 - 19 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the 2022 cohort size and student participation rate for all sub groups and subjects at elmwood elementary school?
+
+  ## Query:
+    select SUBGROUP_NAME, subject, cohort, rate from [ACC_EM_Participation_Rate] where entity_name = 'elmwood elementary school' and year = 2022 
+
+
+##### NYSED_SRC2022 - 20 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many public elementary school entities met a 95 percent participation rate in at least one subject?
+
+  ## Query:
+    select count(distinct entity_cd) schoolCount from [ACC_EM_Participation_Rate] where MET_95_PERCENT = 'Y' 	and ENTITY_CD in ( 		select entity_cd 		from [Institution_Grouping] 		where group_name = 'Public School' 	) 
+
+
+##### NYSED_SRC2022 - 21 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For public elementary school participation rates not equal to s, calculate the average participation rate.
+
+  ## Query:
+    select avg(cast(rate as float)) as avgRate from [ACC_EM_Participation_Rate] where rate <> 's' 	and ENTITY_CD in ( 		select entity_cd 		from [Institution_Grouping] 		where group_name = 'Public School' 	) 
+
+
+##### NYSED_SRC2022 - 22 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each subject, show the average public high school entity chronic absence rate for records where the rate does not equal 's'.
+
+  ## Query:
+    select subject, avg(cast(absent_rate as float)) avgRate from [ACC_EM_Chronic_Absenteeism] where ABSENT_RATE <> 's' and ENTITY_CD in ( 		select entity_cd 		from [Institution_Grouping] 		where group_name = 'Public School' 	) group by subject 
+
+
+##### NYSED_SRC2022 - 23 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the name of the public elementary school entity that has the lowest chronic absence rate of students with disabilities. Exclude data where the rate value is 's'.
+
+  ## Query:
+    select top 1 entity_name from [ACC_EM_Chronic_Absenteeism] where SUBGROUP_NAME = 'students with disabilities' and absent_rate <> 's' order by cast(absent_rate as float) desc 
+
+
+##### NYSED_SRC2022 - 24 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    show the school name, sub group name, and total enrollment at public elementary school entities that have the highest absenteeism rate in 2022. Exclude data where the absenteeism rate is 's'.
+
+  ## Query:
+    select a.entity_name, subgroup_name, enrollment from [ACC_EM_Chronic_Absenteeism] a join [Institution_Grouping] g on a.ENTITY_CD = g.ENTITY_CD where cast(absent_rate as float) = ( 	select max(cast(absent_rate as float))  	from [ACC_EM_Chronic_Absenteeism]  	where absent_rate <> 's' 	and year = 2022 	) 	and absent_rate <> 's' 	and year = 2022 	and group_name = 'public school' 
+
+
+##### NYSED_SRC2022 - 25 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average public high school entity chronic absenteeism rate by student sub group in 2021? Do not include rows where the rate is 's'.
+
+  ## Query:
+    select subgroup_name, avg(cast(absent_rate as float)) avgRate from [ACC_HS_Chronic_Absenteeism] a join [Institution_Grouping] g on a.ENTITY_CD = g.ENTITY_CD where absent_rate <> 's' 	and group_name = 'Public School' group by subgroup_name 
+
+
+##### NYSED_SRC2022 - 26 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the 2021 chronic absenteeism count and rate for the sub group 'All students' at the public high school entity with the highest enrollment? Exclude enrollment data that has the value 's'. Include the school name in the result.
+
+  ## Query:
+    select top 1 entity_name, absent_count, absent_rate from [ACC_HS_Chronic_Absenteeism] where enrollment <> 's' 	and year = 2021 	and ENTITY_CD in ( 		select entity_cd 		from [Institution_Grouping] 		where group_name = 'Public School' 	) 	and SUBGROUP_NAME = 'All Students' order by cast(enrollment as float) desc 
+
+
+##### NYSED_SRC2022 - 27 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the core and weighted cohorts, and the core and weighted performance indexes of Economically Disadvantaged Students at Albany High School in the Math subject in 2022?
+
+  ## Query:
+    select core_cohort, weighted_cohort, core_index, weighted_index from [ACC_HS_Core_and_Weighted_Performance] where year = 2022 	and subject = 'MATH' 	and subgroup_name = 'Economically Disadvantaged' 	and entity_name = 'ALBANY HIGH SCHOOL' 
+
+
+##### NYSED_SRC2022 - 28 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the names of the five public high school entity that have the highest weighted performance index score in math for the all student sub group in 2022? Exclude the value 's' from the index score.
+
+  ## Query:
+    select top 5 p.ENTITY_NAME  from [ACC_HS_Core_and_Weighted_Performance] p join [Institution_Grouping] g on p.ENTITY_CD = g.ENTITY_CD where WEIGHTED_INDEX <> 's' 	and group_name = 'Public School' 	and subject = 'MATH' 	and subgroup_name = 'All Students' 	and year = 2022 order by cast(weighted_index as float) desc 
+
+
+##### NYSED_SRC2022 - 29 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the school name and the average weighted index subject score for science for the five lowest scoring public school districts. Exclude weighted index scores with the value 's'.
+
+  ## Query:
+    select top 5 entity_name, avg(cast(weighted_index as float)) averageScienceScore from [ACC_HS_Core_and_Weighted_Performance] where weighted_index <> 's' and subject = 'SCIENCE' and entity_cd in ( 	select entity_cd 	from [Institution_Grouping] 	where GROUP_NAME = 'public school district' ) group by entity_name order by avg(cast(weighted_index as float)) asc 
+
+
+##### NYSED_SRC2022 - 30 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the 2022 english language learner count, benchmark size, progress rate, success ration, and level of the english language program at Alfred E Smith Career-Tech HS for the all students subgroup?
+
+  ## Query:
+    select ELL_COUNT, BENCHMARK, PROGRESS_RATE, SUCCESS_RATIO, LEVEL from [ACC_HS_ELP] where ENTITY_NAME = 'ALFRED E SMITH CAREER-TECH HS' 	and SUBGROUP_NAME = 'All Students' 	and year = 2022 
+
+
+##### NYSED_SRC2022 - 31 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average english language learner count at public high schools for each student subgroup?
+
+  ## Query:
+    select subgroup_name, avg(cast(ell_count as float)) ELLAvg from [ACC_HS_ELP] where entity_cd in ( 	select entity_cd 	from [Institution_Grouping] 	where GROUP_NAME = 'public school' ) group by subgroup_name 
+
+
+##### NYSED_SRC2022 - 32 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the 2022 federal expenditure per student at the public high school with the highest english language learner count in the All Students sub group in their english language program? Include the school name, language learner count, and federal expenditure per student in the result.
+
+  ## Query:
+    select top 1 el.ENTITY_NAME, ELL_COUNT, PER_FED_STATE_LOCAL_EXP from [ACC_HS_ELP] el join [Expenditures_per_Pupil] ex  	on el.ENTITY_CD = ex.ENTITY_CD  	and el.year = ex.year where SUBGROUP_NAME = 'All Students' 	and ELL_COUNT <> 's' 	and ex.YEAR = 2022 	and el.entity_cd in ( 		select entity_cd 		from [Institution_Grouping] 		where GROUP_NAME = 'public school district' 	) order by cast(ELL_COUNT as float) desc 
+
+
+##### NYSED_SRC2022 - 33 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each year and status type, what is the number of entities in accountability each status for the all students subgroup?
+
+  ## Query:
+    select YEAR, OVERALL_STATUS, count(*) entCount from [Accountability_Status_by_Subgroup] where SUBGROUP_NAME = 'All Students' group by year, OVERALL_STATUS 
+
+
+##### NYSED_SRC2022 - 34 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many high schools (HS) had an accountability status of good standing in 2021 for the Multiracial sub group?
+
+  ## Query:
+    select count(*) HSCount from [Accountability_Status_by_Subgroup] where SCHOOL_TYPE = 'HS' 	and SUBGROUP_NAME = 'Multiracial' 	and year = 2021 
+
+
+##### NYSED_SRC2022 - 35 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the overall acountability status for each school type and student subgroup in 2021 for the entity named 'albany city SD'?
+
+  ## Query:
+    select SCHOOL_TYPE, SUBGROUP_NAME, OVERALL_STATUS from [Accountability_Status_by_Subgroup] where year = 2021 	and ENTITY_NAME = 'ALBANY CITY SD' 
+
+
+##### NYSED_SRC2022 - 36 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the average public elementary school level 1, level 2, level 3, and level 4 percent tested for each science assessment? Exclude scores with the value 's'.
+
+  ## Query:
+    select ASSESSMENT_NAME, avg(cast([LEVEL1_%TESTED] as float)) L1, avg(cast([LEVEL2_%TESTED] as float)) L2, avg(cast([LEVEL3_%TESTED] as float)) L3, avg(cast([LEVEL4_%TESTED] as float)) L4 from [Annual_EM_Science] where [LEVEL1_%TESTED] <> 's' 	and entity_cd in ( 		select entity_cd 		from [Institution_Grouping] 		where GROUP_NAME = 'public school' 	) group by ASSESSMENT_NAME 
+
+
+##### NYSED_SRC2022 - 37 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the average public elementary school level 1, level 2, level 3, and level 4 percent tested for each sub group for the Science8 assessment? Exclude scores with the value 's'.
+
+  ## Query:
+    select SUBGROUP_NAME, avg(cast([LEVEL1_%TESTED] as float)) L1, avg(cast([LEVEL2_%TESTED] as float)) L2, avg(cast([LEVEL3_%TESTED] as float)) L3, avg(cast([LEVEL4_%TESTED] as float)) L4 from [Annual_EM_Science] where [LEVEL1_%TESTED] <> 's' 	and ASSESSMENT_NAME = 'Science8' 	and entity_cd in ( 		select entity_cd 		from [Institution_Grouping] 		where GROUP_NAME = 'public school' 	) group by SUBGROUP_NAME 
+
+
+##### NYSED_SRC2022 - 38 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many different subjects are present in the new york state english as a second language achievement test data?
+
+  ## Query:
+    select count(distinct subject) subjectCount from [Annual_NYSESLAT] 
+
+
+##### NYSED_SRC2022 - 39 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What percent of students in the 'parent not in armed forces' subgroup enrolled at JOHANNA PERRIN MIDDLE SCHOOL scored in the expanding level on the TS_6 subject on the new york state english as a second language achievement test in 2021?
+
+  ## Query:
+    select PER_EXP from [Annual_NYSESLAT] where SUBGROUP_NAME = 'Parent Not In Armed Forces' 	and SUBJECT = 'TS_6' 	and ENTITY_NAME = 'JOHANNA PERRIN MIDDLE SCHOOL' 	and year = 2021 
+
+
+##### NYSED_SRC2022 - 40 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What percent of students in the 'parent not in armed forces' subgroup enrolled at JOHANNA PERRIN MIDDLE SCHOOL scored in the entering level, the emerging level, the transitioning level, or the expanding level, on the TS_6 subject on the new york state english as a second language achievement test in 2021?
+
+  ## Query:
+    select PER_ENT, PER_EMER, PER_TRAN, PER_EXP from [Annual_NYSESLAT] where SUBGROUP_NAME = 'Parent Not In Armed Forces' 	and SUBJECT = 'TS_6' 	and ENTITY_NAME = 'JOHANNA PERRIN MIDDLE SCHOOL' 	and year = 2021 
+
+
+##### NYSED_SRC2022 - 41 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each subject, what is the average percent of students scoring at the entering level on the new york state english as a second language achievement test in 2021 for students at public schools? Exclude score values of 's'.
+
+  ## Query:
+    select subject, avg(cast(per_ent as float)) avgScore from [Annual_NYSESLAT] where per_ent <> 's' 	and year = 2021 	and entity_cd in ( 		select entity_cd 		from [Institution_Grouping] 		where GROUP_NAME = 'public school district' 	) group by subject 
+
+
+##### NYSED_SRC2022 - 42 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each subject, what is the average percent of students scoring at the entering level, the emerging level, the transitioning level, the expanding level, or the commanding level, on the new york state english as a second language achievement test in 2021 for students at public schools? Exclude score values of 's'.
+
+  ## Query:
+    select subject,  	avg(cast(per_ent as float)) avgEnt, 	avg(cast(per_emer as float)) avgEmer, 	avg(cast(per_tran as float)) avgTran, 	avg(cast(per_exp as float)) avgExp, 	avg(cast(per_com as float)) avgCom from [Annual_NYSESLAT] where per_ent <> 's' 	and year = 2021 	and entity_cd in ( 		select entity_cd 		from [Institution_Grouping] 		where GROUP_NAME = 'public school district' 	) group by subject 
+
+
+##### NYSED_SRC2022 - 43 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the number of students in the 'parent not in armed forces' subgroup enrolled at JOHANNA PERRIN MIDDLE SCHOOL scored in the entering level, the emerging level, the transitioning level, or the expanding level, on the TS_6 subject on the new york state english as a second language achievement test in 2021?
+
+  ## Query:
+    select NUM_ENT, NUM_EMER, NUM_TRAN, NUM_EXP from [Annual_NYSESLAT] where SUBGROUP_NAME = 'Parent Not In Armed Forces' 	and SUBJECT = 'TS_6' 	and ENTITY_NAME = 'JOHANNA PERRIN MIDDLE SCHOOL' 	and year = 2021 
+
+
+##### NYSED_SRC2022 - 44 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many schools are a part of each board of cooperative educational services in 2020? Show the board name and the count of schools.
+
+  ## Query:
+    select BOCES_NAME, count(distinct school_name) SchoolCount from [BOCES_and_N/RC] where year = 2020 group by BOCES_NAME 
+
+
+##### NYSED_SRC2022 - 45 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many schools are a part of each county in 2020? Show the county name and the count of schools.
+
+  ## Query:
+    select COUNTY_NAME, count(distinct school_name) SchoolCount from [BOCES_and_N/RC] where year = 2020 group by COUNTY_NAME 
+
+
+##### NYSED_SRC2022 - 46 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each board of cooperative educational services in 2021, show the average federal and state and local expenditures_per_pupil. Include the board name and average expenditures in the result.
+
+  ## Query:
+    select BOCES_NAME, avg(cast(PER_FEDERAL_EXP as float)) avgFedExp, avg(cast(PER_STATE_LOCAL_EXP as float)) avgLocExp from [BOCES_and_N/RC] b join [Expenditures_per_Pupil] e on b.ENTITY_CD = e.ENTITY_CD and b.YEAR = e.YEAR where b.year = 2021 group by BOCES_NAME 
+
+
+##### NYSED_SRC2022 - 47 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many board of cooperative educational services are there?
+
+  ## Query:
+    select count(distinct BOCES_NAME) BOCESCount from [BOCES_and_N/RC] 
+
+
+##### NYSED_SRC2022 - 48 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the names of the board of cooperative educational services and the number of counties, for boards that have more than one county.
+
+  ## Query:
+    select BOCES_NAME, count(distinct COUNTY_NAME) CountyCount from [BOCES_and_N/RC] group by BOCES_NAME having count(distinct COUNTY_NAME) > 1 
+
+
+##### NYSED_SRC2022 - 49 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the number of teachers, number of inexperienced teaches, and percentage of inexperienced teaches at sheridan prep academy in 2021.
+
+  ## Query:
+    select NUM_TEACH, NUM_TEACH_INEXP, PER_TEACH_INEXP from [Inexperienced_Teachers_and_Principals] where entity_name = 'SHERIDAN PREP ACADEMY' and year = 2021 
+
+
+##### NYSED_SRC2022 - 50 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the entity codes, names and percentage inexperience teachers, of the five public schools with the highest percentage of inexperienced teachers in 2021?
+
+  ## Query:
+    select top 5 i.ENTITY_CD, i.ENTITY_NAME, PER_TEACH_INEXP from [Inexperienced_Teachers_and_Principals] i join [Institution_Grouping] g on i.ENTITY_CD = g.ENTITY_CD where year = 2021 	and GROUP_NAME = 'public school' order by PER_TEACH_INEXP desc 
+
+
+##### NYSED_SRC2022 - 51 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average percantage of inexperienced teachers for the five school districts with the highest average? Include the district name in the result.
+
+  ## Query:
+    select top 5 DISTRICT_NAME, AVG(PER_TEACH_INEXP) teachCount from [Inexperienced_Teachers_and_Principals] i join [BOCES_and_N/RC] b on i.ENTITY_CD = b.ENTITY_CD group by DISTRICT_NAME order by AVG(PER_TEACH_INEXP) desc 
+
+
+##### NYSED_SRC2022 - 52 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average of the total number of teachers and principals in low-poverty schools statewide?
+
+  ## Query:
+    select avg(TOT_PRINC_LOW) princLow, avg(TOT_TEACH_LOW) teachLow from [Inexperienced_Teachers_and_Principals] 
+
+
+##### NYSED_SRC2022 - 53 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    In 2022, How many students in either the male or the female subgroup at Brocton Middle High School attended an out of state, four-year postsecondary institution?
+
+  ## Query:
+    select sum(cast(OUT_4_YR_CNT as int)) studentCount from [Postsecondary_Enrollment] where SUBGROUP_NAME in ('male', 'female') 	and ENTITY_NAME = 'BROCTON MIDDLE HIGH SCHOOL' 
+
+
+##### NYSED_SRC2022 - 54 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the 2022 subgroup 'All Students' at Oneida Senior High School, what is the total graduate count, the percent of graduates who enrolled in a new york state public two-year postsecondary institution, and the percent of graduates who enrolled in a new york state public four-year postsecondary institution?
+
+  ## Query:
+    select PER_NYS_PUB_2_YR, PER_NYS_PUB_4_YR from [Postsecondary_Enrollment] where year = 2022 	and ENTITY_NAME = 'ONEIDA SENIOR HIGH SCHOOL' 	and SUBGROUP_NAME = 'All Students' 
+
+
+##### NYSED_SRC2022 - 55 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the name of the public school district that had the most teachers teaching out of certification in 2021?
+
+  ## Query:
+    select top 1 ENTITY_NAME from [Teachers_Teaching_Out_of_Certification] where year = 2021 	and entity_cd in ( 		select entity_cd 		from [Institution_Grouping] 		where GROUP_NAME = 'public school district' 	) order by NUM_OUT_CERT desc 
+
+
+##### NYSED_SRC2022 - 56 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    In 2021, what was the number and percentage of teachers out of certification at bolton central school?
+
+  ## Query:
+    select NUM_OUT_CERT, PER_OUT_CERT from [Teachers_Teaching_Out_of_Certification] where ENTITY_NAME = 'BOLTON CENTRAL SCHOOL' 	and year = 2021 
+
+
+##### NYSED_SRC2022 - 57 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the county name and total number of teachers teaching out of certification in each county.
+
+  ## Query:
+    select COUNTY_NAME, sum(NUM_OUT_CERT) OOCCount from [Teachers_Teaching_Out_of_Certification] c join [BOCES_and_N/RC] b on c.ENTITY_CD = b.ENTITY_CD group by COUNTY_NAME 
+
+
+##### NYSED_SRC2022 - 58 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the subgroup name, cohort count, the number of students with a valid score, the number of students scoring at levels 1 through 4 for the male and female subgroups at waverly high school in the 2017 cohort.
+
+  ## Query:
+    select subgroup_name, COHORT_COUNT, TEST_COUNT, LEVEL1_COUNT, LEVEL2_COUNT, LEVEL3_COUNT, LEVEL4_COUNT from [Total_Cohort_Regents_Exams] where ENTITY_NAME = 'WAVERLY HIGH SCHOOL' 	and COHORT = 2017 	and SUBGROUP_NAME in ('female', 'male') 	and SUBJECT = 'MATH' 
+
+
+##### NYSED_SRC2022 - 59 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the name of the public school entity that had the highest percent of level four regents math exam scores in the 2017 student cohort and in the 'all students' sub group? Exclude score percentage values of 's'.
+
+  ## Query:
+    select TOP 1 ENTITY_NAME from [Total_Cohort_Regents_Exams] where COHORT = 2017 	and SUBGROUP_NAME = 'All Students' 	and SUBJECT = 'MATH' 	and [LEVEL4_%COHORT] <> 's' 	and entity_cd in ( 		select entity_cd 		from [Institution_Grouping] 		where GROUP_NAME = 'public school' 	) order by cast([LEVEL4_%COHORT] as int) desc 
+
+
+##### NYSED_SRC2022 - 60 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many different elementary school math assessment types are there?
+
+  ## Query:
+    select count(distinct ASSESSMENT_NAME) AssessmentCount from [Annual_EM_MATH] 
+
+
+##### NYSED_SRC2022 - 61 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many  elementary students in the male sub group were given the Science4 assessment in 2021 at FORTS FERRY SCHOOL?
+
+  ## Query:
+    select total_count from [Annual_EM_Science] where year = 2021 	and SUBGROUP_NAME = 'male' 	and ASSESSMENT_NAME = 'Science4' 	and ENTITY_NAME = 'FORTS FERRY SCHOOL' 
+
+
+##### NYSED_SRC2022 - 62 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the name of the public school entity that had the highest percentage of out-of-state four year postsecondary enrollments in 2022? Exclude percantage values of 's'.
+
+  ## Query:
+    select top 1 ENTITY_NAME from [Postsecondary_Enrollment] where year = 2022 	and SUBGROUP_NAME = 'All Students' 	and PER_OUT_4_YR <> 's' 	and entity_cd in ( 		select entity_cd 		from [Institution_Grouping] 		where GROUP_NAME = 'public school' 	) order by cast(PER_OUT_4_YR as int) desc 
+
+
+##### PacificIslandLandbirds - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many stations are there?
+
+  ## Query:
+    select count(*) as station_count  from tbl_stations 
+
+
+##### PacificIslandLandbirds - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many islands are there?
+
+  ## Query:
+    select count(distinct Island) from tbl_locations 
+
+
+##### PacificIslandLandbirds - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many sites does each island have?
+
+  ## Query:
+    select Island, count(distinct site_id) as site_count from tbl_locations group by Island 
+
+
+##### PacificIslandLandbirds - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many events have a half meter density count greater than 8?
+
+  ## Query:
+    select count(*) densityCount from tbl_Density where Half_meter > 8 
+
+
+##### PacificIslandLandbirds - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Get a count of events by station
+
+  ## Query:
+    select station_id, count(*) event_count from tbl_events group by station_id 
+
+
+##### PacificIslandLandbirds - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many contacts are there from each organization?
+
+  ## Query:
+    select organization, count(*) person_count from tlu_contacts group by organization 
+
+
+##### PacificIslandLandbirds - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show all of the zip codes for the city of Hilo.
+
+  ## Query:
+    select distinct zip_code  from tlu_contacts where city = 'Hilo' 
+
+
+##### PacificIslandLandbirds - 7 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Make a list of events that are repeat samples that were verified by Lauren Smith, and that includes the event id, station id, and the start date,.
+
+  ## Query:
+    select event_id, station_id, start_date  from tbl_events where repeat_sample = 1 and verified_by = 'Lauren Smith' 
+
+
+##### PacificIslandLandbirds - 8 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    how many observations were made in the forest bird habitat?
+
+  ## Query:
+    select count(*) obsCount from tbl_observations o join tlu_species s on o.Species_ID = s.Species_ID where habitat = 'Forest Bird' 
+
+
+##### PacificIslandLandbirds - 9 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show a count of observations by species habitat
+
+  ## Query:
+    select habitat, count(*) obsCount from tlu_species s join tbl_observations o on o.Species_ID = s.Species_ID group by habitat 
+
+
+##### PacificIslandLandbirds - 10 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Make a list of event ids for events that have more than 7 observations.
+
+  ## Query:
+    select e.event_id from tbl_events e join tbl_observations o on e.Event_ID = o.Event_ID group by e.event_id having count(*) > 7 
+
+
+##### PacificIslandLandbirds - 11 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the scientific and common name of the three most frequently observed bird species?
+
+  ## Query:
+    select top 3 scientific_name, common_name from tbl_observations o join tlu_species s on o.Species_ID = s.Species_ID group by scientific_name, common_name order by count(*) desc 
+
+
+##### PacificIslandLandbirds - 12 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the most common understory composition and canopy composition combination of events entered by Caitlin Jensen?
+
+  ## Query:
+    select top 1 canopy_comp, understory_comp from tbl_habitat h join tbl_events e on h.event_id = e.event_id where entered_by = 'caitlin jensen' group by canopy_comp, understory_comp order by count(*) desc 
+
+
+##### PacificIslandLandbirds - 13 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the weather conditions (cloud cover, rain, wind, and gusts) for events entered by Cari Squibb and updated by Seth Judge?
+
+  ## Query:
+    select cloud, rain, wind, gust  from tbl_events e join tbl_Event_Details ed on e.Event_ID = ed.Event_ID where updated_by = 'Seth Judge' and entered_by = 'Cari Squibb' 
+
+
+##### PacificIslandLandbirds - 14 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many observations had more than 15 detections?
+
+  ## Query:
+    select count(*) obsCount from ( 	select observation_id  	from tbl_detections d 	group by Observation_ID 	having count(Detection_ID) > 15 ) t 
+
+
+##### PacificIslandLandbirds - 15 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average detection distance for all detections?
+
+  ## Query:
+    select avg(distance) avgdist from tbl_detections 
+
+
+##### PacificIslandLandbirds - 16 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the common name of the species observed and detected from the farthest distance?
+
+  ## Query:
+    select top 1 common_name from tlu_species s join tbl_observations o on s.species_id = o.species_id join tbl_detections t on t.observation_id = o.observation_id order by distance desc 
+
+
+##### PacificIslandLandbirds - 17 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what are the common names and alternate names for birds of the family Laridae?
+
+  ## Query:
+    select common_name, alternate_name from tlu_species s join xref_species_alternate_names a on s.species_id = a.species_id where family = 'laridae' 
+
+
+##### PacificIslandLandbirds - 18 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what are all of the different sources of species information?
+
+  ## Query:
+    select distinct source from tlu_species 
+
+
+##### PacificIslandLandbirds - 19 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the station name of the station currently located at UTM coordinates X 272454 Y 2141631
+
+  ## Query:
+    select Station  from tbl_stations  join tbl_Stations_UTMs on tbl_stations.Station_ID = tbl_stations_utms.Station_ID where X_final = 272454 and Y_final = 2141631 
+
+
+##### PacificIslandLandbirds - 20 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what is Patrick Hart's position and organization?
+
+  ## Query:
+    select position_title, organization from tlu_contacts where First_Name = 'Patrick' and Last_Name = 'Hart' 
+
+
+##### PacificIslandLandbirds - 21 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the names of the sites on each island?
+
+  ## Query:
+    select distinct Island, Site_name from tbl_locations join tbl_sites on tbl_locations.site_id = tbl_sites.site_id 
+
+
+##### PacificIslandLandbirds - 22 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which island has the location called Northwest Kahuku?
+
+  ## Query:
+    select Island from tbl_locations where loc_name = 'Northwest Kahuku' 
+
+
+##### PacificIslandLandbirds - 23 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what are the family, scientific and common names of all of the bird species that occupy Forest Bird habitats?
+
+  ## Query:
+    select distinct family, scientific_name, common_name  from tlu_species where habitat = 'Forest Bird' 
+
+
+##### PacificIslandLandbirds - 24 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many station locations are documented using WGS84 and how many are documented using NAD83 datums?
+
+  ## Query:
+    select distinct datum, count(*) stationCount from tbl_stations_utms where datum in ('WGS84', 'NAD83') group by datum 
+
+
+##### PacificIslandLandbirds - 25 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many observations were made on days when there were no clouds in the sky?
+
+  ## Query:
+    select count(*) obs_count from tbl_observations obs join tbl_event_details det on obs.Event_ID = det.Event_ID where Cloud = 0 
+
+
+##### PacificIslandLandbirds - 26 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    how many events occurred on the most windy days?
+
+  ## Query:
+    select count(*) windy_day_count from tbl_event_details where wind in ( 	select max(wind) from tbl_event_details ) 
+
+
+##### PacificIslandLandbirds - 27 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many stations does each island have?
+
+  ## Query:
+    select Island, count(*) as station_count from tbl_locations loc join tbl_transect trans on loc.location_id = trans.location_id join tbl_stations sta on trans.transect_id = sta.Transect_ID group by Island 
+
+
+##### PacificIslandLandbirds - 28 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which island has the fewest stations, and how many stations does it have?
+
+  ## Query:
+    select top 1 Island, count(*) as station_count from tbl_locations loc join tbl_transect trans on loc.location_id = trans.location_id join tbl_stations sta on trans.transect_id = sta.Transect_ID group by Island order by station_count asc 
+
+
+##### PacificIslandLandbirds - 29 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the distinct family and species code of all bird observed during events logged when it was raining (denoted by the value 1).
+
+  ## Query:
+    select distinct family, species_code from tlu_species s join tbl_observations o on s.species_id = o.species_id join tbl_events e on o.event_id = e.event_id join tbl_event_details ed on e.event_id = ed.event_id where rain = 1 
+
+
+##### PacificIslandLandbirds - 30 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What species has Patrick Hart observed? List all of them by their scientific and common names. Don't include duplicate rows.
+
+  ## Query:
+    select distinct scientific_name, common_name from tlu_species spc join tbl_observations obs on spc.Species_ID = obs.species_id join xref_event_contacts xcon on xcon.Event_ID = obs.event_id join tlu_contacts con on xcon.Contact_ID = con.Contact_ID where last_name = 'Hart' and first_name = 'Patrick' order by Scientific_Name 
+
+
+##### PacificIslandLandbirds - 31 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    At stations 2 and 3, show the station name and common names of each species observed at each station, and include the total count of observations per species.
+
+  ## Query:
+    select Station, Common_Name, count(*) NumObservations from tbl_Stations t_s  join tbl_Events t_e on t_e.Station_ID = t_s.Station_ID join tbl_Observations t_o on t_o.Event_ID = t_e.Event_ID join tlu_Species t_sp on t_o.Species_ID = t_sp.Species_iD where Station = '2' or Station = '3' group by Station, Common_Name order by Station 
+
+
+##### PacificIslandLandbirds - 32 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many events does each station have? Show them in the descending order of event counts. Include the station name and the event count in the output.
+
+  ## Query:
+    select station, count(*) as event_count from tbl_stations ts join tbl_events te on ts.station_id = te.station_id group by ts.station order by event_count desc 
+
+
+##### PacificIslandLandbirds - 33 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the northmost station's station name and position?
+
+  ## Query:
+    select top 1 lat_final, long_final, Station  from tbl_stations order by lat_final desc 
+
+
+##### PacificIslandLandbirds - 34 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many stations has the Hawaii Amakihi been observed at?
+
+  ## Query:
+    select count(distinct tbl_stations.station_id) as station_count from tbl_stations join tbl_events on tbl_stations.station_id = tbl_events.station_id join tbl_observations on tbl_observations.event_id = tbl_events.event_id join tlu_species on tlu_species.species_id = tbl_observations.species_id where common_name = 'Hawaii Amakihi' 
+
+
+##### PacificIslandLandbirds - 35 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What percent of stations has the bird with the common name Hawaii Amakihi been observed at?
+
+  ## Query:
+    select 100 * (sum(sighted) / count(distinct station_id)) as perc_stations from ( 	select distinct tbl_stations.station_id, case  			when tlu_species.common_name = 'Hawaii Amakihi' then 1.0 else 0.0 			end as sighted 	from tbl_stations 	join tbl_events on tbl_stations.station_id = tbl_events.station_id 	join tbl_observations on tbl_observations.event_id = tbl_events.event_id 	join tlu_species on tlu_species.species_id = tbl_observations.species_id ) sightings 
+
+
+##### PacificIslandLandbirds - 36 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the first name, last name, and number of logged events for members of the national park service.
+
+  ## Query:
+    select last_name, first_name, count(*) num_events from tlu_contacts tlc join xref_event_contacts xrec on tlc.Contact_ID = xrec.Contact_ID where organization = 'National Park Service' group by last_name, first_name, organization order by last_name desc 
+
+
+##### PacificIslandLandbirds - 37 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average canopy height of each species' habitats? Include the common name and scientfic name of each species. Ensure the average has decimal precision.
+
+  ## Query:
+    select Scientific_Name, Common_Name, avg(cast(canopy_height as float)) as avg_canopy_height from tbl_habitat hab join tbl_events ev on hab.Event_ID = ev.Event_ID join tbl_Observations obs on obs.Event_ID = ev.Event_ID join tlu_species spec on spec.species_id = obs.species_id group by Scientific_Name, common_name order by Scientific_Name 
+
+
+##### PacificIslandLandbirds - 38 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Create a list of species sightings at each station. Include the island, site name, location name, transect and transect type, station, the station's latitude, the event id of the observations, the last names of those who observed as well as their notes, the family, scientific name, common name, and alternate name of each bird observed.
+
+  ## Query:
+    select island, site_name, Loc_Name, transect, transect_type, Station, lat_final, te.event_id, last_name, event_notes, family, Scientific_Name, Common_Name, Alternate_Name from tbl_locations tl join tbl_sites ts on tl.Site_ID = ts.Site_ID join tbl_transect tr on tr.Location_ID = tl.Location_ID join tbl_stations st on st.Transect_ID = tr.Transect_ID join tbl_events te on te.station_id = st.station_id join xref_Event_Contacts ec on ec.Event_ID = te.Event_ID join tlu_Contacts con on ec.Contact_ID = con.Contact_ID join tbl_Observations obs on te.Event_ID = obs.Event_ID join tlu_species spc on obs.Species_ID = spc.Species_ID join xref_Species_Alternate_Names spc_alt on spc.Species_ID = spc_alt.Species_ID 
+
+
+##### PacificIslandLandbirds - 39 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which island has the most sightings of the bird with the common name Pacific Kingfisher?
+
+  ## Query:
+    select top 1 island, count(*) as kingfisher_count from tbl_locations tl join tbl_transect tr on tr.Location_ID = tl.Location_ID join tbl_stations st on st.Transect_ID = tr.Transect_ID join tbl_events te on te.station_id = st.station_id join xref_Event_Contacts ec on ec.Event_ID = te.Event_ID join tlu_Contacts con on ec.Contact_ID = con.Contact_ID join tbl_Observations obs on te.Event_ID = obs.Event_ID join tlu_species spc on obs.Species_ID = spc.Species_ID where common_name = 'Pacific Kingfisher' group by island order by kingfisher_count 
+
+
+##### SBODemoUS - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many different internal reconciliation types are there?
+
+  ## Query:
+    select count(distinct ReconType) numTypes from oitr 
+
+
+##### SBODemoUS - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the payee names, zip, city, street, country, and states for the payees with the user department named 'General'
+
+  ## Query:
+    select PayeeName, PayeeZip, PayeeCity, PayeeStree, PayCountry, PayeeState from OUDP departments join OPEX paymentResultsTable on departments.Code = paymentResultsTable.department where departments.Name = 'General' 
+
+
+##### SBODemoUS - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the account numbers that have checks for payment with more than one line? Include only one entry per account number.
+
+  ## Query:
+    select distinct AcctNum from OCHO O join CHO1 on O.CheckKey = CHO1.CheckKey group by AcctNum, O.CheckKey having count(*) > 1 
+
+
+##### SBODemoUS - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the witholding tax deduction amounts and percents for checks for payment associated with the account with account number '100-3443-7867'?
+
+  ## Query:
+    select Deduction, DdctPrcnt from ocho where AcctNum = '100-3443-7867' 
+
+
+##### SBODemoUS - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the card code, card name, address, and functional currency transfer amount for the incoming payments created in the year 2012 where the document summary currency code is 'EUR'
+
+  ## Query:
+    select CardCode, CardName, Address, TrsfrSumFC from ORCT where year(CreateDate) = 2012 	and DocCurr = 'EUR' 
+
+
+##### SBODemoUS - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the Withholding tax posted, account number, and functional currency sum for the incoming checks with the country code 'CA'
+
+  ## Query:
+    select WTOnhldPst, AcctNum, CheckSumFC from ORCT join RCT1 on ORCT.DocNum = RCT1.DocNum where CountryCod = 'CA' 
+
+
+##### SBODemoUS - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many incoming invoices document an applied value added tax of more than 700?
+
+  ## Query:
+    select count(*) invoiceCount from RCT2 where vatApplied > 700 
+
+
+##### SBODemoUS - 7 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For incoming payments processed with credit vouchers, show the average of the sums of the first partial payments.
+
+  ## Query:
+    select avg(FirstSum) firstPmtAvg from ORCT join RCT3 on ORCT.DocNum = RCT3.DocNum 
+
+
+##### SBODemoUS - 8 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the receipt number, card payment internal ID, and card account code for the credit card deposit deposited on 2012-01-31.
+
+  ## Query:
+    select RctAbs, DepNum, CardCode from OCRH where DeposDate = '2012-01-31' 
+
+
+##### SBODemoUS - 9 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the payment term with the term group code 'Net30', show the number of additional days, number of installments, and whether or not value added tax is applied on the first installment.
+
+  ## Query:
+    select ExtraDays, InstNum, VATFirst from OCTG where PymntGroup = 'Net30' 
+
+
+##### SBODemoUS - 10 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the group name and count of business partners in each card group
+
+  ## Query:
+    select GroupName, count(*) partnerCount from OCRG join OCRD on OCRG.GroupCode = OCRD.GroupCode group by GroupName 
+
+
+##### SBODemoUS - 11 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Make a contact roster that includes the name, address, cell phone number, and email address of all persons currently in either a CEO or COO position.
+
+  ## Query:
+    select Name, address, Cellolar, E_MailL from OCPR where Position = 'CEO' or Position = 'COO' 
+
+
+##### SBODemoUS - 12 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the commission rate of the sales employee named Bill Levine?
+
+  ## Query:
+    select Commission from OSLP where SlpName = 'Bill Levine' 
+
+
+##### SBODemoUS - 13 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the names of sales employees in the high commission group?
+
+  ## Query:
+    select SlpName from OSLP join OCOG on OSLP.GroupCode = OCOG.GroupCode where GroupName = 'High Commission' 
+
+
+##### SBODemoUS - 14 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the names, mobile phone numbers, and email addresses of sales employees in the high commission group?
+
+  ## Query:
+    select SlpName, Mobil, Email from OSLP join OCOG on OSLP.GroupCode = OCOG.GroupCode where GroupName = 'High Commission' 
+
+
+##### SBODemoUS - 15 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Display the payment code and tax code for current business partners whos closing date procedure number is lower than 35
+
+  ## Query:
+    select PymCode, TaxCode from OCRD join CRD1 on OCRD.CardCode = CRD1.CardCode where CDPNum < 35 
+
+
+##### SBODemoUS - 16 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the activity number, contact time and date, and the details of all activities created in the year 2021
+
+  ## Query:
+    select ClgCode, CntctDate, CntctTime, details from OCLG where Year(CreateDate) = '2021' 
+
+
+##### SBODemoUS - 17 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the bank details, to include bank code, country, account number, branch, and city, for the business partner with the card name Microchips
+
+  ## Query:
+    select OCRB.BankCode, OCRB.Country, Account, Branch, OCRB.City from OCRD join OCRB on OCRD.CardCode = OCRD.CardCode where CardName = 'Microchips' 
+
+
+##### SBODemoUS - 18 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what is the account balance of the business partner with the payment method code 'Incoming BT' and a currency type that is either 'EUR' or 'CAN'
+
+  ## Query:
+    select Balance  from OCRD where Currency in ('EUR', 'CAN') and OCRD.PymCode = 'Incoming BT' 
+
+
+##### SBODemoUS - 19 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the email address and federal tax ID of the target with the position of CIO that is of target type C?
+
+  ## Query:
+    select E_Mail, LicTradNum from TGG1 join OTGG on TGG1.TargetCode = OTGG.TargetCode where Position = 'CIO' and TargetType = 'C' 
+
+
+##### SBODemoUS - 20 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the account name and number of journal entries for the general ledger account with code '_SYS00000000002'.
+
+  ## Query:
+    select AcctName, count(*) EntryCount from OACT O join JDT1 J on O.AcctCode = J.Account where Account = '_SYS00000000002' group by Acctname 
+
+
+##### SBODemoUS - 21 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the sum of journal entry debits and sum of journal entry credits due in 2021?
+
+  ## Query:
+    select sum(debit) debitSum, sum(credit) creditSum from JDT1 where year(DueDate) = '2021' 
+
+
+##### SBODemoUS - 22 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the account name, the average monthly budget debit, and average monthly budget credit totals for general ledger accounts with the words 'Travel Expense' in their account name.
+
+  ## Query:
+    select AcctName, avg(DebLTotal) as AvgDeb, avg(CredLTotal) as AvgCred from OACT join BGT1 on OACT.AcctCode = BGT1.AcctCode where AcctName like '%Travel Expense%' group by AcctName 
+
+
+##### SBODemoUS - 23 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the account name and current total balance of accounts with the category name cash
+
+  ## Query:
+    select AcctName, CurrTotal from OACT join OACG on OACT.category = OACG.AbsId where OACG.Name = 'cash' 
+
+
+##### SBODemoUS - 24 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For all rows associated with the value added tax transactions that have source object type 18, show the Tax Code, value added tax percent, and the value added tax sum.
+
+  ## Query:
+    select TaxCode, VatPercent, VatSum  from OTAX join TAX1 on OTAX.AbsEntry = TAX1.AbsEntry where SrcObjAbs = 18 
+
+
+##### SBODemoUS - 25 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What year had the highest rate for currency type 'CAN' from data source I?
+
+  ## Query:
+    select top 1 year(RateDate) HighYear from ORTT where DataSource = 'I' order by Rate desc 
+
+
+##### SBODemoUS - 26 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Get a count of recurring postings by year of the next execution
+
+  ## Query:
+    select year(NextDeu) NextYear, count(*) NumPostings from ORCR group by year(NextDeu) 
+
+
+##### SBODemoUS - 27 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the names of the financial report categories that have father number 10
+
+  ## Query:
+    select name from OFRC where FatherNum = 10 
+
+
+##### SBODemoUS - 28 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    show the report category name and the three different calculation methods for extended category f financial reports with a cash flow line item ids greater than 30
+
+  ## Query:
+    select name, CalcMethod, CalMethod2, CalMethod3 from FRC1 join OFRC on FRC1.CatId = OFRC.CatId where CFWId > 30 
+
+
+##### SBODemoUS - 29 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the project code and name of the projects valid after 2020?
+
+  ## Query:
+    select prjcode, prjname from OPRJ where year(ValidFrom) > 2020 
+
+
+##### SBODemoUS - 30 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the description and expected costs of project management stages with start dates before october 20th, 2021.
+
+  ## Query:
+    select DSCRIPTION, EXPCOSTS from PMG1 where START < '2021-10-20' 
+
+
+##### SBODemoUS - 31 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What values are associated with the dictionary key 'HomePage'?
+
+  ## Query:
+    select _Value from CDIC where _Key like 'HomePage' 
+
+
+##### SBODemoUS - 32 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many queries does the dashboard entry with code DAB002 have?
+
+  ## Query:
+    select count(*) queryCount from ODAB join DAB1 on ODAB.AbsEntry = DAB1.DsbEntry where DashbdCode = 'DAB002' 
+
+
+##### SBODemoUS - 33 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the Dashboard name, dashboard path, status, and query name for dashboards and their queries where the query category is 2
+
+  ## Query:
+    select DashbdName, DashbdPath, Status, QryName from ODAB join DAB1 on ODAB.AbsEntry = DAB1.DsbEntry where QryCtgry = 2 
+
+
+##### SBODemoUS - 34 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the code, name, and number of fields for key performance indicator sets of type P
+
+  ## Query:
+    select KpsCode, KpsName, FieldsNum from OKPS where KpsType = 'P' 
+
+
+##### SBODemoUS - 35 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the resource name, type, group code, and resource cost 1 of the employee resource with employee ID 9?
+
+  ## Query:
+    select ResName, ResType, ResGrpCod, StdCost1 from ORSC join RSC4 on ORSC.ResCode = RSC4.ResCode where EmpId = 9 
+
+
+##### SBODemoUS - 36 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what is the average daily capacity factor 1 of the resource named 'Testing Machine' on weekdays 1 through 5?
+
+  ## Query:
+    select avg(CapFactor1) avgCapacity from ORSC join RSC6 on ORSC.ResCode = RSC6.ResCode where ResName = 'Testing Machine' and WeekDay >= 1 and WeekDay <= 5 
+
+
+##### SBODemoUS - 37 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the project name and open issue remarks, and open issue solution for projects that have open issues.
+
+  ## Query:
+    select NAME, REMARKS, SOLUTION from OPMG join PMG2 on OPMG.AbsEntry = PMG2.AbsEntry 
+
+
+##### SBODemoUS - 38 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the cockpit subtable left, right, top, and bottom values for the cockpit named purchase
+
+  ## Query:
+    select CPT1._left, CPT1._right, CPT1._top, CPT1._bottom from OCPT join CPT1 on OCPT.AbsEntry = CPT1.AbsEntry where Name = 'Purchase' 
+
+
+##### SBODemoUS - 39 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the table names of business object briefs with the description fields that have the word Memo in them?
+
+  ## Query:
+    select TableName from OBOB where DescField like '%Memo%' 
+
+
+##### SBODemoUS - 40 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the first and last names of employees on the Sales team?
+
+  ## Query:
+    select lastName, firstName from OHEM employees join HTM1 teamMembers on employees.empId = teamMembers.empID join OHTM emplTeams on teamMembers.teamID = emplTeams.teamID where emplTeams.name = 'Sales' 
+
+
+##### SBODemoUS - 41 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Get a list of all of the holiday start and end dates and remarks for holidays in 2014.
+
+  ## Query:
+    select StrDate, EndDate, Rmrks from HLD1 where StrDate >= '20140101 00:00:00.000' 	and EndDate <= '20141231 23:59:59.000' 
+
+
+##### SBODemoUS - 42 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average salary of employees on the purchasing team?
+
+  ## Query:
+    select avg(salary) as avgSalary from OHEM join HTM1 on OHEM.empID = HTM1.empID join OHTM on OHTM.teamID = HTM1.teamID where OHTM.name = 'Purchasing' 
+
+
+##### SBODemoUS - 43 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the office phone number, mobile phone number, pager number, and home phone number of the employee named George Keeng?
+
+  ## Query:
+    select officeTel, mobile, pager, homeTel from OHEM where lastName = 'Keeng' and firstName = 'George' 
+
+
+##### SBODemoUS - 44 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the first and last name of the spouse of employee Maria Bridi?
+
+  ## Query:
+    select FNameSP, SurnameSP from OHEM where lastName = 'Bridi' and firstName = 'Maria' 
+
+
+##### SBODemoUS - 45 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the last name, education status, and number of children for employees of type Technician
+
+  ## Query:
+    select lastName, StatusOfE, nChildren from OHEM join OHTY on OHTY.typeID = OHEM.type where OHTY.name = 'Technician' 
+
+
+##### SBODemoUS - 46 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the type ID and name of each employee type
+
+  ## Query:
+    select typeID, [name] from OHTY 
+
+
+##### SBODemoUS - 47 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Make an employee health insurance list that includes their employee ID, last name,  insurance company name, insurance code, and type of insurance.
+
+  ## Query:
+    select empID, lastName, HeaInsName, HeaInsCode, HeaInsType from OHEM 
+
+
+##### SBODemoUS - 48 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the job title code of the employee with the last name  Chan?
+
+  ## Query:
+    select JTCode from OHEM where lastName = 'Chan' 
+
+
+##### SBODemoUS - 49 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the average vacation days in the current year for employees on the sales team?
+
+  ## Query:
+    select avg(vacCurYear) from OHEM employees join HTM1 teamMembers on employees.empId = teamMembers.empID join OHTM emplTeams on teamMembers.teamID = emplTeams.teamID where emplTeams.name = 'Sales' 
+
+
+##### SBODemoUS - 50 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the team ID of the team that has the employee with the personal fiscal ID 51B.
+
+  ## Query:
+    select teamID from HTM1  join OHEM on HTM1.empID = OHEM.empID where CPF = '51B' 
+
+
+##### SBODemoUS - 51 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the municipality key, tax class, and income tax liability for all of the employees of type accountant.
+
+  ## Query:
+    select MunKey, TaxClass, InTaxLiabi from OHEM join OHTY on OHEM.type = OHTY.typeID where OHTY.name = 'Accountant' 
+
+
+##### SBODemoUS - 52 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the role IDs of employees whos' salaries are less than 5000?
+
+  ## Query:
+    select roleID from HEM6 join OHEM on HEM6.empID = OHEM.empID where salary < 5000 
+
+
+##### SBODemoUS - 53 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the date of birth, country of birth, home city, home county, and home country for the employees with the job title of accountant
+
+  ## Query:
+    select birthDate, brthCountr, homeCity, homeCounty, homeCountr from OHEM where jobTitle = 'Accountant' 
+
+
+##### SBODemoUS - 54 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the professional status, citizenship and passport number  of the employee whos last name is Buyer
+
+  ## Query:
+    select StatusOfP, citizenshp, passportNo from OHEM where lastName = 'Buyer' 
+
+
+##### SBODemoUS - 55 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the first name, last name, home city, and work city of employees whos costs are higher than 4000.
+
+  ## Query:
+    select firstName, lastName, homeCity, workCity from OHEM where emplCost > 4000 
+
+
+##### SBODemoUS - 56 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the municipality key, home city, home phone number, work city and office phone number of employees on the sales team.
+
+  ## Query:
+    select MunKey, homeCity, homeTel, workCity, officeTel from OHEM employees join HTM1 teamMembers on employees.empId = teamMembers.empID join OHTM emplTeams on teamMembers.teamID = emplTeams.teamID where emplTeams.name = 'Sales' 
+
+
+##### SBODemoUS - 57 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the professional status and educational statuses as well as the home and work street numbers of employees on the purchasing team.
+
+  ## Query:
+    select StatusOfP, StatusOfE, StreetNoW, StreetNoH from OHEM employees join HTM1 teamMembers on employees.empId = teamMembers.empID join OHTM emplTeams on teamMembers.teamID = emplTeams.teamID where emplTeams.name = 'Purchasing' 
+
+
+##### SBODemoUS - 58 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the payment method, exemption amount currency, and additional amount currency, for the employee who's tax office name is baltimore?
+
+  ## Query:
+    select pymmeth, exemptcurr, addicurr  from OHEM where TaxOName = 'baltimore' 
+
+
+##### SBODemoUS - 59 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the marital status, home street, home block, home zip code, and home state of the employee with the last name Bridi?
+
+  ## Query:
+    select martstatus, homestreet, homeblock, homezip, homestate from OHEM where lastName = 'Bridi' 
+
+
+##### SBODemoUS - 60 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many items with the name 'USB Flashdrive 128GB' are on hand, committed, and on order?
+
+  ## Query:
+    select OnHand, IsCommited, OnOrder from OITM where ItemName = 'USB Flashdrive 128GB' 
+
+
+##### SBODemoUS - 61 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the number of commited items, the price-per-item, and the total price of the commited items for the item called 'Memory Chip?
+
+  ## Query:
+    select IsCommited, Price, IsCommited * Price as totalPrice from OITM join ITM1 on OITM.ItemCode = ITM1.ItemCode where ItemName = 'Memory Chip' 
+
+
+##### SBODemoUS - 62 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the vendor with vendor code V1010, show item names, consignment numbers, and last purchase price for items where the vendor is preferred.
+
+  ## Query:
+    select ItemName, Consig, LastPurPrc from ITM2 join OITM on ITM2.ItemCode = OITM.ItemCode where VendorCode = 'V1010' 
+
+
+##### SBODemoUS - 63 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the item named 'Printer Paper A4 White', show the package dimensions including height 1, width 1, length 1, and volume, for the packaging that holds a quantity of 24.
+
+  ## Query:
+    select height1, width1, length1, volume from ITM4 join OITM on ITM4.ItemCode = OITM.ItemCode where itemname = 'Printer Paper A4 White'       and QtyPerPack = 24 
+
+
+##### SBODemoUS - 64 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the useful life, remaining life, and remaining day parameters for the item that uses depreciation area 'GAAP'?
+
+  ## Query:
+    select UsefulLife, RemainLife, RemainDays from ITM7 where DprArea = 'GAAP' 
+
+
+##### SBODemoUS - 65 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the volume of the box package type?
+
+  ## Query:
+    select volume from OPKG where PkgType = 'Box' 
+
+
+##### SBODemoUS - 66 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the barcodes for the item named 'Printer Paper A4 White' with unit of measurement entries that are either 3 or 4?
+
+  ## Query:
+    select BcdCode  from OITM join OBCD on OITM.ItemCode = OBCD.ItemCode where ItemName =  'Printer Paper A4 White'       and UomEntry in (3, 4) 
+
+
+##### SBODemoUS - 67 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the display names, data source, and updated date of bin field configurations that are activated (activated code = 'Y')
+
+  ## Query:
+    select DispName, DataSource, UpdateDate from OBFC where activated = 'Y' 
+
+
+##### SBODemoUS - 68 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Display a count of items for each item group. Include the item group name and count of items in the result.
+
+  ## Query:
+    select ItmsGrpNam, count(*) ItmCt from OITM join OITB on OITM.ItmsGrpCod = OITB.ItmsGrpCod group by ItmsGrpNam 
+
+
+##### SBODemoUS - 69 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average volume of items in the 'Items' Item group?
+
+  ## Query:
+    select avg(volume) avgVolume from OITM join OITB on OITM.ItmsGrpCod = OITB.ItmsGrpCod join ITM4 on OITM.ItemCode = ITM4.ItemCode where ItmsGrpNam = 'Items' 
+
+
+##### SBODemoUS - 70 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the parameter names and parameter parameters for the parameters with the description 'Electronic documents'
+
+  ## Query:
+    select ParamName, ParamPrms from OECM join ECM1 on OECM.Code = ECM1.Code where Descr = 'Electronic documents' 
+
+
+##### SBODemoUS - 71 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Get the field and object type xpaths for the mapping determinations associated with parameters with the description 'PEPPOL'.
+
+  ## Query:
+    select ObjXPath, FieldXPath from ECM4 join OECM on ECM4.Code = OECM.Code where Descr = 'PEPPOL' 
+
+
+##### SBODemoUS - 72 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many queries are there in each category?
+
+  ## Query:
+    select QCategory, count(*) qCount from OUQR group by QCategory 
+
+
+##### SBODemoUS - 73 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Display the group description, log instance, the updated date, and the created date of the query group with the code 'Group4'
+
+  ## Query:
+    select AUTHGRPN, LogInstanc, UpdateDate, CreateDate from OQAG where AUTHGRPCD = 'Group4' 
+
+
+##### SBODemoUS - 74 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the widest document width for documents with a grid size of 10?
+
+  ## Query:
+    select top 1 Width from RDOC where GridSize = 10 order by width desc 
+
+
+##### SBODemoUS - 75 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the type codes and screen fonts for documents that use the email font 'Tahoma'?
+
+  ## Query:
+    select TypeCode, ScreenFont from RDOC where EmailFont = 'Tahoma' 
+
+
+##### SBODemoUS - 76 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the document code, and the document type code of the document types with 'Service Call' in the type name
+
+  ## Query:
+    select DocCode, CODE  from RDOC join RTYP on RDOC.DocCode = RTYP.DEFLT_REP where NAME like '%Service Call%' 
+
+
+##### SBODemoUS - 77 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the document code and document name name, and count of reporting elements for each document with the type code 'WTR1'
+
+  ## Query:
+    select RDOC.DocCode, DocName, count(*) elmtCt from RDOC join RITM on RDOC.DocCode = RITM.DocCode where TypeCode = 'WTR1' group by RDOC.DocCode, DocName 
+
+
+##### SBODemoUS - 78 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the Action for extension error, and the number of repetetive areas for documents that require conversion font for email (indicated by 'Y' value).
+
+  ## Query:
+    select ExtOnErr, NumRepArs from RDOC where SwpInEmail = 'Y' 
+
+
+##### SBODemoUS - 79 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the background, foreground, bold, and border red / green / blue values for the reporting elements with a height less than 5 and greater than 0?
+
+  ## Query:
+    select BGRed, BGGreen, BGBlue, FGRed, FGGreen, FGBlue, MrkrRed, MrkrBlue, MrkrGreen, BrdrRed, BrdrBlue, BrdrGreen from RITM where height < 5 and height > 0 
+
+
+##### SBODemoUS - 80 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the average potential max sales opportunity amount in local currency for each card group
+
+  ## Query:
+    select CardGroup, avg(MaxSumLoc) avgMax from OOPR group by CardGroup 
+
+
+##### SBODemoUS - 81 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the percent profit, gross profit total (local), gross profit total (system) for sales opportunities with the status 'W'?
+
+  ## Query:
+    select PrcnProf, SumProfL, SumProfS from oopr where status = 'W' 
+
+
+##### SBODemoUS - 82 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each sales opportunity, show sequence number and, carde code, the average percentage rate of all the rows associated with the opportunity
+
+  ## Query:
+    select OOPR.OpprId, CardCode, avg(ClosePrcnt) avgPerc from OOPR join OPR1 on OOPR.OpprId = OPR1.OpprID group by OOPR.OpprId, CardCode 
+
+
+##### SBODemoUS - 83 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For row-level sales opportunity data, show the weighted amount in both system and local currency for rows with the close date occuring in 2014.
+
+  ## Query:
+    select WtSumLoc, WtSumSys from OPR1 where year(CloseDate) = 2014 
+
+
+##### SBODemoUS - 84 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the cost center code, name, balance, and dimension code for cost centers that are active (Y value) and valid in 2021.
+
+  ## Query:
+    select PrCCode, PrcName, Balance, DataSource from OPRC where Active = 'Y' and year(ValidFrom) = 2021 
+
+
+##### SBODemoUS - 85 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each card associated with a sales opportunity, Show the carde name, the sum of the real total amount (both local and system), the sum of the real closing gross profit (local and system), and the average closing percentage.
+
+  ## Query:
+    select CardName, sum(RealSumLoc) realSumLoc, sum(realSumSys) realSumSys, sum(RealProfS) realProfSys, sum(RealProfL) realProfLoc, avg(CloPrcnt) from OOPR group by CardName 
+
+
+##### SBODemoUS - 86 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the open and close dates for sales opportunity rows that have a closing percentage of six or less?
+
+  ## Query:
+    select OpenDate, CloseDate from OPR1 where ClosePrcnt <= 6 
+
+
+##### SBODemoUS - 87 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the newest sales opportunity start date for each opportunity status code
+
+  ## Query:
+    select status, max(OpenDate) maxDate from OOPR group by status 
+
+
+##### SBODemoUS - 88 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the dimension code of the cost center named 'General Center 3'?
+
+  ## Query:
+    select DimCode from OPRC where PrcName = 'General Center 3' 
+
+
+##### SBODemoUS - 89 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the sales opportunity average gross profit in local currency by year created
+
+  ## Query:
+    select year(CreateDate) yearCreated, avg(SumProfL) avgLocProfit from OOPR group by year(CreateDate) 
+
+
+##### SBODemoUS - 90 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many service contract items are there for each service contract? Include the contract ID in the result.
+
+  ## Query:
+    select OCTR.ContractID, count(*) itemCount from OCTR join CTR1 on OCTR.ContractID = CTR1.ContractID group by OCTR.ContractID 
+
+
+##### SBODemoUS - 91 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the renewal status of the contracts with the customer named 'Maxi-Teq'? Include the contract ID and the status in the result.
+
+  ## Query:
+    select ContractID, Renewal from OCTR where CstmrName = 'Maxi-Teq' 
+
+
+##### SBODemoUS - 92 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each state in the country US, show a count of entries in the customer equipment card table
+
+  ## Query:
+    select state, count(*) entryCount from OINS where country = 'US' group by state 
+
+
+##### SBODemoUS - 93 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the customer equipment item name of the item with code S10000? Include only one result in the output.
+
+  ## Query:
+    select distinct itemName from OINS where itemCode = 'S10000' 
+
+
+##### SBODemoUS - 94 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each queue, show the description, manager, and email address
+
+  ## Query:
+    select descript, manager, email from OQUE 
+
+
+##### SBODemoUS - 95 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many service calls are there per customer where the priority is medium? (value M) Include the custmer ID and customer name
+
+  ## Query:
+    select customer, custmrName, count(*) callCount from OSCL where priority = 'M' group by customer, custmrName 
+
+
+##### SBODemoUS - 96 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the assigned date, response date, and resolved date of service calls that originated on the web
+
+  ## Query:
+    select AssignDate, respOnDate, resolOnDat from OSCL join OSCO on OSCL.origin = OSCO.originID where OSCO.Name = 'Web' 
+
+
+##### SBODemoUS - 97 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    what is the business partner shipping and billing address and email for the customer named 'Aquent Systems'. Display only one row per unique result.
+
+  ## Query:
+    select distinct BPShipAddr, BPBillAddr, BPE_Mail from OSCL where custmrName = 'Aquent Systems' 
+
+
+##### SBODemoUS - 98 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the number of service calls for customer with the 'Silver Warranty' contract template. Include the customer name and count of calls in the result.
+
+  ## Query:
+    select CstmrName, count(*) callCount from OCTR join OSCL on OCTR.CstmrCode = OSCL.customer group by CstmrName 
+
+
+##### SBODemoUS - 99 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the internal serial numbers of the service contract with the customer named microhips and the iten code A00006?
+
+  ## Query:
+    select internalSN from OINS where custmrName = 'Microchips' and itemCode = 'A00006' 
+
+

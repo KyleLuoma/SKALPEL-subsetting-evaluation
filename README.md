@@ -61,6 +61,13 @@ python ./src/main.py --subsetter_name CodeS --benchmark_name snails --filename_c
 python ./src/main.py --subsetter_name CodeS --benchmark_name spider2 --filename_comments lambda1 --recover_previous
 ```
 
+## DTSSQL on Lambda1
+```bash
+python ./src/main.py --subsetter_name dtssql --benchmark_name bird --filename_comments lambda1
+python ./src/main.py --subsetter_name dtssql --benchmark_name snails --filename_comments lambda1
+python ./src/main.py --subsetter_name dtssql --benchmark_name spider2 --filename_comments lambda1
+```
+
 ## Chess with GPT4o
 ```bash
 python ./src/main.py --subsetter_name chess --benchmark_name bird --filename_comments gpt4o --max_col_count 2500

@@ -1,46 +1,68 @@
 {
     "debit_card_specializing": {
         "table_count": 5,
-        "column_count": 21
+        "column_count": 21,
+        "total_rows": 423050,
+        "total_vals": 1280275
     },
     "financial": {
         "table_count": 8,
-        "column_count": 55
+        "column_count": 55,
+        "total_rows": 1073209,
+        "total_vals": 10633726
     },
     "formula_1": {
         "table_count": 13,
-        "column_count": 94
+        "column_count": 94,
+        "total_rows": 514287,
+        "total_vals": 3433871
     },
     "california_schools": {
         "table_count": 3,
-        "column_count": 89
+        "column_count": 89,
+        "total_rows": 29941,
+        "total_vals": 1181167
     },
     "card_games": {
         "table_count": 6,
-        "column_count": 115
+        "column_count": 115,
+        "total_rows": 803445,
+        "total_vals": 8117431
     },
     "european_football_2": {
         "table_count": 7,
-        "column_count": 199
+        "column_count": 199,
+        "total_rows": 222796,
+        "total_vals": 10830081
     },
     "thrombosis_prediction": {
         "table_count": 3,
-        "column_count": 64
+        "column_count": 64,
+        "total_rows": 15952,
+        "total_vals": 631096
     },
     "toxicology": {
         "table_count": 4,
-        "column_count": 11
+        "column_count": 11,
+        "total_rows": 49813,
+        "total_vals": 149096
     },
     "student_club": {
         "table_count": 8,
-        "column_count": 48
+        "column_count": 48,
+        "total_rows": 42511,
+        "total_vals": 253761
     },
     "superhero": {
         "table_count": 10,
-        "column_count": 31
+        "column_count": 31,
+        "total_rows": 10614,
+        "total_vals": 32466
     },
     "codebase_community": {
         "table_count": 8,
-        "column_count": 71
+        "column_count": 71,
+        "total_rows": 740646,
+        "total_vals": 7057880
     }
 }

@@ -126,12 +126,12 @@ class NlSqlBenchmark:
             database = self.databases[self.active_database]
         if question == None:
             question = self.active_database_questions[self.active_question_no]
-        return {
-            "result_set": {},
-            "database": database,
-            "question": question,
-            "error_message": ""
-        }
+        return QueryResult(
+            result_set={},
+            database=database,
+            question=question,
+            error_message=""
+        )
     
 
     def get_sample_values(
@@ -157,9 +157,36 @@ SELECT ? FROM ? LIMIT ?
         db_stats = {}
         for database in self.databases:
             schema = self.get_active_schema(database=database)
+            total_rows = 0
+            total_vals = 0
+            for table in schema.tables:
+                if " " in table.name and self.sql_dialect == "sqlite":
+                    table_name = f"`{table.name}`"
+                elif " " in table.name and self.sql_dialect == "mssql":
+                    table_name = f"[{table.name}]"
+                else:
+                    table_name = table.name
+                result = self.execute_query(
+                    query=f"select count(*) as col_count from {table_name}",
+                    database=database
+                )
+                try:
+                    result.result_set = {k.lower(): result.result_set[k] for k in result.result_set.keys()}
+                    row_count = result.result_set["col_count"][0]
+                    total_rows += row_count
+                    total_vals += (row_count * len(table.columns))
+                except TypeError:
+                    print(result.error_message)
+                except KeyError:
+                    print(result.error_message)
+                    print(result.result_set)
+                except AttributeError:
+                    print(result.error_message)
             db_stats[database] = {
                 "table_count": schema.get_table_count(),
-                "column_count": schema.get_column_count()
+                "column_count": schema.get_column_count(),
+                "total_rows": total_rows,
+                "total_vals": total_vals
             }
         with open(f"{save_path}/{self.name}_schema_stats.json", "wt") as f:
             f.write(json.dumps(db_stats, indent=4))

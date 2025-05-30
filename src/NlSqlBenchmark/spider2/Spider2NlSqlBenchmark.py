@@ -446,6 +446,8 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             cached_result = self._get_cached_result(query, database, simulate_exec_time=simulate_exec_time_on_cache_retrieval)
             if cached_result != None:
                 return cached_result
+        if "`" in query:
+            query = query.replace("`", '"')
         s_time = time.perf_counter()
         snowflake_credential = json.load(open('./.local/snowflake_credential.json'))
         conn = snowflake.connector.connect(

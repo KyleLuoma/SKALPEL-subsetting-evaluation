@@ -1,38 +1,56 @@
 {
     "ASIS_20161108_HerpInv_Database": {
         "table_count": 36,
-        "column_count": 245
+        "column_count": 245,
+        "total_rows": 15480,
+        "total_vals": 129350
     },
     "ATBI": {
         "table_count": 28,
-        "column_count": 192
+        "column_count": 192,
+        "total_rows": 12190,
+        "total_vals": 107695
     },
     "CratersWildlifeObservations": {
         "table_count": 13,
-        "column_count": 71
+        "column_count": 71,
+        "total_rows": 9174,
+        "total_vals": 161571
     },
     "KlamathInvasiveSpecies": {
         "table_count": 18,
-        "column_count": 157
+        "column_count": 157,
+        "total_rows": 42656,
+        "total_vals": 549720
     },
     "NorthernPlainsFireManagement": {
         "table_count": 27,
-        "column_count": 190
+        "column_count": 190,
+        "total_rows": 12188,
+        "total_vals": 107691
     },
     "NTSB": {
         "table_count": 40,
-        "column_count": 1161
+        "column_count": 1161,
+        "total_rows": 1066223,
+        "total_vals": 19092768
     },
     "NYSED_SRC2022": {
         "table_count": 27,
-        "column_count": 423
+        "column_count": 423,
+        "total_rows": 4559524,
+        "total_vals": 101764622
     },
     "PacificIslandLandbirds": {
         "table_count": 21,
-        "column_count": 196
+        "column_count": 196,
+        "total_rows": 77617,
+        "total_vals": 502133
     },
     "SBODemoUS": {
         "table_count": 2588,
-        "column_count": 90477
+        "column_count": 90477,
+        "total_rows": 453973,
+        "total_vals": 41174418
     }
 }
