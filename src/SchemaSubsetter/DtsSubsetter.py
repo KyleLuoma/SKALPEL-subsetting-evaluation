@@ -52,6 +52,7 @@ class DtsSubsetter(SchemaSubsetter):
         self.tokenizer.pad_token = self.tokenizer.eos_token
         self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
         self.tokenizer.encode(' ;')
+        self.schema_string_cache = {}
 
         
     class EosListStoppingCriteria(StoppingCriteria):
@@ -96,8 +97,11 @@ class DtsSubsetter(SchemaSubsetter):
                     num_values=3
                 )
             schema_string += f"Sample rows from `{table.name}`:"
-            for i in range(0, max(3, len(sample_values[table.columns[0].name]))):
-                schema_string += f"\n{', '.join([str(sample_values[k][i]) for k in sample_values.keys()])}"
+            for i in range(0, min(3, len(sample_values[table.columns[0].name]))):
+                try:
+                    schema_string += f"\n{', '.join([str(sample_values[k][i]) for k in sample_values.keys()])}"
+                except IndexError:
+                    pass
             schema_string += "\n\n"
         return schema_string
 
@@ -108,7 +112,11 @@ class DtsSubsetter(SchemaSubsetter):
             ) -> SchemaSubsetterResult:
         question = benchmark_question.question 
         query = benchmark_question.query
-        database_schema = self._make_schema_string(benchmark_question.schema)
+        if benchmark_question.schema.database not in self.schema_string_cache.keys():
+            database_schema = self._make_schema_string(benchmark_question.schema)
+            self.schema_string_cache[benchmark_question.schema.database] = database_schema
+        else:
+            database_schema = self.schema_string_cache[benchmark_question.schema.database]
         db_id = benchmark_question.schema.database
         user_message = f"""Given the following SQL tables, your job is to determine the columns and tables that the question is referring to.
         {database_schema}

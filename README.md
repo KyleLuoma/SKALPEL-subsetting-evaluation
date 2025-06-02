@@ -54,11 +54,18 @@ python ./src/main.py --subsetter_name crush4sql --benchmark_name snails --filena
 python ./src/main.py --subsetter_name crush4sql --benchmark_name spider2 --filename_comments lambda1 --recover_previous
 ```
 
-## CodeS on Lambda1
+## CodeS on Lambda1 sic_bird
 ```bash
 python ./src/main.py --subsetter_name CodeS --benchmark_name bird --filename_comments lambda1
 python ./src/main.py --subsetter_name CodeS --benchmark_name snails --filename_comments lambda1
 python ./src/main.py --subsetter_name CodeS --benchmark_name spider2 --filename_comments lambda1 --recover_previous
+```
+
+## CodeS on Lambda1 sic_merged
+```bash
+python ./src/main.py --subsetter_name CodeS --benchmark_name bird --filename_comments lambda1-sic-merged
+python ./src/main.py --subsetter_name CodeS --benchmark_name snails --filename_comments lambda1-sic-merged
+python ./src/main.py --subsetter_name CodeS --benchmark_name spider2 --filename_comments lambda1-sic-merged
 ```
 
 ## DTSSQL on Lambda1
@@ -139,7 +146,6 @@ We did our best to faithfully implement the subsetting methods. However, in some
 
 # RSLSQL Modifications
 - Modified db_op.py to interact with benchmark classes instead of directly with sqlite databases.
-- Made a change to backwards schema linking to reflect the methodology described in the paper: the authors describe this process as generating preliminary SQL using the full schema, then extracting identifiers from the SQL that match to identifiers in the schema. However, in the code the preliminary SQL is generated using the subset (in step_1_preliminary.py).
 
 # TASQL Modifications
 - Added output instructions to base prompts because reasoning models (vs. completion models) were outputing reasoning steps.

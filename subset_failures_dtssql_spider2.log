@@ -1,0 +1,4879 @@
+##### open_targets_platform_1 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the detailed molecule data, Please display the drug id, drug type and withdrawal status for approved drugs with a black box warning and known drug type among 'Keytruda', 'Vioxx', 'Premarin', and 'Humira'
+
+  ## Query:
+    -- DECLARE
+--   my_drug_list ARRAY<STRING>;
+-- SET
+--   my_drug_list = [
+--   'Keytruda',
+--   'Vioxx',
+--   'Humira',
+--   'Premarin' ];
+
+-- SELECT
+--   id AS drug_id,
+--   tradeNameList.element AS drug_trade_name,
+--   drugType AS drug_type,
+--   hasBeenWithdrawn AS drug_withdrawn
+-- FROM
+--   `open-targets-prod.platform.molecule`,
+--   UNNEST (tradeNames.list) AS tradeNameList
+-- WHERE
+--   tradeNameList.element IN UNNEST(my_drug_list)
+--   AND isApproved = TRUE
+--   AND blackBoxWarning = TRUE
+--   AND drugType != 'Unknown';
+
+-- Modified to remove PL SQL
+SELECT
+  id AS drug_id,
+  tradeNameList.element AS drug_trade_name,
+  drugType AS drug_type,
+  hasBeenWithdrawn AS drug_withdrawn
+FROM
+  `open-targets-prod.platform.molecule`,
+  UNNEST (tradeNames.list) AS tradeNameList
+WHERE
+  tradeNameList.element IN UNNEST([
+    'Keytruda',
+    'Vioxx',
+    'Humira',
+    'Premarin'
+    ])
+  AND isApproved = TRUE
+  AND blackBoxWarning = TRUE
+  AND drugType != 'Unknown';
+
+
+##### open_targets_platform_1 - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which target approved symbol has the overall association score closest to the mean score for psoriasis?
+
+  ## Query:
+    WITH AvgScore AS (
+  SELECT
+    AVG(associations.score) AS avg_score
+  FROM
+    `open-targets-prod.platform.associationByOverallDirect` AS associations
+  JOIN
+    `open-targets-prod.platform.diseases` AS diseases
+  ON
+    associations.diseaseId = diseases.id
+  WHERE
+    diseases.name = 'psoriasis'
+)
+SELECT
+  targets.approvedSymbol AS target_approved_symbol
+FROM
+  `open-targets-prod.platform.associationByOverallDirect` AS associations
+JOIN
+  `open-targets-prod.platform.diseases` AS diseases
+ON
+  associations.diseaseId = diseases.id
+JOIN
+  `open-targets-prod.platform.targets` AS targets
+ON
+  associations.targetId = targets.id
+CROSS JOIN
+  AvgScore
+WHERE
+  diseases.name = 'psoriasis'
+ORDER BY
+  ABS(associations.score - AvgScore.avg_score) ASC
+LIMIT 1
+
+
+
+##### open_targets_platform_1 - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Generate a list of drugs from the table containing molecular details that have completed clinical trials for pancreatic endocrine carcinoma, disease ID EFO_0007416. Please include each drug's name, the target approved symbol, and links to the relevant clinical trials.
+
+  ## Query:
+    SELECT
+  targets.approvedSymbol AS target_symbol,
+  drugs.name AS drug_name,
+  source_urls.element.url AS clinical_trial_reference_url,
+FROM
+  `open-targets-prod.platform.evidence` AS evidence,
+  UNNEST(evidence.urls.list) AS source_urls
+JOIN
+  `open-targets-prod.platform.targets` AS targets
+ON
+  evidence.targetId=targets.id
+JOIN
+  `open-targets-prod.platform.molecule` AS drugs
+ON
+  evidence.drugId=drugs.id
+WHERE
+  datasourceId="chembl"
+  AND diseaseId="EFO_0007416"
+  AND evidence.clinicalStatus = "Completed"
+
+
+##### open_targets_platform_2 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Retrieve the approved symbol of target genes with the highest overall score that are associated with the disease 'EFO_0000676' from the data source 'IMPC'.
+
+  ## Query:
+    SELECT
+  T1.targetId AS target_id,
+  T1.datasourceId,
+  targets.approvedSymbol AS approved_symbol,
+  overall_associations.score AS overall_score
+FROM
+  `bigquery-public-data.open_targets_platform.associationByDatasourceDirect` as T1
+JOIN
+  `bigquery-public-data.open_targets_platform.targets` AS targets
+ON
+  targetId = targets.id
+JOIN
+  `bigquery-public-data.open_targets_platform.associationByOverallDirect` AS overall_associations
+ON
+  T1.targetId = overall_associations.targetId
+WHERE
+  overall_associations.diseaseId = 'EFO_0000676' AND datasourceId = 'impc'
+ORDER BY
+  overall_associations.score DESC
+LIMIT
+  1;
+
+
+
+##### open_targets_genetics_1 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Find the average, variance, max-min difference, and the QTL source(right study) of the maximum log2(h4/h3) for data where right gene id is "ENSG00000169174", h4 > 0.8, h3 < 0.02, reported trait includes "lesterol levels", right biological feature is "IPSC", and the variant is '1_55029009_C_T'.
+
+  ## Query:
+    WITH coloc_stats AS (
+  SELECT
+    coloc.coloc_log2_h4_h3,
+    coloc.right_study AS qtl_source
+  FROM
+    `open-targets-genetics.genetics.variant_disease_coloc` AS coloc
+  JOIN
+    `open-targets-genetics.genetics.studies` AS studies
+  ON
+    coloc.left_study = studies.study_id
+  WHERE
+    coloc.right_gene_id = "ENSG00000169174"
+    AND coloc.coloc_h4 > 0.8
+    AND coloc.coloc_h3 < 0.02
+    AND studies.trait_reported LIKE "%lesterol levels%"
+    AND coloc.right_bio_feature = 'IPSC'
+    AND CONCAT(coloc.left_chrom, '_', coloc.left_pos, '_', coloc.left_ref, '_', coloc.left_alt) = '1_55029009_C_T'
+),
+max_value AS (
+  SELECT
+    MAX(coloc_log2_h4_h3) AS max_log2_h4_h3
+  FROM
+    coloc_stats
+)
+
+SELECT
+  AVG(coloc_log2_h4_h3) AS average,
+  VAR_SAMP(coloc_log2_h4_h3) AS variance,
+  MAX(coloc_log2_h4_h3) - MIN(coloc_log2_h4_h3) AS max_min_difference,
+  (SELECT qtl_source FROM coloc_stats WHERE coloc_log2_h4_h3 = (SELECT max_log2_h4_h3 FROM max_value)) AS qtl_source_of_max
+FROM
+  coloc_stats;
+
+
+##### gnomAD - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Identify which start positions are associated with missense variants in the BRCA1 gene on chromosome 17, where the reference base is 'C' and the alternate base is 'T'. Using data from the gnomAD v2.1.1 version.
+
+  ## Query:
+    WITH gene_region AS (
+  SELECT 
+    MIN(start_position) AS start_pos, 
+    MAX(end_position) AS end_pos
+  FROM `bigquery-public-data.gnomAD.v2_1_1_genomes__chr17` AS main_table
+  WHERE EXISTS (
+    SELECT 1 
+    FROM UNNEST(main_table.alternate_bases) AS alternate_bases
+    WHERE EXISTS (
+      SELECT 1 
+      FROM UNNEST(alternate_bases.vep) AS vep
+      WHERE vep.SYMBOL = 'BRCA1'
+    )
+  )
+)
+
+
+SELECT 
+  DISTINCT start_position
+FROM `bigquery-public-data.gnomAD.v2_1_1_genomes__chr17` AS main_table,
+     UNNEST(main_table.alternate_bases) AS alternate_bases,
+     UNNEST(alternate_bases.vep) AS vep,
+     gene_region
+WHERE main_table.start_position >= gene_region.start_pos
+  AND main_table.start_position <= gene_region.end_pos
+  AND REGEXP_CONTAINS(vep.Consequence, r"missense_variant")
+  AND reference_bases = "C"
+  AND alternate_bases.alt = "T"
+
+
+
+##### gnomAD - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Generate summary statistics on genetic variants in the region between positions 55039447 and 55064852 on chromosome 1. This includes the number of variants, the total allele count, the total number of alleles, and distinct gene symbols (using Variant Effect Predictor, VEP, for gene annotation). Additionally, compute the density of mutations by dividing the length of the region by the number of variants.  Using data from the gnomAD v3 version.
+
+  ## Query:
+    WITH summary_stats AS (
+  SELECT
+    COUNT(1) AS num_variants,
+    SUM((SELECT alt.AC FROM UNNEST(alternate_bases) AS alt)) AS sum_AC,
+    SUM(AN) AS sum_AN,
+    -- Also include some information from Variant Effect Predictor (VEP).
+    STRING_AGG(DISTINCT (SELECT annot.symbol FROM UNNEST(alternate_bases) AS alt,
+                                               UNNEST(vep) AS annot LIMIT 1), ', ') AS genes
+  FROM bigquery-public-data.gnomAD.v3_genomes__chr1 AS main_table
+  WHERE start_position >= 55039447 AND start_position <= 55064852
+)
+SELECT
+  ROUND((55064852 - 55039447) / num_variants, 3) AS burden_of_mutation,
+  *
+FROM summary_stats;
+
+
+##### nhtsa_traffic_fatalities_plus - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    According to the 2015 and 2016 accident and driver distraction, and excluding cases where the driver’s distraction status is recorded as 'Not Distracted,' 'Unknown if Distracted,' or 'Not Reported,' how many traffic accidents per 100,000 people were caused by driver distraction in each U.S. state for those two years, based on 2010 census population data, and which five states each year had the highest rates?
+
+  ## Query:
+    SELECT * FROM
+(
+SELECT
+  '2015' AS year,
+  COUNT(a.consecutive_number) AS total,
+  a.state_name AS state,
+  c.state_pop AS population,
+  (COUNT(a.consecutive_number) / c.state_pop * 100000) AS rate_per_100000
+FROM
+  `bigquery-public-data.nhtsa_traffic_fatalities.accident_2015` a
+JOIN
+  `bigquery-public-data.nhtsa_traffic_fatalities.distract_2015` b
+ON
+  a.consecutive_number = b.consecutive_number
+JOIN (
+  SELECT
+    SUM(d.population) AS state_pop,
+    e.state_name AS state
+  FROM
+    `bigquery-public-data.census_bureau_usa.population_by_zip_2010` d
+  JOIN
+    `bigquery-public-data.utility_us.zipcode_area` e
+  ON
+    d.zipcode = e.zipcode
+  GROUP BY
+    state ) c
+ON
+  c.state = a.state_name
+WHERE
+  b.driver_distracted_by_name NOT IN ('Not Distracted', 'Unknown if Distracted', 'Not Reported')
+GROUP BY
+  state,
+  population,
+  c.state_pop
+ORDER BY
+  rate_per_100000 DESC
+LIMIT 5
+)
+UNION ALL
+(
+SELECT
+  '2016' AS year,
+  COUNT(a.consecutive_number) AS total,
+  a.state_name AS state,
+  c.state_pop AS population,
+  (COUNT(a.consecutive_number) / c.state_pop * 100000) AS rate_per_100000
+FROM
+  `bigquery-public-data.nhtsa_traffic_fatalities.accident_2016` a
+JOIN
+  `bigquery-public-data.nhtsa_traffic_fatalities.distract_2016` b
+ON
+  a.consecutive_number = b.consecutive_number
+JOIN (
+  SELECT
+    SUM(d.population) AS state_pop,
+    e.state_name AS state
+  FROM
+    `bigquery-public-data.census_bureau_usa.population_by_zip_2010` d
+  JOIN
+    `bigquery-public-data.utility_us.zipcode_area` e
+  ON
+    d.zipcode = e.zipcode
+  GROUP BY
+    state ) c
+ON
+  c.state = a.state_name
+WHERE
+  b.driver_distracted_by_name NOT IN ('Not Distracted', 'Unknown if Distracted', 'Not Reported')
+GROUP BY
+  state,
+  population,
+  c.state_pop
+ORDER BY
+  rate_per_100000 DESC
+LIMIT 5
+)
+
+
+##### nhtsa_traffic_fatalities - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which top 3 states had the largest differences in the number of traffic accidents between rainy and clear weather during weekends in 2016? Please also provide the respective differences for each state.
+
+  ## Query:
+    WITH weekend_accidents AS (
+    SELECT
+        state_name,
+        CASE
+            WHEN atmospheric_conditions_1_name = 'Rain' THEN 'Rain'
+            WHEN atmospheric_conditions_1_name = 'Clear' THEN 'Clear'
+            ELSE 'Other'
+        END AS Weather_Condition,
+        COUNT(DISTINCT consecutive_number) AS num_accidents
+    FROM
+        `bigquery-public-data.nhtsa_traffic_fatalities.accident_2016`
+    WHERE
+        EXTRACT(DAYOFWEEK FROM timestamp_of_crash) IN (1, 7)  -- 1 = Sunday, 7 = Saturday
+        AND atmospheric_conditions_1_name IN ('Rain', 'Clear')
+    GROUP BY
+        state_name, Weather_Condition
+),
+
+weather_difference AS (
+    SELECT
+        state_name,
+        MAX(CASE WHEN Weather_Condition = 'Rain' THEN num_accidents ELSE 0 END) AS Rain_Accidents,
+        MAX(CASE WHEN Weather_Condition = 'Clear' THEN num_accidents ELSE 0 END) AS Clear_Accidents,
+        ABS(MAX(CASE WHEN Weather_Condition = 'Rain' THEN num_accidents ELSE 0 END) -
+            MAX(CASE WHEN Weather_Condition = 'Clear' THEN num_accidents ELSE 0 END)) AS Difference
+    FROM
+        weekend_accidents
+    GROUP BY
+        state_name
+)
+
+SELECT
+    state_name,
+    Difference
+FROM
+    weather_difference
+ORDER BY
+    Difference DESC
+LIMIT 3;
+
+
+##### sdoh - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the increasing amount of the average earnings per job between the years 2012 and 2017 for each geographic region in Massachusetts (indicated by "MA" at the end of GeoName)?
+
+  ## Query:
+    WITH bea_2012 AS (
+  SELECT GeoFIPS, GeoName, Earnings_per_job_avg AS earnings_2012
+  FROM `bigquery-public-data.sdoh_bea_cainc30.fips`
+  WHERE Year='2012-01-01' AND ENDS_WITH(GeoName, "MA") IS TRUE
+),
+
+bea_2017 AS (
+  SELECT GeoFIPS, GeoName, Earnings_per_job_avg AS earnings_2017
+  FROM `bigquery-public-data.sdoh_bea_cainc30.fips`
+  WHERE Year='2017-01-01' AND ENDS_WITH(GeoName, "MA") IS TRUE
+),
+
+earnings_diff AS (
+  SELECT
+    bea_2017.GeoFIPS, bea_2017.GeoName, bea_2017.earnings_2017, bea_2012.earnings_2012, 
+    (bea_2017.earnings_2017 - bea_2012.earnings_2012) AS earnings_change
+   FROM bea_2017 
+   JOIN bea_2012
+   ON bea_2017.GeoFIPS = bea_2012.GeoFIPS
+)
+ 
+SELECT * FROM earnings_diff WHERE earnings_change IS NOT NULL ORDER BY earnings_change DESC
+
+
+##### sdoh - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Identify the top 10 regions (counties) with the highest total number of SNAP-participating households, using the 2017 5-year ACS county-level data and SNAP enrollment data from January 1, 2017, excluding regions where the total SNAP participation is zero. For each of these regions, calculate the ratio of households earning under $20,000 to the total number of SNAP-participating households.
+
+  ## Query:
+    WITH acs_2017 AS (
+  SELECT geo_id, income_less_10000 AS i10, income_10000_14999 AS i15, income_15000_19999 AS i20
+  FROM `bigquery-public-data.census_bureau_acs.county_2017_5yr`
+ ),
+
+snap_2017_Jan AS (
+  SELECT FIPS, SNAP_All_Participation_Households AS snap_total
+  FROM `bigquery-public-data.sdoh_snap_enrollment.snap_enrollment`
+  WHERE Date = '2017-01-01'
+)
+
+SELECT acs_2017.geo_id, snap_2017_Jan.snap_total,
+(acs_2017.i10 + acs_2017.i15 + acs_2017.i20) As households_under_20,
+(acs_2017.i10 + acs_2017.i15 + acs_2017.i20)/snap_2017_Jan.snap_total As under_20_snap_ratio 
+FROM acs_2017
+JOIN snap_2017_Jan
+ON  acs_2017.geo_id = snap_2017_Jan.FIPS
+WHERE snap_2017_Jan.snap_total > 0
+ORDER BY snap_2017_Jan.snap_total DESC
+LIMIT 10
+
+
+
+##### sdoh - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the change in the number of homeless veterans between 2012 and 2018 for each CoC region in New York that has data available in both years?
+
+  ## Query:
+    WITH homeless_2012 AS (
+  SELECT Homeless_Veterans AS Vet12, CoC_Name  
+  FROM `bigquery-public-data.sdoh_hud_pit_homelessness.hud_pit_by_coc` 
+  WHERE SUBSTR(CoC_Number,0,2) = "NY" AND Count_Year = 2012
+),
+ 
+homeless_2018 AS (
+  SELECT Homeless_Veterans AS Vet18, CoC_Name  
+  FROM `bigquery-public-data.sdoh_hud_pit_homelessness.hud_pit_by_coc` 
+  WHERE SUBSTR(CoC_Number,0,2) = "NY" AND Count_Year = 2018
+),
+ 
+veterans_change AS (
+  SELECT homeless_2012.COC_Name, Vet12, Vet18, Vet18 - Vet12 AS VetChange
+  FROM homeless_2018
+  JOIN homeless_2012
+  ON homeless_2018.CoC_Name = homeless_2012.CoC_Name
+)
+
+SELECT COC_Name, VetChange FROM veterans_change
+ORDER BY CoC_Name;
+
+
+##### sdoh - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Calculate the percentage change in the total number of unsheltered homeless people from 2015 to 2018 for each state by summing the counts over all Continuums of Care (CoCs) within each state. Then, determine the national average of these state percentage changes. Identify the five states whose percentage change is closest to this national average percentage change. Please provide the state abbreviations.
+
+  ## Query:
+    WITH homeless_2015 AS (
+  SELECT Unsheltered_Homeless AS U15, SUBSTR(CoC_Number, 0, 2) as State_Abbr
+  FROM `bigquery-public-data.sdoh_hud_pit_homelessness.hud_pit_by_coc`
+  WHERE Count_Year = 2015
+),
+ 
+homeless_2018 AS (
+  SELECT Unsheltered_Homeless AS U18, SUBSTR(CoC_Number, 0, 2) as State_Abbr
+  FROM `bigquery-public-data.sdoh_hud_pit_homelessness.hud_pit_by_coc`
+  WHERE Count_Year = 2018
+),
+
+unsheltered_change AS (
+  SELECT homeless_2018.State_Abbr, 
+         SUM(U15) AS Unsheltered_2015, 
+         SUM(U18) AS Unsheltered_2018, 
+         (SUM(U18) - SUM(U15)) / SUM(U15) * 100 AS Percent_Change
+  FROM homeless_2018
+  JOIN homeless_2015
+  ON homeless_2018.State_Abbr = homeless_2015.State_Abbr
+  GROUP BY State_Abbr
+),
+
+average_change AS (
+  SELECT AVG(Percent_Change) AS Avg_Change
+  FROM unsheltered_change
+),
+
+closest_to_avg AS (
+  SELECT State_Abbr
+  FROM unsheltered_change, average_change
+  ORDER BY ABS(Percent_Change - Avg_Change)
+  LIMIT 5
+)
+
+SELECT State_Abbr FROM closest_to_avg;
+
+
+##### sdoh - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list the average number of prenatal weeks in 2018 for counties in Wisconsin where more than 5% of the employed population had commutes of 45-59 minutes in 2017.
+
+  ## Query:
+    WITH natality_2018 AS (
+  SELECT County_of_Residence_FIPS AS FIPS, Ave_Number_of_Prenatal_Wks AS Vist_Ave, County_of_Residence
+  FROM `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality` 
+  WHERE SUBSTR(County_of_Residence_FIPS, 0, 2) = "55" AND Year = '2018-01-01'
+),
+
+acs_2017 AS (
+  SELECT geo_id, commute_45_59_mins, employed_pop
+  FROM `bigquery-public-data.census_bureau_acs.county_2017_5yr`
+),
+
+corr_tbl AS (
+  SELECT
+    n.County_of_Residence,
+    ROUND((a.commute_45_59_mins / a.employed_pop) * 100, 2) AS percent_high_travel,
+    n.Vist_Ave
+  FROM acs_2017 a
+  JOIN natality_2018 n
+  ON a.geo_id = n.FIPS
+)
+
+SELECT County_of_Residence, Vist_Ave
+FROM corr_tbl
+WHERE percent_high_travel > 5
+
+
+
+##### sdoh - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Count the number of counties that experienced an increase in unemployment from 2015 to 2018, using 5-year ACS data, and a decrease in dual-eligible enrollee counts between December 1, 2015, and December 1, 2018.
+
+  ## Query:
+    WITH acs_2018 AS (
+  SELECT geo_id, unemployed_pop AS unemployed_2018  
+  FROM `bigquery-public-data.census_bureau_acs.county_2018_5yr` 
+),
+ 
+acs_2015 AS (
+  SELECT geo_id, unemployed_pop AS unemployed_2015  
+  FROM `bigquery-public-data.census_bureau_acs.county_2015_5yr` 
+),
+ 
+unemployed_change AS (
+  SELECT
+    u18.unemployed_2018, u18.geo_id, u15.unemployed_2015,
+    (u18.unemployed_2018 - u15.unemployed_2015) AS u_change
+  FROM acs_2018 u18
+  JOIN acs_2015 u15
+  ON u18.geo_id = u15.geo_id
+),
+ 
+duals_Jan_2018 AS (
+  SELECT Public_Total AS duals_2018, County_Name, FIPS 
+  FROM `bigquery-public-data.sdoh_cms_dual_eligible_enrollment.dual_eligible_enrollment_by_county_and_program` 
+  WHERE Date = '2018-12-01'
+),
+
+duals_Jan_2015 AS (
+  SELECT Public_Total AS duals_2015, County_Name, FIPS
+  FROM `bigquery-public-data.sdoh_cms_dual_eligible_enrollment.dual_eligible_enrollment_by_county_and_program` 
+  WHERE Date = '2015-12-01'
+),
+
+duals_change AS (
+  SELECT
+    d18.FIPS, d18.County_Name, d18.duals_2018, d15.duals_2015,
+    (d18.duals_2018 - d15.duals_2015) AS total_duals_diff
+  FROM duals_Jan_2018 d18
+  JOIN duals_Jan_2015 d15
+  ON d18.FIPS = d15.FIPS
+),
+ 
+corr_tbl AS (
+  SELECT unemployed_change.geo_id, duals_change.County_Name, unemployed_change.u_change, duals_change.total_duals_diff
+  FROM unemployed_change
+  JOIN duals_change
+  ON unemployed_change.geo_id = duals_change.FIPS
+)
+
+
+SELECT COUNT(*)
+FROM corr_tbl
+WHERE
+u_change >0
+AND
+corr_tbl.total_duals_diff < 0
+
+
+##### sdoh - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Could you assess the relationship between the poverty rates from the previous year's census data and the percentage of births without maternal morbidity for the years 2016 to 2018? Use only data for births where no maternal morbidity was reported and for each year, use the 5-year census data from the year before to compute the Pearson correlation coefficient
+
+  ## Query:
+    WITH poverty_and_natality AS (
+  SELECT
+    EXTRACT(YEAR FROM n.Year) AS data_year,
+    p.geo_id AS county_fips,
+    (p.poverty / p.pop_determined_poverty_status) * 100 AS poverty_rate,
+    SUM(n.Births) AS total_births,
+    SUM(CASE WHEN n.Maternal_Morbidity_YN = 0 THEN n.Births ELSE 0 END) AS births_without_morbidity
+  FROM
+    `bigquery-public-data.census_bureau_acs.county_2015_5yr` p
+  JOIN
+    `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality_by_maternal_morbidity` n
+  ON p.geo_id = n.County_of_Residence_FIPS
+  WHERE
+    p.pop_determined_poverty_status > 0 AND
+    EXTRACT(YEAR FROM n.Year) = 2016
+  GROUP BY
+    p.geo_id, p.poverty, p.pop_determined_poverty_status, EXTRACT(YEAR FROM n.Year)
+  UNION ALL
+  SELECT
+    EXTRACT(YEAR FROM n.Year) AS data_year,
+    p.geo_id AS county_fips,
+    (p.poverty / p.pop_determined_poverty_status) * 100 AS poverty_rate,
+    SUM(n.Births) AS total_births,
+    SUM(CASE WHEN n.Maternal_Morbidity_YN = 0 THEN n.Births ELSE 0 END) AS births_without_morbidity
+  FROM
+    `bigquery-public-data.census_bureau_acs.county_2016_5yr` p
+  JOIN
+    `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality_by_maternal_morbidity` n
+  ON p.geo_id = n.County_of_Residence_FIPS
+  WHERE
+    p.pop_determined_poverty_status > 0 AND
+    EXTRACT(YEAR FROM n.Year) = 2017
+  GROUP BY
+    p.geo_id, p.poverty, p.pop_determined_poverty_status, EXTRACT(YEAR FROM n.Year)
+  UNION ALL
+  SELECT
+    EXTRACT(YEAR FROM n.Year) AS data_year,
+    p.geo_id AS county_fips,
+    (p.poverty / p.pop_determined_poverty_status) * 100 AS poverty_rate,
+    SUM(n.Births) AS total_births,
+    SUM(CASE WHEN n.Maternal_Morbidity_YN = 0 THEN n.Births ELSE 0 END) AS births_without_morbidity
+  FROM
+    `bigquery-public-data.census_bureau_acs.county_2017_5yr` p
+  JOIN
+    `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality_by_maternal_morbidity` n
+  ON p.geo_id = n.County_of_Residence_FIPS
+  WHERE
+    p.pop_determined_poverty_status > 0 AND
+    EXTRACT(YEAR FROM n.Year) = 2018
+  GROUP BY
+    p.geo_id, p.poverty, p.pop_determined_poverty_status, EXTRACT(YEAR FROM n.Year)
+)
+
+SELECT
+  data_year,
+  CORR(poverty_rate, (births_without_morbidity / total_births) * 100) AS correlation_coefficient
+FROM
+  poverty_and_natality
+GROUP BY
+  data_year
+
+
+
+##### openaq - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which three cities have the largest difference between their 1990 EPA PM2.5 measurements (using units_of_measure = 'Micrograms/cubic meter (LC)' and parameter_name = 'Acceptable PM2.5 AQI & Speciation Mass') and their 2020 OpenAQ PM2.5 measurements (where pollutant = 'pm25' based on the year extracted from the timestamp), with both datasets matched by latitude and longitude rounded to two decimals, and the difference ordered from greatest to least?
+
+  ## Query:
+    SELECT
+  aq.city,
+  epa.arithmetic_mean,
+  aq.value,
+  aq.timestamp,
+  (epa.arithmetic_mean - aq.value)
+FROM
+  `bigquery-public-data.openaq.global_air_quality` AS aq
+JOIN
+  `bigquery-public-data.epa_historical_air_quality.air_quality_annual_summary` AS epa
+ON
+  ROUND(aq.latitude, 2) = ROUND(epa.latitude, 2)
+  AND ROUND(aq.longitude, 2) = ROUND(epa.longitude, 2)
+WHERE
+  epa.units_of_measure = "Micrograms/cubic meter (LC)"
+  AND epa.parameter_name = "Acceptable PM2.5 AQI & Speciation Mass"
+  AND epa.year = 1990
+  AND aq.pollutant = "pm25"
+  AND EXTRACT(YEAR FROM aq.timestamp) = 2020
+ORDER BY
+  (epa.arithmetic_mean - aq.value) DESC
+LIMIT 3
+
+
+
+
+
+
+##### STACKOVERFLOW - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How do the average reputation and number of badges vary among Stack Overflow users based on the number of complete years they have been members, considering only those who joined on or before October 1, 2021?
+
+  ## Query:
+    WITH sub AS (
+  SELECT 
+    "users"."id",
+    CAST(TO_TIMESTAMP(MAX("users"."creation_date") / 1000000.0) AS DATE) AS "user_creation_date",  -- 使用 MAX 聚合 creation_date 并转换为 DATE
+    MAX("users"."reputation") AS "reputation",  
+    SUM(CASE WHEN badges."user_id" IS NULL THEN 0 ELSE 1 END) AS "num_badges"
+  FROM "STACKOVERFLOW"."STACKOVERFLOW"."USERS" "users"
+  LEFT JOIN "STACKOVERFLOW"."STACKOVERFLOW"."BADGES" badges
+    ON "users"."id" = badges."user_id"
+  WHERE CAST(TO_TIMESTAMP("users"."creation_date" / 1000000.0) AS DATE) <= DATE '2021-10-01'
+  GROUP BY "users"."id"
+)
+
+SELECT 
+  DATEDIFF(YEAR, "user_creation_date", DATE '2021-10-01') AS "user_tenure",
+  COUNT(1) AS "Num_Users",
+  AVG("reputation") AS "Avg_Reputation",
+  AVG("num_badges") AS "Avg_Num_Badges"
+FROM sub
+GROUP BY "user_tenure"
+ORDER BY "user_tenure";
+
+
+
+##### stackoverflow - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    You need to determine which day of the week has the third highest percentage of questions on Stack Overflow that receive an answer within an hour. To do this, use the question creation date from the posts_questions table and the earliest answer creation date from the posts_answers table. Once you’ve calculated the percentage of questions that get answered within an hour for each day, identify the day with the third highest percentage and report that percentage.
+
+  ## Query:
+    WITH first_answers AS (
+  SELECT
+    parent_id AS question_id,
+    MIN(creation_date) AS first_answer_date
+  FROM
+    `bigquery-public-data.stackoverflow.posts_answers`
+  GROUP BY
+    parent_id
+)
+
+SELECT
+  FORMAT_DATE('%A', DATE(q.creation_date)) AS question_day,
+  SUM(CASE WHEN f.first_answer_date IS NOT NULL AND TIMESTAMP_DIFF(f.first_answer_date, q.creation_date, MINUTE) <= 60 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS percent_questions
+FROM
+  `bigquery-public-data.stackoverflow.posts_questions` q
+LEFT JOIN
+  first_answers f
+ON
+  q.id = f.question_id
+GROUP BY
+  question_day
+ORDER BY
+  percent_questions DESC
+LIMIT 1 OFFSET 2
+
+
+##### stackoverflow - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please provide the display name of the user who has answered the most questions on Stack Overflow, considering only users with a reputation greater than 10.
+
+  ## Query:
+    WITH UserAnswers AS (
+  SELECT
+    owner_user_id AS answer_owner_id,
+    COUNT(id) AS answer_count
+  FROM bigquery-public-data.stackoverflow.posts_answers
+  WHERE owner_user_id IS NOT NULL
+  GROUP BY owner_user_id
+),
+DetailedUsers AS (
+  SELECT
+    id AS user_id,
+    display_name AS user_display_name,
+    reputation
+  FROM bigquery-public-data.stackoverflow.users
+  WHERE display_name IS NOT NULL AND reputation > 10
+),
+RankedUsers AS (
+  SELECT
+    u.user_display_name,
+    u.reputation,
+    a.answer_count,
+    ROW_NUMBER() OVER (ORDER BY a.answer_count DESC) AS rank
+  FROM DetailedUsers u
+  JOIN UserAnswers a ON u.user_id = a.answer_owner_id
+)
+SELECT
+  user_display_name,
+FROM RankedUsers
+WHERE rank = 1;
+
+
+
+##### stackoverflow - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the highest number of answers received for a single Python 2 specific question on Stack Overflow, excluding any discussions that involve Python 3?
+
+  ## Query:
+    WITH
+  python2_questions AS (
+    SELECT
+      q.id AS question_id,
+      q.title,
+      q.body AS question_body,
+      q.tags
+    FROM
+      `bigquery-public-data.stackoverflow.posts_questions` q
+    WHERE
+      (LOWER(q.tags) LIKE '%python-2%'
+      OR LOWER(q.tags) LIKE '%python-2.x%'
+      OR (
+        LOWER(q.title) LIKE '%python 2%'
+        OR LOWER(q.body) LIKE '%python 2%'
+        OR LOWER(q.title) LIKE '%python2%'
+        OR LOWER(q.body) LIKE '%python2%'
+      ))
+      AND (
+        LOWER(q.title) NOT LIKE '%python 3%'
+        AND LOWER(q.body) NOT LIKE '%python 3%'
+        AND LOWER(q.title) NOT LIKE '%python3%'
+        AND LOWER(q.body) NOT LIKE '%python3%'
+      )
+  )
+
+SELECT
+  COUNT(*) AS count_number
+FROM
+  python2_questions q
+LEFT JOIN
+  `bigquery-public-data.stackoverflow.posts_answers` a
+ON
+  q.question_id = a.parent_id
+GROUP BY q.question_id
+ORDER BY count_number DESC
+LIMIT 1
+
+
+
+
+##### stackoverflow - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Retrieve details of accepted answers to Stack Overflow questions posted in January 2016 that have tags including "javascript" and at least one of "xss", "cross-site", "exploit", or "cybersecurity"; the answers themselves must also have been posted in January 2016. For each accepted answer, include the answer's ID, the answerer's reputation, score, and comment count, along with the associated question's tags, score, answer count, the asker's reputation, view count, and comment count.
+
+  ## Query:
+    SELECT
+    answer.id AS a_id,
+    (SELECT users.reputation FROM `bigquery-public-data.stackoverflow.users` users
+        WHERE users.id = answer.owner_user_id) AS a_user_reputation,
+    answer.score AS a_score,
+    answer.comment_count AS answer_comment_count,
+    questions.tags as q_tags,
+    questions.score AS q_score,  
+    questions.answer_count AS answer_count, 
+    (SELECT users.reputation FROM `bigquery-public-data.stackoverflow.users` users
+        WHERE users.id = questions.owner_user_id) AS q_user_reputation,
+    questions.view_count AS q_view_count,
+    questions.comment_count AS q_comment_count
+FROM
+   `bigquery-public-data.stackoverflow.posts_answers` AS answer 
+LEFT JOIN
+   `bigquery-public-data.stackoverflow.posts_questions` AS questions
+      ON answer.parent_id = questions.id
+WHERE
+    answer.id = questions.accepted_answer_id
+    AND 
+    (
+        questions.tags LIKE '%javascript%' AND
+        (questions.tags LIKE '%xss%' OR
+        questions.tags LIKE '%cross-site%' OR
+        questions.tags LIKE '%exploit%' OR
+        questions.tags LIKE '%cybersecurity%')
+    )
+    AND DATE(questions.creation_date) BETWEEN '2016-01-01' AND '2016-01-31'
+    AND DATE(answer.creation_date) BETWEEN '2016-01-01' AND '2016-01-31'
+
+
+
+##### stackoverflow - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the monthly proportion of Stack Overflow questions tagged with 'python' in the year 2022?
+
+  ## Query:
+    WITH
+-- Get recent data
+RecentData AS (
+    SELECT
+        FORMAT_TIMESTAMP('%Y%m', creation_date) AS month_index,
+        tags
+    FROM
+        `bigquery-public-data.stackoverflow.posts_questions`
+    WHERE
+        EXTRACT(YEAR FROM DATE(creation_date)) = 2022
+),
+
+-- Monthly number of questions posted
+MonthlyQuestions AS (
+    SELECT
+        month_index,
+        COUNT(*) AS num_questions
+    FROM
+        RecentData
+    GROUP BY
+        month_index
+),
+
+-- Monthly number of questions posted with specific tags
+TaggedQuestions AS (
+    SELECT
+        month_index,
+        tag,
+        COUNT(*) AS num_tags
+    FROM
+        RecentData,
+        UNNEST(SPLIT(tags, '|')) AS tag
+    WHERE
+        tag IN ('python')
+    GROUP BY
+        month_index, tag
+)
+
+SELECT
+    a.month_index,
+    a.num_tags / b.num_questions AS proportion
+FROM
+    TaggedQuestions a
+LEFT JOIN
+    MonthlyQuestions b ON a.month_index = b.month_index
+ORDER BY
+    a.month_index, proportion DESC;
+
+
+##### stackoverflow - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    From July 1, 2019 through December 31, 2019, for all users with IDs between 16712208 and 18712208 on Stack Overflow, retrieve the user ID and the tags of the relevant question for each of their contributions, including comments on both questions and answers, any answers they posted, and any questions they authored, making sure to correctly associate the comment or answer with its parent question’s tags.
+
+  ## Query:
+    SELECT u_id, tags
+FROM (
+    -- select comments with tags from the post
+    SELECT cm.u_id, cm.creation_date, cm.text, pq.tags, "comment" as type
+    FROM (
+            SELECT a.parent_id as q_id, c.user_id as u_id, c.creation_date as creation_date, c.text as text
+            FROM `bigquery-public-data.stackoverflow.comments` as c
+            INNER JOIN `bigquery-public-data.stackoverflow.posts_answers` as a ON (a.id = c.post_id)
+            WHERE c.user_id BETWEEN 16712208 AND 18712208
+              AND DATE(c.creation_date) BETWEEN '2019-07-01' AND '2019-12-31'
+            
+            UNION ALL 
+            
+            SELECT q.id as q_id, c.user_id as u_id, c.creation_date as creation_date, c.text as text
+            FROM `bigquery-public-data.stackoverflow.comments` as c
+            INNER JOIN `bigquery-public-data.stackoverflow.posts_questions` as q ON (q.id = c.post_id)
+            WHERE c.user_id BETWEEN 16712208 AND 18712208
+              AND DATE(c.creation_date) BETWEEN '2019-07-01' AND '2019-12-31'
+        ) as cm
+    INNER JOIN `bigquery-public-data.stackoverflow.posts_questions` as pq ON (pq.id = cm.q_id)
+        
+    UNION ALL
+    -- select answers with tags related to the post
+    SELECT pa.owner_user_id as u_id, pa.creation_date as creation_date, pa.body as text, pq.tags as tags, "answer" as type
+    FROM `bigquery-public-data.stackoverflow.posts_answers` as pa
+    LEFT OUTER JOIN `bigquery-public-data.stackoverflow.posts_questions` as pq ON pq.id = pa.parent_id
+    WHERE pa.owner_user_id BETWEEN 16712208 AND 18712208
+      AND DATE(pa.creation_date) BETWEEN '2019-07-01' AND '2019-12-31'
+    
+    UNION ALL
+    -- select posts
+    SELECT pq.owner_user_id as u_id, pq.creation_date as creation_date, pq.body as text, pq.tags as tags, "question" as type
+    FROM `bigquery-public-data.stackoverflow.posts_questions` as pq
+    WHERE pq.owner_user_id BETWEEN 16712208 AND 18712208
+      AND DATE(pq.creation_date) BETWEEN '2019-07-01' AND '2019-12-31'
+)
+ORDER BY u_id, creation_date;
+
+
+
+
+##### stackoverflow - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Retrieve the top 50 most viewed questions for each of the following Android-related tags on StackOverflow: 'android-layout', 'android-activity', 'android-intent', 'android-edittext', 'android-fragments', 'android-recyclerview', 'listview', 'android-actionbar', 'google-maps', and 'android-asynctask'. Each question must contain the word 'how' in either its title or body and must not contain any of the following troubleshooting terms in either its title or body: 'fail', 'problem', 'error', 'wrong', 'fix', 'bug', 'issue', 'solve', or 'trouble'. Only include tags that have at least 50 questions meeting these criteria, and for each such tag, select the top 50 questions ranked by view count.
+
+  ## Query:
+    WITH
+tags_to_use AS (
+    SELECT tag, idx
+    FROM UNNEST([
+        'android-layout', 
+        'android-activity', 
+        'android-intent', 
+        'android-edittext', 
+        'android-fragments', 
+        'android-recyclerview', 
+        'listview', 
+        'android-actionbar', 
+        'google-maps', 
+        'android-asynctask'
+    ]) AS tag WITH OFFSET idx
+),
+android_how_to_questions AS (
+    SELECT
+        PQ.*
+    FROM
+        bigquery-public-data.stackoverflow.posts_questions PQ
+    WHERE
+        EXISTS (
+            SELECT 1
+            FROM UNNEST(SPLIT(PQ.tags, '|')) tag
+            WHERE tag IN (SELECT tag FROM tags_to_use)
+        )
+        AND (LOWER(PQ.title) LIKE '%how%' OR LOWER(PQ.body) LIKE '%how%')
+        AND NOT (LOWER(PQ.title) LIKE '%fail%' OR LOWER(PQ.title) LIKE '%problem%' OR LOWER(PQ.title) LIKE '%error%'
+                 OR LOWER(PQ.title) LIKE '%wrong%' OR LOWER(PQ.title) LIKE '%fix%' OR LOWER(PQ.title) LIKE '%bug%'
+                 OR LOWER(PQ.title) LIKE '%issue%' OR LOWER(PQ.title) LIKE '%solve%' OR LOWER(PQ.title) LIKE '%trouble%')
+        AND NOT (LOWER(PQ.body) LIKE '%fail%' OR LOWER(PQ.body) LIKE '%problem%' OR LOWER(PQ.body) LIKE '%error%'
+                 OR LOWER(PQ.body) LIKE '%wrong%' OR LOWER(PQ.body) LIKE '%fix%' OR LOWER(PQ.body) LIKE '%bug%'
+                 OR LOWER(PQ.body) LIKE '%issue%' OR LOWER(PQ.body) LIKE '%solve%' OR LOWER(PQ.body) LIKE '%trouble%')
+),
+questions_with_tag_rankings AS (
+    SELECT
+        T.id AS tag_id,
+        TTU.idx AS tag_offset,
+        T.tag_name,
+        T.wiki_post_id AS tag_wiki_post_id,
+        Q.id AS question_id,
+        Q.title,
+        Q.tags,
+        Q.view_count,
+        RANK() OVER (PARTITION BY T.id ORDER BY Q.view_count DESC) AS question_view_count_rank,
+        COUNT(*) OVER (PARTITION BY T.id) AS total_valid_questions
+    FROM
+        bigquery-public-data.stackoverflow.tags T
+    INNER JOIN
+        tags_to_use TTU ON T.tag_name = TTU.tag
+    INNER JOIN
+        android_how_to_questions Q ON T.tag_name IN UNNEST(SPLIT(Q.tags, '|'))
+)
+SELECT
+    question_id
+FROM
+    questions_with_tag_rankings
+WHERE
+    question_view_count_rank <= 50 AND total_valid_questions >= 50
+ORDER BY
+    tag_offset ASC, question_view_count_rank ASC;
+
+
+
+##### stackoverflow - 7 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the title of the most viewed "how" question related to Android development on StackOverflow, across specified tags such as 'android-layout', 'android-activity', 'android-intent', and others
+
+  ## Query:
+    WITH
+tags_to_use AS (
+    SELECT tag, idx
+    FROM UNNEST([
+        'android-layout', 
+        'android-activity', 
+        'android-intent', 
+        'android-edittext', 
+        'android-fragments', 
+        'android-recyclerview', 
+        'listview', 
+        'android-actionbar', 
+        'google-maps', 
+        'android-asynctask'
+    ]) AS tag WITH OFFSET idx
+),
+android_how_to_questions AS (
+    SELECT
+        PQ.*
+    FROM
+        `bigquery-public-data.stackoverflow.posts_questions` PQ
+    WHERE
+        EXISTS (
+            SELECT 1
+            FROM UNNEST(SPLIT(PQ.tags, '|')) tag
+            WHERE tag IN (SELECT tag FROM tags_to_use)
+        )
+        AND (LOWER(PQ.title) LIKE '%how%' OR LOWER(PQ.body) LIKE '%how%')
+),
+most_viewed_question AS (
+    SELECT
+        T.id AS tag_id,
+        T.tag_name,
+        Q.id AS question_id,
+        Q.title,
+        Q.tags,
+        Q.view_count
+    FROM
+        `bigquery-public-data.stackoverflow.tags` T
+    INNER JOIN
+        tags_to_use TTU ON T.tag_name = TTU.tag
+    INNER JOIN
+        android_how_to_questions Q ON T.tag_name IN UNNEST(SPLIT(Q.tags, '|'))
+    ORDER BY Q.view_count DESC
+    LIMIT 1
+)
+SELECT
+    title
+FROM
+    most_viewed_question;
+
+
+##### stackoverflow - 8 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the number of Stack Overflow questions asked each day of the week in 2021, and find out how many and what percentage of those were answered within one hour.
+
+  ## Query:
+    SELECT
+  Day_of_Week,
+  COUNT(1) AS Num_Questions,
+  SUM(answered_in_1h) AS Num_Answered_in_1H,
+  ROUND(100 * SUM(answered_in_1h) / COUNT(1),1) AS Percent_Answered_in_1H
+FROM
+(
+  SELECT
+    q.id AS question_id,
+    EXTRACT(DAYOFWEEK FROM q.creation_date) AS day_of_week,
+    MAX(IF(a.parent_id IS NOT NULL AND
+           (UNIX_SECONDS(a.creation_date)-UNIX_SECONDS(q.creation_date))/(60*60) <= 1, 1, 0)) AS answered_in_1h
+  FROM
+    `bigquery-public-data.stackoverflow.posts_questions` q
+  LEFT JOIN
+    `bigquery-public-data.stackoverflow.posts_answers` a
+  ON q.id = a.parent_id
+  WHERE EXTRACT(YEAR FROM a.creation_date) = 2020
+    AND EXTRACT(YEAR FROM q.creation_date) = 2020
+  GROUP BY question_id, day_of_week
+)
+GROUP BY
+  Day_of_Week
+ORDER BY
+  Day_of_Week;
+
+
+##### stackoverflow - 9 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Retrieve the top 10 longest questions on Stack Overflow, measured by the length of their body text, where each question either has an accepted answer or has no accepted answer but has at least one answer with a score-to-view ratio exceeding 0.01. For each of these questions, include the reputation of the user who asked the question, the user's net votes (calculated as their total up_votes minus down_votes), and the total number of badges the user has earned.
+
+  ## Query:
+    WITH badge_counts AS (
+  SELECT
+    c.id,
+    COUNT(DISTINCT d.id) AS badge_number
+  FROM
+    `bigquery-public-data.stackoverflow.users` AS c
+  JOIN
+    `bigquery-public-data.stackoverflow.badges` AS d
+  ON
+    c.id = d.user_id
+  GROUP BY
+    c.id
+),
+labeled_questions AS (
+  SELECT
+    a.id,
+    IF(
+      a.id IN (
+        SELECT DISTINCT b.id
+        FROM
+          `bigquery-public-data.stackoverflow.posts_answers` AS a
+        JOIN
+          `bigquery-public-data.stackoverflow.posts_questions` AS b
+        ON
+          a.parent_id = b.id
+        WHERE
+          b.accepted_answer_id IS NULL
+          AND a.score / b.view_count > 0.01
+      ) OR accepted_answer_id IS NOT NULL,
+      1,
+      0
+    ) AS label,
+    a.owner_user_id,
+    LENGTH(a.body) AS body_length
+  FROM
+    `bigquery-public-data.stackoverflow.posts_questions` AS a
+)
+SELECT
+  lq.id,
+  b.reputation,
+  b.up_votes - b.down_votes AS net_votes,
+  e.badge_number
+FROM
+  labeled_questions AS lq
+JOIN
+  `bigquery-public-data.stackoverflow.users` AS b
+ON
+  lq.owner_user_id = b.id
+JOIN
+  badge_counts AS e
+ON
+  b.id = e.id
+WHERE
+  lq.label = 1
+ORDER BY
+  lq.body_length DESC
+LIMIT
+  10;
+
+
+
+
+
+##### fhir_synthea - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among all patients, how many individuals remain alive (i.e., with no recorded deceased.dateTime), have a diagnosis of either Diabetes or Hypertension, and are prescribed at least seven distinct active medications?
+
+  ## Query:
+    With INFO AS (
+SELECT 
+  MR.patientId, 
+  P.last_name,
+  ARRAY_TO_STRING(P.first_name, " ") AS First_name,
+  Condition.Codes, 
+  Condition.Conditions,
+  MR.med_count AS COUNT_NUMBER
+FROM
+  (SELECT 
+    id, 
+    name[safe_offset(0)].family as last_name, 
+    name[safe_offset(0)].given as first_name, 
+    TIMESTAMP(deceased.dateTime) AS deceased_datetime 
+  FROM `bigquery-public-data.fhir_synthea.patient`) AS P
+JOIN
+  (SELECT  subject.patientId as patientId, 
+           COUNT(DISTINCT medication.codeableConcept.coding[safe_offset(0)].code) AS med_count
+   FROM    `bigquery-public-data.fhir_synthea.medication_request`
+   WHERE   status = 'active'
+   GROUP BY 1
+   ) AS MR
+ON MR.patientId = P.id 
+JOIN
+  (SELECT 
+  PatientId, 
+  STRING_AGG(DISTINCT condition_desc, ", ") AS Conditions, 
+  STRING_AGG(DISTINCT condition_code, ", ") AS Codes
+  FROM(
+    SELECT 
+      subject.patientId as PatientId, 
+              code.coding[safe_offset(0)].code condition_code,
+              code.coding[safe_offset(0)].display condition_desc
+       FROM `bigquery-public-data.fhir_synthea.condition`
+       wHERE 
+         code.coding[safe_offset(0)].display = 'Diabetes'
+         OR 
+         code.coding[safe_offset(0)].display = 'Hypertension' 
+    )
+  GROUP BY PatientId
+  ) AS Condition
+ON MR.patientId = Condition.PatientId
+WHERE med_count >= 7 
+AND P.deceased_datetime is NULL /*only alive patients*/
+GROUP BY patientId, last_name, first_name, Condition.Codes, Condition.Conditions, MR.med_count
+ORDER BY last_name
+)
+
+SELECT COUNT(*) FROM INFO
+
+
+##### eclipse_megamovie - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Find the user with the highest total clicks across all records from all available photo collections.
+
+  ## Query:
+    SELECT user
+FROM (
+Select user
+      From `bigquery-public-data.eclipse_megamovie.photos_v_0_1`
+      UNION ALL
+      Select user
+      From`bigquery-public-data.eclipse_megamovie.photos_v_0_2`
+      UNION ALL
+      Select user
+      From`bigquery-public-data.eclipse_megamovie.photos_v_0_3`
+) 
+GROUP BY user 
+HAVING COUNT (user)=( 
+SELECT MAX(mycount) 
+FROM ( 
+SELECT user, COUNT(user) mycount 
+FROM (
+Select user
+      From `bigquery-public-data.eclipse_megamovie.photos_v_0_1`
+      UNION ALL
+      Select user
+      From`bigquery-public-data.eclipse_megamovie.photos_v_0_2`
+      UNION ALL
+      Select user
+      From`bigquery-public-data.eclipse_megamovie.photos_v_0_3`
+)
+GROUP BY user))
+ORDER BY COUNT(user) 
+LIMIT 1
+
+
+##### epa_historical_air_quality - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please calculate the monthly average levels of PM10, PM2.5 FRM, PM2.5 non-FRM, volatile organic emissions, SO2 (scaled by a factor of 10), and Lead (scaled by a factor of 100) air pollutants in California for the year 2020.
+
+  ## Query:
+    SELECT
+  pm10.month AS month,
+  pm10.avg AS pm10,
+  pm25_frm.avg AS pm25_frm,
+  pm25_nonfrm.avg AS pm25_nonfrm,
+  co.avg AS co,
+  so2.avg AS so2,
+  lead.avg AS lead
+FROM
+  (SELECT AVG(arithmetic_mean) AS avg, 
+          EXTRACT(YEAR FROM date_local) AS year, 
+          EXTRACT(MONTH FROM date_local) AS month
+   FROM `bigquery-public-data.epa_historical_air_quality.pm10_daily_summary`
+   WHERE state_name = 'California' AND EXTRACT(YEAR FROM date_local) = 2020
+   GROUP BY year, month) AS pm10
+JOIN
+  (SELECT AVG(arithmetic_mean) AS avg, 
+          EXTRACT(YEAR FROM date_local) AS year, 
+          EXTRACT(MONTH FROM date_local) AS month
+   FROM `bigquery-public-data.epa_historical_air_quality.pm25_frm_daily_summary`
+   WHERE state_name = 'California' AND EXTRACT(YEAR FROM date_local) = 2020
+   GROUP BY year, month) AS pm25_frm
+ON pm10.year = pm25_frm.year AND pm10.month = pm25_frm.month
+JOIN
+  (SELECT AVG(arithmetic_mean) AS avg, 
+          EXTRACT(YEAR FROM date_local) AS year, 
+          EXTRACT(MONTH FROM date_local) AS month
+   FROM `bigquery-public-data.epa_historical_air_quality.pm25_nonfrm_daily_summary`
+   WHERE state_name = 'California' AND EXTRACT(YEAR FROM date_local) = 2020
+   GROUP BY year, month) AS pm25_nonfrm
+ON pm10.year = pm25_nonfrm.year AND pm10.month = pm25_nonfrm.month
+JOIN
+  (SELECT AVG(arithmetic_mean) * 100 AS avg, 
+          EXTRACT(YEAR FROM date_local) AS year, 
+          EXTRACT(MONTH FROM date_local) AS month
+   FROM `bigquery-public-data.epa_historical_air_quality.lead_daily_summary`
+   WHERE state_name = 'California' AND EXTRACT(YEAR FROM date_local) = 2020
+   GROUP BY year, month) AS lead
+ON pm10.year = lead.year AND pm10.month = lead.month
+JOIN
+  (SELECT AVG(arithmetic_mean) AS avg, 
+          EXTRACT(YEAR FROM date_local) AS year, 
+          EXTRACT(MONTH FROM date_local) AS month
+   FROM `bigquery-public-data.epa_historical_air_quality.voc_daily_summary`
+   WHERE state_name = 'California' AND EXTRACT(YEAR FROM date_local) = 2020
+   GROUP BY year, month) AS co
+ON pm10.year = co.year AND pm10.month = co.month
+JOIN
+  (SELECT AVG(arithmetic_mean) * 10 AS avg, 
+          EXTRACT(YEAR FROM date_local) AS year, 
+          EXTRACT(MONTH FROM date_local) AS month
+   FROM `bigquery-public-data.epa_historical_air_quality.so2_daily_summary`
+   WHERE state_name = 'California' AND EXTRACT(YEAR FROM date_local) = 2020
+   GROUP BY year, month) AS so2
+ON pm10.year = so2.year AND pm10.month = so2.month
+ORDER BY
+  month;
+
+
+##### IDC - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How large are the DICOM image files with SEG or RTSTRUCT modalities and the SOP Class UID "1.2.840.10008.5.1.4.1.1.66.4", when grouped by collection, study, and series IDs, if they have no references to other series, images, or sources? Can you also provide a viewer URL formatted as "https://viewer.imaging.datacommons.cancer.gov/viewer/" followed by the study ID, and list these sizes in kilobytes, sorted from largest to smallest?
+
+  ## Query:
+    WITH seg_rtstruct AS (
+  SELECT
+    "collection_id",
+    "StudyInstanceUID",
+    "SeriesInstanceUID",
+    CONCAT('https://viewer.imaging.datacommons.cancer.gov/viewer/', "StudyInstanceUID") AS "viewer_url",
+    "instance_size"
+  FROM
+    "IDC"."IDC_V17"."DICOM_ALL"
+  WHERE
+    "Modality" IN ('SEG', 'RTSTRUCT')
+    AND "SOPClassUID" = '1.2.840.10008.5.1.4.1.1.66.4'
+    AND ARRAY_SIZE("ReferencedSeriesSequence") = 0
+    AND ARRAY_SIZE("ReferencedImageSequence") = 0
+    AND ARRAY_SIZE("SourceImageSequence") = 0
+)
+
+SELECT
+  seg_rtstruct."collection_id",
+  seg_rtstruct."SeriesInstanceUID",
+  seg_rtstruct."StudyInstanceUID",
+  seg_rtstruct."viewer_url",
+  SUM(seg_rtstruct."instance_size") / 1024 AS "collection_size_KB"
+FROM
+  seg_rtstruct
+GROUP BY
+  seg_rtstruct."collection_id",
+  seg_rtstruct."SeriesInstanceUID",
+  seg_rtstruct."StudyInstanceUID",
+  seg_rtstruct."viewer_url"
+ORDER BY
+  "collection_size_KB" DESC;
+
+
+
+##### IDC - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    In publicly accessible DICOM data where the Modality is 'SEG' and the SOPClassUID is '1.2.840.10008.5.1.4.1.1.66.4', and each segmentation references its original SOPInstanceUID, which five segmentation categories (by 'SegmentedPropertyCategory.CodeMeaning') occur most frequently?
+
+  ## Query:
+    WITH
+  sampled_sops AS (
+    SELECT
+      "collection_id",
+      "SeriesDescription",
+      "SeriesInstanceUID",
+      "SOPInstanceUID" AS "seg_SOPInstanceUID",
+      COALESCE(
+        "ReferencedSeriesSequence"[0]."ReferencedInstanceSequence"[0]."ReferencedSOPInstanceUID",
+        "ReferencedImageSequence"[0]."ReferencedSOPInstanceUID",
+        "SourceImageSequence"[0]."ReferencedSOPInstanceUID"
+      ) AS "referenced_sop"
+    FROM
+      "IDC"."IDC_V17"."DICOM_ALL"
+    WHERE
+      "Modality" = 'SEG'
+      AND "SOPClassUID" = '1.2.840.10008.5.1.4.1.1.66.4'
+      AND "access" = 'Public'
+  ),
+  segmentations_data AS (
+    SELECT
+      dicom_all."collection_id",
+      dicom_all."PatientID",
+      dicom_all."SOPInstanceUID",
+      REPLACE(segmentations."SegmentedPropertyCategory":CodeMeaning::STRING, '"', '') AS "segmentation_category",
+      REPLACE(segmentations."SegmentedPropertyType":CodeMeaning::STRING, '"', '') AS "segmentation_type"
+    FROM
+      sampled_sops
+    JOIN
+      "IDC"."IDC_V17"."DICOM_ALL" AS dicom_all
+    ON
+      sampled_sops."referenced_sop" = dicom_all."SOPInstanceUID"
+    JOIN
+      "IDC"."IDC_V17"."SEGMENTATIONS" AS segmentations
+    ON
+      segmentations."SOPInstanceUID" = sampled_sops."seg_SOPInstanceUID"
+  )
+SELECT
+  "segmentation_category",
+  COUNT(*) AS "count_"
+FROM
+  segmentations_data
+GROUP BY
+  "segmentation_category"
+ORDER BY
+  "count_" DESC
+LIMIT 5;
+
+
+
+##### IDC - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    From the union of the specified MR series with SeriesInstanceUID 1.3.6.1.4.1.14519.5.2.1.3671.4754.105976129314091491952445656147 and all associated segmentation instances, which modality has the greatest number of SOP instances in total, and how many are there?
+
+  ## Query:
+    WITH union_mr_seg AS (
+  SELECT
+    "dicom_all_mr"."SOPInstanceUID",
+    '' AS "segPropertyTypeCodeMeaning", 
+    '' AS "segPropertyCategoryCodeMeaning"
+  FROM
+    "IDC"."IDC_V17"."DICOM_ALL" AS "dicom_all_mr"
+  WHERE
+    "dicom_all_mr"."SeriesInstanceUID" IN ('1.3.6.1.4.1.14519.5.2.1.3671.4754.105976129314091491952445656147')
+    
+  UNION ALL
+
+  SELECT
+    "dicom_all_seg"."SOPInstanceUID",
+    "segmentations"."SegmentedPropertyType":"CodeMeaning" AS "segPropertyTypeCodeMeaning",
+    "segmentations"."SegmentedPropertyCategory":"CodeMeaning" AS "segPropertyCategoryCodeMeaning"
+  FROM
+    "IDC"."IDC_V17"."DICOM_ALL" AS "dicom_all_seg"
+  JOIN
+    "IDC"."IDC_V17"."SEGMENTATIONS" AS "segmentations"
+  ON
+    "dicom_all_seg"."SOPInstanceUID" = "segmentations"."SOPInstanceUID"
+)
+
+SELECT
+  "dc_all"."Modality",
+  COUNT(*) AS "count_"
+FROM 
+  "IDC"."IDC_V17"."DICOM_ALL" AS "dc_all"
+INNER JOIN
+  union_mr_seg
+ON 
+  "dc_all"."SOPInstanceUID" = union_mr_seg."SOPInstanceUID"
+GROUP BY
+  "dc_all"."Modality"
+ORDER BY
+  "count_" DESC
+LIMIT 1;
+
+
+
+##### IDC - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    In the "qin_prostate_repeatability" collection, please provide the distinct StudyInstanceUIDs for studies that include T2-weighted axial MR imaging and also contain anatomical structure segmentations labeled as "Peripheral zone."
+
+  ## Query:
+    WITH
+-- Studies that have MR volumes
+"mr_studies" AS (
+  SELECT
+    "dicom_all_mr"."StudyInstanceUID"
+  FROM
+    "IDC"."IDC_V17"."DICOM_ALL" AS "dicom_all_mr"
+  WHERE
+    "Modality" = 'MR'
+    AND "collection_id" = 'qin_prostate_repeatability'
+    AND CONTAINS("SeriesDescription", 'T2 Weighted Axial')
+),
+
+"seg_studies" AS (
+  SELECT
+    "dicom_all_seg"."StudyInstanceUID"
+  FROM
+    "IDC"."IDC_V17"."DICOM_ALL" AS "dicom_all_seg"
+  JOIN
+    "IDC"."IDC_V17"."SEGMENTATIONS" AS "segmentations"
+  ON
+    "dicom_all_seg"."SOPInstanceUID" = "segmentations"."SOPInstanceUID"
+  WHERE
+    "collection_id" = 'qin_prostate_repeatability'
+    AND CONTAINS("segmentations"."SegmentedPropertyType":"CodeMeaning", 'Peripheral zone')
+    AND "segmentations"."SegmentedPropertyCategory":"CodeMeaning" = 'Anatomical Structure'
+)
+
+SELECT DISTINCT
+  "mr_studies"."StudyInstanceUID"
+FROM
+  "mr_studies"
+JOIN
+  "seg_studies"
+ON
+  "mr_studies"."StudyInstanceUID" = "seg_studies"."StudyInstanceUID";
+
+
+
+##### IDC - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Can you list all unique pairs of embedding medium and staining substance code meanings, along with the number of occurrences for each pair, based on distinct embedding medium and staining substance codes from the 'SM' modality in the DICOM dataset's un-nested specimen preparation sequences, ensuring that the codes are from the SCT coding scheme?
+
+  ## Query:
+    WITH
+  SpecimenPreparationSequence_unnested AS (
+    SELECT
+      d."SOPInstanceUID",
+      concept_name_code_sequence.value:"CodeMeaning"::STRING AS "cnc_cm",
+      concept_name_code_sequence.value:"CodingSchemeDesignator"::STRING AS "cnc_csd",
+      concept_name_code_sequence.value:"CodeValue"::STRING AS "cnc_val",
+      concept_code_sequence.value:"CodeMeaning"::STRING AS "ccs_cm",
+      concept_code_sequence.value:"CodingSchemeDesignator"::STRING AS "ccs_csd",
+      concept_code_sequence.value:"CodeValue"::STRING AS "ccs_val"
+    FROM
+      "IDC"."IDC_V17"."DICOM_ALL" AS d,
+      LATERAL FLATTEN(input => d."SpecimenDescriptionSequence") AS spec_desc,
+      LATERAL FLATTEN(input => spec_desc.value:"SpecimenPreparationSequence") AS prep_seq,
+      LATERAL FLATTEN(input => prep_seq.value:"SpecimenPreparationStepContentItemSequence") AS prep_step,
+      LATERAL FLATTEN(input => prep_step.value:"ConceptNameCodeSequence") AS concept_name_code_sequence,
+      LATERAL FLATTEN(input => prep_step.value:"ConceptCodeSequence") AS concept_code_sequence
+  ),
+  slide_embedding AS (
+    SELECT
+      "SOPInstanceUID",
+      ARRAY_AGG(DISTINCT(CONCAT("ccs_cm", ':', "ccs_csd", ':', "ccs_val"))) AS "embeddingMedium_code_str"
+    FROM
+      SpecimenPreparationSequence_unnested
+    WHERE
+      "cnc_csd" = 'SCT' AND "cnc_val" = '430863003' -- CodeMeaning is 'Embedding medium'
+    GROUP BY
+      "SOPInstanceUID"
+  ),
+  slide_staining AS (
+    SELECT
+      "SOPInstanceUID",
+      ARRAY_AGG(DISTINCT(CONCAT("ccs_cm", ':', "ccs_csd", ':', "ccs_val"))) AS "staining_usingSubstance_code_str"
+    FROM
+      SpecimenPreparationSequence_unnested
+    WHERE
+      "cnc_csd" = 'SCT' AND "cnc_val" = '424361007' -- CodeMeaning is 'Using substance'
+    GROUP BY
+      "SOPInstanceUID"
+  ),
+  embedding_data AS (
+    SELECT
+      d."SOPInstanceUID",
+      d."instance_size",
+      e."embeddingMedium_code_str",
+      s."staining_usingSubstance_code_str"
+    FROM
+      "IDC"."IDC_V17"."DICOM_ALL" AS d
+    LEFT JOIN
+      slide_embedding AS e ON d."SOPInstanceUID" = e."SOPInstanceUID"
+    LEFT JOIN
+      slide_staining AS s ON d."SOPInstanceUID" = s."SOPInstanceUID"
+    WHERE
+      d."Modality" = 'SM'
+  )
+SELECT
+  SPLIT_PART(embeddingMedium_CodeMeaning_flat.VALUE::STRING, ':', 1) AS "embeddingMedium_CodeMeaning",
+  SPLIT_PART(staining_usingSubstance_CodeMeaning_flat.VALUE::STRING, ':', 1) AS "staining_usingSubstance_CodeMeaning",
+  COUNT(*) AS "count_"
+FROM
+  embedding_data
+  , LATERAL FLATTEN(input => embedding_data."embeddingMedium_code_str") AS embeddingMedium_CodeMeaning_flat
+  , LATERAL FLATTEN(input => embedding_data."staining_usingSubstance_code_str") AS staining_usingSubstance_CodeMeaning_flat
+GROUP BY
+  SPLIT_PART(embeddingMedium_CodeMeaning_flat.VALUE::STRING, ':', 1),
+  SPLIT_PART(staining_usingSubstance_CodeMeaning_flat.VALUE::STRING, ':', 1);
+
+
+
+##### IDC - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Considering only CT images from the 'nlst' collection, what are the average series sizes in MiB for the top 3 patients with the highest slice interval difference tolerance (calculated as the difference between the maximum and minimum unique slice intervals within their series) and the top 3 patients with the highest maximum exposure difference (calculated as the difference between the maximum and minimum unique exposure values within their series), where the series size is determined by summing the instance sizes of all images in a series and converting it to MiB?
+
+  ## Query:
+    WITH
+  nonLocalizerRawData AS (
+    SELECT
+      "SeriesInstanceUID",
+      "StudyInstanceUID",
+      "PatientID",
+      TRY_CAST("Exposure"::STRING AS FLOAT) AS "Exposure",  -- 直接从 bid 获取 Exposure
+      TRY_CAST(axes.VALUE::STRING AS FLOAT) AS "zImagePosition",
+      LEAD(TRY_CAST(axes.VALUE::STRING AS FLOAT)) OVER (
+        PARTITION BY "SeriesInstanceUID" 
+        ORDER BY TRY_CAST(axes.VALUE::STRING AS FLOAT)
+      ) - TRY_CAST(axes.VALUE::STRING AS FLOAT) AS "slice_interval",
+      "instance_size" AS "instanceSize"
+    FROM
+      "IDC"."IDC_V17"."DICOM_ALL" AS "bid",
+      LATERAL FLATTEN(input => "bid"."ImagePositionPatient") AS axes  -- 使用 LATERAL FLATTEN 展开数组
+    WHERE
+      "collection_id" = 'nlst' 
+      AND "Modality" = 'CT' 
+  ),
+  geometryChecks AS (
+    SELECT
+      "SeriesInstanceUID",
+      "StudyInstanceUID",
+      "PatientID",
+      ARRAY_AGG(DISTINCT "slice_interval") AS "sliceIntervalDifferences",
+      ARRAY_AGG(DISTINCT "Exposure") AS "distinctExposures",
+      SUM("instanceSize") / 1024 / 1024 AS "seriesSizeInMB"
+    FROM
+      nonLocalizerRawData
+    GROUP BY
+      "SeriesInstanceUID", 
+      "StudyInstanceUID",
+      "PatientID"
+  ),
+  patientMetrics AS (
+    SELECT
+      "PatientID",
+      MAX(TRY_CAST(sid.VALUE::STRING AS FLOAT)) AS "maxSliceIntervalDifference",
+      MIN(TRY_CAST(sid.VALUE::STRING AS FLOAT)) AS "minSliceIntervalDifference",
+      MAX(TRY_CAST(sid.VALUE::STRING AS FLOAT)) - MIN(TRY_CAST(sid.VALUE::STRING AS FLOAT)) AS "sliceIntervalDifferenceTolerance",
+      MAX(TRY_CAST(de.VALUE::STRING AS FLOAT)) AS "maxExposure",
+      MIN(TRY_CAST(de.VALUE::STRING AS FLOAT)) AS "minExposure",
+      MAX(TRY_CAST(de.VALUE::STRING AS FLOAT)) - MIN(TRY_CAST(de.VALUE::STRING AS FLOAT)) AS "maxExposureDifference",
+      "seriesSizeInMB"
+    FROM
+      geometryChecks,
+      LATERAL FLATTEN(input => "sliceIntervalDifferences") AS sid,  -- 展开 sliceIntervalDifferences
+      LATERAL FLATTEN(input => "distinctExposures") AS de  -- 展开 distinctExposures
+    WHERE
+      sid.VALUE IS NOT NULL
+      AND de.VALUE IS NOT NULL
+    GROUP BY
+      "PatientID",
+      "seriesSizeInMB"
+  ),
+  top3BySliceInterval AS (
+    SELECT
+      "PatientID",
+      "seriesSizeInMB"
+    FROM
+      patientMetrics
+    ORDER BY
+      "sliceIntervalDifferenceTolerance" DESC
+    LIMIT 3
+  ),
+  top3ByMaxExposure AS (
+    SELECT
+      "PatientID",
+      "seriesSizeInMB"
+    FROM
+      patientMetrics
+    ORDER BY
+      "maxExposureDifference" DESC
+    LIMIT 3
+  )
+SELECT
+  'Top 3 by Slice Interval' AS "MetricGroup",
+  AVG("seriesSizeInMB") AS "AverageSeriesSizeInMB"
+FROM
+  top3BySliceInterval
+UNION ALL
+SELECT
+  'Top 3 by Max Exposure' AS "MetricGroup",
+  AVG("seriesSizeInMB") AS "AverageSeriesSizeInMB"
+FROM
+  top3ByMaxExposure;
+
+
+
+##### IDC - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Could you provide a clean, structured dataset from dicom_all table that only includes SM images marked as VOLUME from the TCGA-LUAD and TCGA-LUSC collections, excluding any slides with compression type “other,” where the specimen preparation step explicitly has “Embedding medium” set to “Tissue freezing medium,” and ensuring that the tissue type is only “normal” or “tumor” and the cancer subtype is reported accordingly?
+
+  ## Query:
+    WITH
+  sm_images AS (
+    SELECT
+      "SeriesInstanceUID" AS "digital_slide_id", 
+      "StudyInstanceUID" AS "case_id",
+      "ContainerIdentifier" AS "physical_slide_id",
+      "PatientID" AS "patient_id",
+      "TotalPixelMatrixColumns" AS "width", 
+      "TotalPixelMatrixRows" AS "height",
+      "collection_id",
+      "crdc_instance_uuid",
+      "gcs_url", 
+      CAST(
+        "SharedFunctionalGroupsSequence"[0]."PixelMeasuresSequence"[0]."PixelSpacing"[0] AS FLOAT
+      ) AS "pixel_spacing", 
+      CASE "TransferSyntaxUID"
+          WHEN '1.2.840.10008.1.2.4.50' THEN 'jpeg'
+          WHEN '1.2.840.10008.1.2.4.91' THEN 'jpeg2000'
+          ELSE 'other'
+      END AS "compression"
+    FROM
+      IDC.IDC_V17.DICOM_ALL
+    WHERE
+      "Modality" = 'SM' 
+      AND "ImageType"[2] = 'VOLUME'
+  ),
+
+  tissue_types AS (
+    SELECT DISTINCT *
+    FROM (
+      SELECT
+        "SeriesInstanceUID" AS "digital_slide_id",
+        CASE "steps_unnested2".value:"CodeValue"::STRING
+            WHEN '17621005' THEN 'normal' -- meaning: 'Normal' (i.e., non-neoplastic)
+            WHEN '86049000' THEN 'tumor'  -- meaning: 'Neoplasm, Primary'
+            ELSE 'other'                 -- meaning: 'Neoplasm, Metastatic'
+        END AS "tissue_type"
+      FROM
+        IDC.IDC_V17.DICOM_ALL
+        CROSS JOIN
+          LATERAL FLATTEN(input => "SpecimenDescriptionSequence"[0]."PrimaryAnatomicStructureSequence") AS "steps_unnested1"
+        CROSS JOIN
+          LATERAL FLATTEN(input => "steps_unnested1".value:"PrimaryAnatomicStructureModifierSequence") AS "steps_unnested2"
+    )
+  ),
+
+  specimen_preparation_sequence_items AS (
+    SELECT DISTINCT *
+    FROM (
+      SELECT
+        "SeriesInstanceUID" AS "digital_slide_id",
+        "steps_unnested2".value:"ConceptNameCodeSequence"[0]."CodeMeaning"::STRING AS "item_name",
+        "steps_unnested2".value:"ConceptCodeSequence"[0]."CodeMeaning"::STRING AS "item_value"
+      FROM
+        IDC.IDC_V17.DICOM_ALL
+        CROSS JOIN
+          LATERAL FLATTEN(input => "SpecimenDescriptionSequence"[0]."SpecimenPreparationSequence") AS "steps_unnested1"
+        CROSS JOIN
+          LATERAL FLATTEN(input => "steps_unnested1".value:"SpecimenPreparationStepContentItemSequence") AS "steps_unnested2"
+    )
+  )
+
+SELECT
+  a.*,
+  b."tissue_type",
+  REPLACE(REPLACE(a."collection_id", 'tcga_luad', 'luad'), 'tcga_lusc', 'lscc') AS "cancer_subtype"
+FROM 
+  sm_images AS a
+  JOIN tissue_types AS b 
+    ON b."digital_slide_id" = a."digital_slide_id"
+  JOIN specimen_preparation_sequence_items AS c 
+    ON c."digital_slide_id" = a."digital_slide_id"
+WHERE
+  (a."collection_id" = 'tcga_luad' OR a."collection_id" = 'tcga_lusc')
+  AND a."compression" != 'other'
+  AND (b."tissue_type" = 'normal' OR b."tissue_type" = 'tumor')
+  AND (c."item_name" = 'Embedding medium' AND c."item_value" = 'Tissue freezing medium')
+ORDER BY 
+  a."crdc_instance_uuid";
+
+
+
+##### IDC - 7 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    In the dicom_pivot table, how many unique StudyInstanceUID values exactly match the SegmentedPropertyTypeCodeSequence of "15825003" (case-insensitive) and also have a collection_id of either "Community" or "nsclc_radiomics"?
+
+  ## Query:
+    SELECT
+  COUNT(*) AS "total_count"
+FROM
+  IDC.IDC_V17.DICOM_PIVOT AS "dicom_pivot"
+WHERE
+  "StudyInstanceUID" IN (
+    SELECT
+      "StudyInstanceUID"
+    FROM
+      IDC.IDC_V17.DICOM_PIVOT AS "dicom_pivot"
+    WHERE
+      "StudyInstanceUID" IN (
+        SELECT
+          "StudyInstanceUID"
+        FROM
+          IDC.IDC_V17.DICOM_PIVOT AS "dicom_pivot"
+        WHERE
+          LOWER("dicom_pivot"."SegmentedPropertyTypeCodeSequence") LIKE LOWER('15825003')
+        GROUP BY
+          "StudyInstanceUID"
+        INTERSECT
+        SELECT
+          "StudyInstanceUID"
+        FROM
+          IDC.IDC_V17.DICOM_PIVOT AS "dicom_pivot"
+        WHERE
+          "dicom_pivot"."collection_id" IN ('Community', 'nsclc_radiomics')
+        GROUP BY
+          "StudyInstanceUID"
+      )
+    GROUP BY
+      "StudyInstanceUID"
+  );
+
+
+
+##### IDC - 8 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many unique StudyInstanceUIDs are there from the DWI, T2 Weighted Axial, Apparent Diffusion Coefficient series, and T2 Weighted Axial Segmentations in the 'qin_prostate_repeatability' collection?
+
+  ## Query:
+    WITH relevant_series AS (
+  SELECT 
+    DISTINCT "StudyInstanceUID"
+  FROM 
+    IDC.IDC_V17.DICOM_ALL
+  WHERE 
+    "collection_id" = 'qin_prostate_repeatability'
+    AND "SeriesDescription" IN (
+      'DWI',
+      'T2 Weighted Axial',
+      'Apparent Diffusion Coefficient',
+      'T2 Weighted Axial Segmentations',
+      'Apparent Diffusion Coefficient Segmentations'
+    )    
+),
+t2_seg_lesion_series AS (
+  SELECT 
+    DISTINCT "StudyInstanceUID"
+  FROM 
+    IDC.IDC_V17.DICOM_ALL
+  CROSS JOIN LATERAL FLATTEN(input => "SegmentSequence") AS segSeq
+  WHERE 
+    "collection_id" = 'qin_prostate_repeatability'
+    AND "SeriesDescription" = 'T2 Weighted Axial Segmentations'
+)
+
+SELECT 
+    COUNT(DISTINCT "StudyInstanceUID") AS "total_count"
+FROM (
+  SELECT 
+    "StudyInstanceUID" 
+  FROM relevant_series
+  UNION ALL
+  SELECT 
+    "StudyInstanceUID"
+  FROM t2_seg_lesion_series
+);
+
+
+
+##### IDC - 9 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Identify the top five CT scan series by size (in MiB), including their SeriesInstanceUID, series number, patient ID, and series size. These series must be from the CT modality and not part of the 'nlst' collection. Exclude any series where the ImageType is classified as 'LOCALIZER' or where the TransferSyntaxUID is either '1.2.840.10008.1.2.4.70' or '1.2.840.10008.1.2.4.51' (i.e., JPEG compressed). The selected series must have consistent slice intervals, exposure levels, image orientation (with only one unique ImageOrientationPatient value), pixel spacing, image positions (both z-axis and xy positions), and pixel dimensions (rows and columns). Ensure that the number of images matches the number of unique z-axis positions, indicating no duplicate slices. Additionally, the z-axis component of the cross product of the x and y direction cosines from ImageOrientationPatient must have an absolute value between 0.99 and 1.01, ensuring alignment with the expected imaging plane. Finally, order the results by series size in descending order and limit the output to the top five series satisfying these conditions.
+
+  ## Query:
+    WITH
+  -- Create a common table expression (CTE) named localizerAndJpegCompressedSeries
+  localizerAndJpegCompressedSeries AS (
+    SELECT 
+      "SeriesInstanceUID"
+    FROM 
+      IDC.IDC_V17."DICOM_ALL" AS bid
+    WHERE 
+      "ImageType" = 'LOCALIZER' OR
+      "TransferSyntaxUID" IN ('1.2.840.10008.1.2.4.70', '1.2.840.10008.1.2.4.51')
+  ),
+  
+  -- Create a common table expression (CTE) for x_vector calculation (first three elements)
+  imageOrientation AS (
+    SELECT
+      "SeriesInstanceUID",
+      ARRAY_AGG(CAST(part.value AS FLOAT)) AS "x_vector"
+    FROM 
+      IDC.IDC_V17."DICOM_ALL" AS bid,
+      LATERAL FLATTEN(input => bid."ImageOrientationPatient") AS part
+    WHERE
+      part.index BETWEEN 0 AND 2
+    GROUP BY "SeriesInstanceUID"
+  ),
+  
+  -- Create a common table expression (CTE) for y_vector calculation (next three elements)
+  imageOrientationY AS (
+    SELECT
+      "SeriesInstanceUID",
+      ARRAY_AGG(CAST(part.value AS FLOAT)) AS "y_vector"
+    FROM 
+      IDC.IDC_V17."DICOM_ALL" AS bid,
+      LATERAL FLATTEN(input => bid."ImageOrientationPatient") AS part
+    WHERE
+      part.index BETWEEN 3 AND 5
+    GROUP BY "SeriesInstanceUID"
+  ),
+  
+  -- Create a common table expression (CTE) named nonLocalizerRawData
+  nonLocalizerRawData AS (
+    SELECT
+      bid."SeriesInstanceUID",  -- Added table alias bid
+      bid."StudyInstanceUID",
+      bid."PatientID",
+      bid."SOPInstanceUID",
+      bid."SliceThickness",
+      bid."ImageType",
+      bid."TransferSyntaxUID",
+      bid."SeriesNumber",
+      bid."aws_bucket",
+      bid."crdc_series_uuid",
+      CAST(bid."Exposure" AS FLOAT) AS "Exposure",  -- Use CAST directly
+      CAST(ipp.value AS FLOAT) AS "zImagePosition", -- Use CAST directly
+      CONCAT(ipp2.value, '/', ipp3.value) AS "xyImagePosition",
+      LEAD(CAST(ipp.value AS FLOAT)) OVER (PARTITION BY bid."SeriesInstanceUID" ORDER BY CAST(ipp.value AS FLOAT)) - CAST(ipp.value AS FLOAT) AS "slice_interval",
+      ARRAY_TO_STRING(bid."ImageOrientationPatient", '/') AS "iop",
+      bid."PixelSpacing",
+      bid."Rows" AS "pixelRows",
+      bid."Columns" AS "pixelColumns",
+      bid."instance_size" AS "instanceSize"
+    FROM
+      IDC.IDC_V17."DICOM_ALL" AS bid
+    LEFT JOIN LATERAL FLATTEN(input => bid."ImagePositionPatient") AS ipp
+    LEFT JOIN LATERAL FLATTEN(input => bid."ImagePositionPatient") AS ipp2
+    LEFT JOIN LATERAL FLATTEN(input => bid."ImagePositionPatient") AS ipp3
+    WHERE
+      bid."collection_id" != 'nlst'
+      AND bid."Modality" = 'CT'
+      AND ipp.index = 2
+      AND ipp2.index = 0
+      AND ipp3.index = 1
+      AND bid."SeriesInstanceUID" NOT IN (SELECT "SeriesInstanceUID" FROM localizerAndJpegCompressedSeries)
+  ),
+  
+  -- Cross product calculation
+  crossProduct AS (
+    SELECT
+      nld."SOPInstanceUID",  -- Added table alias nld
+      nld."SeriesInstanceUID",  -- Added table alias nld
+      OBJECT_CONSTRUCT(
+        'x', ("x_vector"[1] * "y_vector"[2] - "x_vector"[2] * "y_vector"[1]),
+        'y', ("x_vector"[2] * "y_vector"[0] - "x_vector"[0] * "y_vector"[2]),
+        'z', ("x_vector"[0] * "y_vector"[1] - "x_vector"[1] * "y_vector"[0])
+      ) AS "xyCrossProduct"
+    FROM 
+      nonLocalizerRawData AS nld  -- Added alias for nonLocalizerRawData
+    JOIN imageOrientation AS io ON nld."SeriesInstanceUID" = io."SeriesInstanceUID"
+    JOIN imageOrientationY AS ioy ON nld."SeriesInstanceUID" = ioy."SeriesInstanceUID"
+  ),
+  
+  -- Cross product elements extraction and row numbering
+  crossProductElements AS (
+    SELECT
+      cp."SOPInstanceUID",  
+      cp."SeriesInstanceUID",  
+      elem.value,
+      ROW_NUMBER() OVER (PARTITION BY cp."SOPInstanceUID", cp."SeriesInstanceUID" ORDER BY elem.value) AS rn
+    FROM 
+      crossProduct AS cp  
+    -- Use LATERAL FLATTEN to explode the cross product object into individual 'x', 'y', and 'z'
+    JOIN LATERAL FLATTEN(input => ARRAY_CONSTRUCT(
+          cp."xyCrossProduct"['x'],
+          cp."xyCrossProduct"['y'],
+          cp."xyCrossProduct"['z']
+    )) AS elem -- Simplified 'elem.value' reference here
+  ),
+  
+  -- Dot product calculation
+  dotProduct AS (
+    SELECT
+      cpe."SOPInstanceUID",  
+      cpe."SeriesInstanceUID",  
+      SUM(
+        CASE 
+          WHEN cpe.rn = 1 THEN cpe.value * 0  -- x * 0
+          WHEN cpe.rn = 2 THEN cpe.value * 0  -- y * 0
+          WHEN cpe.rn = 3 THEN cpe.value * 1  -- z * 1
+        END
+      ) AS "xyDotProduct"
+    FROM 
+      crossProductElements AS cpe
+    GROUP BY 
+      cpe."SOPInstanceUID",  
+      cpe."SeriesInstanceUID"
+  ),
+  
+  -- Geometry checks for series consistency
+  geometryChecks AS (
+    SELECT
+      gc."SeriesInstanceUID",  -- Added table alias gc
+      gc."SeriesNumber",
+      gc."aws_bucket",
+      gc."crdc_series_uuid",
+      gc."StudyInstanceUID",
+      gc."PatientID",
+      ARRAY_AGG(DISTINCT gc."slice_interval") AS "sliceIntervalDifferences",
+      ARRAY_AGG(DISTINCT gc."Exposure") AS "distinctExposures",
+      COUNT(DISTINCT gc."iop") AS "iopCount",
+      COUNT(DISTINCT gc."PixelSpacing") AS "pixelSpacingCount",
+      COUNT(DISTINCT gc."zImagePosition") AS "positionCount",
+      COUNT(DISTINCT gc."xyImagePosition") AS "xyPositionCount",
+      COUNT(DISTINCT gc."SOPInstanceUID") AS "sopInstanceCount",
+      COUNT(DISTINCT gc."SliceThickness") AS "sliceThicknessCount",
+      COUNT(DISTINCT gc."Exposure") AS "exposureCount",
+      COUNT(DISTINCT gc."pixelRows") AS "pixelRowCount",
+      COUNT(DISTINCT gc."pixelColumns") AS "pixelColumnCount",
+      dp."xyDotProduct",  -- Added xyDotProduct from dotProduct
+      SUM(gc."instanceSize") / 1024 / 1024 AS "seriesSizeInMiB"
+    FROM 
+      nonLocalizerRawData AS gc  -- Added table alias gc
+    JOIN dotProduct AS dp ON gc."SeriesInstanceUID" = dp."SeriesInstanceUID" 
+    AND gc."SOPInstanceUID" = dp."SOPInstanceUID"
+    GROUP BY
+      gc."SeriesInstanceUID", 
+      gc."SeriesNumber",
+      gc."aws_bucket",
+      gc."crdc_series_uuid",
+      gc."StudyInstanceUID",
+      gc."PatientID",
+      dp."xyDotProduct"  -- Include xyDotProduct in GROUP BY
+    HAVING
+      COUNT(DISTINCT gc."iop") = 1 
+      AND COUNT(DISTINCT gc."PixelSpacing") = 1  
+      AND COUNT(DISTINCT gc."SOPInstanceUID") = COUNT(DISTINCT gc."zImagePosition") 
+      AND COUNT(DISTINCT gc."xyImagePosition") = 1
+      AND COUNT(DISTINCT gc."pixelRows") = 1 
+      AND COUNT(DISTINCT gc."pixelColumns") = 1 
+      AND ABS(dp."xyDotProduct") BETWEEN 0.99 AND 1.01
+  )
+
+SELECT
+  geometryChecks."SeriesInstanceUID",  -- Added table alias
+  geometryChecks."SeriesNumber",  -- Added table alias
+  geometryChecks."PatientID",  -- Added table alias
+  geometryChecks."seriesSizeInMiB"
+FROM
+  geometryChecks
+ORDER BY
+  geometryChecks."seriesSizeInMiB" DESC
+LIMIT 5;
+
+
+
+##### nppes - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among healthcare providers whose practice location is in Mountain View, CA, and who have a specified specialization in the field healthcare provider taxonomy, identify the top 10 most common specializations based on the count of distinct NPIs. Then determine which of those top 10 has a count of distinct NPIs closest to the average count across those 10 specializations.
+
+  ## Query:
+    WITH specialist_counts AS (
+  SELECT
+    healthcare_provider_taxonomy_1_specialization,
+    COUNT(DISTINCT npi) AS number_specialist
+  FROM
+    `bigquery-public-data.nppes.npi_optimized`
+  WHERE
+    provider_business_practice_location_address_city_name = "MOUNTAIN VIEW"
+    AND provider_business_practice_location_address_state_name = "CA"
+    AND healthcare_provider_taxonomy_1_specialization > ""
+  GROUP BY
+    healthcare_provider_taxonomy_1_specialization
+),
+top_10_specialists AS (
+  SELECT
+    healthcare_provider_taxonomy_1_specialization,
+    number_specialist
+  FROM
+    specialist_counts
+  ORDER BY
+    number_specialist DESC
+  LIMIT 10
+),
+average_value AS (
+  SELECT
+    AVG(number_specialist) AS average_specialist
+  FROM
+    top_10_specialists
+),
+closest_to_average AS (
+  SELECT
+    healthcare_provider_taxonomy_1_specialization,
+    number_specialist,
+    ABS(number_specialist - (SELECT average_specialist FROM average_value)) AS difference
+  FROM
+    top_10_specialists
+)
+SELECT
+  healthcare_provider_taxonomy_1_specialization
+FROM
+  closest_to_average
+ORDER BY
+  difference
+LIMIT 1;
+
+
+##### TCGA - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the RNA expression levels of the genes MDM2, TP53, CDKN1A, and CCNE1, along with associated clinical information, in bladder cancer patients with CDKN2A mutations in the 'TCGA-BLCA' project?  Use clinical data from the Genomic Data Commons Release 39, data about somatic mutations derived from the hg19 human genome reference in Feb 2017.
+
+  ## Query:
+    SELECT
+  genex."case_barcode" AS "case_barcode",
+  genex."sample_barcode" AS "sample_barcode",
+  genex."aliquot_barcode" AS "aliquot_barcode",
+  genex."HGNC_gene_symbol" AS "HGNC_gene_symbol",
+  clinical_info."Variant_Type" AS "Variant_Type",
+  genex."gene_id" AS "gene_id",
+  genex."normalized_count" AS "normalized_count",
+  genex."project_short_name" AS "project_short_name",
+  clinical_info."demo__gender" AS "gender",
+  clinical_info."demo__vital_status" AS "vital_status",
+  clinical_info."demo__days_to_death" AS "days_to_death"
+FROM ( 
+  SELECT
+    case_list."Variant_Type" AS "Variant_Type",
+    case_list."case_barcode" AS "case_barcode",
+    clinical."demo__gender",
+    clinical."demo__vital_status",
+    clinical."demo__days_to_death"
+  FROM
+    (SELECT
+      mutation."case_barcode",
+      mutation."Variant_Type"
+    FROM
+      "TCGA"."TCGA_VERSIONED"."SOMATIC_MUTATION_HG19_DCC_2017_02" AS mutation
+    WHERE
+      mutation."Hugo_Symbol" = 'CDKN2A'
+      AND mutation."project_short_name" = 'TCGA-BLCA'
+    GROUP BY
+      mutation."case_barcode",
+      mutation."Variant_Type"
+    ORDER BY
+      mutation."case_barcode"
+    ) AS case_list /* end case_list */
+  INNER JOIN
+    "TCGA"."TCGA_VERSIONED"."CLINICAL_GDC_R39" AS clinical
+  ON
+    case_list."case_barcode" = clinical."submitter_id" /* end clinical annotation */ ) AS clinical_info
+INNER JOIN
+  "TCGA"."TCGA_VERSIONED"."RNASEQ_HG19_GDC_2017_02" AS genex
+ON
+  genex."case_barcode" = clinical_info."case_barcode"
+WHERE
+  genex."HGNC_gene_symbol" IN ('MDM2', 'TP53', 'CDKN1A','CCNE1')
+ORDER BY
+  "case_barcode",
+  "HGNC_gene_symbol";
+
+
+
+##### CPTAC_PDC - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Use CPTAC proteomics and RNAseq data for Clear Cell Renal Cell Carcinoma to select 'Primary Tumor' and 'Solid Tissue Normal' samples. Join the datasets on sample submitter IDs and gene symbols. Calculate the correlation between protein abundance (log2 ratio) and gene expression levels (log-transformed+1 FPKM) for each gene and sample type. Filter out correlations with an absolute value greater than 0.5, and compute the average correlation for each sample type.
+
+  ## Query:
+    WITH 
+quant AS (
+    SELECT 
+        meta.sample_submitter_id, 
+        meta.sample_type, 
+        quant.case_id, 
+        quant.aliquot_id, 
+        quant.gene_symbol, 
+        CAST(quant.protein_abundance_log2ratio AS FLOAT64) AS protein_abundance_log2ratio 
+    FROM 
+        `isb-cgc-bq.CPTAC.quant_proteome_CPTAC_CCRCC_discovery_study_pdc_current` AS quant
+    JOIN 
+        `isb-cgc-bq.PDC_metadata.aliquot_to_case_mapping_current` AS meta
+        ON quant.case_id = meta.case_id
+        AND quant.aliquot_id = meta.aliquot_id
+        AND meta.sample_type IN ('Primary Tumor', 'Solid Tissue Normal')
+),
+gexp AS (
+    SELECT DISTINCT 
+        meta.sample_submitter_id, 
+        meta.sample_type, 
+        rnaseq.gene_name, 
+        LOG(rnaseq.fpkm_unstranded + 1) AS HTSeq__FPKM   -- Confirm the correct column name here
+    FROM 
+        `isb-cgc-bq.CPTAC.RNAseq_hg38_gdc_current` AS rnaseq
+    JOIN 
+        `isb-cgc-bq.PDC_metadata.aliquot_to_case_mapping_current` AS meta
+        ON meta.sample_submitter_id = rnaseq.sample_barcode
+),
+correlation AS (
+    SELECT 
+        quant.gene_symbol, 
+        gexp.sample_type, 
+        COUNT(*) AS n, 
+        CORR(protein_abundance_log2ratio, HTSeq__FPKM) AS corr  -- Confirm the correct column name here
+    FROM 
+        quant 
+    JOIN 
+        gexp 
+        ON quant.sample_submitter_id = gexp.sample_submitter_id
+        AND gexp.gene_name = quant.gene_symbol
+        AND gexp.sample_type = quant.sample_type
+    GROUP BY 
+        quant.gene_symbol, gexp.sample_type
+),
+pval AS (
+    SELECT  
+        gene_symbol, 
+        sample_type, 
+        n, 
+        corr
+    FROM 
+        correlation
+    WHERE 
+        ABS(corr) <= 0.5
+)
+SELECT sample_type, AVG(corr)
+FROM pval
+GROUP BY sample_type;
+
+
+##### TCGA_MITELMAN - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Identify the case barcodes from the TCGA-LAML study with the highest weighted average copy number in cytoband 15q11 on chromosome 15, using segment data and cytoband overlaps from TCGA's genomic and Mitelman databases.
+
+  ## Query:
+    WITH copy AS (
+  SELECT 
+    "case_barcode", 
+    "chromosome", 
+    "start_pos", 
+    "end_pos", 
+    MAX("copy_number") AS "copy_number"
+  FROM 
+    "TCGA_MITELMAN"."TCGA_VERSIONED"."COPY_NUMBER_SEGMENT_ALLELIC_HG38_GDC_R23"
+  WHERE 
+    "project_short_name" = 'TCGA-LAML'
+  GROUP BY 
+    "case_barcode", 
+    "chromosome", 
+    "start_pos", 
+    "end_pos"
+),
+total_cases AS (
+  SELECT COUNT(DISTINCT "case_barcode") AS "total"
+  FROM copy
+),
+cytob AS (
+  SELECT 
+    "chromosome", 
+    "cytoband_name", 
+    "hg38_start", 
+    "hg38_stop"
+  FROM 
+    "TCGA_MITELMAN"."PROD"."CYTOBANDS_HG38"
+),
+joined AS (
+  SELECT 
+    cytob."chromosome", 
+    cytob."cytoband_name", 
+    cytob."hg38_start", 
+    cytob."hg38_stop", 
+    copy."case_barcode",
+    (ABS(cytob."hg38_stop" - cytob."hg38_start") + ABS(copy."end_pos" - copy."start_pos") 
+      - ABS(cytob."hg38_stop" - copy."end_pos") - ABS(cytob."hg38_start" - copy."start_pos")) / 2.0 AS "overlap", 
+    copy."copy_number"
+  FROM 
+    copy
+  LEFT JOIN 
+    cytob
+  ON 
+    cytob."chromosome" = copy."chromosome"
+  WHERE 
+    (cytob."hg38_start" >= copy."start_pos" AND copy."end_pos" >= cytob."hg38_start")
+    OR (copy."start_pos" >= cytob."hg38_start" AND copy."start_pos" <= cytob."hg38_stop")
+),
+INFO AS (
+  SELECT 
+    "chromosome", 
+    "cytoband_name", 
+    "hg38_start", 
+    "hg38_stop", 
+    "case_barcode",
+    ROUND(SUM("overlap" * "copy_number") / SUM("overlap")) AS "copy_number"
+  FROM 
+    joined
+  GROUP BY 
+    "chromosome", "cytoband_name", "hg38_start", "hg38_stop", "case_barcode"
+)
+
+SELECT 
+  "case_barcode"
+FROM 
+  INFO
+WHERE 
+  "chromosome" = 'chr15' 
+  AND "cytoband_name" = '15q11'
+ORDER BY 
+  "copy_number" DESC
+LIMIT 1;
+
+
+
+##### TCGA_MITELMAN - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Using segment-level copy number data from the copy_number_segment_allelic_hg38_gdc_r23 dataset restricted to 'TCGA-KIRC' samples, merge these segments with the cytogenetic band definitions in 'CytoBands_hg38' to identify each sample’s maximum copy number per cytoband. Classify these maximum copy numbers into amplifications (>3), gains (=3), homozygous deletions (=0), heterozygous deletions (=1), or normal (=2), then calculate the frequency of each subtype out of the total number of distinct cases, and finally present these frequencies as percentages sorted by chromosome and cytoband.
+
+  ## Query:
+    WITH copy AS (
+  SELECT 
+    "case_barcode", 
+    "chromosome", 
+    "start_pos", 
+    "end_pos", 
+    MAX("copy_number") AS "copy_number"
+  FROM 
+    "TCGA_MITELMAN"."TCGA_VERSIONED"."COPY_NUMBER_SEGMENT_ALLELIC_HG38_GDC_R23" 
+  WHERE  
+    "project_short_name" = 'TCGA-KIRC'
+  GROUP BY 
+    "case_barcode", 
+    "chromosome", 
+    "start_pos", 
+    "end_pos"
+),
+total_cases AS (
+  SELECT COUNT(DISTINCT "case_barcode") AS "total"
+  FROM copy 
+),
+cytob AS (
+  SELECT 
+    "chromosome", 
+    "cytoband_name", 
+    "hg38_start", 
+    "hg38_stop"
+  FROM 
+    "TCGA_MITELMAN"."PROD"."CYTOBANDS_HG38"
+),
+joined AS (
+  SELECT 
+    cytob."chromosome", 
+    cytob."cytoband_name", 
+    cytob."hg38_start", 
+    cytob."hg38_stop",
+    copy."case_barcode",
+    copy."copy_number"  
+  FROM 
+    copy
+  LEFT JOIN cytob
+    ON cytob."chromosome" = copy."chromosome" 
+  WHERE 
+    (cytob."hg38_start" >= copy."start_pos" AND copy."end_pos" >= cytob."hg38_start")
+    OR (copy."start_pos" >= cytob."hg38_start" AND copy."start_pos" <= cytob."hg38_stop")
+),
+cbands AS (
+  SELECT 
+    "chromosome", 
+    "cytoband_name", 
+    "hg38_start", 
+    "hg38_stop", 
+    "case_barcode",
+    MAX("copy_number") AS "copy_number"
+  FROM 
+    joined
+  GROUP BY 
+    "chromosome", 
+    "cytoband_name", 
+    "hg38_start", 
+    "hg38_stop", 
+    "case_barcode"
+),
+aberrations AS (
+  SELECT
+    "chromosome",
+    "cytoband_name",
+    -- Amplifications: more than two copies for diploid > 4
+    SUM( CASE WHEN "copy_number" > 3 THEN 1 ELSE 0 END ) AS "total_amp",
+    -- Gains: at most two extra copies
+    SUM( CASE WHEN "copy_number" = 3 THEN 1 ELSE 0 END ) AS "total_gain",
+    -- Homozygous deletions, or complete deletions
+    SUM( CASE WHEN "copy_number" = 0 THEN 1 ELSE 0 END ) AS "total_homodel",
+    -- Heterozygous deletions, 1 copy lost
+    SUM( CASE WHEN "copy_number" = 1 THEN 1 ELSE 0 END ) AS "total_heterodel",
+    -- Normal for Diploid = 2
+    SUM( CASE WHEN "copy_number" = 2 THEN 1 ELSE 0 END ) AS "total_normal"
+  FROM 
+    cbands
+  GROUP BY 
+    "chromosome", 
+    "cytoband_name"
+)
+SELECT 
+  aberrations."chromosome", 
+  aberrations."cytoband_name",
+  total_cases."total",  
+  100 * aberrations."total_amp" / total_cases."total" AS "freq_amp", 
+  100 * aberrations."total_gain" / total_cases."total" AS "freq_gain",
+  100 * aberrations."total_homodel" / total_cases."total" AS "freq_homodel", 
+  100 * aberrations."total_heterodel" / total_cases."total" AS "freq_heterodel", 
+  100 * aberrations."total_normal" / total_cases."total" AS "freq_normal"  
+FROM 
+  aberrations, 
+  total_cases
+ORDER BY 
+  aberrations."chromosome", 
+  aberrations."cytoband_name";
+
+
+
+##### TCGA_HG19_DATA_V0 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Assess whether different genetic variants affect the log10-transformed TP53 expression levels in TCGA-BRCA samples using sequencing and mutation data. Provide the total number of samples, the number of mutation types, the mean square between groups, the mean square within groups, and the F-statistic.
+
+  ## Query:
+    WITH
+cohortExpr AS (
+  SELECT
+    "sample_barcode",
+    LOG(10, "normalized_count") AS "expr"
+  FROM
+    "TCGA_HG19_DATA_V0"."TCGA_HG19_DATA_V0"."RNASEQ_GENE_EXPRESSION_UNC_RSEM"
+  WHERE
+    "project_short_name" = 'TCGA-BRCA'
+    AND "HGNC_gene_symbol" = 'TP53'
+    AND "normalized_count" IS NOT NULL
+    AND "normalized_count" > 0
+),
+cohortVar AS (
+  SELECT
+    "Variant_Type",
+    "sample_barcode_tumor" AS "sample_barcode"
+  FROM
+    "TCGA_HG19_DATA_V0"."TCGA_HG19_DATA_V0"."SOMATIC_MUTATION_MC3"
+  WHERE
+    "SYMBOL" = 'TP53'
+),
+cohort AS (
+  SELECT
+    e."sample_barcode" AS "sample_barcode",
+    v."Variant_Type" AS "group_name",
+    e."expr"
+  FROM
+    cohortExpr e
+  JOIN
+    cohortVar v
+  ON
+    e."sample_barcode" = v."sample_barcode"
+),
+grandMeanTable AS (
+  SELECT
+    AVG("expr") AS "grand_mean"
+  FROM
+    cohort
+),
+groupMeansTable AS (
+  SELECT
+    AVG("expr") AS "group_mean",
+    "group_name",
+    COUNT("sample_barcode") AS "n"
+  FROM
+    cohort
+  GROUP BY
+    "group_name"
+),
+ssBetween AS (
+  SELECT
+    g."group_name",
+    g."group_mean",
+    gm."grand_mean",
+    g."n",
+    g."n" * POW(g."group_mean" - gm."grand_mean", 2) AS "n_diff_sq"
+  FROM
+    groupMeansTable g
+  CROSS JOIN
+    grandMeanTable gm
+),
+ssWithin AS (
+  SELECT
+    c."group_name" AS "group_name",
+    c."expr",
+    b."group_mean",
+    b."n" AS "n",
+    POW(c."expr" - b."group_mean", 2) AS "s2"
+  FROM
+    cohort c
+  JOIN
+    ssBetween b
+  ON
+    c."group_name" = b."group_name"
+),
+numerator AS (
+  SELECT
+    SUM("n_diff_sq") / (COUNT("group_name") - 1) AS "mean_sq_between"
+  FROM
+    ssBetween
+),
+denominator AS (
+  SELECT
+    COUNT(DISTINCT "group_name") AS "k",
+    COUNT("group_name") AS "n",
+    SUM("s2") / (COUNT("group_name") - COUNT(DISTINCT "group_name")) AS "mean_sq_within"
+  FROM
+    ssWithin
+)
+
+SELECT
+  "n",
+  "k",
+  "mean_sq_between",
+  "mean_sq_within",
+  "mean_sq_between" / "mean_sq_within" AS "F"
+FROM
+  numerator,
+  denominator;
+
+
+
+##### TCGA_HG38_DATA_V0 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    In the TCGA-BRCA cohort of patients who are 80 years old or younger at diagnosis and have a pathological stage of Stage I, Stage II, or Stage IIA, calculate the t-statistic derived from the Pearson correlation between the log10-transformed average RNA-Seq expression levels (using HTSeq__Counts + 1) of the gene SNORA31 and the average microRNA-Seq expression levels of all unique microRNAs, only considering pairs with more than 25 samples and where the absolute Pearson correlation coefficient is between 0.3 and 1.0
+
+  ## Query:
+    WITH cohort AS (
+    SELECT "case_barcode"
+    FROM "TCGA_HG38_DATA_V0"."TCGA_BIOCLIN_V0"."CLINICAL"
+    WHERE "project_short_name" = 'TCGA-BRCA'
+        AND "age_at_diagnosis" <= 80
+        AND "pathologic_stage" IN ('Stage I', 'Stage II', 'Stage IIA')
+),
+table1 AS (
+    SELECT
+        "symbol",
+        "data" AS "rnkdata",
+        "ParticipantBarcode"
+    FROM (
+        SELECT
+            "gene_name" AS "symbol", 
+            AVG(LOG(10, "HTSeq__Counts" + 1)) AS "data",
+            "case_barcode" AS "ParticipantBarcode"
+        FROM "TCGA_HG38_DATA_V0"."TCGA_HG38_DATA_V0"."RNASEQ_GENE_EXPRESSION"
+        WHERE "case_barcode" IN (SELECT "case_barcode" FROM cohort)
+            AND "gene_name" = 'SNORA31'
+            AND "HTSeq__Counts" IS NOT NULL
+        GROUP BY
+            "ParticipantBarcode", "symbol"
+    )
+),
+table2 AS (
+    SELECT
+        "symbol",
+        "data" AS "rnkdata",
+        "ParticipantBarcode"
+    FROM (
+        SELECT
+            "mirna_id" AS "symbol", 
+            AVG("reads_per_million_miRNA_mapped") AS "data",
+            "case_barcode" AS "ParticipantBarcode"
+        FROM "TCGA_HG38_DATA_V0"."TCGA_HG38_DATA_V0"."MIRNASEQ_EXPRESSION"
+        WHERE "case_barcode" IN (SELECT "case_barcode" FROM cohort)
+            AND "mirna_id" IS NOT NULL
+            AND "reads_per_million_miRNA_mapped" IS NOT NULL
+        GROUP BY
+            "ParticipantBarcode", "symbol"
+    )
+),
+summ_table AS (
+    SELECT 
+        n1."symbol" AS "symbol1",
+        n2."symbol" AS "symbol2",
+        COUNT(n1."ParticipantBarcode") AS "n",
+        CORR(n1."rnkdata", n2."rnkdata") AS "correlation"
+    FROM
+        table1 AS n1
+    INNER JOIN
+        table2 AS n2
+    ON
+        n1."ParticipantBarcode" = n2."ParticipantBarcode"
+    GROUP BY
+        "symbol1", "symbol2"
+)
+
+SELECT 
+    "symbol1", 
+    "symbol2", 
+    ABS("correlation") * SQRT(( "n" - 2 ) / (1 - "correlation" * "correlation")) AS "t"
+FROM 
+    summ_table
+WHERE 
+    "n" > 25 
+    AND ABS("correlation") >= 0.3 
+    AND ABS("correlation") < 1.0;
+
+
+
+##### PANCANCER_ATLAS_1 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Calculate, for each histology type specified in the 'icd_o_3_histology' field (excluding those enclosed in square brackets), the average of the per-patient average log10(normalized_count + 1) expression levels of the IGF2 gene among LGG patients with valid IGF2 expression data. Match gene expression and clinical data using the ParticipantBarcode field.
+
+  ## Query:
+    WITH
+    table1 AS (
+        SELECT 
+            "Symbol" AS "symbol", 
+            AVG(LOG(10, "normalized_count" + 1)) AS "data", 
+            "ParticipantBarcode"
+        FROM 
+            PANCANCER_ATLAS_1.PANCANCER_ATLAS_FILTERED.EBPP_ADJUSTPANCAN_ILLUMINAHISEQ_RNASEQV2_GENEXP_FILTERED
+        WHERE 
+            "Study" = 'LGG' 
+            AND "Symbol" = 'IGF2' 
+            AND "normalized_count" IS NOT NULL
+        GROUP BY 
+            "ParticipantBarcode", "symbol"
+    ),
+    table2 AS (
+        SELECT
+            "symbol",
+            "avgdata" AS "data",
+            "ParticipantBarcode"
+        FROM (
+            SELECT
+                'icd_o_3_histology' AS "symbol", 
+                "icd_o_3_histology" AS "avgdata",
+                "bcr_patient_barcode" AS "ParticipantBarcode"
+            FROM 
+                PANCANCER_ATLAS_1.PANCANCER_ATLAS_FILTERED.CLINICAL_PANCAN_PATIENT_WITH_FOLLOWUP_FILTERED
+            WHERE 
+                "acronym" = 'LGG' 
+                AND "icd_o_3_histology" IS NOT NULL  
+                AND NOT REGEXP_LIKE("icd_o_3_histology", '^(\\[.*\\]$)')
+        )
+    ),
+    table_data AS (
+        SELECT 
+            n1."data" AS "data1",
+            n2."data" AS "data2",
+            n1."ParticipantBarcode"
+        FROM 
+            table1 AS n1
+        INNER JOIN 
+            table2 AS n2
+        ON 
+            n1."ParticipantBarcode" = n2."ParticipantBarcode"
+    ) 
+
+SELECT 
+    "data2" AS "Histology_Type", 
+    AVG("data1") AS "Average_Log_Expression"
+FROM 
+    table_data
+GROUP BY 
+    "data2";
+
+
+
+##### PANCANCER_ATLAS_1 - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which top five histological types of breast cancer (BRCA) in the PanCancer Atlas exhibit the highest percentage of CDH1 gene mutations?
+
+  ## Query:
+    WITH
+    table1 AS (
+        SELECT
+            "histological_type" AS "data1",
+            "bcr_patient_barcode" AS "ParticipantBarcode"
+        FROM 
+            "PANCANCER_ATLAS_1"."PANCANCER_ATLAS_FILTERED"."CLINICAL_PANCAN_PATIENT_WITH_FOLLOWUP_FILTERED"
+        WHERE 
+            "acronym" = 'BRCA' 
+            AND "histological_type" IS NOT NULL      
+    ),
+    table2 AS (
+        SELECT
+            "Hugo_Symbol" AS "symbol", 
+            "ParticipantBarcode"
+        FROM 
+            "PANCANCER_ATLAS_1"."PANCANCER_ATLAS_FILTERED"."MC3_MAF_V5_ONE_PER_TUMOR_SAMPLE"
+        WHERE 
+            "Study" = 'BRCA' 
+            AND "Hugo_Symbol" = 'CDH1'
+            AND "FILTER" = 'PASS'  
+        GROUP BY
+            "ParticipantBarcode", "symbol"
+    ),
+    summ_table AS (
+        SELECT 
+            n1."data1",
+            CASE 
+                WHEN n2."ParticipantBarcode" IS NULL THEN 'NO' 
+                ELSE 'YES' 
+            END AS "data2",
+            COUNT(*) AS "Nij"
+        FROM
+            table1 AS n1
+        LEFT JOIN
+            table2 AS n2 
+            ON n1."ParticipantBarcode" = n2."ParticipantBarcode"
+        GROUP BY
+            n1."data1", "data2"
+    ),
+    percentages AS (
+        SELECT
+            "data1",
+            SUM(CASE WHEN "data2" = 'YES' THEN "Nij" ELSE 0 END) AS "mutation_count",
+            SUM("Nij") AS "total",
+            SUM(CASE WHEN "data2" = 'YES' THEN "Nij" ELSE 0 END) / SUM("Nij") AS "mutation_percentage"
+        FROM 
+            summ_table
+        GROUP BY 
+            "data1"
+    )
+SELECT 
+    "data1" AS "Histological_Type"
+FROM 
+    percentages
+ORDER BY 
+    "mutation_percentage" DESC
+LIMIT 5;
+
+
+
+##### PANCANCER_ATLAS_1 - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Calculate the chi-square value to assess the association between histological types and the presence of CDH1 gene mutations in BRCA patients using data from the PanCancer Atlas. Focus on patients with known histological types and consider only reliable mutation entries.  Exclude any histological types or mutation statuses with marginal totals less than or equal to 10. Match clinical and mutation data using ParticipantBarcode
+
+  ## Query:
+    WITH
+    table1 AS (
+        SELECT
+            "symbol",
+            "avgdata" AS "data",
+            "ParticipantBarcode"
+        FROM (
+            SELECT
+                'histological_type' AS "symbol", 
+                "histological_type" AS "avgdata",
+                "bcr_patient_barcode" AS "ParticipantBarcode"
+            FROM 
+                "PANCANCER_ATLAS_1"."PANCANCER_ATLAS_FILTERED"."CLINICAL_PANCAN_PATIENT_WITH_FOLLOWUP_FILTERED"
+            WHERE 
+                "acronym" = 'BRCA' 
+                AND "histological_type" IS NOT NULL      
+        )
+    ),
+    table2 AS (
+        SELECT
+            "symbol",
+            "ParticipantBarcode"
+        FROM (
+            SELECT
+                "Hugo_Symbol" AS "symbol", 
+                "ParticipantBarcode" AS "ParticipantBarcode"
+            FROM 
+                "PANCANCER_ATLAS_1"."PANCANCER_ATLAS_FILTERED"."MC3_MAF_V5_ONE_PER_TUMOR_SAMPLE"
+            WHERE 
+                "Study" = 'BRCA' 
+                AND "Hugo_Symbol" = 'CDH1'
+                AND "FILTER" = 'PASS'  
+            GROUP BY
+                "ParticipantBarcode", "symbol"
+        )
+    ),
+    summ_table AS (
+        SELECT 
+            n1."data" AS "data1",
+            CASE 
+                WHEN n2."ParticipantBarcode" IS NULL THEN 'NO' 
+                ELSE 'YES' 
+            END AS "data2",
+            COUNT(*) AS "Nij"
+        FROM
+            table1 AS n1
+        LEFT JOIN
+            table2 AS n2 
+            ON n1."ParticipantBarcode" = n2."ParticipantBarcode"
+        GROUP BY
+            n1."data", "data2"
+    ),
+    expected_table AS (
+        SELECT 
+            "data1", 
+            "data2"
+        FROM (     
+            SELECT 
+                "data1", 
+                SUM("Nij") AS "Ni"   
+            FROM 
+                summ_table
+            GROUP BY 
+                "data1"
+        ) AS Ni_table
+        CROSS JOIN ( 
+            SELECT 
+                "data2", 
+                SUM("Nij") AS "Nj"
+            FROM 
+                summ_table
+            GROUP BY 
+                "data2"
+        ) AS Nj_table
+        WHERE 
+            Ni_table."Ni" > 10 
+            AND Nj_table."Nj" > 10
+    ),
+    contingency_table AS (
+        SELECT
+            T1."data1",
+            T1."data2",
+            COALESCE(T2."Nij", 0) AS "Nij",
+            (SUM(T2."Nij") OVER (PARTITION BY T1."data1")) * 
+            (SUM(T2."Nij") OVER (PARTITION BY T1."data2")) / 
+            SUM(T2."Nij") OVER () AS "E_nij"
+        FROM
+            expected_table AS T1
+        LEFT JOIN
+            summ_table AS T2
+        ON 
+            T1."data1" = T2."data1" 
+            AND T1."data2" = T2."data2"
+    )
+SELECT
+    SUM( ( "Nij" - "E_nij" ) * ( "Nij" - "E_nij" ) / "E_nij" ) AS "Chi2"
+FROM 
+    contingency_table;
+
+
+
+##### pancancer_atlas_2 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Calculate the net difference between the number of pancreatic adenocarcinoma (PAAD) patients in TCGA's dataset who are confirmed to have mutations in both KRAS and TP53 genes, and those without mutations in either gene. Utilize patient clinical and follow-up data alongside genomic mutation details from TCGA’s cancer genomics database, focusing specifically on PAAD studies where the mutations have passed quality filters.
+
+  ## Query:
+    WITH
+barcodes AS (
+   SELECT bcr_patient_barcode AS ParticipantBarcode
+   FROM `isb-cgc-bq.pancancer_atlas.Filtered_clinical_PANCAN_patient_with_followup`
+   WHERE acronym = 'PAAD'
+)
+,table1 AS (
+SELECT
+   t1.ParticipantBarcode,
+   IF( t2.ParticipantBarcode is null, 'NO', 'YES') as data
+FROM
+   barcodes AS t1
+LEFT JOIN
+   (
+   SELECT
+      ParticipantBarcode AS ParticipantBarcode
+   FROM `isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample`
+   WHERE Study = 'PAAD' AND Hugo_Symbol = 'KRAS'
+         AND FILTER = 'PASS'
+   GROUP BY ParticipantBarcode
+   ) AS t2
+ON t1.ParticipantBarcode = t2.ParticipantBarcode
+)
+,table2 AS (
+SELECT
+   t1.ParticipantBarcode,
+   IF( t2.ParticipantBarcode is null, 'NO', 'YES') as data
+FROM
+   barcodes AS t1
+LEFT JOIN
+   (
+   SELECT
+      ParticipantBarcode AS ParticipantBarcode
+   FROM `isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample`
+   WHERE Study = 'PAAD' AND Hugo_Symbol = 'TP53'
+         AND FILTER = 'PASS'
+   GROUP BY ParticipantBarcode
+   ) AS t2
+ON t1.ParticipantBarcode = t2.ParticipantBarcode
+),
+
+INFO AS (
+SELECT
+   n1.data as data1,
+   n2.data as data2,
+   COUNT(*) as Nij
+FROM
+   table1 AS n1
+INNER JOIN
+   table2 AS n2
+ON
+   n1.ParticipantBarcode = n2.ParticipantBarcode
+GROUP BY
+  data1, data2
+)
+
+SELECT 
+(SELECT Nij FROM INFO WHERE data1="YES" AND data2="YES")
+-
+(SELECT Nij FROM INFO WHERE data1="NO" AND data2="NO")
+
+
+
+
+##### pancancer_atlas_2 - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Using TCGA dataset, calculate the chi-squared statistic to evaluate the association between KRAS and TP53 gene mutations in patients diagnosed with pancreatic adenocarcinoma (PAAD). Incorporate clinical follow-up data and high-quality mutation annotations to accurately determine the frequency of patients with co-occurring KRAS and TP53 mutations compared to those with each mutation occurring independently. Ensure that patient records are meticulously matched based on unique identifiers to maintain data integrity. This analysis aims to identify and quantify potential correlations between KRAS and TP53 genetic alterations within the PAAD patient population.
+
+  ## Query:
+    WITH
+barcodes AS (
+   SELECT bcr_patient_barcode AS ParticipantBarcode
+   FROM isb-cgc-bq.pancancer_atlas.Filtered_clinical_PANCAN_patient_with_followup
+   WHERE acronym = 'PAAD'
+),
+table1 AS (
+SELECT
+   t1.ParticipantBarcode,
+   IF(t2.ParticipantBarcode IS NULL, 'NO', 'YES') AS data
+FROM
+   barcodes AS t1
+LEFT JOIN
+   (
+   SELECT
+      ParticipantBarcode AS ParticipantBarcode
+   FROM isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample
+   WHERE Study = 'PAAD' AND Hugo_Symbol = 'KRAS'
+         AND FILTER = 'PASS'
+   GROUP BY ParticipantBarcode
+   ) AS t2
+ON t1.ParticipantBarcode = t2.ParticipantBarcode
+),
+table2 AS (
+SELECT
+   t1.ParticipantBarcode,
+   IF(t2.ParticipantBarcode IS NULL, 'NO', 'YES') AS data
+FROM
+   barcodes AS t1
+LEFT JOIN
+   (
+   SELECT
+      ParticipantBarcode AS ParticipantBarcode
+   FROM isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample
+   WHERE Study = 'PAAD' AND Hugo_Symbol = 'TP53'
+         AND FILTER = 'PASS'
+   GROUP BY ParticipantBarcode
+   ) AS t2
+ON t1.ParticipantBarcode = t2.ParticipantBarcode
+),
+summ_table AS (
+SELECT
+   n1.data AS data1,
+   n2.data AS data2,
+   COUNT(*) AS Nij
+FROM
+   table1 AS n1
+INNER JOIN
+   table2 AS n2
+ON
+   n1.ParticipantBarcode = n2.ParticipantBarcode
+GROUP BY
+  data1, data2
+),
+contingency_table AS (
+SELECT
+  MAX(IF((data1 = 'YES') AND (data2 = 'YES'), Nij, 0)) AS a,
+  MAX(IF((data1 = 'YES') AND (data2 = 'NO'), Nij, 0)) AS b,
+  MAX(IF((data1 = 'NO') AND (data2 = 'YES'), Nij, 0)) AS c,
+  MAX(IF((data1 = 'NO') AND (data2 = 'NO'), Nij, 0)) AS d,
+  (MAX(IF((data1 = 'YES') AND (data2 = 'YES'), Nij, 0)) + MAX(IF((data1 = 'YES') AND (data2 = 'NO'), Nij, 0))) AS row1_total,
+  (MAX(IF((data1 = 'NO') AND (data2 = 'YES'), Nij, 0)) + MAX(IF((data1 = 'NO') AND (data2 = 'NO'), Nij, 0))) AS row2_total,
+  (MAX(IF((data1 = 'YES') AND (data2 = 'YES'), Nij, 0)) + MAX(IF((data1 = 'NO') AND (data2 = 'YES'), Nij, 0))) AS col1_total,
+  (MAX(IF((data1 = 'YES') AND (data2 = 'NO'), Nij, 0)) + MAX(IF((data1 = 'NO') AND (data2 = 'NO'), Nij, 0))) AS col2_total,
+  SUM(Nij) AS grand_total
+FROM summ_table
+)
+SELECT
+  POWER((a - (row1_total * col1_total) / grand_total), 2) / ((row1_total * col1_total) / grand_total) +
+  POWER((b - (row1_total * col2_total) / grand_total), 2) / ((row1_total * col2_total) / grand_total) +
+  POWER((c - (row2_total * col1_total) / grand_total), 2) / ((row2_total * col1_total) / grand_total) +
+  POWER((d - (row2_total * col2_total) / grand_total), 2) / ((row2_total * col2_total) / grand_total) AS chi_square_statistic
+FROM contingency_table
+WHERE a IS NOT NULL AND b IS NOT NULL AND c IS NOT NULL AND d IS NOT NULL;
+
+
+
+##### austin - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Can you provide the number of distinct active and closed bike share stations for each year 2013 and 2014?
+
+  ## Query:
+    SELECT
+    t.year,
+    CASE 
+        WHEN t.year = 2013 THEN (
+                                  SELECT 
+                                    COUNT(DISTINCT station_id)
+                                  FROM 
+                                    `bigquery-public-data.austin_bikeshare.bikeshare_trips` t
+                                  INNER JOIN 
+                                    `bigquery-public-data.austin_bikeshare.bikeshare_stations` s
+                                  ON 
+                                    t.start_station_id = s.station_id
+                                  WHERE 
+                                    s.status = 'active' AND EXTRACT(YEAR FROM start_time) = 2013
+                                 ) 
+        WHEN t.year = 2014 THEN (
+                                  SELECT 
+                                    COUNT(DISTINCT station_id)
+                                  FROM 
+                                    `bigquery-public-data.austin_bikeshare.bikeshare_trips` t
+                                  INNER JOIN 
+                                    `bigquery-public-data.austin_bikeshare.bikeshare_stations` s
+                                  ON 
+                                    t.start_station_id = s.station_id
+                                  WHERE 
+                                    s.status = 'active' AND EXTRACT(YEAR FROM start_time) = 2014
+                                 )
+    END
+    AS number_status_active,
+    CASE 
+        WHEN t.year = 2013 THEN (
+                                  SELECT 
+                                   COUNT(DISTINCT station_id)
+                                  FROM 
+                                  `bigquery-public-data.austin_bikeshare.bikeshare_trips` t
+                                  INNER JOIN 
+                                  `bigquery-public-data.austin_bikeshare.bikeshare_stations` s
+                                  ON 
+                                   t.start_station_id = s.station_id
+                                  WHERE 
+                                   s.status = 'closed' AND EXTRACT(YEAR FROM start_time) = 2013
+                                 ) 
+        WHEN t.year = 2014 THEN (
+                                  SELECT 
+                                  COUNT(DISTINCT station_id)
+                                  FROM 
+                                    `bigquery-public-data.austin_bikeshare.bikeshare_trips` t
+                                  INNER JOIN 
+                                    `bigquery-public-data.austin_bikeshare.bikeshare_stations` s
+                                  ON 
+                                    t.start_station_id = s.station_id
+                                  WHERE 
+                                    s.status = 'closed' AND EXTRACT(YEAR FROM start_time) = 2014
+                                 )
+    END
+    AS number_status_closed
+FROM
+    (
+      SELECT 
+         EXTRACT(YEAR FROM start_time) AS year,
+         start_station_id
+      FROM
+         `bigquery-public-data.austin_bikeshare.bikeshare_trips`
+    ) 
+    AS t
+INNER JOIN
+    `bigquery-public-data.austin_bikeshare.bikeshare_stations` s
+ON
+    t.start_station_id = s.station_id
+WHERE
+    t.year BETWEEN 2013 AND 2014
+GROUP BY
+    t.year
+ORDER BY
+    t.year
+
+
+##### austin - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the highest number of electric bike rides lasting more than 10 minutes taken by subscribers with 'Student Membership' in a single day, excluding rides starting or ending at 'Mobile Station' or 'Repair Shop'?
+
+  ## Query:
+    SELECT
+  COUNT(1) AS num_rides
+FROM
+  `bigquery-public-data.austin_bikeshare.bikeshare_trips` 
+WHERE 
+start_station_name 
+    NOT IN ('Mobile Station', 'Repair Shop')
+AND
+end_station_name 
+    NOT IN ('Mobile Station', 'Repair Shop')
+AND 
+subscriber_type = 'Student Membership'
+AND
+bike_type = 'electric'
+AND
+duration_minutes > 10
+GROUP BY 
+    EXTRACT(YEAR from start_time), 
+    EXTRACT(MONTH from start_time), 
+    EXTRACT(DAY from start_time)
+ORDER BY num_rides DESC
+LIMIT 1
+
+
+##### austin - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Can you tell me the numeric value of the active council district in Austin which has the highest number of bike trips that start and end within the same district, but not at the same station?
+
+  ## Query:
+    SELECT 
+  district
+FROM (
+  SELECT
+    S.starting_district AS district,
+    T.start_station_id,
+    T.end_station_id
+  FROM
+    `bigquery-public-data.austin_bikeshare.bikeshare_trips` AS T
+  INNER JOIN (
+    SELECT
+      station_id,
+      council_district AS starting_district
+    FROM
+      `bigquery-public-data.austin_bikeshare.bikeshare_stations`
+    WHERE
+      status = "active"
+  ) AS S ON T.start_station_id = S.station_id
+  WHERE
+    S.starting_district IN (
+      SELECT council_district
+      FROM `bigquery-public-data.austin_bikeshare.bikeshare_stations`
+      WHERE
+        status = "active" AND
+        station_id = SAFE_CAST(T.end_station_id AS INT64)
+    )
+    AND T.start_station_id != SAFE_CAST(T.end_station_id AS INT64)
+) 
+GROUP BY district
+ORDER BY COUNT(*) DESC
+LIMIT 1;
+
+
+
+##### austin - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the date with the second highest Z-score for daily counts of 'PUBLIC INTOXICATION' incidents in Austin for the year 2016? List the date in the format of '2016-xx-xx'.
+
+  ## Query:
+    WITH incident_stats AS (
+  SELECT 
+    COUNT(descript) AS total_pub_intox
+  FROM 
+    `bigquery-public-data.austin_incidents.incidents_2016` 
+  WHERE 
+    descript = 'PUBLIC INTOXICATION' 
+  GROUP BY 
+    date
+),
+average_and_stddev AS (
+  SELECT 
+    AVG(total_pub_intox) AS avg, 
+    STDDEV(total_pub_intox) AS stddev 
+  FROM 
+    incident_stats
+),
+daily_z_scores AS (
+  SELECT 
+    date, 
+    COUNT(descript) AS total_pub_intox, 
+    ROUND((COUNT(descript) - a.avg) / a.stddev, 2) AS z_score
+  FROM 
+    `bigquery-public-data.austin_incidents.incidents_2016`,
+    (SELECT avg, stddev FROM average_and_stddev) AS a
+  WHERE 
+    descript = 'PUBLIC INTOXICATION'
+  GROUP BY 
+    date, avg, stddev
+)
+
+SELECT 
+  date
+FROM 
+  daily_z_scores
+ORDER BY 
+  z_score DESC
+LIMIT 1
+OFFSET 1
+
+
+##### dimensions_ai_covid19 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Retrieve the venue titles of publications that have a `date_inserted` from the year 2021 onwards and are associated with a grid whose address city is 'Qianjiang'. For each publication, prioritize the venue title by selecting the journal title first if it exists; if not, then the proceedings title; if that's also unavailable, then the book title; and finally, if none of those are available, the book series title.
+
+  ## Query:
+    SELECT
+   COALESCE(p.journal.title, p.proceedings_title.preferred, p.book_title.preferred, p.book_series_title.preferred) AS venue,
+FROM
+   `bigquery-public-data.dimensions_ai_covid19.publications` p
+LEFT JOIN
+   UNNEST(research_orgs) AS research_orgs_grids
+LEFT JOIN
+   `bigquery-public-data.dimensions_ai_covid19.grid` grid
+ON
+   grid.id=research_orgs_grids
+WHERE
+   EXTRACT(YEAR FROM date_inserted) >= 2021
+   AND
+   grid.address.city = 'Qianjiang'
+
+
+##### ebi_chembl - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Using data from ChEMBL Release 23, retrieve all distinct molecules associated with the company 'SanofiAventis,' listing the trade name and the most recent approval date for each molecule. Make sure to keep only the latest approval date per molecule and ensure the company field precisely matches 'SanofiAventis' without relying on other fields.
+
+  ## Query:
+    SELECT *
+  FROM (
+  SELECT
+  molregno,
+  comp.company,
+  prod.trade_name,
+  prod.approval_date,
+  ROW_NUMBER() OVER(PARTITION BY molregno ORDER BY PARSE_DATE('%Y-%m-%d', prod.approval_date) DESC) rn
+  FROM bigquery-public-data.ebi_chembl.compound_records_23 AS cmpd_rec
+  JOIN bigquery-public-data.ebi_chembl.molecule_synonyms_23 AS ms USING (molregno)
+  JOIN bigquery-public-data.ebi_chembl.research_companies_23 AS comp USING (res_stem_id)
+  JOIN bigquery-public-data.ebi_chembl.formulations_23 AS form USING (molregno)
+  JOIN bigquery-public-data.ebi_chembl.products_23 AS prod USING (product_id)
+  ) as subq
+ WHERE rn = 1 AND company = 'SanofiAventis'
+
+
+##### ebi_chembl - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Find pairs of different molecules tested in the same assay and standard type, where both have 10–15 heavy atoms, fewer than 5 activities in that assay, fewer than 2 duplicate activities, non-null standard values, and pChEMBL values over 10. For each pair, report the maximum heavy atom count, the latest publication date (calculated based on the document's rank within the same journal and year, and map it to a synthetic month and day), the highest document ID, classify the change in standard values as 'increase', 'decrease', or 'no-change' based on their values and relations, and generate UUIDs from their activity IDs and canonical SMILES.
+
+  ## Query:
+    select 
+  -- *, 
+  greatest(heavy_atoms_1, heavy_atoms_2) as heavy_atoms_greatest,
+  greatest(publication_date_1, publication_date_2) as publication_date_greatest,
+  greatest(doc_id_1, doc_id_2) as doc_id_greatest,
+  case 
+    when 
+      standard_value_1 > standard_value_2 and 
+      standard_relation_1 not in ('<', '<<') and 
+      standard_relation_2 not in ('>', '>>')
+    then 'decrease'
+    when
+      standard_value_1 < standard_value_2 and 
+      standard_relation_1 not in ('>', '>>') and 
+      standard_relation_2 not in ('<', '<<') 
+    then 'increase'
+    when
+      standard_value_1 = standard_value_2 and 
+      standard_relation_1 in ('=', '~') and 
+      standard_relation_2 in ('=', '~') 
+    then 'no-change'
+    else null
+  end as standard_change,
+  to_hex(md5(to_json_string(struct(activity_id_1, activity_id_2)))) as mmp_delta_uuid,
+  to_hex(md5(to_json_string(struct(canonical_smiles_1, canonical_smiles_2, 5)))) as mmp_search_uuid
+from (
+  select 
+    act.assay_id,
+    act.standard_type,
+    act.activity_id as activity_id_1,
+    cast(act.standard_value as numeric) as standard_value_1,
+    act.standard_relation as standard_relation_1,
+    cast(act.pchembl_value as numeric) as pchembl_value_1,
+    count(*) over (partition by act.assay_id) as count_activities_1,
+    count(*) over (partition by act.assay_id, act.molregno) as duplicate_activities_1,
+    act.molregno as molregno_1,
+    com.canonical_smiles as canonical_smiles_1,
+    cast(cmp.heavy_atoms as int64) as heavy_atoms_1,
+    cast(d.doc_id as int64) as doc_id_1,
+    date(
+      coalesce(cast(d.year as int64), 1970), 
+      coalesce(cast(floor(percent_rank() over (
+        partition by d.journal, d.year order by SAFE_CAST(d.first_page as int64)) * 11) as int64) + 1, 1),
+      coalesce(mod(cast(floor(percent_rank() over (
+        partition by d.journal, d.year order by SAFE_CAST(d.first_page as int64)) * 308) as int64), 28) + 1, 1)) as publication_date_1
+  FROM `bigquery-public-data.ebi_chembl.activities_29` act
+  join `bigquery-public-data.ebi_chembl.compound_structures_29` com using (molregno)
+  join `bigquery-public-data.ebi_chembl.compound_properties_29` cmp using (molregno)
+  left join `bigquery-public-data.ebi_chembl.docs_29` d using (doc_id)
+  where standard_type in (select distinct standard_type from`bigquery-public-data.ebi_chembl.activities_29` where pchembl_value is not null)
+  ) a1
+join (
+  select 
+    act.assay_id,
+    act.standard_type,
+    act.activity_id as activity_id_2,
+    cast(act.standard_value as numeric) as standard_value_2,
+    act.standard_relation as standard_relation_2,
+    cast(act.pchembl_value as numeric) as pchembl_value_2,
+    count(*) over (partition by act.assay_id) as count_activities_2,
+    count(*) over (partition by act.assay_id, act.molregno) as duplicate_activities_2, 
+    act.molregno as molregno_2,
+    com.canonical_smiles as canonical_smiles_2, 
+    cast(cmp.heavy_atoms as int64) as heavy_atoms_2,
+    cast(d.doc_id as int64) as doc_id_2,
+    date(
+      coalesce(cast(d.year as int64), 1970), 
+      coalesce(cast(floor(percent_rank() over (
+        partition by d.journal, d.year order by SAFE_CAST(d.first_page as int64)) * 11) as int64) + 1, 1),
+      coalesce(mod(cast(floor(percent_rank() over (
+        partition by d.journal, d.year order by SAFE_CAST(d.first_page as int64)) * 308) as int64), 28) + 1, 1)) as publication_date_2
+  FROM `bigquery-public-data.ebi_chembl.activities_29` act
+  join `bigquery-public-data.ebi_chembl.compound_structures_29` com using (molregno)
+  join `bigquery-public-data.ebi_chembl.compound_properties_29` cmp using (molregno)
+  left join `bigquery-public-data.ebi_chembl.docs_29` d using (doc_id)
+  where standard_type in (select distinct standard_type from`bigquery-public-data.ebi_chembl.activities_29` where pchembl_value is not null)
+  ) a2 using (assay_id, standard_type)
+where 
+  a1.molregno_1 != a2.molregno_2 and
+  a1.count_activities_1 < 5 and 
+  a2.count_activities_2 < 5 and 
+  a1.heavy_atoms_1 between 10 and 15 and
+  a2.heavy_atoms_2 between 10 and 15 and
+  a1.standard_value_1 is not null and 
+  a2.standard_value_2 is not null and
+  a1.duplicate_activities_1 < 2 and
+  a2.duplicate_activities_2 < 2 and
+  a1.pchembl_value_1 > 10 and
+  a2.pchembl_value_2 > 10
+
+
+
+
+##### fda - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Could you provide me with the zip code of the location that has the highest number of bank institutions in Florida?
+
+  ## Query:
+    with _fips AS
+    (
+        SELECT
+            state_fips_code
+        FROM
+            `bigquery-public-data.census_utility.fips_codes_states`
+        WHERE
+            state_name = "Florida"
+    )
+
+    ,_zip AS
+    (
+        SELECT
+            z.zip_code,
+            z.zip_code_geom,
+        FROM
+            `bigquery-public-data.geo_us_boundaries.zip_codes` z, _fips u
+        WHERE
+            z.state_fips_code = u.state_fips_code
+    )
+
+    ,locations AS
+    (
+        SELECT
+            COUNT(i.institution_name) AS count_locations,
+            l.zip_code
+        FROM
+            `bigquery-public-data.fdic_banks.institutions` i
+        JOIN
+            `bigquery-public-data.fdic_banks.locations` l 
+        USING (fdic_certificate_number)
+        WHERE
+            l.state IS NOT NULL
+        AND 
+            l.state_name IS NOT NULL
+        GROUP BY 2
+    )
+
+    SELECT
+        z.zip_code
+    FROM
+        _zip z
+    JOIN
+        locations l 
+    USING (zip_code)
+    GROUP BY
+        z.zip_code
+    ORDER BY
+        SUM(l.count_locations) DESC
+    LIMIT 1;
+
+
+##### fda - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which Colorado zip code has the highest concentration of bank locations per block group, based on the overlap between zip codes and block groups?
+
+  ## Query:
+    WITH _fips AS (
+    SELECT
+        state_fips_code
+    FROM
+        `bigquery-public-data.census_utility.fips_codes_states`
+    WHERE
+        state_name = "Colorado"
+),
+
+_bg AS (
+    SELECT
+        b.geo_id,
+        b.blockgroup_geom,
+        ST_AREA(b.blockgroup_geom) AS bg_size
+    FROM
+        `bigquery-public-data.geo_census_blockgroups.us_blockgroups_national` b
+    JOIN
+        _fips u ON b.state_fips_code = u.state_fips_code
+),
+
+_zip AS (
+    SELECT
+        z.zip_code,
+        z.zip_code_geom
+    FROM
+        `bigquery-public-data.geo_us_boundaries.zip_codes` z
+    JOIN
+        _fips u ON z.state_fips_code = u.state_fips_code
+),
+
+bq_zip_overlap AS (
+    SELECT
+        b.geo_id,
+        z.zip_code,
+        ST_AREA(ST_INTERSECTION(b.blockgroup_geom, z.zip_code_geom)) / b.bg_size AS overlap_size,
+        b.blockgroup_geom
+    FROM
+        _zip z
+    JOIN
+        _bg b ON ST_INTERSECTS(b.blockgroup_geom, z.zip_code_geom)
+),
+
+locations AS (
+    SELECT
+        SUM(overlap_size * count_locations) AS locations_per_bg,
+        l.zip_code
+    FROM (
+        SELECT
+            COUNT(CONCAT(institution_name, " : ", branch_name)) AS count_locations,
+            zip_code
+        FROM
+            `bigquery-public-data.fdic_banks.locations`
+        WHERE
+            state IS NOT NULL
+            AND state_name IS NOT NULL
+        GROUP BY
+            zip_code
+    ) l
+    JOIN
+        bq_zip_overlap ON l.zip_code = bq_zip_overlap.zip_code
+    GROUP BY
+        l.zip_code
+)
+
+SELECT
+    l.zip_code
+FROM
+    locations l
+GROUP BY
+    l.zip_code
+ORDER BY
+    MAX(locations_per_bg) DESC
+LIMIT 1;
+
+
+##### GOOGLE_ADS - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please retrieve the page URLs, first shown time, last shown time, removal reason, violation category, and the lower and upper bounds of times shown for the five most recently removed ads in the Croatia region (region code 'HR'), where the times shown availability date is null, the times shown lower bound exceeds 10,000, the times shown upper bound is below 25,000, and the ads used at least one non-unused audience selection approach among demographics, geographic location, contextual signals, customer lists, or topics of interest, ordering the resulting ads by their last shown time in descending order.
+
+  ## Query:
+    SELECT
+    "creative_page_url",
+    TO_TIMESTAMP(GET("region_stat".value, 'first_shown')) AS "first_shown",
+    TO_TIMESTAMP(GET("region_stat".value, 'last_shown')) AS "last_shown",
+    REPLACE(REPLACE("disapproval"[0]."removal_reason", '""', '"'), '"', '') AS "removal_reason", 
+    REPLACE(REPLACE("disapproval"[0]."violation_category", '""', '"'), '"', '') AS "violation_category",
+    GET("region_stat".value, 'times_shown_lower_bound') AS "times_shown_lower",
+    GET("region_stat".value, 'times_shown_upper_bound') AS "times_shown_upper"
+FROM
+    "GOOGLE_ADS"."GOOGLE_ADS_TRANSPARENCY_CENTER"."REMOVED_CREATIVE_STATS",
+    LATERAL FLATTEN(input => "region_stats") AS "region_stat"
+WHERE
+    GET("region_stat".value, 'region_code') = 'HR' 
+    AND GET("region_stat".value, 'times_shown_availability_date') IS NULL 
+    AND GET("region_stat".value, 'times_shown_lower_bound') > 10000 
+    AND GET("region_stat".value, 'times_shown_upper_bound') < 25000
+    AND (
+        GET("audience_selection_approach_info", 'demographic_info') != 'CRITERIA_UNUSED' 
+        OR GET("audience_selection_approach_info", 'geo_location') != 'CRITERIA_UNUSED' 
+        OR GET("audience_selection_approach_info", 'contextual_signals') != 'CRITERIA_UNUSED' 
+        OR GET("audience_selection_approach_info", 'customer_lists') != 'CRITERIA_UNUSED' 
+        OR GET("audience_selection_approach_info", 'topics_of_interest') != 'CRITERIA_UNUSED'
+    )
+ORDER BY
+    "last_shown" DESC
+LIMIT 5;
+
+
+
+##### world_bank - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the top three debt indicators for Russia based on the highest debt values?
+
+  ## Query:
+    WITH russia_Data as (
+SELECT distinct 
+  id.country_name,
+  id.value, --format in DataStudio
+  id.indicator_name
+FROM (
+  SELECT
+    country_code,
+    region
+  FROM
+    bigquery-public-data.world_bank_intl_debt.country_summary
+  WHERE
+    region != "" ) cs --aggregated countries do not have a region
+INNER JOIN (
+  SELECT
+    country_code,
+    country_name,
+    value, 
+    indicator_name
+  FROM
+    bigquery-public-data.world_bank_intl_debt.international_debt
+  WHERE true
+    and country_code = 'RUS'  
+     ) id
+ON
+  cs.country_code = id.country_code
+WHERE value is not null
+ORDER BY
+  id.value DESC
+)
+SELECT 
+    indicator_name
+FROM russia_data
+LIMIT 3;
+
+
+##### world_bank - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which high-income country had the highest average crude birth rate respectively in each region, and what are their corresponding average birth rate, during the 1980s?
+
+  ## Query:
+    WITH country_data AS ( 
+  SELECT 
+    country_code, 
+    short_name AS country,
+    region, 
+    income_group 
+  FROM 
+    bigquery-public-data.world_bank_wdi.country_summary
+)
+, birth_rate_data AS (
+  SELECT 
+    data.country_code, 
+    country_data.country,
+    country_data.region,
+    AVG(value) AS avg_birth_rate
+  FROM 
+    bigquery-public-data.world_bank_wdi.indicators_data data 
+  LEFT JOIN 
+    country_data 
+  ON 
+    data.country_code = country_data.country_code
+  WHERE 
+    indicator_code = "SP.DYN.CBRT.IN" -- Birth Rate
+    AND EXTRACT(YEAR FROM PARSE_DATE('%Y', CAST(year AS STRING))) BETWEEN 1980 AND 1989 -- 1980s
+    AND country_data.income_group = "High income" -- High-income group
+  GROUP BY 
+    data.country_code, 
+    country_data.country,
+    country_data.region
+)
+, ranked_birth_rates AS (
+  SELECT
+    region,
+    country,
+    avg_birth_rate,
+    RANK() OVER(PARTITION BY region ORDER BY avg_birth_rate DESC) AS rank
+  FROM
+    birth_rate_data
+)
+SELECT 
+  region, 
+  country, 
+  avg_birth_rate
+FROM 
+  ranked_birth_rates
+WHERE 
+  rank = 1
+ORDER BY 
+  region;
+
+
+##### world_bank - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the top 10 countries with respect to the total amount of long-term external debt in descending order, excluding those without a specified region.
+
+  ## Query:
+    SELECT DISTINCT
+  id.country_name,
+  --cs.region,
+  id.value AS debt,
+  --id.indicator_code
+FROM (
+  SELECT
+    country_code,
+    region
+  FROM
+    `bigquery-public-data.world_bank_intl_debt.country_summary`
+  WHERE
+    region != "" ) cs
+INNER JOIN (
+  SELECT
+    country_code,
+    country_name,
+    value,
+    indicator_code
+  FROM
+    `bigquery-public-data.world_bank_intl_debt.international_debt`
+  WHERE
+    indicator_code = "DT.AMT.DLXF.CD") id
+
+ON
+  cs.country_code = id.country_code
+ORDER BY
+  id.value DESC
+  LIMIT 10
+
+
+##### world_bank - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many debt indicators for Russia have a value of 0, excluding NULL values?
+
+  ## Query:
+    WITH russia_Data AS (
+  SELECT DISTINCT 
+    id.country_name,
+    id.value, -- Format in DataStudio
+    id.indicator_name
+  FROM (
+    SELECT
+      country_code,
+      region
+    FROM
+      bigquery-public-data.world_bank_intl_debt.country_summary
+    WHERE
+      region != "" -- Aggregated countries do not have a region
+  ) cs -- Aggregated countries do not have a region
+  INNER JOIN (
+    SELECT
+      country_code,
+      country_name,
+      value, 
+      indicator_name
+    FROM
+      bigquery-public-data.world_bank_intl_debt.international_debt
+    WHERE
+      country_code = 'RUS'
+  ) id
+  ON
+    cs.country_code = id.country_code
+  WHERE value IS NOT NULL
+)
+-- Count the number of indicators with a value of 0 for Russia
+SELECT 
+  COUNT(*) AS number_of_indicators_with_zero
+FROM 
+  russia_Data
+WHERE 
+  value = 0;
+
+
+##### world_bank - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which region has the highest median GDP (constant 2015 US$) value?
+
+  ## Query:
+    WITH country_data AS (
+  -- CTE for country descriptive data
+  SELECT 
+    country_code, 
+    short_name AS country,
+    region, 
+    income_group 
+  FROM 
+    `bigquery-public-data.world_bank_wdi.country_summary`
+),
+
+gdp_data AS (
+  -- Filter data to only include GDP values
+  SELECT 
+    data.country_code, 
+    country,
+    region,
+    value AS gdp_value
+  FROM 
+    `bigquery-public-data.world_bank_wdi.indicators_data` data
+  LEFT JOIN country_data
+    ON data.country_code = country_data.country_code
+  WHERE indicator_code = "NY.GDP.MKTP.KD" -- GDP Indicator
+    AND country_data.region IS NOT NULL
+    AND country_data.income_group IS NOT NULL
+),
+
+cal_median_gdp AS (
+  -- Calculate the median GDP value for each region
+  SELECT 
+    region,
+    APPROX_QUANTILES(gdp_value, 2)[OFFSET(1)] AS median_gdp
+  FROM gdp_data
+  GROUP BY region
+)
+-- Select the regions with their median GDP values
+SELECT 
+  region
+FROM 
+  cal_median_gdp
+ORDER BY median_gdp DESC
+LIMIT 1;
+
+
+##### ecommerce - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    After removing any duplicate records from the rev_transactions dataset, identify each channel grouping that has transactions from more than one country. For each such channel grouping, find the country with the highest total number of transactions and report both the country name and the sum of transactions for that channel grouping.
+
+  ## Query:
+    WITH tmp AS (
+  SELECT DISTINCT *
+  FROM `data-to-insights.ecommerce.rev_transactions`
+  -- Removing duplicated values
+),
+tmp1 AS (
+  SELECT 
+    tmp.channelGrouping,
+    tmp.geoNetwork_country,
+    SUM(tmp.totals_transactions) AS tt
+  FROM tmp
+  GROUP BY 1, 2
+),
+tmp2 AS (
+  SELECT 
+    channelGrouping,
+    geoNetwork_country,
+    SUM(tt) AS TotalTransaction,
+    COUNT(DISTINCT geoNetwork_country) OVER (PARTITION BY channelGrouping) AS CountryCount
+  FROM tmp1
+  GROUP BY channelGrouping, geoNetwork_country
+),
+tmp3 AS (
+  SELECT
+    channelGrouping,
+    geoNetwork_country AS Country,
+    TotalTransaction,
+    RANK() OVER (PARTITION BY channelGrouping ORDER BY TotalTransaction DESC) AS rnk
+  FROM tmp2
+  WHERE CountryCount > 1
+)
+SELECT
+  channelGrouping,
+  Country,
+  TotalTransaction
+FROM tmp3
+WHERE rnk = 1;
+
+
+##### ecommerce - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Calculate the conversion rate from unique visitors to purchasers by using data exclusively from the `web_analytics` table in the `data-to-insights.ecommerce` dataset. A visitor is defined as a unique `fullVisitorId` present in the table, while a purchaser is a visitor who has at least one transaction recorded (`totals.transactions` is not null). The conversion rate is computed by dividing the number of unique purchasers by the total number of unique visitors. Additionally, calculate the average number of transactions per purchaser, considering only those visitors who have made at least one transaction.
+
+  ## Query:
+    WITH visitors AS (
+  SELECT
+    COUNT(DISTINCT fullVisitorId) AS total_visitors
+  FROM 
+    `data-to-insights.ecommerce.web_analytics`
+),
+
+purchasers AS (
+  SELECT
+    COUNT(DISTINCT fullVisitorId) AS total_purchasers
+  FROM 
+    `data-to-insights.ecommerce.web_analytics`
+  WHERE 
+    totals.transactions IS NOT NULL
+),
+
+transactions AS (
+  SELECT
+    COUNT(*) AS total_transactions,
+    AVG(totals.transactions) AS avg_transactions_per_purchaser
+  FROM 
+    `data-to-insights.ecommerce.web_analytics`
+  WHERE 
+    totals.transactions IS NOT NULL
+)
+
+SELECT
+  p.total_purchasers / v.total_visitors AS conversion_rate,
+  a.avg_transactions_per_purchaser AS avg_transactions_per_purchaser
+FROM
+  visitors v,
+  purchasers p,
+  transactions a;
+
+
+##### META_KAGGLE - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Identify the pair of Kaggle users involved in ForumMessageVotes such that one user has given the other the greatest distinct number of upvotes, then also display how many upvotes that recipient returned. Present the usernames of both users, the total distinct upvotes one received from the other, and the upvotes they gave back, sorting by the highest received count and then by the highest given count, and show only the top result.
+
+  ## Query:
+    WITH UserPairUpvotes AS (
+  SELECT
+    ToUsers."UserName" AS "ToUserName",
+    FromUsers."UserName" AS "FromUserName",
+    COUNT(DISTINCT "ForumMessageVotes"."Id") AS "UpvoteCount"
+  FROM META_KAGGLE.META_KAGGLE.FORUMMESSAGEVOTES AS "ForumMessageVotes"
+  INNER JOIN META_KAGGLE.META_KAGGLE.USERS AS FromUsers
+    ON FromUsers."Id" = "ForumMessageVotes"."FromUserId"
+  INNER JOIN META_KAGGLE.META_KAGGLE.USERS AS ToUsers
+    ON ToUsers."Id" = "ForumMessageVotes"."ToUserId"
+  GROUP BY
+    ToUsers."UserName",
+    FromUsers."UserName"
+),
+TopPairs AS (
+  SELECT
+    "ToUserName",
+    "FromUserName",
+    "UpvoteCount",
+    ROW_NUMBER() OVER (ORDER BY "UpvoteCount" DESC) AS "Rank"
+  FROM UserPairUpvotes
+),
+ReciprocalUpvotes AS (
+  SELECT
+    t."ToUserName",
+    t."FromUserName",
+    t."UpvoteCount" AS "UpvotesReceived",
+    COALESCE(u."UpvoteCount", 0) AS "UpvotesGiven"
+  FROM TopPairs t
+  LEFT JOIN UserPairUpvotes u
+    ON t."ToUserName" = u."FromUserName" AND t."FromUserName" = u."ToUserName"
+  WHERE t."Rank" = 1
+)
+SELECT
+  "ToUserName" AS "UpvotedUserName",
+  "FromUserName" AS "UpvotingUserName",
+  "UpvotesReceived" AS "UpvotesReceivedByUpvotedUser",
+  "UpvotesGiven" AS "UpvotesGivenByUpvotedUser"
+FROM ReciprocalUpvotes
+ORDER BY "UpvotesReceived" DESC, "UpvotesGiven" DESC;
+
+
+
+##### firebase - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    I'm trying to evaluate which board types were most effective on September 15, 2018. Can you find out the average scores for each board type from the quick play mode completions on that day?
+
+  ## Query:
+    WITH EventData AS (
+    SELECT 
+        user_pseudo_id, 
+        event_timestamp, 
+        param
+    FROM 
+        `firebase-public-project.analytics_153293282.events_20180915`,
+        UNNEST(event_params) AS param
+    WHERE 
+        event_name = "level_complete_quickplay"
+        AND (param.key = "value" OR param.key = "board")
+),
+ProcessedData AS (
+    SELECT 
+        user_pseudo_id, 
+        event_timestamp, 
+        MAX(IF(param.key = "value", param.value.int_value, NULL)) AS score,
+        MAX(IF(param.key = "board", param.value.string_value, NULL)) AS board_type
+    FROM 
+        EventData
+    GROUP BY 
+        user_pseudo_id, 
+        event_timestamp
+)
+SELECT 
+    ANY_VALUE(board_type) AS board, 
+    AVG(score) AS average_score
+FROM 
+    ProcessedData
+GROUP BY 
+    board_type
+
+
+
+##### ga4 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    On November 30, 2020, identify the item category with the highest tax rate by dividing tax value in usd by purchase revenue in usd for purchase events, and then retrieve the transaction IDs, total item quantities, and both purchase revenue in usd and purchase revenue for those purchase events in that top-tax-rate category.
+
+  ## Query:
+    WITH top_category AS (
+  SELECT
+    product.item_category,
+    SUM(ecommerce.tax_value_in_usd) / SUM(ecommerce.purchase_revenue_in_usd) AS tax_rate
+  FROM
+    bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201130,
+    UNNEST(items) AS product
+  WHERE
+    event_name = 'purchase'
+  GROUP BY
+    product.item_category
+  ORDER BY
+    tax_rate DESC
+  LIMIT 1
+)
+
+SELECT
+    ecommerce.transaction_id,
+    SUM(ecommerce.total_item_quantity) AS total_item_quantity,
+    SUM(ecommerce.purchase_revenue_in_usd) AS purchase_revenue_in_usd,
+    SUM(ecommerce.purchase_revenue) AS purchase_revenue
+FROM
+    bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201130, 
+    UNNEST(items) AS product
+JOIN top_category
+ON product.item_category = top_category.item_category
+WHERE
+    event_name = 'purchase'
+GROUP BY
+    ecommerce.transaction_id;
+
+
+##### E_commerce - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    According to the RFM definition document, calculate the average sales per order for each customer within distinct RFM segments, considering only 'delivered' orders. Use the customer unique identifier. Clearly define how to calculate Recency based on the latest purchase timestamp and specify the criteria for classifying RFM segments. The average sales should be computed as the total spend divided by the total number of orders. Please analyze and report the differences in average sales across the RFM segments
+
+  ## Query:
+    WITH RecencyScore AS (
+    SELECT customer_unique_id,
+           MAX(order_purchase_timestamp) AS last_purchase,
+           NTILE(5) OVER (ORDER BY MAX(order_purchase_timestamp) DESC) AS recency
+    FROM orders
+        JOIN customers USING (customer_id)
+    WHERE order_status = 'delivered'
+    GROUP BY customer_unique_id
+),
+FrequencyScore AS (
+    SELECT customer_unique_id,
+           COUNT(order_id) AS total_orders,
+           NTILE(5) OVER (ORDER BY COUNT(order_id) DESC) AS frequency
+    FROM orders
+        JOIN customers USING (customer_id)
+    WHERE order_status = 'delivered'
+    GROUP BY customer_unique_id
+),
+MonetaryScore AS (
+    SELECT customer_unique_id,
+           SUM(price) AS total_spent,
+           NTILE(5) OVER (ORDER BY SUM(price) DESC) AS monetary
+    FROM orders
+        JOIN order_items USING (order_id)
+        JOIN customers USING (customer_id)
+    WHERE order_status = 'delivered'
+    GROUP BY customer_unique_id
+),
+
+-- 2. Assign each customer to a group
+RFM AS (
+    SELECT last_purchase, total_orders, total_spent,
+        CASE
+            WHEN recency = 1 AND frequency + monetary IN (1, 2, 3, 4) THEN "Champions"
+            WHEN recency IN (4, 5) AND frequency + monetary IN (1, 2) THEN "Can't Lose Them"
+            WHEN recency IN (4, 5) AND frequency + monetary IN (3, 4, 5, 6) THEN "Hibernating"
+            WHEN recency IN (4, 5) AND frequency + monetary IN (7, 8, 9, 10) THEN "Lost"
+            WHEN recency IN (2, 3) AND frequency + monetary IN (1, 2, 3, 4) THEN "Loyal Customers"
+            WHEN recency = 3 AND frequency + monetary IN (5, 6) THEN "Needs Attention"
+            WHEN recency = 1 AND frequency + monetary IN (7, 8) THEN "Recent Users"
+            WHEN recency = 1 AND frequency + monetary IN (5, 6) OR
+                recency = 2 AND frequency + monetary IN (5, 6, 7, 8) THEN "Potentital Loyalists"
+            WHEN recency = 1 AND frequency + monetary IN (9, 10) THEN "Price Sensitive"
+            WHEN recency = 2 AND frequency + monetary IN (9, 10) THEN "Promising"
+            WHEN recency = 3 AND frequency + monetary IN (7, 8, 9, 10) THEN "About to Sleep"
+        END AS RFM_Bucket
+    FROM RecencyScore
+        JOIN FrequencyScore USING (customer_unique_id)
+        JOIN MonetaryScore USING (customer_unique_id)
+)
+
+SELECT RFM_Bucket, 
+       AVG(total_spent / total_orders) AS avg_sales_per_customer
+FROM RFM
+GROUP BY RFM_Bucket
+
+
+##### E_commerce - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Could you tell me the number of orders, average payment per order and customer lifespan in weeks of the 3 custumers with the highest average payment per order, where the lifespan is calculated by subtracting the earliest purchase date from the latest purchase date in days, dividing by seven, and if the result is less than seven days, setting it to 1.0?
+
+  ## Query:
+    WITH CustomerData AS (
+    SELECT
+        customer_unique_id,
+        COUNT(DISTINCT orders.order_id) AS order_count,
+        SUM(payment_value) AS total_payment,
+        JULIANDAY(MIN(order_purchase_timestamp)) AS first_order_day,
+        JULIANDAY(MAX(order_purchase_timestamp)) AS last_order_day
+    FROM customers
+        JOIN orders USING (customer_id)
+        JOIN order_payments USING (order_id)
+    GROUP BY customer_unique_id
+)
+SELECT
+    customer_unique_id,
+    order_count AS PF,
+    ROUND(total_payment / order_count, 2) AS AOV,
+    CASE
+        WHEN (last_order_day - first_order_day) < 7 THEN
+            1
+        ELSE
+            (last_order_day - first_order_day) / 7
+        END AS ACL
+FROM CustomerData
+ORDER BY AOV DESC
+LIMIT 3
+
+
+
+##### Baseball - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    I would like to know the given names of baseball players who have achieved the highest value of games played, runs, hits, and home runs, with their corresponding score values.
+
+  ## Query:
+    WITH player_stats AS (
+    SELECT
+        b.player_id,
+        p.name_given AS player_name,
+        SUM(b.g) AS games_played,
+        SUM(b.r) AS runs,
+        SUM(b.h) AS hits,
+        SUM(b.hr) AS home_runs
+    FROM player p
+    JOIN batting b ON p.player_id = b.player_id
+    GROUP BY b.player_id, p.name_given
+)
+
+SELECT 'Games Played' AS Category, player_name AS Player_Name, games_played AS Batting_Table_Topper
+FROM player_stats
+WHERE games_played = (SELECT MAX(games_played) FROM player_stats)
+
+UNION ALL
+
+SELECT 'Runs' AS Category, player_name AS Player_Name, runs AS Batting_Table_Topper
+FROM player_stats
+WHERE runs = (SELECT MAX(runs) FROM player_stats)
+
+UNION ALL
+
+SELECT 'Hits' AS Category, player_name AS Player_Name, hits AS Batting_Table_Topper
+FROM player_stats
+WHERE hits = (SELECT MAX(hits) FROM player_stats)
+
+UNION ALL
+
+SELECT 'Home Runs' AS Category, player_name AS Player_Name, home_runs AS Batting_Table_Topper
+FROM player_stats
+WHERE home_runs = (SELECT MAX(home_runs) FROM player_stats);
+
+
+
+##### WWE - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the NXT title that had the shortest match (excluding titles with "title change"), what were the names of the two wrestlers involved?
+
+  ## Query:
+    WITH MatchDetails AS (
+    SELECT
+        b.name AS titles,
+        m.duration AS match_duration,
+        w1.name || ' vs ' || w2.name AS matches,
+        m.win_type AS win_type,
+        l.name AS location,
+        e.name AS event,
+        ROW_NUMBER() OVER (PARTITION BY b.name ORDER BY m.duration ASC) AS rank
+    FROM 
+        Belts b
+    INNER JOIN Matches m ON m.title_id = b.id
+    INNER JOIN Wrestlers w1 ON w1.id = m.winner_id
+    INNER JOIN Wrestlers w2 ON w2.id = m.loser_id
+    INNER JOIN Cards c ON c.id = m.card_id
+    INNER JOIN Locations l ON l.id = c.location_id
+    INNER JOIN Events e ON e.id = c.event_id
+    INNER JOIN Promotions p ON p.id = c.promotion_id
+    WHERE
+        p.name = 'NXT'
+        AND m.duration <> ''
+        AND b.name <> ''
+        AND b.name NOT IN (
+            SELECT name 
+            FROM Belts 
+            WHERE name LIKE '%title change%'
+        )
+),
+Rank1 AS (
+SELECT 
+    titles,
+    match_duration,
+    matches,
+    win_type,
+    location,
+    event
+FROM 
+    MatchDetails
+WHERE 
+    rank = 1
+)
+SELECT
+    SUBSTR(matches, 1, INSTR(matches, ' vs ') - 1) AS wrestler1,
+    SUBSTR(matches, INSTR(matches, ' vs ') + 4) AS wrestler2
+FROM
+Rank1
+ORDER BY match_duration 
+LIMIT 1
+
+
+##### EU_soccer - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    In each league, considering all seasons, which single team has the fewest total match wins based on comparing home and away goals, including teams with zero wins, ensuring that if multiple teams tie for the fewest wins, only one team is returned for each league?
+
+  ## Query:
+    WITH match_view AS(
+SELECT
+    M.id,
+    L.name AS league,
+    M.season,
+    M.match_api_id,
+    T.team_long_name AS home_team,
+    TM.team_long_name AS away_team,
+    M.home_team_goal,
+    M.away_team_goal,
+    P1.player_name AS home_gk,
+    P2.player_name AS home_center_back_1,
+    P3.player_name AS home_center_back_2,
+    P4.player_name AS home_right_back,
+    P5.player_name AS home_left_back,
+    P6.player_name AS home_midfield_1,
+    P7.player_name AS home_midfield_2,
+    P8.player_name AS home_midfield_3,
+    P9.player_name AS home_midfield_4,
+    P10.player_name AS home_second_forward,
+    P11.player_name AS home_center_forward,
+    P12.player_name AS away_gk,
+    P13.player_name AS away_center_back_1,
+    P14.player_name AS away_center_back_2,
+    P15.player_name AS away_right_back,
+    P16.player_name AS away_left_back,
+    P17.player_name AS away_midfield_1,
+    P18.player_name AS away_midfield_2,
+    P19.player_name AS away_midfield_3,
+    P20.player_name AS away_midfield_4,
+    P21.player_name AS away_second_forward,
+    P22.player_name AS away_center_forward,
+    M.goal,
+    M.card
+FROM
+    match M
+LEFT JOIN
+    league L ON M.league_id = L.id
+LEFT JOIN
+    team T ON M.home_team_api_id = T.team_api_id
+LEFT JOIN
+    team TM ON M.away_team_api_id = TM.team_api_id
+LEFT JOIN
+    player P1 ON M.home_player_1 = P1.player_api_id
+LEFT JOIN
+    player P2 ON M.home_player_2 = P2.player_api_id
+LEFT JOIN
+    player P3 ON M.home_player_3 = P3.player_api_id
+LEFT JOIN
+    player P4 ON M.home_player_4 = P4.player_api_id
+LEFT JOIN
+    player P5 ON M.home_player_5 = P5.player_api_id
+LEFT JOIN
+    player P6 ON M.home_player_6 = P6.player_api_id
+LEFT JOIN
+    player P7 ON M.home_player_7 = P7.player_api_id
+LEFT JOIN
+    player P8 ON M.home_player_8 = P8.player_api_id
+LEFT JOIN
+    player P9 ON M.home_player_9 = P9.player_api_id
+LEFT JOIN
+    player P10 ON M.home_player_10 = P10.player_api_id
+LEFT JOIN
+    player P11 ON M.home_player_11 = P11.player_api_id
+LEFT JOIN
+    player P12 ON M.away_player_1 = P12.player_api_id
+LEFT JOIN
+    player P13 ON M.away_player_2 = P13.player_api_id
+LEFT JOIN
+    player P14 ON M.away_player_3 = P14.player_api_id
+LEFT JOIN
+    player P15 ON M.away_player_4 = P15.player_api_id
+LEFT JOIN
+    player P16 ON M.away_player_5 = P16.player_api_id
+LEFT JOIN
+    player P17 ON M.away_player_6 = P17.player_api_id
+LEFT JOIN
+    player P18 ON M.away_player_7 = P18.player_api_id
+LEFT JOIN
+    player P19 ON M.away_player_8 = P19.player_api_id
+LEFT JOIN
+    player P20 ON M.away_player_9 = P20.player_api_id
+LEFT JOIN
+    player P21 ON M.away_player_10 = P21.player_api_id
+LEFT JOIN
+    player P22 ON M.away_player_11 = P22.player_api_id
+),
+match_score AS
+(
+    SELECT  -- Displaying teams and their goals as home_team
+        id,
+        home_team AS team,
+        CASE
+            WHEN home_team_goal > away_team_goal THEN 1 ELSE 0 END AS Winning_match
+    FROM
+        match_view
+
+    UNION ALL
+
+    SELECT  -- Displaying teams and their goals as away_team
+        id,
+        away_team AS team,
+        CASE
+            WHEN away_team_goal > home_team_goal THEN 1 ELSE 0 END AS Winning_match
+    FROM
+        match_view
+),
+winning_matches AS
+(
+    SELECT  -- Displaying total match wins for each team
+        MV.league,
+        M.team,
+        COUNT(CASE WHEN M.Winning_match = 1 THEN 1 END) AS wins,
+        ROW_NUMBER() OVER(PARTITION BY MV.league ORDER BY COUNT(CASE WHEN M.Winning_match = 1 THEN 1 END) ASC) AS rn
+    FROM
+        match_score M
+    JOIN
+        match_view MV
+    ON
+        M.id = MV.id
+    GROUP BY
+        MV.league,
+        team
+    ORDER BY
+        league,
+        wins ASC
+)
+SELECT
+    league,
+    team
+FROM
+    winning_matches
+WHERE
+    rn = 1  -- Getting the team with the least number of wins in each league
+ORDER BY
+    league;
+
+
+##### f1 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each year, which driver and which constructor scored the most points? I want the full name of each driver.
+
+  ## Query:
+    with year_points as (
+    select races.year,
+           drivers.forename || ' ' || drivers.surname as driver,
+           constructors.name as constructor,
+           sum(results.points) as points
+    from results
+    left join races on results.race_id = races.race_id  -- Ensure these columns exist in your schema
+    left join drivers on results.driver_id = drivers.driver_id  -- Ensure these columns exist in your schema
+    left join constructors on results.constructor_id = constructors.constructor_id  -- Ensure these columns exist in your schema
+    group by races.year, driver
+    union
+    select races.year,
+           null as driver,
+           constructors.name as constructor,
+           sum(results.points) as points
+    from results
+    left join races on results.race_id = races.race_id  -- Ensure these columns exist in your schema
+    left join drivers on results.driver_id = drivers.driver_id  -- Ensure these columns exist in your schema
+    left join constructors on results.constructor_id = constructors.constructor_id  -- Ensure these columns exist in your schema
+    group by races.year, constructor
+),
+max_points as (
+    select year,
+           max(case when driver is not null then points else null end) as max_driver_points,
+           max(case when constructor is not null then points else null end) as max_constructor_points
+    from year_points
+    group by year
+)
+select max_points.year,
+       drivers_year_points.driver,
+       constructors_year_points.constructor
+from max_points
+left join year_points as drivers_year_points on
+    max_points.year = drivers_year_points.year and
+    max_points.max_driver_points = drivers_year_points.points and
+    drivers_year_points.driver is not null
+left join year_points as constructors_year_points on
+    max_points.year = constructors_year_points.year and
+    max_points.max_constructor_points = constructors_year_points.points and
+    constructors_year_points.constructor is not null
+order by max_points.year;
+
+
+##### GLOBAL_WEATHER__CLIMATE_DATA_FOR_BI - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Assuming today is April 1, 2024, I would like to know the daily snowfall amounts greater than 6 inches for each U.S. postal code during the week ending after the first two full weeks of the previous year. Show the postal code, date, and snowfall amount.
+
+  ## Query:
+    WITH timestamps AS
+(   
+    SELECT
+        DATE_TRUNC(year,DATEADD(year,-1,DATE '2024-08-29')) AS ref_timestamp,
+        LAST_DAY(DATEADD(week,2 + CAST(WEEKISO(ref_timestamp) != 1 AS INTEGER),ref_timestamp),week) AS end_week,
+        DATEADD(day, day_num - 7, end_week) AS date_valid_std
+    FROM
+    (   
+        SELECT
+            ROW_NUMBER() OVER (ORDER BY SEQ1()) AS day_num
+        FROM
+            TABLE(GENERATOR(rowcount => 7))
+    ) 
+)
+SELECT
+    country,
+    postal_code,
+    date_valid_std,
+    tot_snowfall_in 
+FROM 
+    GLOBAL_WEATHER__CLIMATE_DATA_FOR_BI.standard_tile.history_day
+NATURAL INNER JOIN
+    timestamps
+WHERE
+    country='US' AND
+    tot_snowfall_in > 6.0 
+ORDER BY 
+    postal_code,date_valid_std
+;
+
+
+##### FINANCE__ECONOMICS - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    As of December 31, 2022, list the top 10 active banks with assets exceeding $10 billion, ranked by the highest percentage of uninsured assets, where the percentage is calculated as one minus the value of the '% Insured (Estimated)' variable from quarterly estimates. Provide the names of these banks and their respective percentages of uninsured assets.
+
+  ## Query:
+    WITH big_banks AS (
+    SELECT id_rssd
+    FROM FINANCE__ECONOMICS.CYBERSYN.financial_institution_timeseries
+    WHERE variable = 'ASSET'
+      AND date = '2022-12-31'
+      AND value > 1E10
+)
+SELECT name
+FROM FINANCE__ECONOMICS.CYBERSYN.financial_institution_timeseries AS ts
+INNER JOIN FINANCE__ECONOMICS.CYBERSYN.financial_institution_attributes AS att ON (ts.variable = att.variable)
+INNER JOIN FINANCE__ECONOMICS.CYBERSYN.financial_institution_entities AS ent ON (ts.id_rssd = ent.id_rssd)
+INNER JOIN big_banks ON (big_banks.id_rssd = ts.id_rssd)
+WHERE ts.date = '2022-12-31'
+  AND att.variable_name = '% Insured (Estimated)'
+  AND att.frequency = 'Quarterly'
+  AND ent.is_active = True
+ORDER BY (1 - value) DESC
+LIMIT 10;
+
+
+##### FINANCE__ECONOMICS - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What was the percentage change in post-market close prices for the Magnificent 7 tech companies from January 1 to June 30, 2024?
+
+  ## Query:
+    WITH ytd_performance AS (
+  SELECT
+    ticker,
+    MIN(date) OVER (PARTITION BY ticker) AS start_of_year_date,
+    FIRST_VALUE(value) OVER (PARTITION BY ticker ORDER BY date ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS start_of_year_price,
+    MAX(date) OVER (PARTITION BY ticker) AS latest_date,
+    LAST_VALUE(value) OVER (PARTITION BY ticker ORDER BY date ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS latest_price
+  FROM FINANCE__ECONOMICS.CYBERSYN.stock_price_timeseries
+  WHERE
+    ticker IN ('AAPL', 'MSFT', 'AMZN', 'GOOGL', 'META', 'TSLA', 'NVDA')
+    AND date BETWEEN DATE '2024-01-01' AND DATE '2024-06-30'  -- Adjusted to cover only from the start of 2024 to the end of June 2024
+    AND variable_name = 'Post-Market Close'
+)
+SELECT
+  ticker,
+  (latest_price - start_of_year_price) / start_of_year_price * 100 AS percentage_change_ytd
+FROM
+  ytd_performance
+GROUP BY
+  ticker, start_of_year_date, start_of_year_price, latest_date, latest_price
+ORDER BY percentage_change_ytd DESC;
+
+
+##### WEATHER__ENVIRONMENT - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For each year from 2010 through 2019, what were the total building damage amounts and total contents damage amounts reported under the National Flood Insurance Program for the NFIP community named 'City Of New York,' grouped by each year of loss?
+
+  ## Query:
+    SELECT 
+    YEAR(claims.date_of_loss)               AS year_of_loss,
+    claims.nfip_community_name,
+    SUM(claims.building_damage_amount) AS total_building_damage_amount,
+    SUM(claims.contents_damage_amount) AS total_contents_damage_amount
+FROM WEATHER__ENVIRONMENT.CYBERSYN.fema_national_flood_insurance_program_claim_index claims
+WHERE 
+    claims.nfip_community_name = 'City Of New York' 
+    AND year_of_loss >=2010 AND year_of_loss <=2019
+GROUP BY year_of_loss, claims.nfip_community_name
+ORDER BY year_of_loss, claims.nfip_community_name;
+
+
+##### BRAZE_USER_EVENT_DEMO_DATASET - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Examine user engagement with push notifications within a specified one-hour window on June 1, 2023.
+
+  ## Query:
+    WITH push_send AS (
+    SELECT
+        id,
+        app_group_id,
+        user_id,
+        campaign_id,
+        message_variation_id,
+        platform,
+        ad_tracking_enabled,
+        TO_TIMESTAMP(TIME) AS "TIME",
+        'Send' AS "EVENT_TYPE"
+    FROM
+        BRAZE_USER_EVENT_DEMO_DATASET.PUBLIC.USERS_MESSAGES_PUSHNOTIFICATION_SEND_VIEW
+    WHERE
+        TO_TIMESTAMP(TIME) BETWEEN '2023-06-01 08:00:00' AND '2023-06-01 09:00:00'
+),
+push_bounce AS (
+    SELECT
+        id,
+        app_group_id,
+        user_id,
+        campaign_id,
+        message_variation_id,
+        platform,
+        ad_tracking_enabled,
+        TO_TIMESTAMP(TIME) AS "TIME",
+        'Bounce' AS "EVENT_TYPE"
+    FROM
+        BRAZE_USER_EVENT_DEMO_DATASET.PUBLIC.USERS_MESSAGES_PUSHNOTIFICATION_BOUNCE_VIEW
+    WHERE
+        TO_TIMESTAMP(TIME) BETWEEN '2023-06-01 08:00:00' AND '2023-06-01 09:00:00'
+),
+push_open AS (
+    SELECT
+        id,
+        app_group_id,
+        user_id,
+        campaign_id,
+        message_variation_id,
+        platform,
+        ad_tracking_enabled,
+        TO_TIMESTAMP(TIME) AS "TIME",
+        'Open' AS "EVENT_TYPE",
+        carrier,
+        browser,
+        device_model
+    FROM
+        BRAZE_USER_EVENT_DEMO_DATASET.PUBLIC.USERS_MESSAGES_PUSHNOTIFICATION_OPEN_VIEW
+    WHERE
+        TO_TIMESTAMP(TIME) BETWEEN '2023-06-01 08:00:00' AND '2023-06-01 09:00:00'
+),
+push_open_influence AS (
+    SELECT
+        id,
+        app_group_id,
+        user_id,
+        campaign_id,
+        message_variation_id,
+        platform,
+        TO_TIMESTAMP(TIME) AS "TIME",
+        'Influenced Open' AS "EVENT_TYPE",
+        carrier,
+        browser,
+        device_model
+    FROM
+        BRAZE_USER_EVENT_DEMO_DATASET.PUBLIC.USERS_MESSAGES_PUSHNOTIFICATION_INFLUENCEDOPEN_VIEW
+    WHERE
+        TO_TIMESTAMP(TIME) BETWEEN '2023-06-01 08:00:00' AND '2023-06-01 09:00:00'
+)
+SELECT
+    ps.app_group_id,
+    ps.campaign_id,
+    ps.user_id,
+    ps.time,
+    po.time push_open_time,
+    ps.message_variation_id,
+    ps.platform,
+    ps.ad_tracking_enabled,
+    po.carrier,
+    po.browser,
+    po.device_model,
+    COUNT(
+        DISTINCT ps.id
+    ) push_notification_sends,
+    COUNT(
+        DISTINCT ps.user_id
+    ) unique_push_notification_sends,
+    COUNT(
+        DISTINCT pb.id
+    ) push_notification_bounced,
+    COUNT(
+        DISTINCT pb.user_id
+    ) unique_push_notification_bounced,
+    COUNT(
+        DISTINCT po.id
+    ) push_notification_open,
+    COUNT(
+        DISTINCT po.user_id
+    ) unique_push_notification_opened,
+    COUNT(
+        DISTINCT poi.id
+    ) push_notification_influenced_open,
+    COUNT(
+        DISTINCT poi.user_id
+    ) unique_push_notification_influenced_open
+FROM
+    push_send ps
+    LEFT JOIN push_bounce pb
+    ON ps.message_variation_id = pb.message_variation_id
+    AND ps.user_id = pb.user_id
+    AND ps.app_group_id = pb.app_group_id
+    LEFT JOIN push_open po
+    ON ps.message_variation_id = po.message_variation_id
+    AND ps.user_id = po.user_id
+    AND ps.app_group_id = po.app_group_id
+    LEFT JOIN push_open_influence poi
+    ON ps.message_variation_id = poi.message_variation_id
+    AND ps.user_id = poi.user_id
+    AND ps.app_group_id = poi.app_group_id
+GROUP BY
+    1,2,3,4,5,6,7,8,9,10,11;
+
+
+
+##### US_ADDRESSES__POI - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Find the top 10 northernmost addresses in Florida's largest zip code area. What are their address numbers, street names, and types?
+
+  ## Query:
+    WITH zip_areas AS (
+    SELECT
+        geo.geo_id,
+        geo.geo_name AS zip,
+        states.related_geo_name AS state,
+        countries.related_geo_name AS country,
+        ST_AREA(TRY_TO_GEOGRAPHY(value)) AS area
+    FROM US_ADDRESSES__POI.CYBERSYN.geography_index AS geo
+    JOIN US_ADDRESSES__POI.CYBERSYN.geography_relationships AS states
+        ON (geo.geo_id = states.geo_id AND states.related_level = 'State')
+    JOIN US_ADDRESSES__POI.CYBERSYN.geography_relationships AS countries
+        ON (geo.geo_id = countries.geo_id AND countries.related_level = 'Country')
+    JOIN US_ADDRESSES__POI.CYBERSYN.geography_characteristics AS chars
+        ON (geo.geo_id = chars.geo_id AND chars.relationship_type = 'coordinates_geojson')
+    WHERE geo.level = 'CensusZipCodeTabulationArea'
+),
+
+zip_area_ranks AS (
+    SELECT
+        *,
+        ROW_NUMBER() OVER (PARTITION BY country, state ORDER BY area DESC, geo_id) AS zip_area_rank
+    FROM zip_areas
+)
+
+SELECT addr.number, addr.street, addr.street_type
+FROM US_ADDRESSES__POI.CYBERSYN.us_addresses AS addr
+JOIN zip_area_ranks AS areas
+    ON (addr.id_zip = areas.geo_id)
+WHERE addr.state = 'FL' AND areas.country = 'United States' AND areas.zip_area_rank = 1
+ORDER BY LATITUDE DESC
+LIMIT 10;
+
+
+##### CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Determine the population distribution within each block group relative to its census tract in New York State using 2021 ACS data. Include block group ID, census value, state county tract ID, total tract population, and the population ratio of each block group.
+
+  ## Query:
+     WITH TractPop AS (
+    SELECT
+        CG."BlockGroupID",
+        FCV."CensusValue",
+        CG."StateCountyTractID",
+        CG."BlockGroupPolygon"
+    FROM
+        CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.PUBLIC."Dim_CensusGeography" CG
+    JOIN
+        CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.PUBLIC."Fact_CensusValues_ACS2021" FCV
+        ON CG."BlockGroupID" = FCV."BlockGroupID"
+    WHERE
+        CG."StateAbbrev" = 'NY'
+        AND FCV."MetricID" = 'B01003_001E'
+),
+
+TractGroup AS (
+    SELECT
+        CG."StateCountyTractID",
+        SUM(FCV."CensusValue") AS "TotalTractPop"
+    FROM
+        CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.PUBLIC."Dim_CensusGeography" CG
+    JOIN
+        CENSUS_GALAXY__ZIP_CODE_TO_BLOCK_GROUP_SAMPLE.PUBLIC."Fact_CensusValues_ACS2021" FCV
+        ON CG."BlockGroupID" = FCV."BlockGroupID"
+    WHERE
+        CG."StateAbbrev" = 'NY'
+        AND FCV."MetricID" = 'B01003_001E'
+    GROUP BY
+        CG."StateCountyTractID"
+)
+
+SELECT
+    TP."BlockGroupID",
+    TP."CensusValue",
+    TP."StateCountyTractID",
+    TG."TotalTractPop",
+    CASE WHEN TG."TotalTractPop" <> 0 THEN TP."CensusValue" / TG."TotalTractPop" ELSE 0 END AS "BlockGroupRatio"
+FROM
+    TractPop TP
+JOIN
+    TractGroup TG
+    ON TP."StateCountyTractID" = TG."StateCountyTractID";
+
+
+##### CENSUS_GALAXY__AIML_MODEL_DATA_ENRICHMENT_SAMPLE - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the New York State ZIP code with the highest number of commuters traveling over one hour, according to 2021 ACS data? Include the zip code, the total commuters, state benchmark for this duration, and state population.
+
+  ## Query:
+    WITH Commuters AS (
+    SELECT
+        GE."ZipCode",
+        SUM(CASE WHEN M."MetricID" = 'B08303_013E' THEN F."CensusValueByZip" ELSE 0 END +
+            CASE WHEN M."MetricID" = 'B08303_012E' THEN F."CensusValueByZip" ELSE 0 END) AS "Num_Commuters_1Hr_Travel_Time"
+    FROM
+        CENSUS_GALAXY__AIML_MODEL_DATA_ENRICHMENT_SAMPLE.PUBLIC."LU_GeographyExpanded" GE
+    JOIN
+        CENSUS_GALAXY__AIML_MODEL_DATA_ENRICHMENT_SAMPLE.PUBLIC."Fact_CensusValues_ACS2021_ByZip" F
+        ON GE."ZipCode" = F."ZipCode"
+    JOIN
+        CENSUS_GALAXY__AIML_MODEL_DATA_ENRICHMENT_SAMPLE.PUBLIC."Dim_CensusMetrics" M
+        ON F."MetricID" = M."MetricID"
+    WHERE
+        GE."PreferredStateAbbrev" = 'NY'
+        AND (M."MetricID" = 'B08303_013E' OR M."MetricID" = 'B08303_012E') -- Metric IDs for commuters with 1+ hour travel time
+    GROUP BY
+        GE."ZipCode"
+),
+
+StateBenchmark AS (
+    SELECT
+        SB."StateAbbrev",
+        SUM(SB."StateBenchmarkValue") AS "StateBenchmark_Over1HrTravelTime",
+        SB."TotalStatePopulation"
+    FROM
+        CENSUS_GALAXY__AIML_MODEL_DATA_ENRICHMENT_SAMPLE.PUBLIC."Fact_StateBenchmark_ACS2021" SB
+    WHERE
+        SB."MetricID" IN ('B08303_013E', 'B08303_012E')
+        AND SB."StateAbbrev" = 'NY'
+    GROUP BY
+        SB."StateAbbrev", SB."TotalStatePopulation"
+)
+
+SELECT
+    C."ZipCode",
+    SUM(C."Num_Commuters_1Hr_Travel_Time") AS "Total_Commuters_1Hr_Travel_Time",
+    SB."StateBenchmark_Over1HrTravelTime",
+    SB."TotalStatePopulation",
+FROM
+    Commuters C
+CROSS JOIN
+    StateBenchmark SB
+GROUP BY
+    C."ZipCode", SB."StateBenchmark_Over1HrTravelTime", SB."TotalStatePopulation"
+ORDER BY
+    "Total_Commuters_1Hr_Travel_Time" DESC
+LIMIT 1;
+
+
+
+
+

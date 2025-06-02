@@ -1,0 +1,3205 @@
+##### card_games - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which are the cards that have incredibly powerful foils.
+
+  ## Query:
+    SELECT id FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL
+
+
+##### card_games - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the borderless cards available without powerful foils?
+
+  ## Query:
+    SELECT id FROM cards WHERE borderColor = 'borderless' AND (cardKingdomId IS NULL OR cardKingdomId IS NULL)
+
+
+##### card_games - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the card names with value that cost more converted mana for the face.
+
+  ## Query:
+    SELECT name FROM cards ORDER BY faceConvertedManaCost LIMIT 1
+
+
+##### card_games - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Name all cards with 2015 frame style ranking below 100 on EDHRec.
+
+  ## Query:
+    SELECT id FROM cards WHERE edhrecRank < 100 AND frameVersion = 2015
+
+
+##### card_games - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List all the mythic rarity print cards banned in gladiator format.
+
+  ## Query:
+    SELECT DISTINCT T1.id FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T2.format = 'gladiator' AND T2.status = 'Banned' AND T1.rarity = 'mythic'
+
+
+##### card_games - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For artifact type of cards that do not have multiple faces on the same card, state its legalities status for vintage play format.
+
+  ## Query:
+    SELECT DISTINCT T2.status FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.type = 'Artifact' AND T2.format = 'vintage' AND T1.side IS NULL
+
+
+##### card_games - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List all the card id and artist with unknown power which are legal for commander play format.
+
+  ## Query:
+    SELECT T1.id, T1.artist FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T2.status = 'Legal' AND T2.format = 'commander' AND (T1.power IS NULL OR T1.power = '*')
+
+
+##### card_games - 7 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Find all cards illustrated by Stephen Daniel and describe the text of the ruling of these cards. State if these cards have missing or degraded properties and values.
+
+  ## Query:
+    SELECT T1.id, T2.text, T1.hasContentWarning FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.artist = 'Stephen Daniele'
+
+
+##### card_games - 8 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Describe the information about rulings for card named 'Sublime Epiphany' with number 74s.
+
+  ## Query:
+    SELECT T2.text FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.name = 'Sublime Epiphany' AND T1.number = '74s'
+
+
+##### card_games - 9 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Name the card and artist with the most ruling information. Also state if the card is a promotional printing.
+
+  ## Query:
+    SELECT T1.name, T1.artist, T1.isPromo FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.isPromo = 1 AND T1.artist = (SELECT artist FROM cards WHERE isPromo = 1 GROUP BY artist HAVING COUNT(DISTINCT uuid) = (SELECT MAX(count_uuid) FROM ( SELECT COUNT(DISTINCT uuid) AS count_uuid FROM cards WHERE isPromo = 1 GROUP BY artist ))) LIMIT 1
+
+
+##### card_games - 10 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    State the alternative languages available for card named Annul numbered 29.
+
+  ## Query:
+    SELECT T2.language FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.name = 'Annul' AND T1.number = 29
+
+
+##### card_games - 11 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Name all the cards which have alternative language in Japanese.
+
+  ## Query:
+    SELECT T1.name FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T2.language = 'Japanese'
+
+
+##### card_games - 12 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Calculate the percentage of the cards availabe in Chinese Simplified.
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN T2.language = 'Chinese Simplified' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid
+
+
+##### card_games - 13 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List all the sets available in Italian translation. State the total number of cards per set.
+
+  ## Query:
+    SELECT T1.name, T1.totalSetSize FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T2.language = 'Italian'
+
+
+##### card_games - 14 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many types of cards does the artist Aaron Boyd illustrated about card art?
+
+  ## Query:
+    SELECT COUNT(type) FROM cards WHERE artist = 'Aaron Boyd'
+
+
+##### card_games - 15 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the keyword found on card 'Angel of Mercy'?
+
+  ## Query:
+    SELECT DISTINCT keywords FROM cards WHERE name = 'Angel of Mercy'
+
+
+##### card_games - 16 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards have infinite power?
+
+  ## Query:
+    SELECT COUNT(*) FROM cards WHERE power = '*'
+
+
+##### card_games - 17 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What type of promotion is of card 'Duress'?
+
+  ## Query:
+    SELECT promoTypes FROM cards WHERE name = 'Duress' AND promoTypes IS NOT NULL
+
+
+##### card_games - 18 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the border color of card "Ancestor's Chosen"?
+
+  ## Query:
+    SELECT DISTINCT borderColor FROM cards WHERE name = 'Ancestor''s Chosen'
+
+
+##### card_games - 19 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the type of the card "Ancestor's Chosen" as originally printed?
+
+  ## Query:
+    SELECT originalType FROM cards WHERE name = 'Ancestor''s Chosen' AND originalType IS NOT NULL
+
+
+##### card_games - 20 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    cards are not directly linked to language but through table 'set'. you need to add set in covered table & rephrase your question
+What are the languages available for the set that card 'Angel of Mercy' is in?
+
+  ## Query:
+    SELECT language FROM set_translations WHERE id IN ( SELECT id FROM cards WHERE name = 'Angel of Mercy' )
+
+
+##### card_games - 21 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards of legalities whose status is restricted have text boxes?
+
+  ## Query:
+    SELECT COUNT(DISTINCT T1.id) FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T2.status = 'Restricted' AND T1.isTextless = 0
+
+
+##### card_games - 22 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the description about the ruling of card "Condemn"?
+
+  ## Query:
+    SELECT T2.text FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.name = 'Condemn'
+
+
+##### card_games - 23 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards of legalities whose status is restricted are found in a starter deck?
+
+  ## Query:
+    SELECT COUNT(DISTINCT T1.id) FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T2.status = 'Restricted' AND T1.isStarter = 1
+
+
+##### card_games - 24 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the status of card "Cloudchaser Eagle"?
+
+  ## Query:
+    SELECT DISTINCT T2.status FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.name = 'Cloudchaser Eagle'
+
+
+##### card_games - 25 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the type of card "Benalish Knight"?
+
+  ## Query:
+    SELECT DISTINCT T1.type FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.name = 'Benalish Knight'
+
+
+##### card_games - 26 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the rule of playing card "Benalish Knight"?
+
+  ## Query:
+    SELECT T2.format FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.name = 'Benalish Knight'
+
+
+##### card_games - 27 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please provide the names of the artists who illustrated the card art in Phyrexian.
+
+  ## Query:
+    SELECT T1.artist FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T2.language = 'Phyrexian'
+
+
+##### card_games - 28 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the percentage of borderless cards?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN borderColor = 'borderless' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM cards
+
+
+##### card_games - 29 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards that illusrtated in German have been reprinted?
+
+  ## Query:
+    SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T2.language = 'German' AND T1.isReprint = 1
+
+
+##### card_games - 30 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many borderless cards are illustrated in Russian?
+
+  ## Query:
+    SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.borderColor = 'borderless' AND T2.language = 'Russian'
+
+
+##### card_games - 31 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the percentage of cards whose language is French among the Story Spotlight cards?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN T2.language = 'French' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.isStorySpotlight = 1
+
+
+##### card_games - 32 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards are there with toughness of 99?
+
+  ## Query:
+    SELECT COUNT(id) FROM cards WHERE toughness = 99
+
+
+##### card_games - 33 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Name the cards that were illustrated by Aaron Boyd.
+
+  ## Query:
+    SELECT DISTINCT name FROM cards WHERE artist = 'Aaron Boyd'
+
+
+##### card_games - 34 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many black border cards are only available on mtgo?
+
+  ## Query:
+    SELECT COUNT(id) FROM cards WHERE availability = 'mtgo' AND borderColor = 'black'
+
+
+##### card_games - 35 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List down all the card IDs with converted mana cost of 0.
+
+  ## Query:
+    SELECT id FROM cards WHERE convertedManaCost = 0
+
+
+##### card_games - 36 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the card layout of cards with keyword of flying?
+
+  ## Query:
+    SELECT layout FROM cards WHERE keywords = 'Flying'
+
+
+##### card_games - 37 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards with original type of "Summon - Angel" have subtype other than "Angel"?
+
+  ## Query:
+    SELECT COUNT(id) FROM cards WHERE originalType = 'Summon - Angel' AND subtypes != 'Angel'
+
+
+##### card_games - 38 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the foiled cards that are incredibly powerful when paired with non foiled cards? List the IDs.
+
+  ## Query:
+    SELECT id FROM cards WHERE cardKingdomId IS NOT NULL AND cardKingdomFoilId IS NOT NULL
+
+
+##### card_games - 39 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the cards belong to duel deck a? List the ID.
+
+  ## Query:
+    SELECT id FROM cards WHERE duelDeck = 'a'
+
+
+##### card_games - 40 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the edhrecRank for cards with frame version 2015.
+
+  ## Query:
+    SELECT edhrecRank FROM cards WHERE frameVersion = 2015
+
+
+##### card_games - 41 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List down the name of artists for cards in Chinese Simplified.
+
+  ## Query:
+    SELECT T1.artist FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T2.language = 'Chinese Simplified'
+
+
+##### card_games - 42 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the cards that only available in paper and Japanese language?
+
+  ## Query:
+    SELECT T1.name FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.availability = 'paper' AND T2.language = 'Japanese'
+
+
+##### card_games - 43 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many of the banned cards are white border?
+
+  ## Query:
+    SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T2.status = 'Banned' AND T1.borderColor = 'white'
+
+
+##### card_games - 44 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List down the uuid for legacy cards and the foreign language of these cards.
+
+  ## Query:
+    SELECT T1.uuid, T3.language FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid INNER JOIN foreign_data AS T3 ON T1.uuid = T3.uuid WHERE T2.format = 'legacy'
+
+
+##### card_games - 45 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Write down the ruling of Beacon of Immortality.
+
+  ## Query:
+    SELECT T2.text FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.name = 'Beacon of Immortality'
+
+
+##### card_games - 46 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards are having future frame version and what are the legality status of these cards?
+
+  ## Query:
+    SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.frameVersion = 'future'
+
+
+##### card_games - 47 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the cards for set OGW? State the colour for these cards.
+
+  ## Query:
+    SELECT id, colors FROM cards WHERE id IN ( SELECT id FROM set_translations WHERE setCode = 'OGW' )
+
+
+##### card_games - 48 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the cards in set 10E with converted mana of 5 have translation and what are the languages?
+
+  ## Query:
+    SELECT id, language FROM set_translations WHERE id = ( SELECT id FROM cards WHERE convertedManaCost = 5 ) AND setCode = '10E'
+
+
+##### card_games - 49 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List down the name of cards with original types of Creature - Elf and the date of rulings for these cards.
+
+  ## Query:
+    SELECT T1.id, T2.date FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.originalType = 'Creature - Elf'
+
+
+##### card_games - 50 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the colors of cards from ID 1-20? What are the format of these cards?
+
+  ## Query:
+    SELECT T1.colors, T2.format FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.id BETWEEN 1 AND 20
+
+
+##### card_games - 51 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the Artifact cards, which are black color and comes with foreign languague translation?
+
+  ## Query:
+    SELECT DISTINCT T1.name FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.originalType = 'Artifact' AND T1.colors = 'B'
+
+
+##### card_games - 52 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Pick 3 cards with rarity of uncommon, list down name these cards according to ascending order of it's ruling date.
+
+  ## Query:
+    SELECT DISTINCT T1.name FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.rarity = 'uncommon' ORDER BY T2.date ASC LIMIT 3
+
+
+##### card_games - 53 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    On how many cards designed by John Avon is its foil non-powerful?
+
+  ## Query:
+    SELECT COUNT(id) FROM cards WHERE (cardKingdomId IS NULL OR cardKingdomFoilId IS NULL) AND artist = 'John Avon'
+
+
+##### card_games - 54 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many white bordered cards are powerful?
+
+  ## Query:
+    SELECT COUNT(id) FROM cards WHERE borderColor = 'white' AND cardKingdomId IS NOT NULL AND cardKingdomFoilId IS NOT NULL
+
+
+##### card_games - 55 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards designed by UDON and available in mtgo print type has a starting maximum hand size of -1?
+
+  ## Query:
+    SELECT COUNT(id) FROM cards WHERE hAND = '-1' AND artist = 'UDON' AND Availability = 'mtgo' 
+
+
+##### card_games - 56 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards with a 1993 frame version and available on paper have a sensitive content warning?
+
+  ## Query:
+    SELECT COUNT(id) FROM cards WHERE frameVersion = 1993 AND availability = 'paper' AND hasContentWarning = 1
+
+
+##### card_games - 57 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the mana cost of cards with a normal layout, a 2003 frame version, with a black border color, and available in paper and mtgo?
+
+  ## Query:
+    SELECT manaCost FROM cards WHERE availability = 'mtgo,paper' AND borderColor = 'black' AND frameVersion = 2003 AND layout = 'normal'
+
+
+##### card_games - 58 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the  unconverted mana do all the cards created by Rob Alexander cost in total?
+
+  ## Query:
+    SELECT manaCost FROM cards WHERE artist = 'Rob Alexander'
+
+
+##### card_games - 59 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Lists all types of cards available in arena.
+
+  ## Query:
+    SELECT DISTINCT subtypes, supertypes FROM cards WHERE availability = 'arena' AND subtypes IS NOT NULL AND supertypes IS NOT NULL
+
+
+##### card_games - 60 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Lists the set code of all cards translated into Spanish.
+
+  ## Query:
+    SELECT setCode FROM set_translations WHERE language = 'Spanish'
+
+
+##### card_games - 61 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What percentage of legendary frame effect cards that are only available in online game variations?
+
+  ## Query:
+    SELECT SUM(CASE WHEN isOnlineOnly = 1 THEN 1.0 ELSE 0 END) / COUNT(id) * 100 FROM cards WHERE frameEffects = 'legendary'
+
+
+##### card_games - 62 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the percentage of Story Spotlight cards that do not have a text box? List them by their ID.
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN isTextless = 0 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM cards WHERE isStorySpotlight = 1
+
+
+##### card_games - 63 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Calculate the percentage of cards in Spanish. List them by name.
+
+  ## Query:
+    SELECT ( SELECT CAST(SUM(CASE WHEN language = 'Spanish' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM foreign_data ), name FROM foreign_data WHERE language = 'Spanish'
+
+
+##### card_games - 64 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Indicates the name of all the languages into which the set whose number of cards is 309 is translated.
+
+  ## Query:
+    SELECT T2.language FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T1.baseSetSize = 309
+
+
+##### card_games - 65 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many Brazilian Portuguese translated sets are inside the Commander block?
+
+  ## Query:
+    SELECT COUNT(T1.id) FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T2.language = 'Portuguese (Brazil)' AND T1.block = 'Commander'
+
+
+##### card_games - 66 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Lists by ID all Creature-type cards with legal status.
+
+  ## Query:
+    SELECT T1.id FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid INNER JOIN legalities AS T3 ON T1.uuid = T3.uuid WHERE T3.status = 'Legal' AND T1.types = 'Creature'
+
+
+##### card_games - 67 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Lists all types of cards in German.
+
+  ## Query:
+    SELECT T1.subtypes, T1.supertypes FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T2.language = 'German' AND T1.subtypes IS NOT NULL AND T1.supertypes IS NOT NULL
+
+
+##### card_games - 68 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many unknown power cards contain info about the triggered ability
+
+  ## Query:
+    SELECT T2.text FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE (T1.power IS NULL OR T1.power = '*') AND T2.text LIKE '%triggered ability%'
+
+
+##### card_games - 69 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Indicates the number of cards with pre-modern format, ruling text "This is a triggered mana ability." that do not have multiple faces.
+
+  ## Query:
+    SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid INNER JOIN rulings AS T3 ON T1.uuid = T3.uuid WHERE T2.format = 'premodern' AND T3.text = 'This is a triggered mana ability.' AND T1.Side IS NULL
+
+
+##### card_games - 70 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Is there any card from Erica Yang artist in pauper format and available in paper? If so, indicate its ID.
+
+  ## Query:
+    SELECT T1.id FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.artist = 'Erica Yang' AND T2.format = 'pauper' AND T1.availability = 'paper'
+
+
+##### card_games - 71 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    To which artist does the card with the text "Das perfekte Gegenmittel zu einer dichten Formation" belong?
+
+  ## Query:
+    SELECT DISTINCT T1.artist FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T2.flavorText LIKE '%DAS perfekte Gegenmittel zu einer dichten Formation%'
+
+
+##### card_games - 72 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the foreign name of the card in French of type Creature, normal layout and black border color, by artist Matthew D. Wilson?
+
+  ## Query:
+    SELECT name FROM foreign_data WHERE uuid IN ( SELECT uuid FROM cards WHERE types = 'Creature' AND layout = 'normal' AND borderColor = 'black' AND artist = 'Matthew D. Wilson' ) AND language = 'French'
+
+
+##### card_games - 73 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards with print rarity have ruling text printed on 01/02/2007?
+
+  ## Query:
+    SELECT COUNT(DISTINCT T1.id) FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.rarity = 'rare' AND T2.date = '2007-02-01'
+
+
+##### card_games - 74 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What language is the set of 180 cards that belongs to the Ravnica block translated into?
+
+  ## Query:
+    SELECT T2.language FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T1.block = 'Ravnica' AND T1.baseSetSize = 180
+
+
+##### card_games - 75 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What percentage of cards with format commander and legal status do not have a content warning?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN T1.hasContentWarning = 0 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T2.format = 'commander' AND T2.status = 'Legal'
+
+
+##### card_games - 76 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What percentage of cards without power are in French?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN T2.language = 'French' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.power IS NULL OR T1.power = '*'
+
+
+##### card_games - 77 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What percentage of Japanese translated sets are expansion sets?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN T2.language = 'Japanese' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T1.type = 'expansion'
+
+
+##### card_games - 78 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What kind of printing is on the card that Daren Bader created?
+
+  ## Query:
+    SELECT DISTINCT availability FROM cards WHERE artist = 'Daren Bader'
+
+
+##### card_games - 79 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many color cards with no borders have been ranked higher than 12000 on EDHRec?
+
+  ## Query:
+    SELECT COUNT(id) FROM cards WHERE edhrecRank > 12000 AND borderColor = 'borderless'
+
+
+##### card_games - 80 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards are oversized, reprinted, and printed for promotions?
+
+  ## Query:
+    SELECT COUNT(id) FROM cards WHERE isOversized = 1 AND isReprint = 1 AND isPromo = 1
+
+
+##### card_games - 81 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list top three unknown power cards that have promotional types for arena league in alphabetical order.
+
+  ## Query:
+    SELECT name FROM cards WHERE (power IS NULL OR power LIKE '%*%') AND promoTypes = 'arenaleague' ORDER BY name LIMIT 3
+
+
+##### card_games - 82 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the language of the card with the multiverse number 149934?
+
+  ## Query:
+    SELECT language FROM foreign_data WHERE multiverseid = 149934
+
+
+##### card_games - 83 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please provide the ids of top three powerful pairs of Kingdom Foil and Kingdom Cards sorted by Kingdom Foil id in alphabetical order.
+
+  ## Query:
+    SELECT cardKingdomFoilId, cardKingdomId FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL ORDER BY cardKingdomFoilId LIMIT 3
+
+
+##### card_games - 84 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What proportion of cards do not have a text box with a normal layout?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN isTextless = 1 AND layout = 'normal' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM cards
+
+
+##### card_games - 85 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the card numbers that don't have multiple faces on a single card and have the subtypes Angel and Wizard?
+
+  ## Query:
+    SELECT id FROM cards WHERE subtypes = 'Angel,Wizard' AND side IS NULL
+
+
+##### card_games - 86 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please provide top three sets that don't appear in Magic: The Gathering Online, along with their names in in alphabetical order.
+
+  ## Query:
+    SELECT name FROM sets WHERE mtgoCode IS NULL ORDER BY name LIMIT 3
+
+
+##### card_games - 87 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What languages are available in the set known as Archenemy on the magic card market and having the code ARC?
+
+  ## Query:
+    SELECT T2.language FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T1.mcmName = 'Archenemy' AND T2.setCode = 'ARC'
+
+
+##### card_games - 88 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the name of set number 5 and its translation?
+
+  ## Query:
+    SELECT T1.name, T2.translation FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T2.id = 5 GROUP BY T1.name, T2.translation
+
+
+##### card_games - 89 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the language and expansion type of set number 206?
+
+  ## Query:
+    SELECT T2.language, T1.type FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T2.id = 206
+
+
+##### card_games - 90 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list top two sets of cards with their IDs that have Italian-language cards and are located in the Shadowmoor block in alphabetical order.
+
+  ## Query:
+    SELECT T1.name, T1.id FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T1.block = 'Shadowmoor' AND T2.language = 'Italian' ORDER BY T1.id LIMIT 2
+
+
+##### card_games - 91 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which set is not available outside of the United States and has foil cards with Japanese writing on them? Please include the set ID in your response.
+
+  ## Query:
+    SELECT T1.name, T1.id FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T2.language = 'Japanese' AND T1.isFoilOnly = 1 AND T1.isForeignOnly = 0
+
+
+##### card_games - 92 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which Russian set of cards contains the most cards overall?
+
+  ## Query:
+    SELECT T1.id FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T2.language = 'Russian' GROUP BY T1.baseSetSize ORDER BY T1.baseSetSize DESC LIMIT 1
+
+
+##### card_games - 93 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the percentage of the set of cards that have Chinese Simplified as the language and are only available for online games?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN T2.language = 'Chinese Simplified' AND T1.isOnlineOnly = 1 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode
+
+
+##### card_games - 94 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many sets are available just in Japanese and not in Magic: The Gathering Online?
+
+  ## Query:
+    SELECT COUNT(T1.id) FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T2.language = 'Japanese'  AND (T1.mtgoCode IS NULL OR T1.mtgoCode = '')
+
+
+##### card_games - 95 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many card border with black color ? List out the card id.
+
+  ## Query:
+    SELECT id FROM cards WHERE borderColor = 'black' GROUP BY id
+
+
+##### card_games - 96 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards have frame effect as extendedart? List out the id of those cards.
+
+  ## Query:
+    SELECT id FROM cards WHERE frameEffects = 'extendedart' GROUP BY id
+
+
+##### card_games - 97 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among black card borders, which card has full artwork?
+
+  ## Query:
+    SELECT id FROM cards WHERE borderColor = 'black' AND isFullArt = 1
+
+
+##### card_games - 98 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Point out the language of set id "174"?
+
+  ## Query:
+    SELECT language FROM set_translations WHERE id = 174
+
+
+##### card_games - 99 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List out the set name of the set code "ALL".
+
+  ## Query:
+    SELECT name FROM sets WHERE code = 'ALL'
+
+
+##### card_games - 100 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which foreign language used by "A Pedra Fellwar"?
+
+  ## Query:
+    SELECT DISTINCT language FROM foreign_data WHERE name = 'A Pedra Fellwar'
+
+
+##### card_games - 101 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    State the set code of the set with release date of 07/13/2007?
+
+  ## Query:
+    SELECT T2.setCode FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T1.releaseDate = '2007-07-13'
+
+
+##### card_games - 102 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Mention the base set size and set code of the set that was in block named "Masques" and "Mirage".
+
+  ## Query:
+    SELECT DISTINCT T1.baseSetSize, T2.setCode FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T1.block IN ('Masques', 'Mirage')
+
+
+##### card_games - 103 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Give the code of sets have expansion type of 'expansion'?
+
+  ## Query:
+    SELECT T2.setCode FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T1.type = 'expansion' GROUP BY T2.setCode
+
+
+##### card_games - 104 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Name the foreign name of the card that has boros watermark? List out the type of this card.
+
+  ## Query:
+    SELECT DISTINCT T1.name, T1.type FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.watermark = 'boros'
+
+
+##### card_games - 105 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the language and flavor text of the card that has colorpie watermark? List out the type of this card.
+
+  ## Query:
+    SELECT DISTINCT T2.language, T2.flavorText FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.watermark = 'colorpie'
+
+
+##### card_games - 106 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is percentage of the cards with a converted Mana Cost of 10 in set of Abyssal Horror?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN T1.convertedManaCost = 10 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id), T1.name FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T1.name = 'Abyssal Horror'
+
+
+##### card_games - 107 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Give the code of sets have expansion commander type?
+
+  ## Query:
+    SELECT T2.setCode FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T1.type = 'commander'
+
+
+##### card_games - 108 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Name the foreign name of the card that has abzan watermark? List out the type of this card.
+
+  ## Query:
+    SELECT DISTINCT T1.name, T1.type FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.watermark = 'abzan'
+
+
+##### card_games - 109 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the language of the card that has azorius watermark? List out the type of this card.
+
+  ## Query:
+    SELECT DISTINCT T2.language, T1.type FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.watermark = 'azorius'
+
+
+##### card_games - 110 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Of all the cards that are designed by Aaron Miller, how many of them are incredibly powerful?
+
+  ## Query:
+    SELECT SUM(CASE WHEN artist = 'Aaron Miller' AND cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL THEN 1 ELSE 0 END) FROM cards
+
+
+##### card_games - 111 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards available in paper have a positive starting maximum hand size?
+
+  ## Query:
+    SELECT SUM(CASE WHEN availability = 'paper' AND hAND = '3' THEN 1 ELSE 0 END) FROM cards
+
+
+##### card_games - 112 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list the names of the cards that have a text box.
+
+  ## Query:
+    SELECT DISTINCT name FROM cards WHERE isTextless = 0
+
+
+##### card_games - 113 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What's the unconverted mana cost of the card "Ancestor's Chosen"?
+
+  ## Query:
+    SELECT DISTINCT manaCost FROM cards WHERE name = 'Ancestor''s Chosen'
+
+
+##### card_games - 114 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the cards with a white border color, how many of them have unknown power?
+
+  ## Query:
+    SELECT SUM(CASE WHEN power LIKE '%*%' OR power IS NULL THEN 1 ELSE 0 END) FROM cards WHERE borderColor = 'white'
+
+
+##### card_games - 115 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which of the cards that are a promotional painting have multiple faces on the same card? Please list their names.
+
+  ## Query:
+    SELECT DISTINCT name FROM cards WHERE isPromo = 1 AND side IS NOT NULL
+
+
+##### card_games - 116 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What's the list of all types for the card "Molimo, Maro-Sorcerer"?
+
+  ## Query:
+    SELECT DISTINCT subtypes, supertypes FROM cards WHERE name = 'Molimo, Maro-Sorcerer'
+
+
+##### card_games - 117 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list the websites where I can purchase the cards that have the promotional type of "bundle".
+
+  ## Query:
+    SELECT DISTINCT purchaseUrls FROM cards WHERE promoTypes = 'bundle'
+
+
+##### card_games - 118 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many artists have designed a card with a black border color and is available in both "arena" and "mtgo" printing type?
+
+  ## Query:
+    SELECT COUNT(CASE WHEN availability LIKE '%arena,mtgo%' AND borderColor = 'black' THEN 1 ELSE NULL END) FROM cards
+
+
+##### card_games - 119 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which card costs more converted mana, "Serra Angel" or "Shrine Keeper"?
+
+  ## Query:
+    SELECT name FROM cards WHERE name IN ('Serra Angel', 'Shrine Keeper') ORDER BY convertedManaCost DESC LIMIT 1
+
+
+##### card_games - 120 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which artist designed the card whose promotional name is "Battra, Dark Destroyer"?
+
+  ## Query:
+    SELECT artist FROM cards WHERE flavorName = 'Battra, Dark Destroyer'
+
+
+##### card_games - 121 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list the names of the top 3 cards with the highest converted mana cost and have a 2003 card frame style.
+
+  ## Query:
+    SELECT name FROM cards WHERE frameVersion = 2003 ORDER BY convertedManaCost DESC LIMIT 3
+
+
+##### card_games - 122 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What's the Italian name of the set of cards with "Ancestor's Chosen" is in?
+
+  ## Query:
+    SELECT translation FROM set_translations WHERE setCode IN ( SELECT setCode FROM cards WHERE name = 'Ancestor''s Chosen' ) AND language = 'Italian'
+
+
+##### card_games - 123 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many translations are there for the set of cards with "Angel of Mercy" in it?
+
+  ## Query:
+    SELECT COUNT(DISTINCT translation) FROM set_translations WHERE setCode IN ( SELECT setCode FROM cards WHERE name = 'Angel of Mercy' ) AND translation IS NOT NULL
+
+
+##### card_games - 124 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list the names of the cards in the set "Hauptset Zehnte Edition".
+
+  ## Query:
+    SELECT DISTINCT T1.name FROM cards AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.setCode WHERE T2.translation = 'Hauptset Zehnte Edition'
+
+
+##### card_games - 125 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the set of cards with "Ancestor's Chosen" in it, is there a Korean version of it?
+
+  ## Query:
+    SELECT IIF(SUM(CASE WHEN T2.language = 'Korean' AND T2.translation IS NOT NULL THEN 1 ELSE 0 END) > 0, 'YES', 'NO') FROM cards AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.setCode WHERE T1.name = 'Ancestor''s Chosen'
+
+
+##### card_games - 126 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the cards in the set "Hauptset Zehnte Edition", how many of them are designed by Adam Rex?
+
+  ## Query:
+    SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.setCode WHERE T2.translation = 'Hauptset Zehnte Edition' AND T1.artist = 'Adam Rex'
+
+
+##### card_games - 127 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards are there in the base set of "Hauptset Zehnte Edition"?
+
+  ## Query:
+    SELECT T1.baseSetSize FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T2.translation = 'Hauptset Zehnte Edition'
+
+
+##### card_games - 128 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the Simplified Chinese translation of the name of the set "Eighth Edition"?
+
+  ## Query:
+    SELECT T2.translation FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T1.name = 'Eighth Edition' AND T2.language = 'Chinese Simplified'
+
+
+##### card_games - 129 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Did the set of cards with "Angel of Mercy" appear on Magic: The Gathering Online?
+
+  ## Query:
+    SELECT IIF(T2.mtgoCode IS NOT NULL, 'YES', 'NO') FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T1.name = 'Angel of Mercy'
+
+
+##### card_games - 130 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    When was the set of cards with "Ancestor's Chosen" released?
+
+  ## Query:
+    SELECT DISTINCT T2.releaseDate FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T1.name = 'Ancestor''s Chosen'
+
+
+##### card_games - 131 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the expansion type of the set "Hauptset Zehnte Edition"?
+
+  ## Query:
+    SELECT T1.type FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T2.translation = 'Hauptset Zehnte Edition'
+
+
+##### card_games - 132 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the sets in the block "Ice Age", how many of them have an Italian translation?
+
+  ## Query:
+    SELECT COUNT(DISTINCT T1.id) FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T1.block = 'Ice Age' AND T2.language = 'Italian' AND T2.translation IS NOT NULL
+
+
+##### card_games - 133 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Is the set of cards with Adarkar Valkyrie only available outside the United States?
+
+  ## Query:
+    SELECT IIF(isForeignOnly = 1, 'YES', 'NO') FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T1.name = 'Adarkar Valkyrie'
+
+
+##### card_games - 134 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the sets of cards that have an Italian translation, how many of them have a base set number of under 100?
+
+  ## Query:
+    SELECT COUNT(T1.id) FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T2.translation IS NOT NULL AND T1.baseSetSize < 100 AND T2.language = 'Italian'
+
+
+##### card_games - 135 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards in the set Coldsnap have a black border color?
+
+  ## Query:
+    SELECT SUM(CASE WHEN T1.borderColor = 'black' THEN 1 ELSE 0 END) FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T2.name = 'Coldsnap'
+
+
+##### card_games - 136 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list the name of the cards in the set Coldsnap with the highest converted mana cost.
+
+  ## Query:
+    SELECT T1.name FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T2.name = 'Coldsnap' ORDER BY T1.convertedManaCost DESC LIMIT 1
+
+
+##### card_games - 137 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which of these artists have designed a card in the set Coldsnap, Jeremy Jarvis, Aaron Miller or Chippy?
+
+  ## Query:
+    SELECT T1.artist FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE (T2.name = 'Coldsnap' AND T1.artist = 'Chippy') OR (T2.name = 'Coldsnap' AND T1.artist = 'Aaron Miller') OR (T2.name = 'Coldsnap' AND T1.artist = 'Jeremy Jarvis') GROUP BY T1.artist
+
+
+##### card_games - 138 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is card number 4 in the set Coldsnap?
+
+  ## Query:
+    SELECT T1.name FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T2.name = 'Coldsnap' AND T1.number = 4
+
+
+##### card_games - 139 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the cards with converted mana cost higher than 5 in the set Coldsnap, how many of them have unknown power?
+
+  ## Query:
+    SELECT SUM(CASE WHEN T1.power LIKE '*' OR T1.power IS NULL THEN 1 ELSE 0 END) FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T2.name = 'Coldsnap' AND T1.convertedManaCost > 5
+
+
+##### card_games - 140 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the Italian flavor text of the card "Ancestor's Chosen"?
+
+  ## Query:
+    SELECT T2.flavorText FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.name = 'Ancestor''s Chosen' AND T2.language = 'Italian'
+
+
+##### card_games - 141 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list all the foreign languages in which the card "Ancestor's Chosen" has a flavor text.
+
+  ## Query:
+    SELECT T2.language FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.name = 'Ancestor''s Chosen' AND T2.flavorText IS NOT NULL
+
+
+##### card_games - 142 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What's the German type of the card "Ancestor's Chosen"?
+
+  ## Query:
+    SELECT DISTINCT T1.type FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.name = 'Ancestor''s Chosen' AND T2.language = 'German'
+
+
+##### card_games - 143 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list the Italian text ruling of all the cards in the set Coldsnap.
+
+  ## Query:
+    SELECT DISTINCT T1.text FROM foreign_data AS T1 INNER JOIN cards AS T2 ON T2.uuid = T1.uuid INNER JOIN sets AS T3 ON T3.code = T2.setCode WHERE T3.name = 'Coldsnap' AND T1.language = 'Italian'
+
+
+##### card_games - 144 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list the Italian names of the cards in the set Coldsnap with the highest converted mana cost.
+
+  ## Query:
+    SELECT T2.name FROM foreign_data AS T1 INNER JOIN cards AS T2 ON T2.uuid = T1.uuid INNER JOIN sets AS T3 ON T3.code = T2.setCode WHERE T3.name = 'Coldsnap' AND T1.language = 'Italian' ORDER BY T2.convertedManaCost DESC
+
+
+##### card_games - 145 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    When was the ruling for the card 'Reminisce' created?
+
+  ## Query:
+    SELECT T2.date FROM cards AS T1 INNER JOIN rulings AS T2 ON T2.uuid = T1.uuid WHERE T1.name = 'Reminisce'
+
+
+##### card_games - 146 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the percentage of the cards with a converted mana cost of 7 in the set Coldsnap?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN T1.convertedManaCost = 7 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T2.name = 'Coldsnap'
+
+
+##### card_games - 147 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the percentage of incredibly powerful cards in the set Coldsnap?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN T1.cardKingdomFoilId IS NOT NULL AND T1.cardKingdomId IS NOT NULL THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T2.name = 'Coldsnap'
+
+
+##### card_games - 148 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What's the code for the set which was released on 2017/7/14?
+
+  ## Query:
+    SELECT code FROM sets WHERE releaseDate = '2017-07-14' GROUP BY releaseDate, code
+
+
+##### card_games - 149 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the keyrune code for the set whose code is 'PKHC'.
+
+  ## Query:
+    SELECT keyruneCode FROM sets WHERE code = 'PKHC'
+
+
+##### card_games - 150 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the set which had 'SS2' as the code, what is its magic card market id?
+
+  ## Query:
+    SELECT mcmId FROM sets WHERE code = 'SS2'
+
+
+##### card_games - 151 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What's the magic card market name for the set which was released on 2017/6/9?
+
+  ## Query:
+    SELECT mcmName FROM sets WHERE releaseDate = '2017-06-09'
+
+
+##### card_games - 152 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the set "From the Vault: Lore", what is its expansion type?
+
+  ## Query:
+    SELECT type FROM sets WHERE name LIKE '%FROM the Vault: Lore%'
+
+
+##### card_games - 153 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the set "Commander 2014 Oversized" , give its parent code.
+
+  ## Query:
+    SELECT parentCode FROM sets WHERE name = 'Commander 2014 Oversized'
+
+
+##### card_games - 154 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For all cards illustrated by Jim Pavelec. and describe the text of the ruling of these cards. Do these cards have missing or degraded properties and values.
+
+  ## Query:
+    SELECT T2.text , CASE WHEN T1.hasContentWarning = 1 THEN 'YES' ELSE 'NO' END FROM cards AS T1 INNER JOIN rulings AS T2 ON T2.uuid = T1.uuid WHERE T1.artist = 'Jim Pavelec'
+
+
+##### card_games - 155 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What was the release date for the set which card "Evacuation" in it?
+
+  ## Query:
+    SELECT T2.releaseDate FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T1.name = 'Evacuation'
+
+
+##### card_games - 156 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the number of cards are there in the set of "Rinascita di Alara"?
+
+  ## Query:
+    SELECT T1.baseSetSize FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T2.translation = 'Rinascita di Alara'
+
+
+##### card_games - 157 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the expansion type of the set "Huitième édition".
+
+  ## Query:
+    SELECT type FROM sets WHERE code IN ( SELECT setCode FROM set_translations WHERE translation = 'Huitième édition' )
+
+
+##### card_games - 158 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What's the French name of the set of cards with "Tendo Ice Bridge" is in?
+
+  ## Query:
+    SELECT T2.translation FROM cards AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.setCode WHERE T1.name = 'Tendo Ice Bridge' AND T2.language = 'French' AND T2.translation IS NOT NULL
+
+
+##### card_games - 159 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many translations of the name of the set "Tenth Edition"?
+
+  ## Query:
+    SELECT COUNT(DISTINCT T2.translation) FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T1.name = 'Tenth Edition' AND T2.translation IS NOT NULL
+
+
+##### card_games - 160 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Tell the Japanese name of the set which card "Fellwar Stone" is in it.
+
+  ## Query:
+    SELECT T2.translation FROM cards AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.setCode WHERE T1.name = 'Fellwar Stone' AND T2.language = 'Japanese' AND T2.translation IS NOT NULL
+
+
+##### card_games - 161 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which card name in the set 'Journey into Nyx Hero's Path' has the highest converted mana cost.
+
+  ## Query:
+    SELECT T1.name FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T2.name = 'Journey into Nyx Hero''s Path' ORDER BY T1.convertedManaCost DESC LIMIT 1
+
+
+##### card_games - 162 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the release date for the set "Ola de frío"?
+
+  ## Query:
+    SELECT T1.releaseDate FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T2.translation = 'Ola de frío'
+
+
+##### card_games - 163 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What was the expansion type for the set which card "Samite Pilgrim" in it?
+
+  ## Query:
+    SELECT type FROM sets WHERE code IN ( SELECT setCode FROM cards WHERE name = 'Samite Pilgrim' )
+
+
+##### card_games - 164 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards are there in the set 'World Championship Decks 2004' with the converted mana cost as '3'.
+
+  ## Query:
+    SELECT COUNT(id) FROM cards WHERE setCode IN ( SELECT code FROM sets WHERE name = 'World Championship Decks 2004' ) AND convertedManaCost = 3
+
+
+##### card_games - 165 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Show the Simplified Chinese translation of the name of the set "Mirrodin"?
+
+  ## Query:
+    SELECT translation FROM set_translations WHERE setCode IN ( SELECT code FROM sets WHERE name = 'Mirrodin' ) AND language = 'Chinese Simplified'
+
+
+##### card_games - 166 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For all the set of cards that has Japanese translation, what is the percentage of them are only available in non-foil?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN isNonFoilOnly = 1 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM sets WHERE code IN ( SELECT setCode FROM set_translations WHERE language = 'Japanese' )
+
+
+##### card_games - 167 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For all the set of cards that has Brazil Portuguese translation, what is the percentage of them are only available online?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN isOnlineOnly = 1 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM sets WHERE code IN ( SELECT setCode FROM set_translations WHERE language = 'Portuguese (Brazil)' )
+
+
+##### card_games - 168 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the available printing types of the cards that doesn't have a text box created by Aleksi Briclot?
+
+  ## Query:
+    SELECT DISTINCT availability FROM cards WHERE artist = 'Aleksi Briclot' AND isTextless = 1
+
+
+##### card_games - 169 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the unique id of the set that has the highest number of cards?
+
+  ## Query:
+    SELECT id FROM sets ORDER BY baseSetSize DESC LIMIT 1
+
+
+##### card_games - 170 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the cards that doesn't have multiple faces on the same card, who is the illustrator of the card art that has the highest cost of converted mana?
+
+  ## Query:
+    SELECT artist FROM cards WHERE side IS NULL ORDER BY convertedManaCost DESC LIMIT 1
+
+
+##### card_games - 171 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the most common visual frame effects among the incredibly powerful foils?
+
+  ## Query:
+    SELECT frameEffects FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL GROUP BY frameEffects ORDER BY COUNT(frameEffects) DESC LIMIT 1
+
+
+##### card_games - 172 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards with unknown power that can't be found in foil is in duel deck A?
+
+  ## Query:
+    SELECT SUM(CASE WHEN power = '*' OR power IS NULL THEN 1 ELSE 0 END) FROM cards WHERE hasFoil = 0 AND duelDeck = 'a'
+
+
+##### card_games - 173 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the sets whose expansion type is Commander, which set has the highest total number of cards including promotional and related supplemental products but excluding Alchemy modifications? Indicate the id of the set.
+
+  ## Query:
+    SELECT id FROM sets WHERE type = 'commander' ORDER BY totalSetSize DESC LIMIT 1
+
+
+##### card_games - 174 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    In duels, what are the top 10 cards with the highest uncoverted mana cost?
+
+  ## Query:
+    SELECT DISTINCT name FROM cards WHERE uuid IN ( SELECT uuid FROM legalities WHERE format = 'duel' ) ORDER BY manaCost DESC LIMIT 0, 10
+
+
+##### card_games - 175 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    When was the oldest mythic card released and what are its legal play formats?
+
+  ## Query:
+    SELECT T1.originalReleaseDate, T2.format FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.rarity = 'mythic' AND T1.originalReleaseDate IS NOT NULL AND T2.status = 'Legal' ORDER BY T1.originalReleaseDate LIMIT 1
+
+
+##### card_games - 176 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many cards did Volkan BaÇµa illustrated whose foreign language is in French?
+
+  ## Query:
+    SELECT COUNT(T3.id) FROM ( SELECT T1.id FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.artist = 'Volkan Baǵa' AND T2.language = 'French' GROUP BY T1.id ) AS T3
+
+
+##### card_games - 177 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many rare enchantment Abundance cards are there whose play format status are all legal?
+
+  ## Query:
+    SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN legalities AS T2 ON T2.uuid = T1.uuid WHERE T1.rarity = 'rare' AND T1.types = 'Enchantment' AND T1.name = 'Abundance' AND T2.status = 'Legal'
+
+
+##### card_games - 178 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which of the play format has the highest number of banned status? Indicate the play format and the names of all the card meet the condition.
+
+  ## Query:
+    WITH MaxBanned AS (SELECT format, COUNT(*) AS count_banned FROM legalities WHERE status = 'Banned' GROUP BY format ORDER BY COUNT(*) DESC LIMIT 1) SELECT T2.format, T1.name FROM cards AS T1 INNER JOIN legalities AS T2 ON T2.uuid = T1.uuid INNER JOIN MaxBanned MB ON MB.format = T2.format WHERE T2.status = 'Banned'
+
+
+##### card_games - 179 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the language of the "Battlebond" set?
+
+  ## Query:
+    SELECT language FROM set_translations WHERE id IN ( SELECT id FROM sets WHERE name = 'Battlebond' )
+
+
+##### card_games - 180 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Who is the illustrator that illustrated the least amount of cards? List the format of play of the cards that he/she illustrated.
+
+  ## Query:
+    SELECT T1.artist, T2.format FROM cards AS T1 INNER JOIN legalities AS T2 ON T2.uuid = T1.uuid GROUP BY T1.artist ORDER BY COUNT(T1.id) ASC LIMIT 1
+
+
+##### card_games - 181 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the cards whose version of frame style is 1997, what is the status of the card illustrated by D. Alexander Gregory in legacy play format that has sensitive content or Wizards of the Coast?
+
+  ## Query:
+    SELECT DISTINCT T2.status FROM cards AS T1 INNER JOIN legalities AS T2 ON T2.uuid = T1.uuid WHERE T1.frameVersion = 1997 AND T1.hasContentWarning = 1 AND T1.artist = 'D. Alexander Gregory' AND T2.format = 'legacy'
+
+
+##### card_games - 182 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which cards are ranked 1st on EDHRec? List all of the cards name and its banned play format.
+
+  ## Query:
+    SELECT T1.name, T2.format FROM cards AS T1 INNER JOIN legalities AS T2 ON T2.uuid = T1.uuid WHERE T1.edhrecRank = 1 AND T2.status = 'Banned' GROUP BY T1.name, T2.format
+
+
+##### card_games - 183 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the annual average number of sets that were released between 1/1/2012 to 12/31/2015? Indicate the common langugage of the card.
+
+  ## Query:
+    SELECT (CAST(SUM(T1.id) AS REAL) / COUNT(T1.id)) / 4, T2.language FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.id = T2.id WHERE T1.releaseDate BETWEEN '2012-01-01' AND '2015-12-31' GROUP BY T1.releaseDate ORDER BY COUNT(T2.language) DESC LIMIT 1
+
+
+##### card_games - 184 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the artists who illustrated cards with black borders which are available only in arena.
+
+  ## Query:
+    SELECT DISTINCT artist FROM cards WHERE availability = 'arena' AND BorderColor = 'black'
+
+
+##### card_games - 185 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Find the uuid of cards in which the old school format is restricted or banned.
+
+  ## Query:
+    SELECT uuid FROM legalities WHERE format = 'oldschool' AND (status = 'Banned' OR status = 'Restricted')
+
+
+##### card_games - 186 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the card designed by Matthew D. Wilson, how many are available only in the paper?
+
+  ## Query:
+    SELECT COUNT(id) FROM cards WHERE artist = 'Matthew D. Wilson' AND availability = 'paper'
+
+
+##### card_games - 187 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the rulings for the card named and designed by Kev Walker? List them in descending order of dates.
+
+  ## Query:
+    SELECT T2.text FROM cards AS T1 INNER JOIN rulings AS T2 ON T2.uuid = T1.uuid WHERE T1.artist = 'Kev Walker' ORDER BY T2.date DESC
+
+
+##### card_games - 188 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the names of all the cards in the set Hour of Devastation and find the formats in which these cards are legal.
+
+  ## Query:
+    SELECT DISTINCT T2.name , CASE WHEN T1.status = 'Legal' THEN T1.format ELSE NULL END FROM legalities AS T1 INNER JOIN cards AS T2 ON T2.uuid = T1.uuid WHERE T2.setCode IN ( SELECT code FROM sets WHERE name = 'Hour of Devastation' )
+
+
+##### card_games - 189 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Find and list the names of sets which doesn't have Japanese translation but have Korean translation.
+
+  ## Query:
+    SELECT name FROM sets WHERE code IN ( SELECT setCode FROM set_translations WHERE language = 'Korean' AND language NOT LIKE '%Japanese%' )
+
+
+##### card_games - 190 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List all the frame styles and cards Allen Williams worked on and find any banned cards if there are any.
+
+  ## Query:
+    SELECT DISTINCT T1.frameVersion, T1.name , IIF(T2.status = 'Banned', T1.name, 'NO') FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.artist = 'Allen Williams'
+
+
+##### european_football_2 - 0 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which player has the highest overall rating? Indicate the player's api id.
+
+  ## Query:
+    SELECT player_api_id FROM Player_Attributes ORDER BY overall_rating DESC LIMIT 1
+
+
+##### european_football_2 - 1 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the height of the tallest player? Indicate his name.
+
+  ## Query:
+    SELECT player_name FROM Player ORDER BY height DESC LIMIT 1
+
+
+##### european_football_2 - 2 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the preferred foot when attacking of the player with the lowest potential?
+
+  ## Query:
+    SELECT preferred_foot FROM Player_Attributes WHERE potential IS NOT NULL ORDER BY potential ASC LIMIT 1
+
+
+##### european_football_2 - 3 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the players with an overall rating between 60 to 65, how many players whose going to be in all of your attack moves instead of defensing?
+
+  ## Query:
+    SELECT COUNT(id) FROM Player_Attributes WHERE overall_rating BETWEEN 60 AND 65 AND defensive_work_rate = 'low'
+
+
+##### european_football_2 - 4 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Who are the top 5 players who perform better in crossing actions? Indicate their player id.
+
+  ## Query:
+    SELECT id FROM Player_Attributes ORDER BY crossing DESC LIMIT 5
+
+
+##### european_football_2 - 5 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Give the name of the league had the most goals in the 2016 season?
+
+  ## Query:
+    SELECT t2.name FROM Match AS t1 INNER JOIN League AS t2 ON t1.league_id = t2.id WHERE t1.season = '2015/2016' GROUP BY t2.name ORDER BY SUM(t1.home_team_goal + t1.away_team_goal) DESC LIMIT 1
+
+
+##### european_football_2 - 6 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which home team had lost the fewest matches in the 2016 season?
+
+  ## Query:
+    SELECT teamDetails.team_long_name FROM Match AS matchData INNER JOIN Team AS teamDetails ON matchData.home_team_api_id = teamDetails.team_api_id WHERE matchData.season = '2015/2016' AND matchData.home_team_goal - matchData.away_team_goal < 0 GROUP BY matchData.home_team_api_id ORDER BY COUNT(*) ASC LIMIT 1
+
+
+##### european_football_2 - 7 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Indicate the full names of the top 10 players with the highest number of penalties.
+
+  ## Query:
+    SELECT t2.player_name FROM Player_Attributes AS t1 INNER JOIN Player AS t2 ON t1.id = t2.id ORDER BY t1.penalties DESC LIMIT 10
+
+
+##### european_football_2 - 8 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    In Scotland Premier League, which away team won the most during the 2010 season?
+
+  ## Query:
+    SELECT teamInfo.team_long_name FROM League AS leagueData INNER JOIN Match AS matchData ON leagueData.id = matchData.league_id INNER JOIN Team AS teamInfo ON matchData.away_team_api_id = teamInfo.team_api_id WHERE leagueData.name = 'Scotland Premier League' AND matchData.season = '2009/2010' AND matchData.away_team_goal - matchData.home_team_goal > 0 GROUP BY matchData.away_team_api_id ORDER BY COUNT(*) DESC LIMIT 1
+
+
+##### european_football_2 - 9 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the speed in which attacks are put together of the top 4 teams with the highest build Up Play Speed?
+
+  ## Query:
+    SELECT t1.buildUpPlaySpeed FROM Team_Attributes AS t1 INNER JOIN Team AS t2 ON t1.team_api_id = t2.team_api_id ORDER BY t1.buildUpPlaySpeed ASC LIMIT 4
+
+
+##### european_football_2 - 10 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Give the name of the league had the most matches end as draw in the 2016 season?
+
+  ## Query:
+    SELECT t2.name FROM Match AS t1 INNER JOIN League AS t2 ON t1.league_id = t2.id WHERE t1.season = '2015/2016' AND t1.home_team_goal = t1.away_team_goal GROUP BY t2.name ORDER BY COUNT(t1.id) DESC LIMIT 1
+
+
+##### european_football_2 - 11 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    At present, calculate for the player's age who have a sprint speed of no less than 97 between 2013 to 2015.
+
+  ## Query:
+    SELECT DISTINCT DATETIME() - T2.birthday age FROM Player_Attributes AS t1 INNER JOIN Player AS t2 ON t1.player_api_id = t2.player_api_id WHERE STRFTIME('%Y',t1.`date`) >= '2013' AND STRFTIME('%Y',t1.`date`) <= '2015' AND t1.sprint_speed >= 97
+
+
+##### european_football_2 - 12 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Give the name of the league with the highest matches of all time and how many matches were played in the said league.
+
+  ## Query:
+    SELECT t2.name, t1.max_count FROM League AS t2 JOIN (SELECT league_id, MAX(cnt) AS max_count FROM (SELECT league_id, COUNT(id) AS cnt FROM Match GROUP BY league_id) AS subquery) AS t1 ON t1.league_id = t2.id
+
+
+##### european_football_2 - 13 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average height of players born between 1990 and 1995?
+
+  ## Query:
+    SELECT SUM(height) / COUNT(id) FROM Player WHERE SUBSTR(birthday, 1, 4) BETWEEN '1990' AND '1995'
+
+
+##### european_football_2 - 14 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the players' api id who had the highest above average overall ratings in 2010.
+
+  ## Query:
+    SELECT player_api_id FROM Player_Attributes WHERE SUBSTR(`date`, 1, 4) = '2010' ORDER BY overall_rating DESC LIMIT 1
+
+
+##### european_football_2 - 15 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Give the team_fifa_api_id of teams with more than 50 but less than 60 build-up play speed.
+
+  ## Query:
+    SELECT DISTINCT team_fifa_api_id FROM Team_Attributes WHERE buildUpPlaySpeed > 50 AND buildUpPlaySpeed < 60
+
+
+##### european_football_2 - 16 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the long name of teams with above-average build-up play passing in 2012.
+
+  ## Query:
+    SELECT DISTINCT t4.team_long_name FROM Team_Attributes AS t3 INNER JOIN Team AS t4 ON t3.team_api_id = t4.team_api_id WHERE SUBSTR(t3.`date`, 1, 4) = '2012' AND t3.buildUpPlayPassing > ( SELECT CAST(SUM(t2.buildUpPlayPassing) AS REAL) / COUNT(t1.id) FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE STRFTIME('%Y',t2.`date`) = '2012')
+
+
+##### european_football_2 - 17 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Calculate the percentage of players who prefer left foot, who were born between 1987 and 1992.
+
+  ## Query:
+    SELECT CAST(COUNT(CASE WHEN t2.preferred_foot = 'left' THEN t1.id ELSE NULL END) AS REAL) * 100 / COUNT(t1.id) percent FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE SUBSTR(t1.birthday, 1, 4) BETWEEN '1987' AND '1992'
+
+
+##### european_football_2 - 18 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the top 5 leagues in ascending order of the number of goals made in all seasons combined.
+
+  ## Query:
+    SELECT t1.name, SUM(t2.home_team_goal) + SUM(t2.away_team_goal) FROM League AS t1 INNER JOIN Match AS t2 ON t1.id = t2.league_id GROUP BY t1.name ORDER BY SUM(t2.home_team_goal) + SUM(t2.away_team_goal) ASC LIMIT 5
+
+
+##### european_football_2 - 19 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Find the average number of long-shot done by Ahmed Samir Farag.
+
+  ## Query:
+    SELECT CAST(SUM(t2.long_shots) AS REAL) / COUNT(t2.`date`) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'Ahmed Samir Farag'
+
+
+##### european_football_2 - 20 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the top 10 players' names whose heights are above 180 in descending order of average heading accuracy.
+
+  ## Query:
+    SELECT t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.height > 180 GROUP BY t1.id ORDER BY CAST(SUM(t2.heading_accuracy) AS REAL) / COUNT(t2.`player_fifa_api_id`) DESC LIMIT 10
+
+
+##### european_football_2 - 21 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the teams with normal build-up play dribbling class in 2014, List the names of the teams with less than average chance creation passing, in descending order of chance creation passing.
+
+  ## Query:
+    SELECT t3.team_long_name FROM Team AS t3 INNER JOIN Team_Attributes AS t4 ON t3.team_api_id = t4.team_api_id WHERE t4.buildUpPlayDribblingClass = 'Normal' AND t4.chanceCreationPassing < ( SELECT CAST(SUM(t2.chanceCreationPassing) AS REAL) / COUNT(t1.id) FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t2.buildUpPlayDribblingClass = 'Normal' AND SUBSTR(t2.`date`, 1, 4) = '2014') ORDER BY t4.chanceCreationPassing DESC
+
+
+##### european_football_2 - 22 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the name of leagues in which the average goals by the home team is higher than the away team in the 2009/2010 season.
+
+  ## Query:
+    SELECT t1.name FROM League AS t1 INNER JOIN Match AS t2 ON t1.id = t2.league_id WHERE t2.season = '2009/2010' GROUP BY t1.name HAVING (CAST(SUM(t2.home_team_goal) AS REAL) / COUNT(DISTINCT t2.id)) - (CAST(SUM(t2.away_team_goal) AS REAL) / COUNT(DISTINCT t2.id)) > 0
+
+
+##### european_football_2 - 23 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the short name of the football team Queens Park Rangers?
+
+  ## Query:
+    SELECT team_short_name FROM Team WHERE team_long_name = 'Queens Park Rangers'
+
+
+##### european_football_2 - 24 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the football players with a birthyear of 1970 and a birthmonth of October.
+
+  ## Query:
+    SELECT player_name FROM Player WHERE SUBSTR(birthday, 1, 7) = '1970-10'
+
+
+##### european_football_2 - 25 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the attacking work rate of the football playerr Franco Zennaro?
+
+  ## Query:
+    SELECT DISTINCT t2.attacking_work_rate FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'Franco Zennaro'
+
+
+##### european_football_2 - 26 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the ADO Den Haag team freedom of movement in the 1st two thirds of the pitch?
+
+  ## Query:
+    SELECT DISTINCT t2.buildUpPlayPositioningClass FROM Team AS t1 INNER JOIN Team_attributes AS t2 ON t1.team_fifa_api_id = t2.team_fifa_api_id WHERE t1.team_long_name = 'ADO Den Haag'
+
+
+##### european_football_2 - 27 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the football player Francois Affolter header's finishing rate on 18/09/2014?
+
+  ## Query:
+    SELECT t2.heading_accuracy FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'Francois Affolter' AND SUBSTR(t2.`date`, 1, 10) = '2014-09-18'
+
+
+##### european_football_2 - 28 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the overall rating of the football player Gabriel Tamas in year 2011?
+
+  ## Query:
+    SELECT t2.overall_rating FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'Gabriel Tamas' AND strftime('%Y', t2.date) = '2011'
+
+
+##### european_football_2 - 29 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many matches in the 2015/2016 season were held in Scotland Premier League
+?
+
+  ## Query:
+    SELECT COUNT(t2.id) FROM League AS t1 INNER JOIN Match AS t2 ON t1.id = t2.league_id WHERE t2.season = '2015/2016' AND t1.name = 'Scotland Premier League'
+
+
+##### european_football_2 - 30 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the preferred foot when attacking of the youngest football player?
+
+  ## Query:
+    SELECT t2.preferred_foot FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id ORDER BY t1.birthday DESC LIMIT 1
+
+
+##### european_football_2 - 31 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List all the football player with the highest potential score.
+
+  ## Query:
+    SELECT DISTINCT(t1.player_name) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t2.potential = (SELECT MAX(potential) FROM Player_Attributes) 
+
+
+##### european_football_2 - 32 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among all the players whose weight is under 130, how many of them preferred foot in attacking is left?
+
+  ## Query:
+    SELECT COUNT(DISTINCT t1.id) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.weight < 130 AND t2.preferred_foot = 'left'
+
+
+##### european_football_2 - 33 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the football teams that has a chance creation passing class of Risky. Inidcate its short name only.
+
+  ## Query:
+    SELECT DISTINCT t1.team_short_name FROM Team AS t1 INNER JOIN Team_attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t2.chanceCreationPassingClass = 'Risky'
+
+
+##### european_football_2 - 34 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the defensive work rate of the football player David Wilson
+?
+
+  ## Query:
+    SELECT DISTINCT t2.defensive_work_rate FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'David Wilson'
+
+
+##### european_football_2 - 35 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    When is the birthday of the football player who has the highest overall rating?
+
+  ## Query:
+    SELECT t1.birthday FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id ORDER BY t2.overall_rating DESC LIMIT 1
+
+
+##### european_football_2 - 36 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the name of the football league in the country of Netherlands?
+
+  ## Query:
+    SELECT t2.name FROM Country AS t1 INNER JOIN League AS t2 ON t1.id = t2.country_id WHERE t1.name = 'Netherlands'
+
+
+##### european_football_2 - 37 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Calculate the average home team goal in the 2010/2011 season in the country of Poland.
+
+  ## Query:
+    SELECT CAST(SUM(t2.home_team_goal) AS REAL) / COUNT(t2.id) FROM Country AS t1 INNER JOIN Match AS t2 ON t1.id = t2.country_id WHERE t1.name = 'Poland' AND t2.season = '2010/2011'
+
+
+##### european_football_2 - 38 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Who has the highest average finishing rate between the highest and shortest football player?
+
+  ## Query:
+    SELECT A FROM ( SELECT AVG(finishing) result, 'Max' A FROM Player AS T1 INNER JOIN Player_Attributes AS T2 ON T1.player_api_id = T2.player_api_id WHERE T1.height = ( SELECT MAX(height) FROM Player ) UNION SELECT AVG(finishing) result, 'Min' A FROM Player AS T1 INNER JOIN Player_Attributes AS T2 ON T1.player_api_id = T2.player_api_id WHERE T1.height = ( SELECT MIN(height) FROM Player ) ) ORDER BY result DESC LIMIT 1
+
+
+##### european_football_2 - 39 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list player names which are higher than 180.
+
+  ## Query:
+    SELECT player_name FROM Player WHERE height > 180
+
+
+##### european_football_2 - 40 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many players were born after 1990?
+
+  ## Query:
+    SELECT COUNT(id) FROM Player WHERE STRFTIME('%Y', birthday) > '1990'
+
+
+##### european_football_2 - 41 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many players whose first names are Adam and weigh more than 170?
+
+  ## Query:
+    SELECT COUNT(id) FROM Player WHERE weight > 170 AND player_name LIKE 'Adam%'
+
+
+##### european_football_2 - 42 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which players had an overall rating of over 80 from 2008 to 2010? Please list player names.
+
+  ## Query:
+    SELECT DISTINCT t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t2.overall_rating > 80 AND SUBSTR(t2.`date`, 1, 4) BETWEEN '2008' AND '2010'
+
+
+##### european_football_2 - 43 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is Aaron Doran's potential score?
+
+  ## Query:
+    SELECT t2.potential FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'Aaron Doran'
+
+
+##### european_football_2 - 44 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List out of players whose preferred foot is left.
+
+  ## Query:
+    SELECT DISTINCT t1.id, t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t2.preferred_foot = 'left'
+
+
+##### european_football_2 - 45 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list all team names which the speed class is fast.
+
+  ## Query:
+    SELECT DISTINCT t1.team_long_name FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t2.buildUpPlaySpeedClass = 'Fast'
+
+
+##### european_football_2 - 46 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the passing class of CLB team?
+
+  ## Query:
+    SELECT DISTINCT t2.buildUpPlayPassingClass FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t1.team_short_name = 'CLB'
+
+
+##### european_football_2 - 47 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which teams have build up play passing more than 70? Please list their short names.
+
+  ## Query:
+    SELECT DISTINCT t1.team_short_name FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t2.buildUpPlayPassing > 70
+
+
+##### european_football_2 - 48 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    From 2010 to 2015, what was the average overall rating of players who are higher than 170?
+
+  ## Query:
+    SELECT CAST(SUM(t2.overall_rating) AS REAL) / COUNT(t2.id) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.height > 170 AND STRFTIME('%Y',t2.`date`) >= '2010' AND STRFTIME('%Y',t2.`date`) <= '2015'
+
+
+##### european_football_2 - 49 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which football player has the shortest height?
+
+  ## Query:
+    SELECT player_name FROM player ORDER BY height ASC LIMIT 1
+
+
+##### european_football_2 - 50 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which country is the league Italy Serie A from?
+
+  ## Query:
+    SELECT t1.name FROM Country AS t1 INNER JOIN League AS t2 ON t1.id = t2.country_id WHERE t2.name = 'Italy Serie A'
+
+
+##### european_football_2 - 51 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List the football team that has a build up play speed of 31, build up plan dribbling of 53, and build up play passing of 32. Only indicate the short name of the team.
+
+  ## Query:
+    SELECT DISTINCT t1.team_short_name FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t2.buildUpPlaySpeed = 31 AND t2.buildUpPlayDribbling = 53 AND t2.buildUpPlayPassing = 32
+
+
+##### european_football_2 - 52 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average overall rating of the football player Aaron Doran?
+
+  ## Query:
+    SELECT CAST(SUM(t2.overall_rating) AS REAL) / COUNT(t2.id) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'Aaron Doran'
+
+
+##### european_football_2 - 53 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many matches were held in the league Germany 1. Bundesliga
+from August to October 2008?
+
+  ## Query:
+    SELECT COUNT(t2.id) FROM League AS t1 INNER JOIN Match AS t2 ON t1.id = t2.league_id WHERE t1.name = 'Germany 1. Bundesliga' AND SUBSTR(t2.`date`, 1, 7) BETWEEN '2008-08' AND '2008-10'
+
+
+##### european_football_2 - 54 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List all the short name of the football team that had a home team goal of 10?
+
+  ## Query:
+    SELECT t1.team_short_name FROM Team AS t1 INNER JOIN Match AS t2 ON t1.team_api_id = t2.home_team_api_id WHERE t2.home_team_goal = 10
+
+
+##### european_football_2 - 55 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List all the football player with the highest balance score and potential score of 61.
+
+  ## Query:
+    SELECT t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t2.potential = '61' ORDER BY t2.balance DESC LIMIT 1
+
+
+##### european_football_2 - 56 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the difference of the average ball control score between Abdou Diallo and Aaron Appindangoye
+?
+
+  ## Query:
+    SELECT CAST(SUM(CASE WHEN t1.player_name = 'Abdou Diallo' THEN t2.ball_control ELSE 0 END) AS REAL) / COUNT(CASE WHEN t1.player_name = 'Abdou Diallo' THEN t2.id ELSE NULL END) - CAST(SUM(CASE WHEN t1.player_name = 'Aaron Appindangoye' THEN t2.ball_control ELSE 0 END) AS REAL) / COUNT(CASE WHEN t1.player_name = 'Aaron Appindangoye' THEN t2.id ELSE NULL END) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id
+
+
+##### european_football_2 - 57 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What's the long name for the team GEN?
+
+  ## Query:
+    SELECT team_long_name FROM Team WHERE team_short_name = 'GEN'
+
+
+##### european_football_2 - 58 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which player is older, Aaron Lennon or Abdelaziz Barrada?
+
+  ## Query:
+    SELECT player_name FROM Player WHERE player_name IN ('Aaron Lennon', 'Abdelaziz Barrada') ORDER BY birthday ASC LIMIT 1
+
+
+##### european_football_2 - 59 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which player is the tallest?
+
+  ## Query:
+    SELECT player_name FROM Player ORDER BY height DESC LIMIT 1
+
+
+##### european_football_2 - 60 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the players whose preferred foot was the left foot when attacking, how many of them would remain in his position when the team attacked?
+
+  ## Query:
+    SELECT COUNT(player_api_id) FROM Player_Attributes WHERE preferred_foot = 'left' AND attacking_work_rate = 'low'
+
+
+##### european_football_2 - 61 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which country is the Belgium Jupiler League from?
+
+  ## Query:
+    SELECT t1.name FROM Country AS t1 INNER JOIN League AS t2 ON t1.id = t2.country_id WHERE t2.name = 'Belgium Jupiler League'
+
+
+##### european_football_2 - 62 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list the leagues from Germany.
+
+  ## Query:
+    SELECT t2.name FROM Country AS t1 INNER JOIN League AS t2 ON t1.id = t2.country_id WHERE t1.name = 'Germany'
+
+
+##### european_football_2 - 63 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which player has the strongest overall strength?
+
+  ## Query:
+    SELECT t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id ORDER BY t2.overall_rating DESC LIMIT 1
+
+
+##### european_football_2 - 64 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the players born before the year 1986, how many of them would remain in his position and defense while the team attacked?
+
+  ## Query:
+    SELECT COUNT(DISTINCT t1.player_name) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE STRFTIME('%Y',t1.birthday) < '1986' AND t2.defensive_work_rate = 'high'
+
+
+##### european_football_2 - 65 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which of these players performs the best in crossing actions, Alexis, Ariel Borysiuk or Arouna Kone?
+
+  ## Query:
+    SELECT t1.player_name, t2.crossing FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name IN ('Alexis', 'Ariel Borysiuk', 'Arouna Kone') ORDER BY t2.crossing DESC LIMIT 1
+
+
+##### european_football_2 - 66 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What's the heading accuracy of Ariel Borysiuk?
+
+  ## Query:
+    SELECT t2.heading_accuracy FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'Ariel Borysiuk'
+
+
+##### european_football_2 - 67 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the players whose height is over 180, how many of them have a volley score of over 70?
+
+  ## Query:
+    SELECT COUNT(DISTINCT t1.id) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.height > 180 AND t2.volleys > 70
+
+
+##### european_football_2 - 68 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please list the names of the players whose volley score and dribbling score are over 70.
+
+  ## Query:
+    SELECT DISTINCT t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t2.volleys > 70 AND t2.dribbling > 70
+
+
+##### european_football_2 - 69 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many matches in the 2008/2009 season were held in Belgium?
+
+  ## Query:
+    SELECT COUNT(t2.id) FROM Country AS t1 INNER JOIN Match AS t2 ON t1.id = t2.country_id WHERE t1.name = 'Belgium' AND t2.season = '2008/2009'
+
+
+##### european_football_2 - 70 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the long passing score of the oldest player?
+
+  ## Query:
+    SELECT t2.long_passing FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id ORDER BY t1.birthday ASC LIMIT 1
+
+
+##### european_football_2 - 71 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many matches were held in the Belgium Jupiler League in April, 2009?
+
+  ## Query:
+    SELECT COUNT(t2.id) FROM League AS t1 INNER JOIN Match AS t2 ON t1.id = t2.league_id WHERE t1.name = 'Belgium Jupiler League' AND SUBSTR(t2.`date`, 1, 7) = '2009-04'
+
+
+##### european_football_2 - 72 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Give the name of the league had the most matches in the 2008/2009 season?
+
+  ## Query:
+    SELECT t1.name FROM League AS t1 JOIN Match AS t2 ON t1.id = t2.league_id WHERE t2.season = '2008/2009' GROUP BY t1.name HAVING COUNT(t2.id) = (SELECT MAX(match_count) FROM (SELECT COUNT(t2.id) AS match_count FROM Match AS t2 WHERE t2.season = '2008/2009' GROUP BY t2.league_id))
+
+
+##### european_football_2 - 73 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average overall rating of the players born before the year 1986?
+
+  ## Query:
+    SELECT SUM(t2.overall_rating) / COUNT(t1.id) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE SUBSTR(t1.birthday, 1, 4) < '1986'
+
+
+##### european_football_2 - 74 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How much higher in percentage is Ariel Borysiuk's overall rating than that of Paulin Puel?
+
+  ## Query:
+    SELECT (SUM(CASE WHEN t1.player_name = 'Ariel Borysiuk' THEN t2.overall_rating ELSE 0 END) * 1.0 - SUM(CASE WHEN t1.player_name = 'Paulin Puel' THEN t2.overall_rating ELSE 0 END)) * 100 / SUM(CASE WHEN t1.player_name = 'Paulin Puel' THEN t2.overall_rating ELSE 0 END) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id
+
+
+##### european_football_2 - 75 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How much is the average build up play speed of the Heart of Midlothian team?
+
+  ## Query:
+    SELECT CAST(SUM(t2.buildUpPlaySpeed) AS REAL) / COUNT(t2.id) FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t1.team_long_name = 'Heart of Midlothian'
+
+
+##### european_football_2 - 76 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Calculate the average overall rating of Pietro Marino.
+
+  ## Query:
+    SELECT CAST(SUM(t2.overall_rating) AS REAL) / COUNT(t2.id) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'Pietro Marino'
+
+
+##### european_football_2 - 77 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is Aaron Lennox's total crossing score?
+
+  ## Query:
+    SELECT SUM(t2.crossing) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'Aaron Lennox'
+
+
+##### european_football_2 - 78 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is Ajax's highest chance creation passing score and what is it classified as?
+
+  ## Query:
+    SELECT t2.chanceCreationPassing, t2.chanceCreationPassingClass FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t1.team_long_name = 'Ajax' ORDER BY t2.chanceCreationPassing DESC LIMIT 1
+
+
+##### european_football_2 - 79 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which foot is preferred by Abdou Diallo?
+
+  ## Query:
+    SELECT DISTINCT t2.preferred_foot FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'Abdou Diallo'
+
+
+##### european_football_2 - 80 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the highest overall rating received by Dorlan Pabon?
+
+  ## Query:
+    SELECT MAX(t2.overall_rating) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'Dorlan Pabon'
+
+
+##### european_football_2 - 81 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average number of goals made by Parma as the away team while playing in Italy?
+
+  ## Query:
+    SELECT CAST(SUM(T1.away_team_goal) AS REAL) / COUNT(T1.id) FROM "Match" AS T1 INNER JOIN TEAM AS T2 ON T1.away_team_api_id = T2.team_api_id INNER JOIN Country AS T3 ON T1.country_id = T3.id WHERE T2.team_long_name = 'Parma' AND T3.name = 'Italy'
+
+
+##### european_football_2 - 82 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the players who had a 77 points overall rating on 2016/6/23, who was the oldest? Give the name of the player.
+
+  ## Query:
+    SELECT t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE SUBSTR(t2.`date`, 1, 10) = '2016-06-23' AND t2.overall_rating = 77 ORDER BY t1.birthday ASC LIMIT 1
+
+
+##### european_football_2 - 83 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What was the overall rating for Aaron Mooy on 2016/2/4?
+
+  ## Query:
+    SELECT t2.overall_rating FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE SUBSTR(t2.`date`, 1, 10) = '2016-02-04' AND t1.player_name = 'Aaron Mooy'
+
+
+##### european_football_2 - 84 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What was the potiential for Francesco Parravicini on 2010/8/30?
+
+  ## Query:
+    SELECT t2.potential FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE SUBSTR(t2.`date`, 1, 10) = '2010-08-30' AND t1.player_name = 'Francesco Parravicini'
+
+
+##### european_football_2 - 85 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How was Francesco Migliore's attacking work rate on 2015/5/1?
+
+  ## Query:
+    SELECT t2.attacking_work_rate FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t2.`date` LIKE '2015-05-01%' AND t1.player_name = 'Francesco Migliore'
+
+
+##### european_football_2 - 86 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Tell the defensive work rate for Kevin Berigaud on 2013/2/22.
+
+  ## Query:
+    SELECT t2.defensive_work_rate FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_fifa_api_id = t2.player_fifa_api_id WHERE SUBSTR(t2.`date`, 1, 10) = '2013-02-22' AND t1.player_name = 'Kevin Berigaud'
+
+
+##### european_football_2 - 87 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    When was the first time did Kevin Constant have his highest crossing score? Give the date.
+
+  ## Query:
+    SELECT `date` FROM ( SELECT t2.crossing, t2.`date` FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_fifa_api_id = t2.player_fifa_api_id WHERE t1.player_name = 'Kevin Constant' ORDER BY t2.crossing DESC) ORDER BY date DESC LIMIT 1
+
+
+##### european_football_2 - 88 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What was the build up play speed class for "Willem II" on 2011/2/22?
+
+  ## Query:
+    SELECT t2.buildUpPlaySpeedClass FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t1.team_long_name = 'Willem II' AND SUBSTR(t2.`date`, 1, 10) = '2011-02-22'
+
+
+##### european_football_2 - 89 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How was the build up play dribbling class for "LEI" on 2015/9/10?
+
+  ## Query:
+    SELECT t2.buildUpPlayDribblingClass FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t1.team_short_name = 'LEI' AND SUBSTR(t2.`date`, 1, 10) = '2015-09-10'
+
+
+##### european_football_2 - 90 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Tell the build Up play passing class for "FC Lorient" on 2010/2/22.
+
+  ## Query:
+    SELECT t2.buildUpPlayPassingClass FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t1.team_long_name = 'FC Lorient' AND t2.`date` LIKE '2010-02-22%'
+
+
+##### european_football_2 - 91 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    State the chance creation passing class for "PEC Zwolle" on 2013/9/20.
+
+  ## Query:
+    SELECT t2.chanceCreationPassingClass FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t1.team_long_name = 'PEC Zwolle' AND SUBSTR(t2.`date`, 1, 10) = '2013-09-20'
+
+
+##### european_football_2 - 92 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What was the chance creation crossing class for "Hull City" on 2010/2/22?
+
+  ## Query:
+    SELECT t2.chanceCreationCrossingClass FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t1.team_long_name = 'Hull City' AND SUBSTR(t2.`date`, 1, 10) = '2010-02-22'
+
+
+##### european_football_2 - 93 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    For the team "Hannover 96", what was its defence aggression class on 2015/9/10?
+
+  ## Query:
+    SELECT t2.chanceCreationShootingClass FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t1.team_long_name = 'Hannover 96' AND t2.`date` LIKE '2015-09-10%'
+
+
+##### european_football_2 - 94 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What was the average overall rating for Marko Arnautovic from 2007/2/22 to 2016/4/21?
+
+  ## Query:
+    SELECT CAST(SUM(t2.overall_rating) AS REAL) / COUNT(t2.id) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_fifa_api_id = t2.player_fifa_api_id WHERE t1.player_name = 'Marko Arnautovic' AND SUBSTR(t2.`date`, 1, 10) BETWEEN '2007-02-22' AND '2016-04-21'
+
+
+##### european_football_2 - 95 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What percentage is Landon Donovan's overall rating higher than Jordan Bowery on 2013/7/12?
+
+  ## Query:
+    SELECT (SUM(CASE WHEN t1.player_name = 'Landon Donovan' THEN t2.overall_rating ELSE 0 END) * 1.0 - SUM(CASE WHEN t1.player_name = 'Jordan Bowery' THEN t2.overall_rating ELSE 0 END)) * 100 / SUM(CASE WHEN t1.player_name = 'Landon Donovan' THEN t2.overall_rating ELSE 0 END) LvsJ_percent FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_fifa_api_id = t2.player_fifa_api_id WHERE SUBSTR(t2.`date`, 1, 10) = '2013-07-12'
+
+
+##### european_football_2 - 96 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List down most tallest players' name.
+
+  ## Query:
+    SELECT player_name FROM (SELECT player_name, height, DENSE_RANK() OVER (ORDER BY height DESC) as rank FROM Player) WHERE rank = 1
+
+
+##### european_football_2 - 97 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the player api id of 10 heaviest players?
+
+  ## Query:
+    SELECT player_api_id FROM Player ORDER BY weight DESC LIMIT 10
+
+
+##### european_football_2 - 98 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List down the name of players who are 35 years old and above.
+
+  ## Query:
+    SELECT player_name FROM Player WHERE CAST((JULIANDAY('now') - JULIANDAY(birthday)) AS REAL) / 365 >= 35
+
+
+##### european_football_2 - 99 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many home team goal have been scored by Aaron Lennon?
+
+  ## Query:
+    SELECT SUM(t2.home_team_goal) FROM Player AS t1 INNER JOIN match AS t2 ON t1.player_api_id = t2.away_player_9 WHERE t1.player_name = 'Aaron Lennon'
+
+
+##### european_football_2 - 100 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Sum up the away team goal scored by both Daan Smith and Filipe Ferreira.
+
+  ## Query:
+    SELECT SUM(t2.away_team_goal) FROM Player AS t1 INNER JOIN match AS t2 ON t1.player_api_id = t2.away_player_5 WHERE t1.player_name IN ('Daan Smith', 'Filipe Ferreira')
+
+
+##### european_football_2 - 101 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Calculate the total home team goal scored by players whose age are 30 years old and below.
+
+  ## Query:
+    SELECT SUM(t2.home_team_goal) FROM Player AS t1 INNER JOIN match AS t2 ON t1.player_api_id = t2.away_player_1 WHERE datetime(CURRENT_TIMESTAMP, 'localtime') - datetime(T1.birthday) < 31
+
+
+##### european_football_2 - 102 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    State the name of the most strongest player.
+
+  ## Query:
+    SELECT DISTINCT t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t2.overall_rating = (SELECT MAX(overall_rating) FROM Player_Attributes)
+
+
+##### european_football_2 - 103 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the name of players with the highest potential?
+
+  ## Query:
+    SELECT DISTINCT t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id ORDER BY t2.potential DESC LIMIT 1
+
+
+##### european_football_2 - 104 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Who are the players that tend to be attacking when their mates were doing attack moves? List down their name.
+
+  ## Query:
+    SELECT DISTINCT t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t2.attacking_work_rate = 'high'
+
+
+##### european_football_2 - 105 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Among the players with finishing rate of 1, pick the eldest player and state the player's name.
+
+  ## Query:
+    SELECT DISTINCT t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t2.finishing = 1 ORDER BY t1.birthday ASC LIMIT 1
+
+
+##### european_football_2 - 106 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    State the name of players who came from Belgium.
+
+  ## Query:
+    SELECT t3.player_name FROM Country AS t1 INNER JOIN Match AS t2 ON t1.id = t2.country_id INNER JOIN Player AS t3 ON t2.home_player_1 = t3.player_api_id WHERE t1.name = 'Belgium'
+
+
+##### european_football_2 - 107 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Locate players with vision scores of 90 and above, state the country of these players.
+
+  ## Query:
+    SELECT DISTINCT t4.name FROM Player_Attributes AS t1 INNER JOIN Player AS t2 ON t1.player_api_id = t2.player_api_id INNER JOIN Match AS t3 ON t2.player_api_id = t3.home_player_8 INNER JOIN Country AS t4 ON t3.country_id = t4.id WHERE t1.vision > 89
+
+
+##### european_football_2 - 108 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which country's players have the heaviest average weights?
+
+  ## Query:
+    SELECT t1.name FROM Country AS t1 INNER JOIN Match AS t2 ON t1.id = t2.country_id INNER JOIN Player AS t3 ON t2.home_player_1 = t3.player_api_id GROUP BY t1.name ORDER BY AVG(t3.weight) DESC LIMIT 1
+
+
+##### european_football_2 - 109 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    List down the long name for slow speed class team.
+
+  ## Query:
+    SELECT DISTINCT t1.team_long_name FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t2.buildUpPlaySpeedClass = 'Slow'
+
+
+##### european_football_2 - 110 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are the short name of team who played safe while creating chance of passing?
+
+  ## Query:
+    SELECT DISTINCT t1.team_short_name FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t2.chanceCreationPassingClass = 'Safe'
+
+
+##### european_football_2 - 111 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the average heights of Italy players?
+
+  ## Query:
+    SELECT CAST(SUM(T1.height) AS REAL) / COUNT(T1.id) FROM Player AS T1 INNER JOIN Match AS T2 ON T1.id = T2.id INNER JOIN Country AS T3 ON T2.country_id = T3.ID WHERE T3.NAME = 'Italy'
+
+
+##### european_football_2 - 112 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please provide the names of top three football players who are over 180 cm tall in alphabetical order.
+
+  ## Query:
+    SELECT player_name FROM Player WHERE height > 180 ORDER BY player_name LIMIT 3
+
+
+##### european_football_2 - 113 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many football players born after the 1990s have the first name "Aaron"?
+
+  ## Query:
+    SELECT COUNT(id) FROM Player WHERE birthday > '1990' AND player_name LIKE 'Aaron%'
+
+
+##### european_football_2 - 114 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the difference between players 6 and 23's jumping scores?
+
+  ## Query:
+    SELECT SUM(CASE WHEN t1.id = 6 THEN t1.jumping ELSE 0 END) - SUM(CASE WHEN t1.id = 23 THEN t1.jumping ELSE 0 END) FROM Player_Attributes AS t1
+
+
+##### european_football_2 - 115 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please provide top five football players' IDs who are among the lowest potential players and prefer to use the right foot when attacking.
+
+  ## Query:
+    SELECT id FROM Player_Attributes WHERE preferred_foot = 'right' ORDER BY potential DESC LIMIT 5
+
+
+##### european_football_2 - 116 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    How many players had the highest potential score for crossing that preferred to use their left foots while attacking?
+
+  ## Query:
+    SELECT COUNT(t1.id) FROM Player_Attributes AS t1 WHERE t1.preferred_foot = 'left' AND t1.crossing = ( SELECT MAX(crossing) FROM Player_Attributes)
+
+
+##### european_football_2 - 117 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What percentage of players have a strength and stamina score of more than 80?
+
+  ## Query:
+    SELECT CAST(COUNT(CASE WHEN strength > 80 AND stamina > 80 THEN id ELSE NULL END) AS REAL) * 100 / COUNT(id) FROM Player_Attributes t
+
+
+##### european_football_2 - 118 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    In what country did the Poland Ekstraklasa take place?
+
+  ## Query:
+    SELECT name FROM Country WHERE id IN ( SELECT country_id FROM League WHERE name = 'Poland Ekstraklasa' )
+
+
+##### european_football_2 - 119 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What was the final score for the match on September 24, 2008, in the Belgian Jupiler League between the home team and the away team?
+
+  ## Query:
+    SELECT t2.home_team_goal, t2.away_team_goal FROM League AS t1 INNER JOIN Match AS t2 ON t1.id = t2.league_id WHERE t1.name = 'Belgium Jupiler League' AND t2.`date` LIKE '2008-09-24%'
+
+
+##### european_football_2 - 120 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What are Alexis Blin's sprint speed, agility, and acceleration scores?
+
+  ## Query:
+    SELECT sprint_speed, agility, acceleration FROM Player_Attributes WHERE player_api_id IN ( SELECT player_api_id FROM Player WHERE player_name = 'Alexis Blin' )
+
+
+##### european_football_2 - 121 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Does the KSV Cercle Brugge team have a slow, balanced or fast speed class?
+
+  ## Query:
+    SELECT DISTINCT t1.buildUpPlaySpeedClass FROM Team_Attributes AS t1 INNER JOIN Team AS t2 ON t1.team_api_id = t2.team_api_id WHERE t2.team_long_name = 'KSV Cercle Brugge'
+
+
+##### european_football_2 - 122 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    In the 2015–2016 season, how many games were played in the Italian Serie A league?
+
+  ## Query:
+    SELECT COUNT(t2.id) FROM League AS t1 INNER JOIN Match AS t2 ON t1.id = t2.league_id WHERE t1.name = 'Italy Serie A' AND t2.season = '2015/2016'
+
+
+##### european_football_2 - 123 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What was the highest score of the home team in the Netherlands Eredivisie league?
+
+  ## Query:
+    SELECT MAX(t2.home_team_goal) FROM League AS t1 INNER JOIN Match AS t2 ON t1.id = t2.league_id WHERE t1.name = 'Netherlands Eredivisie'
+
+
+##### european_football_2 - 124 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please state the finishing rate and curve score of the player who has the heaviest weight.
+
+  ## Query:
+    SELECT id, finishing, curve FROM Player_Attributes WHERE player_api_id = ( SELECT player_api_id FROM Player ORDER BY weight DESC LIMIT 1 ) LIMIT 1
+
+
+##### european_football_2 - 125 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Which top 4 leagues had the most games in the 2015-2016 season?
+
+  ## Query:
+    SELECT t1.name FROM League AS t1 INNER JOIN Match AS t2 ON t1.id = t2.league_id WHERE t2.season = '2015/2016' GROUP BY t1.name ORDER BY COUNT(t2.id) DESC LIMIT 4
+
+
+##### european_football_2 - 126 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please provide the full name of the away team that scored the most goals.
+
+  ## Query:
+    SELECT t2.team_long_name FROM Match AS t1 INNER JOIN Team AS t2 ON t1.away_team_api_id = t2.team_api_id ORDER BY t1.away_team_goal DESC LIMIT 1
+
+
+##### european_football_2 - 127 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    Please name one player whose overall strength is the greatest.
+
+  ## Query:
+    SELECT DISTINCT t1.player_name FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t2.overall_rating = ( SELECT MAX(overall_rating) FROM Player_Attributes)
+
+
+##### european_football_2 - 128 #####
+Error: Inputs greater than context window
+Prompt: None
+  ## Question:
+    What is the percentage of players that are under 180 cm who have an overall strength of more than 70?
+
+  ## Query:
+    SELECT CAST(COUNT(CASE WHEN t2.overall_rating > 70 THEN t1.id ELSE NULL END) AS REAL) * 100 / COUNT(t1.id) percent FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.height < 180
+
+

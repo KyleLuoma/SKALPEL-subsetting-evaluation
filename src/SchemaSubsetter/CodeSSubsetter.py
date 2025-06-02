@@ -18,7 +18,7 @@ class CodeSSubsetter(SchemaSubsetter):
     uses_gpu = True
 
     def __init__(self, benchmark: NlSqlBenchmark = None, device: int = None):
-        self.sic = SchemaItemClassifierInference(model_save_path="src/SchemaSubsetter/CodeS/sic_ckpts/sic_bird", device=device)
+        self.sic = SchemaItemClassifierInference(model_save_path="src/SchemaSubsetter/CodeS/sic_ckpts/sic_merged", device=device)
         self.filter_schema = sif.filter_schema
         self.benchmark = benchmark
         self.device = device
