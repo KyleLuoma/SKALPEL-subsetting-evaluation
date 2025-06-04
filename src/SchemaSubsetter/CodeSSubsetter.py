@@ -22,6 +22,7 @@ class CodeSSubsetter(SchemaSubsetter):
         self.filter_schema = sif.filter_schema
         self.benchmark = benchmark
         self.device = device
+        self.schema_dict_cache = {}
 
 
 
@@ -58,6 +59,9 @@ class CodeSSubsetter(SchemaSubsetter):
             "matched_contents": {}
             }
         schema_dict["schema"]["schema_items"] = []
+        if schema.database in self.schema_dict_cache.keys():
+            schema_dict["schema"] = self.schema_dict_cache[schema.database]
+            return [schema_dict]
         for table in schema["tables"]:
             if len(table["primary_keys"]) > 0:
                 pk_indicators = [1 if c["name"] in table["primary_keys"][0] else 0 for c in table["columns"]]
@@ -82,7 +86,7 @@ class CodeSSubsetter(SchemaSubsetter):
                     ref_col = fk_dict["references"][1]
                     fk += [ref_table, ref_col]
                     schema_dict["schema"]["foreign_keys"].append(fk)
-
+        self.schema_dict_cache[schema.database] = schema_dict["schema"]
         return [schema_dict]
     
 

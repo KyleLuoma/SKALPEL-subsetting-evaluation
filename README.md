@@ -64,7 +64,7 @@ python ./src/main.py --subsetter_name CodeS --benchmark_name spider2 --filename_
 ## CodeS on Lambda1 sic_merged
 ```bash
 python ./src/main.py --subsetter_name CodeS --benchmark_name bird --filename_comments lambda1-sic-merged
-python ./src/main.py --subsetter_name CodeS --benchmark_name snails --filename_comments lambda1-sic-merged
+python ./src/main.py --subsetter_name CodeS --benchmark_name snails --filename_comments lambda1-sic-merged --recover_previous
 python ./src/main.py --subsetter_name CodeS --benchmark_name spider2 --filename_comments lambda1-sic-merged
 ```
 
