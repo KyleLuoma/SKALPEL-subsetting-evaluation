@@ -77,8 +77,8 @@ python ./src/main.py --subsetter_name dtssql --benchmark_name spider2 --filename
 
 ## Chess with GPT4o
 ```bash
-python ./src/main.py --subsetter_name chess --benchmark_name bird --filename_comments gpt4o --max_col_count 2500
-python ./src/main.py --subsetter_name chess --benchmark_name snails --filename_comments gpt4o --max_col_count 2500
+python ./src/main.py --subsetter_name chess --benchmark_name bird --filename_comments gpt4o --max_col_count 2500 --recover_previous
+python ./src/main.py --subsetter_name chess --benchmark_name snails --filename_comments gpt4o --max_col_count 2500 --recover_previous
 python ./src/main.py --subsetter_name chess --benchmark_name spider2 --filename_comments gpt4o --max_col_count 2500 --recover_previous
 ```
 

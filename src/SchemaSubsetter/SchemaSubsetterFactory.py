@@ -1,5 +1,5 @@
 from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
-# from SchemaSubsetter.ChessSubsetter import ChessSubsetter
+from SchemaSubsetter.ChessSubsetter import ChessSubsetter
 from SchemaSubsetter.CodeSSubsetter import CodeSSubsetter
 from SchemaSubsetter.DtsSubsetter import DtsSubsetter
 from SchemaSubsetter.Crush4SqlSubsetter import Crush4SqlSubsetter
@@ -28,7 +28,7 @@ class SchemaSubsetterFactory:
 
     subsetter_build_dict = {
         "abstract": (SchemaSubsetter, {}),
-        # "chess": (ChessSubsetter, {}),
+        "chess": (ChessSubsetter, {}),
         "CodeS": (CodeSSubsetter, {}),
         "crush4sql": (Crush4SqlSubsetter, {}),
         "DINSQL": (DinSqlSubsetter, {"model":"gpt-4.1"}),
