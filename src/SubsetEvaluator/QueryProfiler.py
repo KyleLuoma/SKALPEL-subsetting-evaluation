@@ -284,6 +284,7 @@ class QueryProfiler:
 
             json_string = response.split('@BEGINJSON')[1]
             json_string = json_string.split('@ENDJSON')[0]
+            
             while "  " in json_string:
                 json_string = json_string.replace("  ", " ")
 

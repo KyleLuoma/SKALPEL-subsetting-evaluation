@@ -130,7 +130,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         sql_files_path = os.path.join(self.benchmark_folder, "spider2-lite/evaluation_suite/gold/sql")
         lookup = {}
         for file_name in os.listdir(sql_files_path):
-            if file_name.endswith(".sql"):
+            if file_name.endswith(".sql") and file_name not in Spider2NlSqlBenchmark.exclude_from_eval:
                 with open(
                     os.path.join(self.benchmark_folder, "spider2-lite/evaluation_suite/gold/sql", file_name),
                     encoding='utf-8'

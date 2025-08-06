@@ -194,7 +194,10 @@ class BenchmarkEmbedding:
                 ).read()
             db_creation_sql = db_creation_sql.replace("__VECTORLENGTH__", str(self.vector_length)) 
             cur = db_conn.cursor()
-            cur.execute(db_creation_sql)
+            try:
+                cur.execute(db_creation_sql)
+            except psycopg.errors.UniqueViolation as e:
+                pass
         db_conn.commit()
         return db_conn
     
@@ -416,12 +419,13 @@ INSERT INTO benchmark_gold_query_predicates(
         profiler = QueryProfiler()
         for question in tqdm(benchmark, total=len(benchmark), desc="Encoding benchmark Gold Query predicates."):
             query_items = profiler.profile_query(query=question.query, dialect=question.query_dialect)
+            a=1
             for key, value in query_items["stats"]:
                 if "predicatecolumn" not in key:
                     continue
                 column = key.split(" ")[1].replace("[", "").replace("]", "")
                 column = column.replace("`", "")
-                literal_value = value.split(" ")[1].replace("'", "")
+                literal_value = " ".join(value.split(" ")[1:]).replace("'", "")
                 if len(literal_value) == 0:
                     continue
                 if literal_value[0] == "%":

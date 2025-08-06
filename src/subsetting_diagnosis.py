@@ -23,7 +23,7 @@ def main():
     if not os.path.exists(diagnosis_folder):
         os.makedirs(diagnosis_folder)
 
-    # diagnose_subsets(f"subsetting-rslsql-bird-Native-gpt4o.xlsx")
+    # diagnose_subsets(f"subsetting-rslsql-spider2-Native-gpt4o.xlsx")
     # return
     for filename in os.listdir(results_folder):
         if filename.endswith(".xlsx") and not filename.startswith("subsetting-diagnosis-"):
@@ -67,12 +67,16 @@ def diagnose_subsets(
         "database": [],
         "question_number": [],
         "gold_query_tables": [],
+        "all_hidden_tables": [],
+        "all_value_reference_problem_columns": [],
         "missing_tables": [],
-        "hidden_tables": [],
+        "missing_hidden_tables": [],
+        "all_ambiguous_tables": [],
         "ambiguous_extra_tables": [],
         "gold_query_columns": [],
         "missing_columns": [],
-        "value_reference_problem_columns": [],
+        "missing_value_reference_problem_columns": [],
+        "all_ambiguous_columns": [],
         "ambiguous_extra_columns": []
     }
     value_reference_problem_results_dict = {
@@ -112,11 +116,17 @@ def diagnose_subsets(
             database_name=row.database,
             question_number=row.question_number,
             naturalness=naturalness
-        ).intersection(missing_tables)
+        )
         if len(hidden_relations) == 0:
-            results_dict["hidden_tables"].append("{}")
+            results_dict["all_hidden_tables"].append("{}")
         else:
-            results_dict["hidden_tables"].append(hidden_relations)
+            results_dict["all_hidden_tables"].append(hidden_relations)
+
+        missing_hidden_relations = hidden_relations.intersection(missing_tables)
+        if len(missing_hidden_relations) == 0:
+            results_dict["missing_hidden_tables"].append("{}")
+        else:
+            results_dict["missing_hidden_tables"].append(missing_hidden_relations)
 
         ## Discover value reference problems ##
         value_reference_problems = benchmark_embedding.get_value_reference_problem_results(
@@ -129,19 +139,30 @@ def diagnose_subsets(
             value_reference_problem_results_dict[column] += question_vrp_items_dict[column]
 
         unmatched_attributes = {}
+        all_value_reference_problem_columns = {}
         missing_columns_upper = [c.upper() for c in missing_attributes]
         for col in value_reference_problems.problem_columns:
+            if f"{col.table_name}.{col.column_name}" not in all_value_reference_problem_columns.keys():
+                all_value_reference_problem_columns[f"{col.table_name}.{col.column_name}"] = [(col.nlq_ngram, col.db_text_value)]
+            else:
+                all_value_reference_problem_columns[f"{col.table_name}.{col.column_name}"].append((col.nlq_ngram, col.db_text_value))
             if f"{col.table_name.upper()}.{col.column_name.upper()}" not in missing_columns_upper:
                 continue
+
             if f"{col.table_name}.{col.column_name}" not in unmatched_attributes.keys():
                 unmatched_attributes[f"{col.table_name}.{col.column_name}"] = [(col.nlq_ngram, col.db_text_value)]
             else:
                 unmatched_attributes[f"{col.table_name}.{col.column_name}"].append((col.nlq_ngram, col.db_text_value))
 
-        if len(unmatched_attributes) > 0:
-            results_dict["value_reference_problem_columns"].append(unmatched_attributes)
+        if len(all_value_reference_problem_columns) > 0:
+            results_dict["all_value_reference_problem_columns"].append(all_value_reference_problem_columns)
         else:
-            results_dict["value_reference_problem_columns"].append("{}")
+            results_dict["all_value_reference_problem_columns"].append("{}")
+
+        if len(unmatched_attributes) > 0:
+            results_dict["missing_value_reference_problem_columns"].append(unmatched_attributes)
+        else:
+            results_dict["missing_value_reference_problem_columns"].append("{}")
 
 
         ## Discover word NL ~ Identifier ambiguity problems ##
@@ -154,20 +175,28 @@ def diagnose_subsets(
         extra_tables = set(sop.string_to_python_object(row.extra_tables if row.extra_tables != "set()" else "{}", use_eval=True))
         extra_columns = set(sop.string_to_python_object(row.extra_columns if row.extra_columns != "set()" else "{}", use_eval=True))
 
-        ambiguous_columns = {}
-        ambiguous_tables = {}
+        all_ambiguous_columns = {}
+        matching_ambiguous_columns = {}
+        all_ambiguous_tables = {}
+        matching_ambiguous_tables = {}
 
         for item in ambiguous_items.word_nl_matches:
             matching_relations = set([r.name for r in item.matching_relations])
             matching_attributes = set([a.name_as_string() for a in item.matching_attributes])
+            if len(matching_attributes) > 0:
+                all_ambiguous_columns[item.word_nl] = matching_attributes
+            if len(matching_relations) > 0:
+                all_ambiguous_tables[item.word_nl] = matching_relations
             if len(extra_columns.intersection(matching_attributes)) > 0:
-                ambiguous_columns[item.word_nl] = extra_columns.intersection(matching_attributes)
+                matching_ambiguous_columns[item.word_nl] = extra_columns.intersection(matching_attributes)
             if len(extra_tables.intersection(matching_relations)) > 0:
-                ambiguous_tables[item.word_nl] = extra_tables.intersection(matching_relations)
+                matching_ambiguous_tables[item.word_nl] = extra_tables.intersection(matching_relations)
 
-        results_dict["ambiguous_extra_columns"].append(ambiguous_columns)
+        results_dict["all_ambiguous_columns"].append(all_ambiguous_columns)
+        results_dict["ambiguous_extra_columns"].append(matching_ambiguous_columns)
 
-        results_dict["ambiguous_extra_tables"].append(ambiguous_tables)
+        results_dict["all_ambiguous_tables"].append(all_ambiguous_tables)
+        results_dict["ambiguous_extra_tables"].append(matching_ambiguous_tables)
 
     pd.DataFrame(results_dict).to_excel(
         f"{results_folder}/diagnosis/{results_filename.replace('subsetting-', 'subsetting-diagnosis-')}", 

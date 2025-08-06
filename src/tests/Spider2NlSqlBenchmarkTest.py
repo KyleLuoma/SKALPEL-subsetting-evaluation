@@ -22,7 +22,7 @@ def init_test():
 def get_active_schema_test():
     bm = Spider2NlSqlBenchmark()
     schema = bm.get_active_schema()
-    return len(schema.tables) == 92
+    return len(schema.tables) == 3
 
 
 def iter_test():
@@ -36,13 +36,14 @@ def iter_test():
     return itercount == (256 - len(bm.exclude_from_eval))
 
 
-def get_sample_values_test():
+def get_snowflake_sample_values_test():
     bm = Spider2NlSqlBenchmark()
     values = bm.get_sample_values(
-        table_name="bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_20201106",
-        column_name="event_name"
+        table_name="PATENTS.PATENTS.PUBLICATIONS",
+        column_name="publication_number",
+        database="PATENTS"
     )
-    return values == ["user_engagement", "page_view"]
+    return values == ['DE-69611147-T2', 'DE-69630331-T2']
 
 
 def set_and_get_active_schema_test():
@@ -100,7 +101,8 @@ def query_bigquery_test():
     bm = Spider2NlSqlBenchmark()
     result = bm.query_bigquery(
         query=query,
-        database=""
+        database="",
+        use_result_caching=False
     )
     return (
         set(result.result_set.keys()) == {"fullvisitorid", "date_first_visit"}
@@ -114,14 +116,14 @@ def query_bigquery_information_schema_test():
     FROM `bigquery-public-data.ga4_obfuscated_sample_ecommerce.INFORMATION_SCHEMA.COLUMNS`;
     """
     bm = Spider2NlSqlBenchmark()
-    result = bm.query_bigquery(query, database="")
+    result = bm.query_bigquery(query, database="", use_result_caching=False)
     return result.error_message == None
 
 
 def execute_query_sqlite_db_test():
     bm = Spider2NlSqlBenchmark()
     try:
-        bm.execute_query(query="select 1", database="northwind")
+        bm.execute_query(query="select 1", database="northwind", use_result_caching=False)
         return True
     except Exception as e:
         return False

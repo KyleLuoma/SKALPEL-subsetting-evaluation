@@ -33,7 +33,10 @@ class StringObjectParser:
     """
 
 
-    def string_to_python_object(input_string: str, use_eval = False) -> object:
+    def string_to_python_object(
+            input_string: str, 
+            use_eval: bool = False
+            ) -> object:
         """
         Converts a string representation of a Python object into the actual Python object.
         Args:
@@ -41,10 +44,12 @@ class StringObjectParser:
             use_eval (bool): If True, uses the eval function to convert the string to a Python object.
                                 The input string must be properly encased with matching symbols (e.g., [], {}, "", '').
                                 Defaults to False.
+        Warning:
+            Using eval can be dangerous. Make sure the input string is from a trusted source.
         Returns:
             object: The Python object represented by the input string.
         Raises:
-            AssertionError: If use_eval is True and the input string is not properly encased with matching symbols.
+            AssertionError: If use_eval is True and the input string is not properly encased with matching symbols
         """
 
         if input_string == "set()":
@@ -52,21 +57,9 @@ class StringObjectParser:
 
         if use_eval:
             warnings.warn("Using eval can be dangerous. Make sure the input string is from a trusted source.")
-
-        encase_symbols = {
-            "[": "]",
-            "(": ")",
-            "{": "}",
-            '"': '"',
-            "'": "'"
-        }
-
-        if use_eval:
-            assert (
-                input_string[0] in encase_symbols.keys()
-                and input_string[-1] == encase_symbols[input_string[0]]
-                )
+            assert StringObjectParser.check_valid_container(input_string)
             return eval(input_string)
+
         
         object_type = StringObjectParser.detect_object_type(input_string)
         parsed_object = input_string
@@ -102,8 +95,19 @@ class StringObjectParser:
         return parsed_object
 
 
-
-
+    @staticmethod
+    def check_valid_container(input_string: str) -> bool:
+        encase_symbols = {
+            "[": "]",
+            "(": ")",
+            "{": "}",
+            '"': '"',
+            "'": "'"
+        }
+        return (
+            input_string[0] in encase_symbols.keys()
+            and input_string[-1] == encase_symbols[input_string[0]]
+            )
 
 
     def detect_object_type(input_string: str) -> str:
