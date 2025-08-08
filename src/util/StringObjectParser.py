@@ -47,9 +47,8 @@ class StringObjectParser:
         Warning:
             Using eval can be dangerous. Make sure the input string is from a trusted source.
         Returns:
-            object: The Python object represented by the input string.
-        Raises:
-            AssertionError: If use_eval is True and the input string is not properly encased with matching symbols
+            object: The Python object represented by the input string 
+            or the original input_string if it does not contain valid opening and closing encasement symbols.
         """
 
         if input_string == "set()":
@@ -57,7 +56,8 @@ class StringObjectParser:
 
         if use_eval:
             warnings.warn("Using eval can be dangerous. Make sure the input string is from a trusted source.")
-            assert StringObjectParser.check_valid_container(input_string)
+            if not StringObjectParser.check_valid_container(input_string):
+                return input_string
             return eval(input_string)
 
         
@@ -104,6 +104,8 @@ class StringObjectParser:
             '"': '"',
             "'": "'"
         }
+        if type(input_string) != str:
+            return False
         return (
             input_string[0] in encase_symbols.keys()
             and input_string[-1] == encase_symbols[input_string[0]]

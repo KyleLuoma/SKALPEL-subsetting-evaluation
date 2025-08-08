@@ -255,9 +255,15 @@ class SchemaTable:
         return ddl
     
 
-
     def get_column_count(self) -> int:
         return len(self.columns)
+    
+
+    def column_exists(self, column_name: str) -> bool:
+        for column in self.columns:
+            if column.name.lower() == column_name.lower():
+                return True
+        return False
 
 
 
@@ -310,6 +316,22 @@ class Schema:
             if t.name == table_name:
                 return t
         raise KeyError(table_name)
+    
+
+    def table_exists(self, table_name: str) -> bool:
+        for t in self.tables:
+            if t.name.lower() == table_name.lower():
+                return True
+        return False
+    
+
+    def column_exists(self, column_name: str, table_name: str = None) -> bool:
+        for t in self.tables:
+            if table_name and table_name != t.name:
+                continue
+            if t.column_exists(column_name=column_name):
+                return True
+        return False
     
 
     def get_table_count(self) -> int:
