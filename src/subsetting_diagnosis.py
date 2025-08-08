@@ -29,13 +29,15 @@ RESULTS_DICT_MASTER = {
         "ambiguous_extra_tables": [],
         "hallucinated_extra_tables": [],
         "hallucinated_similar_missing_tables": [],
+        "missing_similar_extra_tables": [],
         "gold_query_columns": [],
         "missing_columns": [],
         "missing_value_reference_problem_columns": [],
         "all_ambiguous_columns": [],
         "ambiguous_extra_columns": [],
         "hallucinated_extra_columns": [],
-        "hallucinated_similar_missing_columns": []
+        "hallucinated_similar_missing_columns": [],
+        "missing_similar_extra_columns": []
     }
 
 
@@ -104,6 +106,8 @@ def diagnose_subsets(
             ] 
         if k in diagnosis_df.columns else [] for k in RESULTS_DICT_MASTER.keys() 
     }
+    results_dict["hallucinated_similar_missing_columns"] = []
+    results_dict["hallucinated_similar_missing_tables"] = []
 
     value_reference_problem_results_dict = {
         "table_name": [],
@@ -282,11 +286,11 @@ def diagnose_subsets(
 
 
         ## Edit distance between missing and hallucinated identifiers
-        if (
-            "hallucinated_similar_missing_tables" not in diagnosis_df.columns
-            and "hallucinated_similar_missing_columns" not in diagnosis_df.columns
-        ):
-        # if True:
+        # if (
+        #     "hallucinated_similar_missing_tables" not in diagnosis_df.columns
+        #     and "hallucinated_similar_missing_columns" not in diagnosis_df.columns
+        # ):
+        if True:
             hallucination_match_threshold = 3
             hallucinated_columns = results_dict["hallucinated_extra_columns"][ix]
             missing_columns = set(
@@ -295,7 +299,7 @@ def diagnose_subsets(
             column_matches = set()
             for m_c in missing_columns:
                 for h_c in hallucinated_columns:
-                    if len(m_c) <= hallucination_match_threshold or len(h_c) <= hallucination_match_threshold:
+                    if len(m_c.split(".")[-1]) <= hallucination_match_threshold or len(h_c.split(".")[-1]) <= hallucination_match_threshold:
                         continue
                     m_h_dist = editdistance.eval(m_c.split(".")[-1], h_c.split(".")[-1])
                     if m_h_dist < hallucination_match_threshold:
@@ -303,7 +307,7 @@ def diagnose_subsets(
             if len(column_matches) > 0:
                 results_dict["hallucinated_similar_missing_columns"].append(column_matches)
             else:
-                results_dict["hallucinated_similar_missing_columns"].append("{                                      }")
+                results_dict["hallucinated_similar_missing_columns"].append("{}")
 
             hallucinated_tables = results_dict["hallucinated_extra_tables"][ix]
             table_matches = set()
@@ -321,6 +325,53 @@ def diagnose_subsets(
                 results_dict["hallucinated_similar_missing_tables"].append(table_matches)
             else:
                 results_dict["hallucinated_similar_missing_tables"].append("{}")
+
+
+        ## Missing - Extra identifier semantic similarity (effects of ambiguity)
+        if (
+            "missing_similar_extra_tables" not in diagnosis_df.columns
+            and "missing_similar_extra_columns" not in diagnosis_df.columns
+        ):
+            sim_threshold = 0.7
+            schema = benchmark.get_active_schema(row.database)
+            missing_similar_extra_columns = set()
+            missing_columns = set(
+                sop.string_to_python_object(
+                    row.missing_columns if row.missing_columns != "set()" else "{}", use_eval=True
+                    )
+                )
+            extra_columns = set(
+                sop.string_to_python_object(
+                    row.extra_columns if row.extra_columns != "set()" else "{}", use_eval=True
+                    )
+                )
+            for m_column in missing_columns:
+                for e_column in extra_columns:
+                    if not schema.column_exists(e_column.split(".")[-1]):
+                        continue
+                    if benchmark_embedding.get_string_similarities(m_column.split(".")[-1], e_column.split(".")[-1]) >= sim_threshold:
+                        missing_similar_extra_columns.add((m_column.split(".")[-1], e_column.split(".")[-1]))
+
+            missing_similar_extra_tables = set()
+            missing_tables = set(
+                sop.string_to_python_object(
+                    row.missing_tables if row.missing_tables != "set()" else "{}", use_eval=True
+                )
+            )
+            extra_tables = set(
+                sop.string_to_python_object(
+                    row.extra_tables if row.extra_tables != "set()" else "{}", use_eval=True
+                )
+            )
+            for m_table in missing_tables:
+                for e_table in extra_tables:
+                    if not schema.table_exists(e_table):
+                        continue
+                    if benchmark_embedding.get_string_similarities(m_table, e_table) >= sim_threshold:
+                        missing_similar_extra_tables.add((m_table, e_table))
+
+            results_dict["missing_similar_extra_columns"].append(missing_similar_extra_columns)
+            results_dict["missing_similar_extra_tables"].append(missing_similar_extra_tables)
 
 
     pd.DataFrame(results_dict).to_excel(
