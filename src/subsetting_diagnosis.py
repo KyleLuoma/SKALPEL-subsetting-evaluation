@@ -349,8 +349,9 @@ def diagnose_subsets(
                 for e_column in extra_columns:
                     if not schema.column_exists(e_column.split(".")[-1]):
                         continue
-                    if benchmark_embedding.get_string_similarities(m_column.split(".")[-1], e_column.split(".")[-1]) >= sim_threshold:
-                        missing_similar_extra_columns.add((m_column.split(".")[-1], e_column.split(".")[-1]))
+                    score =  benchmark_embedding.get_string_similarities(m_column.split(".")[-1], e_column.split(".")[-1]) 
+                    if score >= sim_threshold:
+                        missing_similar_extra_columns.add((m_column.split(".")[-1], e_column.split(".")[-1], score))
 
             missing_similar_extra_tables = set()
             missing_tables = set(
@@ -367,8 +368,9 @@ def diagnose_subsets(
                 for e_table in extra_tables:
                     if not schema.table_exists(e_table):
                         continue
-                    if benchmark_embedding.get_string_similarities(m_table, e_table) >= sim_threshold:
-                        missing_similar_extra_tables.add((m_table, e_table))
+                    score = benchmark_embedding.get_string_similarities(m_table, e_table)
+                    if score >= sim_threshold:
+                        missing_similar_extra_tables.add((m_table, e_table, score))
 
             results_dict["missing_similar_extra_columns"].append(missing_similar_extra_columns)
             results_dict["missing_similar_extra_tables"].append(missing_similar_extra_tables)
