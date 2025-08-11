@@ -180,7 +180,19 @@ class BenchmarkEmbedding:
         except psycopg.errors.DuplicateDatabase as e:
             pass
         db_conn.commit()
-        db_conn.close()      
+        db_conn.close()   
+
+        db_conn = psycopg.connect(
+            f"user=postgres dbname=benchmark_vector_db host={self.db_host} port=5432 password=skalpel dbname={self.benchmark_name}_benchmark_vector_db"
+        )
+        try:
+            db_conn.execute(f"ALTER DATABASE {self.benchmark_name}_benchmark_vector_db SET work_mem = '{int(1000000/64)}MB'")
+        except psycopg.errors.UniqueViolation as e:
+            pass
+        except psycopg.errors.InternalError_ as e:
+            pass
+        db_conn.commit()
+        db_conn.close()
 
         db_conn = psycopg.connect(
             f"user=postgres dbname=benchmark_vector_db host={self.db_host} port=5432 password=skalpel dbname={self.benchmark_name}_benchmark_vector_db"
@@ -199,6 +211,8 @@ class BenchmarkEmbedding:
             except psycopg.errors.UniqueViolation as e:
                 pass
         db_conn.commit()
+        
+
         return db_conn
     
 

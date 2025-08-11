@@ -15,6 +15,7 @@ import os
 from tqdm import tqdm
 from util.StringObjectParser import StringObjectParser as sop
 import editdistance
+import multiprocessing
 
 
 RESULTS_DICT_MASTER = {
@@ -47,6 +48,11 @@ def main():
 
     if not os.path.exists(diagnosis_folder):
         os.makedirs(diagnosis_folder)
+
+    xlsx_files = [f for f in os.listdir(results_folder) if f.endswith(".xlsx")]
+
+    # with multiprocessing.Pool(processes=16) as pool:
+    #     pool.map(diagnose_subsets, xlsx_files)
 
     # diagnose_subsets(f"subsetting-rslsql-spider2-Native-gpt4o.xlsx")
     # return
@@ -106,8 +112,10 @@ def diagnose_subsets(
             ] 
         if k in diagnosis_df.columns else [] for k in RESULTS_DICT_MASTER.keys() 
     }
-    results_dict["hallucinated_similar_missing_columns"] = []
-    results_dict["hallucinated_similar_missing_tables"] = []
+    # results_dict["hallucinated_similar_missing_columns"] = []
+    # results_dict["hallucinated_similar_missing_tables"] = []
+    # results_dict["missing_similar_extra_columns"] = []
+    # results_dict["missing_similar_extra_tables"] = []
 
     value_reference_problem_results_dict = {
         "table_name": [],
@@ -286,11 +294,11 @@ def diagnose_subsets(
 
 
         ## Edit distance between missing and hallucinated identifiers
-        # if (
-        #     "hallucinated_similar_missing_tables" not in diagnosis_df.columns
-        #     and "hallucinated_similar_missing_columns" not in diagnosis_df.columns
-        # ):
-        if True:
+        if (
+            "hallucinated_similar_missing_tables" not in diagnosis_df.columns
+            and "hallucinated_similar_missing_columns" not in diagnosis_df.columns
+        ):
+        # if True:
             hallucination_match_threshold = 3
             hallucinated_columns = results_dict["hallucinated_extra_columns"][ix]
             missing_columns = set(
@@ -332,6 +340,7 @@ def diagnose_subsets(
             "missing_similar_extra_tables" not in diagnosis_df.columns
             and "missing_similar_extra_columns" not in diagnosis_df.columns
         ):
+        # if True:
             sim_threshold = 0.7
             schema = benchmark.get_active_schema(row.database)
             missing_similar_extra_columns = set()
@@ -346,12 +355,14 @@ def diagnose_subsets(
                     )
                 )
             for m_column in missing_columns:
+                if m_column[-2:].lower() == "id":
+                    continue
                 for e_column in extra_columns:
                     if not schema.column_exists(e_column.split(".")[-1]):
                         continue
                     score =  benchmark_embedding.get_string_similarities(m_column.split(".")[-1], e_column.split(".")[-1]) 
                     if score >= sim_threshold:
-                        missing_similar_extra_columns.add((m_column.split(".")[-1], e_column.split(".")[-1], score))
+                        missing_similar_extra_columns.add((m_column, e_column, score))
 
             missing_similar_extra_tables = set()
             missing_tables = set(
@@ -372,8 +383,15 @@ def diagnose_subsets(
                     if score >= sim_threshold:
                         missing_similar_extra_tables.add((m_table, e_table, score))
 
-            results_dict["missing_similar_extra_columns"].append(missing_similar_extra_columns)
-            results_dict["missing_similar_extra_tables"].append(missing_similar_extra_tables)
+            if len(missing_similar_extra_columns) > 0:
+                results_dict["missing_similar_extra_columns"].append(missing_similar_extra_columns)
+            else:
+                results_dict["missing_similar_extra_columns"].append("{}")
+
+            if len(missing_similar_extra_tables) > 0:
+                results_dict["missing_similar_extra_tables"].append(missing_similar_extra_tables)
+            else:
+                results_dict["missing_similar_extra_tables"].append("{}")
 
 
     pd.DataFrame(results_dict).to_excel(
