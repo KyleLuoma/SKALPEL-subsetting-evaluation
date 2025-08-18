@@ -41,6 +41,7 @@ def main():
     parser.add_argument("--no_subset_generation", action="store_true", default=False, help="Set to True to skip subsetting (e.g., if you want to preprocess only).")
     parser.add_argument("--max_col_count", type=int, default=None, help="Limit subset generation to schemas with fewer than this number of columns.")
     parser.add_argument("--results_filename", default=None, help="Load specified results and evaluate only (no re-subsetting).")
+    parser.add_argument("--sleep", default=0, help="Time (seconds) to sleep between subsetting inferences.")
 
     args = parser.parse_args()
 
@@ -53,7 +54,7 @@ def main():
     subsetter_preprocessing = args.subsetter_preprocessing
     subset_generation = not args.no_subset_generation
     max_col_count = args.max_col_count
-    
+    sleep_time = args.sleep
 
     global v_print
     if verbose:
@@ -95,7 +96,8 @@ def main():
             recover_previous=recover_previous,
             filename_comments=filename_comments,
             bypass_databases=[],
-            max_col_count_to_generate=max_col_count
+            max_col_count_to_generate=max_col_count,
+            sleep=sleep_time
             )
     elif results_filename != None:
         results, subsets_questions = load_subsets_from_results(
@@ -130,7 +132,8 @@ def generate_subsets(
         recover_previous: bool = False,
         filename_comments: str = "",
         bypass_databases: list = [],
-        max_col_count_to_generate: int = None
+        max_col_count_to_generate: int = None,
+        sleep: int = 0
         ) -> tuple[dict, list]:
     results = {
         "database": [],
@@ -191,6 +194,7 @@ def generate_subsets(
             failures.append((question, f"Error: {result.error_message}\nPrompt: {str(result.raw_llm_response)}"))
         t_end = time.perf_counter()
         v_print("Subsetting time:", str(t_end - t_start))
+        time.sleep(sleep)
         subsets_questions.append((subset, question))
         results["database"].append(question["schema"]["database"])
         results["question_number"].append(question["question_number"])
