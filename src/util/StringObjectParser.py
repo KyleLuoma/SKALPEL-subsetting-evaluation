@@ -35,7 +35,7 @@ class StringObjectParser:
 
     def string_to_python_object(
             input_string: str, 
-            use_eval: bool = False
+            use_eval: bool = True
             ) -> object:
         """
         Converts a string representation of a Python object into the actual Python object.
@@ -104,12 +104,12 @@ class StringObjectParser:
             '"': '"',
             "'": "'"
         }
-        if type(input_string) != str:
+        if not isinstance(input_string, str) or len(input_string) == 0:
             return False
         return (
             input_string[0] in encase_symbols.keys()
             and input_string[-1] == encase_symbols[input_string[0]]
-            )
+        )
 
 
     def detect_object_type(input_string: str) -> str:

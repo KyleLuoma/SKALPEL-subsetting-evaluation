@@ -103,6 +103,13 @@ python ./src/main.py --subsetter_name rslsql --benchmark_name snails --filename_
 python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename_comments gpt4o --recover_previous
 ```
 
+## RSSQL with GPT4.1
+```bash
+python ./src/main.py --subsetter_name rslsql --benchmark_name bird --filename_comments gpt41 --recover_previous
+python ./src/main.py --subsetter_name rslsql --benchmark_name snails --filename_comments gpt41 --recover_previous
+python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename_comments gpt41 --recover_previous
+```
+
 ## TASQL with GPT4.1 nano
 ```bash
 python ./src/main.py --subsetter_name tasql --benchmark_name bird --filename_comments gpt41nano --recover_previous

@@ -104,6 +104,8 @@ class StringObjectParser:
             '"': '"',
             "'": "'"
         }
+        if not isinstance(input_string, str) or len(input_string) == 0:
+            return False
         return (
             input_string[0] in encase_symbols.keys()
             and input_string[-1] == encase_symbols[input_string[0]]
