@@ -9,7 +9,7 @@ import tests
 # from tests import BirdNlSqlBenchmarkTest
 # from tests import SnailsNlSqlBenchmarkTest
 # from tests import SpiderNlSqlBenchmarkTest
-from tests import Spider2NlSqlBenchmarkTest
+# from tests import Spider2NlSqlBenchmarkTest
 # from tests import NlSqlBenchmarkFactoryTest
 # from tests import SchemaDDLGeneratorTest
 
@@ -26,6 +26,7 @@ from tests import Spider2NlSqlBenchmarkTest
 # from tests import RslSqlSubsetterTest
 # from tests import TaSqlSubsetterTest
 # from tests import DtsSubsetterTest
+from tests import SkalpelSubsetterTest
 
 # from tests import SchemaSubsetterEvaluatorTest
 # from tests import BenchmarkEmbeddingTest

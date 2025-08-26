@@ -40,8 +40,11 @@ class BenchmarkEmbedding:
             build_database_on_init: bool = False,
             instantiate_embedding_model: bool = True,
             db_host_profile: str = "docker",
-            db_host: str = "localhost"
+            db_host: str = "localhost",
+            cuda_device: int = None
             ):
+        if cuda_device != None:
+            cuda_device = f":{cuda_device}"
         self.verbose = verbose
         self.benchmark_name = benchmark_name
         self.build_database_on_init = build_database_on_init
@@ -65,7 +68,7 @@ class BenchmarkEmbedding:
             self.embedding_model = SentenceTransformer(self.model_name, trust_remote_code=True)
             self.embedding_model.max_seq_length = 512
             self.embedding_model.tokenizer.padding_side="right"
-            self.embedding_model.to("cuda")
+            self.embedding_model.to(f"cuda{cuda_device}")
         else:
             self.embedding_model = None
 

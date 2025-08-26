@@ -93,7 +93,8 @@ def diagnose_subsets(
         benchmark_name=benchmark_name, 
         build_database_on_init=True,
         db_host_profile="remote",
-        db_host="cdas2"
+        db_host="cdas2",
+        cuda_device=2
         )
 
     ### Benchmark encoding tasks, uncomment as-needed ###

@@ -1,0 +1,27 @@
+You are given a list of tables and columns in DDL form. This list is a subset of the full schema. You previously selected these tables as the most relevant to the question. Your task is now to select the minimal columns for each table required to translate the following natural language query into an SQL query.
+
+Due to context window limitations, I am only able to show you {max_tables} at a time.
+
+You have already selected the following columns:
+{already_selected_columns}
+
+Instructions:
+1. Carefully read the natural language query.
+2. Review the columns in each table.
+3. Identify which columns contain the necessary information to answer the query.
+4. Select only the columns that are essential for constructing the SQL query or for joining tables together.
+5. Provide the columns as table.column strings in a json list enclosed in [square brackets].
+6. If no columns are required, then simply return an empty list without contents.
+
+Example output format:
+```json
+["users.user_id", "orders.date", "products.name"]
+```
+
+Natural language query:
+{query}
+
+Schema:
+{schema}
+
+Selected columns:

@@ -153,7 +153,7 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
     def GPT4_generation(self, prompt, model: str = "gpt-4") -> tuple[str, int]:
 
         response = openai.chat.completions.create(
-            model="gpt-4.1",
+            model=model,
             messages=[{"role": "user", "content": prompt}],
             n = 1,
             stream = False,

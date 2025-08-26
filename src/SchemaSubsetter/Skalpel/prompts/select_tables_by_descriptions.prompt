@@ -1,0 +1,34 @@
+You are given a list of table descriptions from a database schema. Your task is to select the minimal set of tables required to translate the following natural language query into an SQL query.
+
+About the database:
+The database contains a total of {table_count} tables.
+Due to context window limitations, I am only able to show you {max_tables} at a time.
+
+You have already selected the following tables:
+{already_selected_tables}
+
+Instructions:
+1. Carefully read the natural language query.
+2. Review the descriptions of all available tables.
+3. Identify which tables contain the necessary information to answer the query.
+4. Select only the tables that are essential for constructing the SQL query.
+5. Do not repeat tables that are already selected.
+7. Provide the tables and a short reason for selection as strings in a json dictionary.
+8. If no tables are required, then return an empty JSON dictionary without any content.
+
+Example output format:
+```json
+{{
+    "users": "the question relates to users.", 
+    "orders": "the question requests number of orders per user", 
+    "products": "the question requests products per user per order"
+}}
+```
+
+Natural language query:
+{query}
+
+Table descriptions:
+{table_descriptions}
+
+Selected tables:

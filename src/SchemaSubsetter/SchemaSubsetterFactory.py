@@ -8,6 +8,7 @@ from SchemaSubsetter.RslSqlSubsetter import RslSqlSubsetter
 from SchemaSubsetter.TaSqlSubsetter import TaSqlSubsetter
 from SchemaSubsetter.Perfect.PerfectSchemaSubsetter import PerfectSchemaSubsetter
 from SchemaSubsetter.Perfect.PerfectTableSchemaSubsetter import PerfectTableSchemaSubsetter
+from SchemaSubsetter.SkalpelSubsetter import SkalpelSubsetter
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 import warnings
 
@@ -23,7 +24,8 @@ class SchemaSubsetterFactory:
         "tasql",
         "dtssql",
         "perfect_subsetter",
-        "perfect_table_subsetter"
+        "perfect_table_subsetter",
+        "skalpel"
     ]
 
     subsetter_build_dict = {
@@ -36,7 +38,8 @@ class SchemaSubsetterFactory:
         "tasql": (TaSqlSubsetter, {}),
         "dtssql": (DtsSubsetter, {}),
         "perfect_subsetter": (PerfectSchemaSubsetter, {}),
-        "perfect_table_subsetter": (PerfectTableSchemaSubsetter, {})
+        "perfect_table_subsetter": (PerfectTableSchemaSubsetter, {}),
+        "skalpel": (SkalpelSubsetter, {})
     }
        
 

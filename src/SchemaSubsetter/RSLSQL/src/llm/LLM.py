@@ -26,7 +26,7 @@ class GPT:
             except Exception as e:
                 print(e)
                 # Skalpel mod: break the infinite loop when the message is related to string length
-                if "string too long" in str(e) or "maximum context length" in str(e):
+                if "string too long" in str(e) or "maximum context length" in str(e) or "Request too large" in str(e):
                     return "", -1
                 continue
             try:

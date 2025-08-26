@@ -105,9 +105,9 @@ python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename
 
 ## RSSQL with GPT4.1
 ```bash
-python ./src/main.py --subsetter_name rslsql --benchmark_name bird --filename_comments gpt41 --recover_previous
-python ./src/main.py --subsetter_name rslsql --benchmark_name snails --filename_comments gpt41 --recover_previous
-python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename_comments gpt41 --recover_previous
+python ./src/main.py --subsetter_name rslsql --benchmark_name bird --filename_comments gpt41 --sleep 3 --recover_previous
+python ./src/main.py --subsetter_name rslsql --benchmark_name snails --filename_comments gpt41 --sleep 3 --recover_previous
+python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename_comments gpt41 --sleep 3 --recover_previous
 ```
 
 ## TASQL with GPT4.1 nano
@@ -122,6 +122,33 @@ python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_
 python ./src/main.py --subsetter_name tasql --benchmark_name bird --filename_comments gpt41 --recover_previous
 python ./src/main.py --subsetter_name tasql --benchmark_name snails --filename_comments gpt41 --recover_previous
 python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_comments gpt41 --recover_previous
+```
+
+## Skalpel with Llama 4 Scout
+```bash
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments dist_sorted_llm_selected_llama4 
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_llm_selected_llama4 --recover_previous
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_llm_selected_table_columns_llama4 --recover_previous
+```
+
+## Skalpel with GPT4.1
+```bash
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_llm_selected_gpt41
+
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_1000tpt_llm_selected_gpt41 --recover_previous
+```
+
+## Skalpel with GPT4.1 nano
+```bash
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_llm_selected_gpt41nano --recover_previous
+```
+
+## Skalpel with GPT-OSS-120b
+tpt = tables per turn
+retrieved - proportion of schema retrieved from semantic search
+```bash
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_100tpt_llm_selected_gptoss120b --recover_previous
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_1000tpt_llm_selected_gptoss120b --recover_previous
 ```
 
 # Modifications made to subsetting methods

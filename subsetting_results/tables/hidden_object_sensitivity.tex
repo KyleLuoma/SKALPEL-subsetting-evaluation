@@ -1,0 +1,17 @@
+\begin{table}
+\caption{This table shows the Value Reference Problem (VRP) and Hidden Relation Problem (HRP) occurence percentages and sensitivities. Sensitivity (Sens.) is the proportion of a given problem occurence percentage (defined as realized problem over all instances where the problem might occur) to the percentage of all missing relations (\% MR) or attributes (\% MA) in the performance data. We can see that all subsetting methods are subject to HRP occurence at a higher rate, and only with 2 methods does the VRP manifest at a rate higher than general missing attribute occurence.}
+\label{tab:vrp_hrp_sensitivity}
+\begin{tabular}{lllrllr}
+\toprule
+$\Psi$ & \% MA & \% VRP & V-Sens. & \% MR & \% HRP & H-Sens. \\
+\midrule
+tasql & 20\% & 13\% & 0.67 & 11\% & 24\% & 2.16 \\
+DINSQL & 36\% & 26\% & 0.74 & 20\% & 24\% & 1.18 \\
+dtssql & 15\% & 11\% & 0.78 & 15\% & 29\% & 1.89 \\
+rslsql & 16\% & 14\% & 0.89 & 1\% & 7\% & 3.89 \\
+CodeS & 65\% & 64\% & 0.98 & 46\% & 51\% & 1.11 \\
+crush4sql & 31\% & 35\% & 1.12 & 11\% & 19\% & 1.74 \\
+chess & 36\% & 43\% & 1.18 & 14\% & 31\% & 2.14 \\
+\bottomrule
+\end{tabular}
+\end{table}

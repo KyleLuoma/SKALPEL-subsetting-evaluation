@@ -20,6 +20,7 @@ import pickle
 import warnings
 import json
 import argparse
+import logging
 
 warnings.filterwarnings("ignore")
 
@@ -29,6 +30,8 @@ results_filename = "./subsetting_results/subsetting-CodeS-snails-NVIDIA_RTX_2000
 results_filename = None
 
 def main():
+
+    # logging.basicConfig(filename='./logs/main_runner.log', level=logging.INFO)
 
     parser = argparse.ArgumentParser(description="Run schema subsetting evaluation.")
     parser.add_argument("--subsetter_name", type=str, default="abstract", help="Name of the subsetter to use.")
@@ -54,7 +57,7 @@ def main():
     subsetter_preprocessing = args.subsetter_preprocessing
     subset_generation = not args.no_subset_generation
     max_col_count = args.max_col_count
-    sleep_time = args.sleep
+    sleep_time = int(args.sleep)
 
     global v_print
     if verbose:

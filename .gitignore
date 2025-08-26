@@ -6,6 +6,7 @@ venv_linux/
 .vscode/
 .local/*
 .cache/*
+logs/
 ~*
 __pycache__/
 skalpel_tmm_nfs/
