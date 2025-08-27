@@ -1,197 +1,1041 @@
-##### iowa_liquor_sales_plus - 0 #####
+##### CENSUS_BUREAU_ACS_2 - 0 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let's break down the question and map it to the schema step by step.
+
+---
+
+## 1. **What is being asked?**
+
+- **Top five states** with the **greatest average difference in median income** between **2015 and 2018** at the **ZIP code level**.
+- For these states, **what is the corresponding average number of vulnerable employees** across the following industries in **2017**:
+    - Wholesale trade
+    - Natural resources and construction
+    - Arts and entertainment
+    - Information
+    - Retail trade
+
+- Data sources: **ACS Five-Year Estimates** and **ZIP code boundaries**.
+
+---
+
+## 2. **Identify relevant tables and columns**
+
+### a. **Median Income by ZIP code and year**
+- Table: `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR` (for 2015)
+- Table: `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR` (for 2018)
+- Column: `median_income`
+- Column: `geo_id` or `zip_code` (for ZIP code)
+- To get state, need to join with ZIP code boundaries:
+    - Table: `CENSUS_BUREAU_ACS_2.GEO_US_BOUNDARIES.ZIP_CODES`
+    - Columns: `zip_code`, `state_code`, `state_name`
+
+### b. **Vulnerable employees by industry, ZIP code, and year**
+- Table: `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR`
+- Columns for industries (based on ACS variable names, may need to check actual column names, but likely):
+    - `employed_wholesale_trade`
+    - `employed_agriculture_forestry_fishing_hunting_mining` (for natural resources)
+    - `employed_construction`
+    - `employed_arts_entertainment_recreation_accommodation_food`
+    - `employed_information`
+    - `employed_retail_trade`
+- Column: `geo_id` or `zip_code`
+
+### c. **State mapping**
+- Table: `CENSUS_BUREAU_ACS_2.GEO_US_BOUNDARIES.ZIP_CODES`
+- Columns: `zip_code`, `state_code`, `state_name`
+
+---
+
+## 3. **Foreign Keys / Joins**
+
+- `ZIP_CODES_2015_5YR.geo_id`/`ZIP_CODES_2018_5YR.geo_id`/`ZIP_CODES_2017_5YR.geo_id` <-> `GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
+- `GEO_US_BOUNDARIES.ZIP_CODES.state_code` or `state_name` for grouping by state
+
+---
+
+## 4. **Cell values**
+
+- Years: 2015, 2017, 2018
+- Industries: wholesale trade, natural resources and construction, arts and entertainment, information, retail trade
+
+---
+
+## 5. **Schema Links**
+
+### **For median income difference:**
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.median_income`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.median_income`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
+- `GEO_US_BOUNDARIES.ZIP_CODES.state_code` or `state_name`
+
+### **For vulnerable employees (2017):**
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_wholesale_trade`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_agriculture_forestry_fishing_hunting_mining`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_construction`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_arts_entertainment_recreation_accommodation_food`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_information`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_retail_trade`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
+- `GEO_US_BOUNDARIES.ZIP_CODES.state_code` or `state_name`
+
+---
+
+## 6. **Possible cell values**
+- Years: 2015, 2017, 2018
+- Industries: wholesale trade, natural resources and construction, arts and entertainment, information, retail trade
+
+---
+
+## 7. **Final Schema Links**
+
+**Schema_links:**
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.median_income`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.median_income`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_wholesale_trade`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_agriculture_forestry_fishing_hunting_mining`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_construction`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_arts_entertainment_recreation_accommodation_food`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_information`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_retail_trade`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
+- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
+- `GEO_US_BOUNDARIES.ZIP_CODES.state_code`
+- `GEO_US_BOUNDARIES.ZIP_CODES.state_name`
+- `2015`
+- `2017`
+- `2018`
+- `wholesale trade`
+- `natural resources and construction`
+- `arts and entertainment`
+- `information`
+- `retail trade`
+
+---
+
+**Summary Table:**
+
+| Step | Table/Column | Purpose |
+|------|--------------|---------|
+| 1 | ZIP_CODES_2015_5YR.median_income | Median income in 2015 by ZIP |
+| 2 | ZIP_CODES_2018_5YR.median_income | Median income in 2018 by ZIP |
+| 3 | ZIP_CODES_2017_5YR.employed_wholesale_trade | Vulnerable employees (2017) |
+| 4 | ZIP_CODES_2017_5YR.employed_agriculture_forestry_fishing_hunting_mining | Vulnerable employees (2017) |
+| 5 | ZIP_CODES_2017_5YR.employed_construction | Vulnerable employees (2017) |
+| 6 | ZIP_CODES_2017_5YR.employed_arts_entertainment_recreation_accommodation_food | Vulnerable employees (2017) |
+| 7 | ZIP_CODES_2017_5YR.employed_information | Vulnerable employees (2017) |
+| 8 | ZIP_CODES_2017_5YR.employed_retail_trade | Vulnerable employees (2017) |
+| 9 | All ZIP_CODES tables .geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code | Join for state info |
+| 10 | GEO_US_BOUNDARIES.ZIP_CODES.state_code/state_name | State grouping |
+
+---
+
+**Final Answer:**
+
+> **Schema_links:**
+> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.median_income
+> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.median_income
+> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_wholesale_trade
+> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_agriculture_forestry_fishing_hunting_mining
+> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_construction
+> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_arts_entertainment_recreation_accommodation_food
+> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_information
+> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_retail_trade
+> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code
+> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code
+> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code
+> - GEO_US_BOUNDARIES.ZIP_CODES.state_code
+> - GEO_US_BOUNDARIES.ZIP_CODES.state_name
+> - 2015
+> - 2017
+> - 2018
+> - wholesale trade
+> - natural resources and construction
+> - arts and entertainment
+> - information
+> - retail trade
+
+---
+
+**This set of schema links will allow you to generate the required SQL queries for the question.**
+  ## Question:
+    Which are the top five states with the greatest average difference in median income between 2015 and 2018 at the ZIP code level, and what is the corresponding average number of vulnerable employees across wholesale trade, natural resources and construction, arts and entertainment, information, and retail trade industries in 2017 according to the ACS Five-Year Estimates and ZIP code boundaries data?
+
+  ## Query:
+    WITH median_income_diff_by_zipcode AS (
+  WITH acs_2018 AS (
+    SELECT
+      "geo_id",
+      "median_income" AS "median_income_2018"
+    FROM
+      CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS."ZIP_CODES_2018_5YR"
+  ),
+  acs_2015 AS (
+    SELECT
+      "geo_id",
+      "median_income" AS "median_income_2015"
+    FROM
+      CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS."ZIP_CODES_2015_5YR"
+  ),
+  acs_diff AS (
+    SELECT
+      a18."geo_id",
+      (a18."median_income_2018" - a15."median_income_2015") AS "median_income_diff"
+    FROM
+      acs_2018 a18
+    JOIN
+      acs_2015 a15 ON a18."geo_id" = a15."geo_id"
+  )
+  SELECT
+    "geo_id",
+    AVG("median_income_diff") AS "avg_median_income_diff"
+  FROM
+    acs_diff
+  WHERE
+    "median_income_diff" IS NOT NULL
+  GROUP BY "geo_id"
+),
+base_census AS (
+  SELECT
+    geo."state_name",
+    AVG(i."avg_median_income_diff") AS "avg_median_income_diff",
+    AVG(
+      "employed_wholesale_trade" * 0.38423645320197042 +
+      "occupation_natural_resources_construction_maintenance" * 0.48071410777129553 +
+      "employed_arts_entertainment_recreation_accommodation_food" * 0.89455676291236841 +
+      "employed_information" * 0.31315240083507306 +
+      "employed_retail_trade" * 0.51
+    ) AS "avg_vulnerable"
+  FROM
+    CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS."ZIP_CODES_2017_5YR" AS census
+  JOIN
+    median_income_diff_by_zipcode i ON CAST(census."geo_id" AS STRING) = i."geo_id"
+  JOIN
+    CENSUS_BUREAU_ACS_2.GEO_US_BOUNDARIES."ZIP_CODES" geo ON census."geo_id" = geo."zip_code"
+  GROUP BY geo."state_name"
+)
+
+SELECT 
+  "state_name",
+  "avg_median_income_diff",
+  "avg_vulnerable"
+FROM 
+  base_census
+ORDER BY 
+  "avg_median_income_diff" DESC
+LIMIT 5;
+
+
+
+##### new_york_plus - 0 #####
 Error: Slicing error for the schema_linking module
 Prompt: Let’s break down the question and map it to the schema step by step:
 
 **Question:**  
-"Please show the monthly per capita Bourbon Whiskey sales during 2022 in Dubuque County for the zip code that ranks third in total Bourbon Whiskey sales, using only the population aged 21 and older."
+What is the average trip duration in minutes for all valid Yellow taxi trips that took place between February 1, 2016, and February 7, 2016 (inclusive), with a positive trip duration, more than three passengers, and a trip distance of at least ten miles, where both the pickup and dropoff locations are in Brooklyn?
 
 ---
 
-### 1. Identify the required columns and tables
+### 1. **Identify the main table(s):**
+- The main table is `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2016` (Yellow taxi trips for 2016).
 
-#### a. **Bourbon Whiskey sales**
-- Need to filter sales for "Bourbon Whiskey".
-- Table: `bigquery-public-data.iowa_liquor_sales.sales`
-- Columns: `category_name` (to filter for "Bourbon Whiskey"), `sale_dollars` (for sales amount), `date` (for 2022), `county` (for "Dubuque County"), `zipcode` (for zip code), `bottles_sold` (optional, but not needed for per capita sales).
+### 2. **Columns needed:**
+- **Trip duration:** Not directly present, but can be calculated as `dropoff_datetime - pickup_datetime`.
+- **pickup_datetime, dropoff_datetime:** For filtering by date and calculating duration.
+- **passenger_count:** For filtering trips with more than three passengers.
+- **trip_distance:** For filtering trips with at least ten miles.
+- **pickup_location_id, dropoff_location_id:** For filtering trips where both locations are in Brooklyn.
 
-#### b. **Monthly**
-- Need to group by month.
-- Column: `date` (extract month and year).
+### 3. **Brooklyn locations:**
+- To check if a location is in Brooklyn, we need to join with `bigquery-public-data.new_york_taxi_trips.taxi_zone_geom`:
+    - `zone_id` in `taxi_zone_geom` matches `pickup_location_id` and `dropoff_location_id` in the trips table.
+    - The `borough` column in `taxi_zone_geom` should be 'Brooklyn'.
 
-#### c. **Per capita**
-- Need population data for the zip code, specifically population aged 21 and older.
-- Table: `bigquery-public-data.census_bureau_usa.population_by_zip_2010`
-- Columns: `zipcode`, `population`, `minimum_age`, `maximum_age`
+### 4. **Filters/Values:**
+- **Date range:** pickup_datetime between '2016-02-01' and '2016-02-07' (inclusive).
+- **Positive trip duration:** dropoff_datetime > pickup_datetime.
+- **More than three passengers:** passenger_count > 3.
+- **Trip distance at least ten miles:** trip_distance >= 10.
+- **Both pickup and dropoff in Brooklyn:** Both corresponding `taxi_zone_geom.borough` = 'Brooklyn'.
 
-#### d. **Zip code that ranks third in total Bourbon Whiskey sales**
-- Need to sum sales by zip code, order by total sales, and pick the third highest.
-- Table: `bigquery-public-data.iowa_liquor_sales.sales`
-- Columns: `zipcode`, `sale_dollars`, `category_name`
-
-#### e. **During 2022**
-- Filter by `date` in 2022.
-
-#### f. **Dubuque County**
-- Filter by `county` = 'Dubuque'
-
----
-
-### 2. Foreign Keys / Join Conditions
-
-- `bigquery-public-data.iowa_liquor_sales.sales.zip_code` = `bigquery-public-data.census_bureau_usa.population_by_zip_2010.zipcode`
+### 5. **Foreign Keys/Joins:**
+- `tlc_yellow_trips_2016.pickup_location_id = taxi_zone_geom.zone_id`
+- `tlc_yellow_trips_2016.dropoff_location_id = taxi_zone_geom.zone_id` (need two aliases for taxi_zone_geom: one for pickup, one for dropoff)
 
 ---
 
-### 3. Cell Values
-
-- "Bourbon Whiskey" (for `category_name`)
-- "Dubuque" (for `county`)
-- 2022 (for `date`)
-- 21 (for `minimum_age`)
-
----
-
-### 4. Schema Links
+## **Schema Links**
 
 **Columns:**
-- `bigquery-public-data.iowa_liquor_sales.sales.category_name`
-- `bigquery-public-data.iowa_liquor_sales.sales.sale_dollars`
-- `bigquery-public-data.iowa_liquor_sales.sales.date`
-- `bigquery-public-data.iowa_liquor_sales.sales.county`
-- `bigquery-public-data.iowa_liquor_sales.sales.zip_code`
-- `bigquery-public-data.census_bureau_usa.population_by_zip_2010.zipcode`
-- `bigquery-public-data.census_bureau_usa.population_by_zip_2010.population`
-- `bigquery-public-data.census_bureau_usa.population_by_zip_2010.minimum_age`
-- `bigquery-public-data.census_bureau_usa.population_by_zip_2010.maximum_age`
+- `tlc_yellow_trips_2016.pickup_datetime`
+- `tlc_yellow_trips_2016.dropoff_datetime`
+- `tlc_yellow_trips_2016.passenger_count`
+- `tlc_yellow_trips_2016.trip_distance`
+- `tlc_yellow_trips_2016.pickup_location_id`
+- `tlc_yellow_trips_2016.dropoff_location_id`
+- `taxi_zone_geom.zone_id`
+- `taxi_zone_geom.borough`
 
-**Foreign Keys:**
-- `bigquery-public-data.iowa_liquor_sales.sales.zip_code = bigquery-public-data.census_bureau_usa.population_by_zip_2010.zipcode`
+**Foreign Keys/Joins:**
+- `tlc_yellow_trips_2016.pickup_location_id = taxi_zone_geom.zone_id` (alias: pickup_zone)
+- `tlc_yellow_trips_2016.dropoff_location_id = taxi_zone_geom.zone_id` (alias: dropoff_zone)
 
 **Cell Values:**
-- "Bourbon Whiskey"
-- "Dubuque"
-- 2022
-- 21
+- '2016-02-01'
+- '2016-02-07'
+- 3
+- 10
+- 'Brooklyn'
+
+**Derived/Computed:**
+- trip duration in minutes: TIMESTAMP_DIFF(dropoff_datetime, pickup_datetime, MINUTE)
+
+---
+
+### **Final Schema Links:**
+
+```plaintext
+Schema_links: [
+  tlc_yellow_trips_2016.pickup_datetime,
+  tlc_yellow_trips_2016.dropoff_datetime,
+  tlc_yellow_trips_2016.passenger_count,
+  tlc_yellow_trips_2016.trip_distance,
+  tlc_yellow_trips_2016.pickup_location_id,
+  tlc_yellow_trips_2016.dropoff_location_id,
+  taxi_zone_geom.zone_id (as pickup_zone),
+  taxi_zone_geom.zone_id (as dropoff_zone),
+  taxi_zone_geom.borough (as pickup_borough),
+  taxi_zone_geom.borough (as dropoff_borough),
+  tlc_yellow_trips_2016.pickup_location_id = pickup_zone.zone_id,
+  tlc_yellow_trips_2016.dropoff_location_id = dropoff_zone.zone_id,
+  '2016-02-01',
+  '2016-02-07',
+  3,
+  10,
+  'Brooklyn'
+]
+```
+
+**Or, more succinctly:**
+
+**Schema_links:**
+- tlc_yellow_trips_2016.pickup_datetime
+- tlc_yellow_trips_2016.dropoff_datetime
+- tlc_yellow_trips_2016.passenger_count
+- tlc_yellow_trips_2016.trip_distance
+- tlc_yellow_trips_2016.pickup_location_id = taxi_zone_geom.zone_id (as pickup_zone)
+- tlc_yellow_trips_2016.dropoff_location_id = taxi_zone_geom.zone_id (as dropoff_zone)
+- pickup_zone.borough
+- dropoff_zone.borough
+- '2016-02-01'
+- '2016-02-07'
+- 3
+- 10
+- 'Brooklyn'
+
+---
+
+**This set of schema links covers all the columns, joins, and values needed to generate the SQL for the question.**
+  ## Question:
+    What is the average trip duration in minutes for all valid Yellow taxi trips that took place between February 1, 2016, and February 7, 2016 (inclusive), with a positive trip duration, more than three passengers, and a trip distance of at least ten miles, where both the pickup and dropoff locations are in Brooklyn?
+
+  ## Query:
+    SELECT 
+    AVG(TIMESTAMP_DIFF(dropoff_datetime, pickup_datetime, SECOND) / 60.0) AS average_trip_duration_in_minutes
+FROM
+(
+    SELECT *
+    FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2016` t
+    WHERE 
+        pickup_datetime BETWEEN '2016-02-01' AND '2016-02-07' AND 
+        dropoff_datetime BETWEEN '2016-02-01' AND '2016-02-07' AND
+        TIMESTAMP_DIFF(dropoff_datetime, pickup_datetime, SECOND) > 0 AND 
+        passenger_count > 3 AND 
+        trip_distance >= 10
+) t
+INNER JOIN `bigquery-public-data.new_york_taxi_trips.taxi_zone_geom` tz
+ON t.pickup_location_id = tz.zone_id
+INNER JOIN `bigquery-public-data.new_york_taxi_trips.taxi_zone_geom` tz1
+ON t.dropoff_location_id = tz1.zone_id
+WHERE 
+    tz.borough = "Brooklyn" AND
+    tz1.borough = "Brooklyn";
+
+
+
+##### covid19_open_world_bank - 0 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question and find the schema links step by step.
+
+**Question:**  
+"You need to calculate the percentage of each country's population that had been confirmed with COVID-19 by June 30, 2020. The population data for 2018 can be found in the World Bank dataset, and the cumulative COVID-19 confirmed cases data is available in the COVID-19 Open Data dataset. Calculate the percentage of each country's population, that was cumulatively confirmed to have COVID-19"
+
+---
+
+### 1. **What is being asked?**
+- For each country, calculate:  
+  (Cumulative confirmed COVID-19 cases as of 2020-06-30) / (Population in 2018) * 100
+
+---
+
+### 2. **Which columns/tables are needed?**
+
+#### a. **COVID-19 confirmed cases as of 2020-06-30**
+- Table: `bigquery-public-data.covid19_open_data.covid19_open_data`
+- Columns:
+  - `country_code` or `country_name` (to identify country)
+  - `date` (to filter for '2020-06-30')
+  - `cumulative_confirmed` (the value we need)
+
+#### b. **Population in 2018**
+- Table: `bigquery-public-data.world_bank_global_population.population_by_country`
+- Columns:
+  - `country_code` or `country` (to identify country)
+  - `year_2018` (population in 2018)
+
+#### c. **Join condition**
+- Both tables have `country_code` (or similar) for joining.
+
+---
+
+### 3. **Foreign Keys / Join Conditions**
+- `bigquery-public-data.covid19_open_data.covid19_open_data.country_code = bigquery-public-data.world_bank_global_population.population_by_country.country_code`
+
+---
+
+### 4. **Possible cell values**
+- '2020-06-30' (for date filter)
+
+---
+
+### 5. **Schema Links**
+
+**Columns:**
+- `bigquery-public-data.covid19_open_data.covid19_open_data.country_code`
+- `bigquery-public-data.covid19_open_data.covid19_open_data.date`
+- `bigquery-public-data.covid19_open_data.covid19_open_data.cumulative_confirmed`
+- `bigquery-public-data.world_bank_global_population.population_by_country.country_code`
+- `bigquery-public-data.world_bank_global_population.population_by_country.year_2018`
+
+**Foreign Key:**
+- `bigquery-public-data.covid19_open_data.covid19_open_data.country_code = bigquery-public-data.world_bank_global_population.population_by_country.country_code`
+
+**Cell Value:**
+- '2020-06-30'
 
 ---
 
 ## **Final Schema Links**
 
 **Schema_links:**
-- bigquery-public-data.iowa_liquor_sales.sales.category_name
-- bigquery-public-data.iowa_liquor_sales.sales.sale_dollars
-- bigquery-public-data.iowa_liquor_sales.sales.date
-- bigquery-public-data.iowa_liquor_sales.sales.county
-- bigquery-public-data.iowa_liquor_sales.sales.zip_code
-- bigquery-public-data.census_bureau_usa.population_by_zip_2010.zipcode
-- bigquery-public-data.census_bureau_usa.population_by_zip_2010.population
-- bigquery-public-data.census_bureau_usa.population_by_zip_2010.minimum_age
-- bigquery-public-data.census_bureau_usa.population_by_zip_2010.maximum_age
-- bigquery-public-data.iowa_liquor_sales.sales.zip_code = bigquery-public-data.census_bureau_usa.population_by_zip_2010.zipcode
-- "Bourbon Whiskey"
-- "Dubuque"
-- 2022
-- 21
+- bigquery-public-data.covid19_open_data.covid19_open_data.country_code
+- bigquery-public-data.covid19_open_data.covid19_open_data.date
+- bigquery-public-data.covid19_open_data.covid19_open_data.cumulative_confirmed
+- bigquery-public-data.world_bank_global_population.population_by_country.country_code
+- bigquery-public-data.world_bank_global_population.population_by_country.year_2018
+- bigquery-public-data.covid19_open_data.covid19_open_data.country_code = bigquery-public-data.world_bank_global_population.population_by_country.country_code
+- '2020-06-30'
+
+---
+
+**(You may also include `country_name` if you want to display the country names in the result.)**
+  ## Question:
+    You need to calculate the percentage of each country's population that had been confirmed with COVID-19 by June 30, 2020. The population data for 2018 can be found in the World Bank dataset, and the cumulative COVID-19 confirmed cases data is available in the COVID-19 Open Data dataset. Calculate the percentage of each country's population, that was cumulatively confirmed to have COVID-19
+
+  ## Query:
+    WITH
+  country_pop AS (
+  SELECT
+    country_code AS iso_3166_1_alpha_3,
+    year_2018 AS population_2018
+  FROM
+    `bigquery-public-data.world_bank_global_population.population_by_country`)
+SELECT
+  country_code,
+  country_name,
+  cumulative_confirmed AS june_confirmed_cases,
+  population_2018,
+  ROUND(cumulative_confirmed/population_2018 * 100,2) AS case_percent
+FROM
+  `bigquery-public-data.covid19_open_data.covid19_open_data`
+JOIN
+  country_pop
+USING
+  (iso_3166_1_alpha_3)
+WHERE
+  date = '2020-06-30'
+  AND aggregation_level = 0
+ORDER BY
+  case_percent DESC
+
+
+##### sdoh - 4 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question:
+
+**Question:**  
+"Please list the average number of prenatal weeks in 2018 for counties in Wisconsin where more than 5% of the employed population had commutes of 45-59 minutes in 2017."
+
+---
+
+### 1. Identify the relevant tables and columns
+
+#### For "average number of prenatal weeks in 2018 for counties in Wisconsin":
+- Table: `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality`
+  - Columns: `Year`, `County_of_Residence`, `Ave_Number_of_Prenatal_Wks`
+- Filter: `Year = 2018`
+- Filter: County in Wisconsin (need to match counties in Wisconsin)
+
+#### For "counties in Wisconsin where more than 5% of the employed population had commutes of 45-59 minutes in 2017":
+- Table: `bigquery-public-data.census_bureau_acs.county_2017_5yr`
+  - Columns: `geo_id`, `commute_45_59_mins`, `employed_pop`, `state_name` (or filter by FIPS for Wisconsin)
+- Need to compute: `commute_45_59_mins / employed_pop > 0.05`
+- Need to filter for Wisconsin counties (by FIPS or state name)
+
+---
+
+### 2. Foreign Keys / Join Keys
+
+- County matching:  
+  - `county_natality.County_of_Residence_FIPS` ↔ `county_2017_5yr.geo_id` (FIPS code)
+- State filter:  
+  - Wisconsin FIPS code prefix is `55` (so FIPS codes starting with `55`)
+
+---
+
+### 3. Cell Values
+
+- `Year = 2018` (for natality)
+- `Year = 2017` (for commute data)
+- `commute_45_59_mins / employed_pop > 0.05`
+- FIPS code starts with `55` (Wisconsin)
+
+---
+
+### 4. Schema Links
+
+**Tables/Columns:**
+- `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Year`
+- `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS`
+- `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Ave_Number_of_Prenatal_Wks`
+- `bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id`
+- `bigquery-public-data.census_bureau_acs.county_2017_5yr.commute_45_59_mins`
+- `bigquery-public-data.census_bureau_acs.county_2017_5yr.employed_pop`
+
+**Foreign Keys:**
+- `county_natality.County_of_Residence_FIPS = county_2017_5yr.geo_id`
+
+**Cell Values:**
+- `2018`
+- `2017`
+- `0.05`
+- FIPS code starts with `55` (Wisconsin)
+
+---
+
+### 5. Final Schema Links
+
+**Schema_links:**
+- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Year
+- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS
+- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Ave_Number_of_Prenatal_Wks
+- bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id
+- bigquery-public-data.census_bureau_acs.county_2017_5yr.commute_45_59_mins
+- bigquery-public-data.census_bureau_acs.county_2017_5yr.employed_pop
+- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS = bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id
+- 2018
+- 2017
+- 0.05
+- FIPS code starts with 55 (Wisconsin)
+
+---
+
+**Summary Table:**
+
+| Table/Column                                                                 | Purpose/Reason                                                                 |
+|------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Year           | Filter for 2018                                                               |
+| bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS | Join key for county                                                           |
+| bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Ave_Number_of_Prenatal_Wks | The value to list                                                             |
+| bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id                | Join key for county                                                           |
+| bigquery-public-data.census_bureau_acs.county_2017_5yr.commute_45_59_mins    | Numerator for commute percentage                                              |
+| bigquery-public-data.census_bureau_acs.county_2017_5yr.employed_pop          | Denominator for commute percentage                                            |
+| bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS = bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id | Foreign key for join                                                          |
+| 2018                                                                         | Filter for natality year                                                      |
+| 2017                                                                         | Filter for commute data year                                                  |
+| 0.05                                                                         | Threshold for commute percentage                                              |
+| FIPS code starts with 55                                                     | Filter for Wisconsin counties                                                 |
+
+---
+
+## **Final Answer**
+
+**Schema_links:**
+- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Year
+- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS
+- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Ave_Number_of_Prenatal_Wks
+- bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id
+- bigquery-public-data.census_bureau_acs.county_2017_5yr.commute_45_59_mins
+- bigquery-public-data.census_bureau_acs.county_2017_5yr.employed_pop
+- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS = bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id
+- 2018
+- 2017
+- 0.05
+- FIPS code starts with 55
+
+---
+
+**If you need the SQL, let me know!**
+  ## Question:
+    Please list the average number of prenatal weeks in 2018 for counties in Wisconsin where more than 5% of the employed population had commutes of 45-59 minutes in 2017.
+
+  ## Query:
+    WITH natality_2018 AS (
+  SELECT County_of_Residence_FIPS AS FIPS, Ave_Number_of_Prenatal_Wks AS Vist_Ave, County_of_Residence
+  FROM `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality` 
+  WHERE SUBSTR(County_of_Residence_FIPS, 0, 2) = "55" AND Year = '2018-01-01'
+),
+
+acs_2017 AS (
+  SELECT geo_id, commute_45_59_mins, employed_pop
+  FROM `bigquery-public-data.census_bureau_acs.county_2017_5yr`
+),
+
+corr_tbl AS (
+  SELECT
+    n.County_of_Residence,
+    ROUND((a.commute_45_59_mins / a.employed_pop) * 100, 2) AS percent_high_travel,
+    n.Vist_Ave
+  FROM acs_2017 a
+  JOIN natality_2018 n
+  ON a.geo_id = n.FIPS
+)
+
+SELECT County_of_Residence, Vist_Ave
+FROM corr_tbl
+WHERE percent_high_travel > 5
+
+
+
+##### stackoverflow - 9 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question and map it to the schema step by step:
+
+**Question:**  
+Retrieve the top 10 longest questions on Stack Overflow, measured by the length of their body text, where each question either has an accepted answer or has no accepted answer but has at least one answer with a score-to-view ratio exceeding 0.01. For each of these questions, include the reputation of the user who asked the question, the user's net votes (calculated as their total up_votes minus down_votes), and the total number of badges the user has earned.
+
+---
+
+### 1. "top 10 longest questions ... measured by the length of their body text"
+- Table: `bigquery-public-data.stackoverflow.posts_questions`
+- Columns: `body` (for length), `id` (question id)
+- Need to compute LENGTH(body) and order by it, limit 10.
+
+### 2. "where each question either has an accepted answer"
+- Table: `posts_questions`
+- Column: `accepted_answer_id` (not null)
+
+### 3. "or has no accepted answer but has at least one answer with a score-to-view ratio exceeding 0.01"
+- Table: `posts_questions` (for questions)
+- Table: `posts_answers` (for answers)
+- Columns: `accepted_answer_id` (null), `id` (question id), `view_count` (from question), `score` (from answer), `parent_id` (answer's parent question id)
+- Need to join answers to questions where `posts_answers.parent_id = posts_questions.id`
+- Need to check: `score / view_count > 0.01`
+
+### 4. "For each of these questions, include the reputation of the user who asked the question"
+- Table: `users`
+- Columns: `reputation`
+- Join: `posts_questions.owner_user_id = users.id`
+
+### 5. "the user's net votes (calculated as their total up_votes minus down_votes)"
+- Table: `users`
+- Columns: `up_votes`, `down_votes`
+- Compute: `up_votes - down_votes`
+
+### 6. "and the total number of badges the user has earned"
+- Table: `badges`
+- Column: `user_id`
+- Need to count badges per user: `COUNT(badges.id)` where `badges.user_id = users.id`
+
+---
+
+## Foreign Keys / Joins Needed
+
+- `posts_questions.owner_user_id = users.id`
+- `badges.user_id = users.id`
+- `posts_answers.parent_id = posts_questions.id`
+
+---
+
+## Cell Values
+
+- 0.01 (score-to-view ratio threshold)
+- 10 (top 10)
+
+---
+
+## Schema Links
+
+**Columns:**
+- posts_questions.id
+- posts_questions.body
+- posts_questions.accepted_answer_id
+- posts_questions.view_count
+- posts_questions.owner_user_id
+- users.id
+- users.reputation
+- users.up_votes
+- users.down_votes
+- badges.user_id
+- badges.id
+- posts_answers.parent_id
+- posts_answers.score
+
+**Joins/Foreign Keys:**
+- posts_questions.owner_user_id = users.id
+- badges.user_id = users.id
+- posts_answers.parent_id = posts_questions.id
+
+**Cell Values:**
+- 0.01
+- 10
+
+---
+
+## Final Schema Links
+
+**Schema_links:**
+- posts_questions.id
+- posts_questions.body
+- posts_questions.accepted_answer_id
+- posts_questions.view_count
+- posts_questions.owner_user_id
+- users.id
+- users.reputation
+- users.up_votes
+- users.down_votes
+- badges.user_id
+- badges.id
+- posts_answers.parent_id
+- posts_answers.score
+- posts_questions.owner_user_id = users.id
+- badges.user_id = users.id
+- posts_answers.parent_id = posts_questions.id
+- 0.01
+- 10
+
+---
+
+**(You may also include posts_answers.id if you want to reference the answer id, but it's not strictly needed for this query.)**
+  ## Question:
+    Retrieve the top 10 longest questions on Stack Overflow, measured by the length of their body text, where each question either has an accepted answer or has no accepted answer but has at least one answer with a score-to-view ratio exceeding 0.01. For each of these questions, include the reputation of the user who asked the question, the user's net votes (calculated as their total up_votes minus down_votes), and the total number of badges the user has earned.
+
+  ## Query:
+    WITH badge_counts AS (
+  SELECT
+    c.id,
+    COUNT(DISTINCT d.id) AS badge_number
+  FROM
+    `bigquery-public-data.stackoverflow.users` AS c
+  JOIN
+    `bigquery-public-data.stackoverflow.badges` AS d
+  ON
+    c.id = d.user_id
+  GROUP BY
+    c.id
+),
+labeled_questions AS (
+  SELECT
+    a.id,
+    IF(
+      a.id IN (
+        SELECT DISTINCT b.id
+        FROM
+          `bigquery-public-data.stackoverflow.posts_answers` AS a
+        JOIN
+          `bigquery-public-data.stackoverflow.posts_questions` AS b
+        ON
+          a.parent_id = b.id
+        WHERE
+          b.accepted_answer_id IS NULL
+          AND a.score / b.view_count > 0.01
+      ) OR accepted_answer_id IS NOT NULL,
+      1,
+      0
+    ) AS label,
+    a.owner_user_id,
+    LENGTH(a.body) AS body_length
+  FROM
+    `bigquery-public-data.stackoverflow.posts_questions` AS a
+)
+SELECT
+  lq.id,
+  b.reputation,
+  b.up_votes - b.down_votes AS net_votes,
+  e.badge_number
+FROM
+  labeled_questions AS lq
+JOIN
+  `bigquery-public-data.stackoverflow.users` AS b
+ON
+  lq.owner_user_id = b.id
+JOIN
+  badge_counts AS e
+ON
+  b.id = e.id
+WHERE
+  lq.label = 1
+ORDER BY
+  lq.body_length DESC
+LIMIT
+  10;
+
+
+
+
+
+##### pancancer_atlas_2 - 1 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question and map the schema links step by step:
+
+**Step 1: Identify the main entities and requirements.**
+- **KRAS and TP53 gene mutations**: Need to find patients with mutations in these genes.
+- **Pancreatic adenocarcinoma (PAAD)**: Restrict to patients with PAAD.
+- **Clinical follow-up data**: Use clinical data to confirm diagnosis and patient status.
+- **High-quality mutation annotations**: Use filtered mutation data.
+- **Match patient records by unique identifiers**: Ensure correct joins.
+- **Calculate co-occurrence and independence**: Need to count patients with both, either, or neither mutation.
+
+**Step 2: Find relevant tables and columns.**
+- **Mutation data**: 
+  - `Filtered_MC3_MAF_V5_one_per_tumor_sample` (has `ParticipantBarcode`, `Study`, `Hugo_Symbol` (gene), `Variant_Classification`)
+- **Clinical data**: 
+  - `Filtered_clinical_PANCAN_patient_with_followup` (has `bcr_patient_barcode`, `acronym` (cancer type), etc.)
+- **Patient identifier**: 
+  - `ParticipantBarcode` in mutation table, `bcr_patient_barcode` in clinical table (likely the same, or can be mapped).
+- **Cancer type**: 
+  - `acronym` in clinical table (should be 'PAAD' for pancreatic adenocarcinoma).
+
+**Step 3: Foreign keys / joins.**
+- Join `Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode` = `Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode`
+- Filter `Filtered_clinical_PANCAN_patient_with_followup.acronym = 'PAAD'`
+- Filter `Filtered_MC3_MAF_V5_one_per_tumor_sample.Hugo_Symbol IN ('KRAS', 'TP53')`
+
+**Step 4: Cell values.**
+- 'KRAS', 'TP53', 'PAAD'
+
+**Step 5: Schema links summary.**
+
+**Schema_links:**
+- `Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode = Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode`
+- `Filtered_clinical_PANCAN_patient_with_followup.acronym`
+- `Filtered_MC3_MAF_V5_one_per_tumor_sample.Hugo_Symbol`
+- `Filtered_MC3_MAF_V5_one_per_tumor_sample.Variant_Classification`
+- `Filtered_clinical_PANCAN_patient_with_followup.*` (for clinical follow-up data)
+- `'KRAS'`
+- `'TP53'`
+- `'PAAD'`
+
+**Full answer:**
+
+---
+
+**Schema_links:**
+- Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode = Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode
+- Filtered_clinical_PANCAN_patient_with_followup.acronym
+- Filtered_MC3_MAF_V5_one_per_tumor_sample.Hugo_Symbol
+- Filtered_MC3_MAF_V5_one_per_tumor_sample.Variant_Classification
+- Filtered_clinical_PANCAN_patient_with_followup.*
+- 'KRAS'
+- 'TP53'
+- 'PAAD'
 
 ---
 
 **Explanation:**  
-These schema links cover all the columns, join conditions, and cell values needed to generate the SQL for the question.
+You need to join the mutation and clinical tables on patient barcode, filter for PAAD patients, and select those with KRAS and/or TP53 mutations. Use the clinical follow-up data for additional filtering or annotation as needed. The relevant columns and values are listed above.
   ## Question:
-    Please show the monthly per capita Bourbon Whiskey sales during 2022 in Dubuque County for the zip code that ranks third in total Bourbon Whiskey sales, using only the population aged 21 and older.
+    Using TCGA dataset, calculate the chi-squared statistic to evaluate the association between KRAS and TP53 gene mutations in patients diagnosed with pancreatic adenocarcinoma (PAAD). Incorporate clinical follow-up data and high-quality mutation annotations to accurately determine the frequency of patients with co-occurring KRAS and TP53 mutations compared to those with each mutation occurring independently. Ensure that patient records are meticulously matched based on unique identifiers to maintain data integrity. This analysis aims to identify and quantify potential correlations between KRAS and TP53 genetic alterations within the PAAD patient population.
 
   ## Query:
-    WITH DUBUQUE_LIQUOR_CTE AS (
+    WITH
+barcodes AS (
+   SELECT bcr_patient_barcode AS ParticipantBarcode
+   FROM isb-cgc-bq.pancancer_atlas.Filtered_clinical_PANCAN_patient_with_followup
+   WHERE acronym = 'PAAD'
+),
+table1 AS (
 SELECT
-  CASE
-      WHEN UPPER(category_name) LIKE 'BUTTERSCOTCH SCHNAPPS' THEN 'All Other' --Edge case is not a scotch
-      WHEN UPPER(category_name) LIKE '%WHISKIES' 
-            AND UPPER(category_name) NOT LIKE '%RYE%'
-            AND UPPER(category_name) NOT LIKE '%BOURBON%'
-            AND UPPER(category_name) NOT LIKE '%SCOTCH%'     THEN 'Other Whiskey'
-      WHEN UPPER(category_name) LIKE '%RYE%'                 THEN 'Rye Whiskey'
-      WHEN UPPER(category_name) LIKE '%BOURBON%'             THEN 'Bourbon Whiskey'
-      WHEN UPPER(category_name) LIKE '%SCOTCH%'              THEN 'Scotch Whiskey'
-      ELSE 'All Other'
-  END                              AS category_group,
-  EXTRACT(MONTH FROM date)         AS month,    -- At the time of this query, there is only data until month 6.
-  LEFT(CAST(zip_code AS string),5) AS zip_code, -- Casting to string necessary because zip_code has a mix of int & str types.
-  ROUND(SUM(sale_dollars), 2)      AS sale_dollars_sum,
-
-FROM 
-  bigquery-public-data.iowa_liquor_sales.sales
-
-WHERE
-  UPPER(county)               = 'DUBUQUE'
-  AND EXTRACT(YEAR FROM date) = 2022
-
+   t1.ParticipantBarcode,
+   IF(t2.ParticipantBarcode IS NULL, 'NO', 'YES') AS data
+FROM
+   barcodes AS t1
+LEFT JOIN
+   (
+   SELECT
+      ParticipantBarcode AS ParticipantBarcode
+   FROM isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample
+   WHERE Study = 'PAAD' AND Hugo_Symbol = 'KRAS'
+         AND FILTER = 'PASS'
+   GROUP BY ParticipantBarcode
+   ) AS t2
+ON t1.ParticipantBarcode = t2.ParticipantBarcode
+),
+table2 AS (
+SELECT
+   t1.ParticipantBarcode,
+   IF(t2.ParticipantBarcode IS NULL, 'NO', 'YES') AS data
+FROM
+   barcodes AS t1
+LEFT JOIN
+   (
+   SELECT
+      ParticipantBarcode AS ParticipantBarcode
+   FROM isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample
+   WHERE Study = 'PAAD' AND Hugo_Symbol = 'TP53'
+         AND FILTER = 'PASS'
+   GROUP BY ParticipantBarcode
+   ) AS t2
+ON t1.ParticipantBarcode = t2.ParticipantBarcode
+),
+summ_table AS (
+SELECT
+   n1.data AS data1,
+   n2.data AS data2,
+   COUNT(*) AS Nij
+FROM
+   table1 AS n1
+INNER JOIN
+   table2 AS n2
+ON
+   n1.ParticipantBarcode = n2.ParticipantBarcode
 GROUP BY
-  category_group,
-  month,
-  zip_code
-  
-ORDER BY 
-  category_group,
-  month,
-  zip_code
+  data1, data2
 ),
-
-DUBUQUE_POPULATION_CTE AS (
+contingency_table AS (
 SELECT
-  zipcode,
-  SUM(population) AS population_sum
-FROM bigquery-public-data.census_bureau_usa.population_by_zip_2010
-WHERE 
-  minimum_age >= 21
-GROUP BY 
-  zipcode
-),
-MONTH_INFO AS (
-SELECT 
-  l.month,
-  l.zip_code,
-  l.sale_dollars_sum,
-  ROUND(sale_dollars_sum/p.population_sum, 2) AS dollars_per_capita
-FROM 
-  DUBUQUE_LIQUOR_CTE AS l
-  LEFT JOIN 
-  DUBUQUE_POPULATION_CTE AS p
-  ON l.zip_code = p.zipcode
-WHERE
-  category_group = 'Bourbon Whiskey'
-GROUP BY 
-  category_group,
-  zip_code,
-  month,
-  sale_dollars_sum,
-  zipcode,
-  population_sum
-ORDER BY
-  zip_code,
-  month
-),
-zip_code_sales AS (
-    SELECT
-        zip_code,
-        SUM(sale_dollars_sum) AS total_sale_dollars_sum
-    FROM MONTH_INFO
-    GROUP BY zip_code
-),
-ranked_zip_codes AS (
-    SELECT
-        zip_code,
-        total_sale_dollars_sum,
-        ROW_NUMBER() OVER (ORDER BY total_sale_dollars_sum DESC) AS rank
-    FROM zip_code_sales
+  MAX(IF((data1 = 'YES') AND (data2 = 'YES'), Nij, 0)) AS a,
+  MAX(IF((data1 = 'YES') AND (data2 = 'NO'), Nij, 0)) AS b,
+  MAX(IF((data1 = 'NO') AND (data2 = 'YES'), Nij, 0)) AS c,
+  MAX(IF((data1 = 'NO') AND (data2 = 'NO'), Nij, 0)) AS d,
+  (MAX(IF((data1 = 'YES') AND (data2 = 'YES'), Nij, 0)) + MAX(IF((data1 = 'YES') AND (data2 = 'NO'), Nij, 0))) AS row1_total,
+  (MAX(IF((data1 = 'NO') AND (data2 = 'YES'), Nij, 0)) + MAX(IF((data1 = 'NO') AND (data2 = 'NO'), Nij, 0))) AS row2_total,
+  (MAX(IF((data1 = 'YES') AND (data2 = 'YES'), Nij, 0)) + MAX(IF((data1 = 'NO') AND (data2 = 'YES'), Nij, 0))) AS col1_total,
+  (MAX(IF((data1 = 'YES') AND (data2 = 'NO'), Nij, 0)) + MAX(IF((data1 = 'NO') AND (data2 = 'NO'), Nij, 0))) AS col2_total,
+  SUM(Nij) AS grand_total
+FROM summ_table
 )
 SELECT
-    t.month,
-    t.zip_code,
-    t.dollars_per_capita
-FROM MONTH_INFO t
-JOIN ranked_zip_codes r
-ON t.zip_code = r.zip_code
-WHERE r.rank = 3
-ORDER BY t.month;
+  POWER((a - (row1_total * col1_total) / grand_total), 2) / ((row1_total * col1_total) / grand_total) +
+  POWER((b - (row1_total * col2_total) / grand_total), 2) / ((row1_total * col2_total) / grand_total) +
+  POWER((c - (row2_total * col1_total) / grand_total), 2) / ((row2_total * col1_total) / grand_total) +
+  POWER((d - (row2_total * col2_total) / grand_total), 2) / ((row2_total * col2_total) / grand_total) AS chi_square_statistic
+FROM contingency_table
+WHERE a IS NOT NULL AND b IS NOT NULL AND c IS NOT NULL AND d IS NOT NULL;
+
+
+
+##### ebi_chembl - 0 #####
+Error: Slicing error for the schema_linking module
+Prompt: Let’s break down the question:
+
+**Question:**  
+"Using data from ChEMBL Release 23, retrieve all distinct molecules associated with the company 'SanofiAventis,' listing the trade name and the most recent approval date for each molecule. Make sure to keep only the latest approval date per molecule and ensure the company field precisely matches 'SanofiAventis' without relying on other fields."
+
+---
+
+### 1. Identify the relevant tables and columns
+
+- **Molecule**:  
+  - Table: `bigquery-public-data.ebi_chembl.molecule_dictionary_23`  
+  - Key column: `molregno` (unique molecule identifier)
+
+- **Product/Trade Name/Approval Date**:  
+  - Table: `bigquery-public-data.ebi_chembl.products_23`  
+  - Columns: `trade_name`, `approval_date`, `product_id`, `innovator_company`
+
+- **Molecule ↔ Product mapping**:  
+  - Table: `bigquery-public-data.ebi_chembl.formulations_23`  
+  - Columns: `molregno`, `product_id`
+
+- **Company**:  
+  - Field: `innovator_company` in `products_23`  
+  - Must match exactly 'SanofiAventis'
+
+---
+
+### 2. Foreign Keys / Joins
+
+- `formulations_23.molregno` = `molecule_dictionary_23.molregno`
+- `formulations_23.product_id` = `products_23.product_id`
+
+---
+
+### 3. Columns needed
+
+- `molecule_dictionary_23.molregno` (distinct molecules)
+- `products_23.trade_name`
+- `products_23.approval_date`
+- `products_23.innovator_company` (for filtering)
+
+---
+
+### 4. Cell values
+
+- 'SanofiAventis' (exact match for company)
+
+---
+
+### 5. Aggregation
+
+- For each molecule, keep only the latest (`MAX(approval_date)`) approval date.
+
+---
+
+### 6. Schema Links
+
+**Schema_links:**
+- `bigquery-public-data.ebi_chembl.molecule_dictionary_23.molregno`
+- `bigquery-public-data.ebi_chembl.formulations_23.molregno = bigquery-public-data.ebi_chembl.molecule_dictionary_23.molregno`
+- `bigquery-public-data.ebi_chembl.formulations_23.product_id = bigquery-public-data.ebi_chembl.products_23.product_id`
+- `bigquery-public-data.ebi_chembl.products_23.trade_name`
+- `bigquery-public-data.ebi_chembl.products_23.approval_date`
+- `bigquery-public-data.ebi_chembl.products_23.innovator_company`
+- `'SanofiAventis'`
+- `MAX(approval_date)`
+
+---
+
+**Final Answer:**
+
+Schema_links:
+- bigquery-public-data.ebi_chembl.molecule_dictionary_23.molregno
+- bigquery-public-data.ebi_chembl.formulations_23.molregno = bigquery-public-data.ebi_chembl.molecule_dictionary_23.molregno
+- bigquery-public-data.ebi_chembl.formulations_23.product_id = bigquery-public-data.ebi_chembl.products_23.product_id
+- bigquery-public-data.ebi_chembl.products_23.trade_name
+- bigquery-public-data.ebi_chembl.products_23.approval_date
+- bigquery-public-data.ebi_chembl.products_23.innovator_company
+- 'SanofiAventis'
+- MAX(approval_date)
+  ## Question:
+    Using data from ChEMBL Release 23, retrieve all distinct molecules associated with the company 'SanofiAventis,' listing the trade name and the most recent approval date for each molecule. Make sure to keep only the latest approval date per molecule and ensure the company field precisely matches 'SanofiAventis' without relying on other fields.
+
+  ## Query:
+    SELECT *
+  FROM (
+  SELECT
+  molregno,
+  comp.company,
+  prod.trade_name,
+  prod.approval_date,
+  ROW_NUMBER() OVER(PARTITION BY molregno ORDER BY PARSE_DATE('%Y-%m-%d', prod.approval_date) DESC) rn
+  FROM bigquery-public-data.ebi_chembl.compound_records_23 AS cmpd_rec
+  JOIN bigquery-public-data.ebi_chembl.molecule_synonyms_23 AS ms USING (molregno)
+  JOIN bigquery-public-data.ebi_chembl.research_companies_23 AS comp USING (res_stem_id)
+  JOIN bigquery-public-data.ebi_chembl.formulations_23 AS form USING (molregno)
+  JOIN bigquery-public-data.ebi_chembl.products_23 AS prod USING (product_id)
+  ) as subq
+ WHERE rn = 1 AND company = 'SanofiAventis'
 
 

@@ -45,6 +45,13 @@ python ./src/main.py --subsetter_name tasql --benchmark_name snails --filename_c
 python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_comments gpt41nano --no_subset_generation --subsetter_preprocessing
 ```
 
+## skalpel with GPT-OSS-120b
+```bash
+python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing
+```
+
 # Do subsetting without preprocessing
 
 ## Crush4SQL on lambda1
@@ -135,7 +142,7 @@ python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename
 ```bash
 python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_llm_selected_gpt41
 
-python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_1000tpt_llm_selected_gpt41 --recover_previous
+python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments 60perc_retrieved_1000tpt_llm_selected_gpt41 --recover_previous
 ```
 
 ## Skalpel with GPT4.1 nano

@@ -9,6 +9,7 @@ from NlSqlBenchmark.SchemaObjects import (
     TableColumn,
     ForeignKey
 )
+from NlSqlBenchmark import semantic_compare
 
 
 """
@@ -133,6 +134,25 @@ class NlSqlBenchmark:
             error_message=""
         )
     
+
+    def compare_gold_to_generated_query(
+            self, 
+            benchmark_question: BenchmarkQuestion, 
+            generated_query: str
+            ):
+        gold_results = self.execute_query(
+            query=benchmark_question.query,
+            database=benchmark_question.schema.database
+            )
+        generated_results = self.execute_query(
+            query=generated_query,
+            database=benchmark_question.schema.database
+        )
+        subset_check_result = semantic_compare.compare_gold_to_generated(
+            gold_result=gold_results, generated_result=generated_results
+        )
+      
+
 
     def get_sample_values(
             self, table_name: str, column_name: str, num_values: int = 2

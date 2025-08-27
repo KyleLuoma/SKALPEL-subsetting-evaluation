@@ -7,6 +7,7 @@ from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 import warnings
 from tqdm import tqdm
+import time
 from collections import defaultdict
 
 import SchemaSubsetter.Skalpel.LLM as LLM
@@ -22,11 +23,11 @@ class SkalpelSubsetter(SchemaSubsetter):
         self.name = SkalpelSubsetter.name
         self.benchmark = benchmark
         self.llm = LLM.OpenAIRequestLLM(
-            request_url="https://api.openai.com/v1/chat/completions"
-            # request_url=LLM.OpenAIRequestLLM.REQUEST_URL
+            # request_url="https://api.openai.com/v1/chat/completions"
+            request_url=LLM.OpenAIRequestLLM.REQUEST_URL
             )
-        # self.llm_model = "openai/gpt-oss-120b"
-        self.llm_model = "gpt-4.1"
+        self.llm_model = "openai/gpt-oss-120b"
+        # self.llm_model = "gpt-4.1"
         # self.llm_model = LLM.OpenAIRequestLLM.DEFAULT_MODEL
         self.vector_search = VectorSearch(
             benchmark_name=self.benchmark.name,
@@ -39,13 +40,15 @@ class SkalpelSubsetter(SchemaSubsetter):
 
     def preprocess_databases(
             self,
-            recreate_database: bool = False,
+            recreate_database: bool = True,
             **args
         ) -> dict:
         warnings.filterwarnings("ignore")
+        processing_times = {}
         if recreate_database:
             self.vector_search.recreate_db()
         for db_name in self.benchmark.databases:
+            s_time = time.perf_counter()
             self.benchmark.set_active_schema(db_name)
             schema = self.benchmark.get_active_schema(database=db_name)
             print("***", schema.database, "***")
@@ -73,6 +76,8 @@ class SkalpelSubsetter(SchemaSubsetter):
                 self.vector_search.encode_table_description_sentences_into_db(
                     db_name=db_name, table_name=table.name, table_description=description
                     )
+            processing_times[db_name] = time.perf_counter() - s_time
+        return processing_times
                 
 
     def get_schema_subset(

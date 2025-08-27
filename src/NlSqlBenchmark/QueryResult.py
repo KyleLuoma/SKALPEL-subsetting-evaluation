@@ -46,4 +46,7 @@ class QueryResult:
         s += "Result Set Dict:\n"
         s += str(self.result_set)
         return s
+    
+
+
 
