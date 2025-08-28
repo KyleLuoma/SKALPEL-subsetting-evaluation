@@ -11,6 +11,7 @@ from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
 from SchemaSubsetter.SchemaSubsetterFactory import SchemaSubsetterFactory
 from SubsetEvaluator.SchemaSubsetEvaluator import SchemaSubsetEvaluator
 from SubsetEvaluator import QueryProfiler
+from NlSqlEvaluator import NlSqlEvaluator
 from util.StringObjectParser import StringObjectParser
 import os
 import time
@@ -45,6 +46,7 @@ def main():
     parser.add_argument("--max_col_count", type=int, default=None, help="Limit subset generation to schemas with fewer than this number of columns.")
     parser.add_argument("--results_filename", default=None, help="Load specified results and evaluate only (no re-subsetting).")
     parser.add_argument("--sleep", default=0, help="Time (seconds) to sleep between subsetting inferences.")
+    parser.add_argument("--nl_sql", type=str, default=None, help="Run nl-to-sql over xlsx files in /subsetting_results. Use the argument to filter files to run. Argument is a substring of the filename. E.g., 'subsetting-tasql-bird' will run nl-to-sql on all filenames containing that substring")
 
     args = parser.parse_args()
 
@@ -58,6 +60,8 @@ def main():
     subset_generation = not args.no_subset_generation
     max_col_count = args.max_col_count
     sleep_time = int(args.sleep)
+    nl_sql = args.nl_sql
+
 
     global v_print
     if verbose:
@@ -127,6 +131,10 @@ def main():
             response = input("See if you can correct the issue and then press enter to try again. Enter quit to terminate without saving.")
             if response.lower() == "quit":
                 end_while = True
+
+    if nl_sql != None:
+        do_nl_to_sql(result_file_substring=nl_sql)
+
 
 
 def generate_subsets(
@@ -307,6 +315,20 @@ def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) 
         schema_subset = Schema(database=row.database, tables=table_items)
         subsets_questions.append((schema_subset, question))
     return results, subsets_questions
+
+
+
+def do_nl_to_sql(result_file_substring: str):
+    evaluator = NlSqlEvaluator.NlSqlEvaluator()
+    subset_filenames = [
+        f for f in os.listdir("./subsetting_results")
+        if f.endswith(".xlsx") and result_file_substring in f
+    ]
+    for filename in tqdm(subset_filenames, descr=f"Running nl to sql over results: {filename}"):
+        nl_sql_results = evaluator.generate_sql_from_subset_df(
+            subset_df=pd.read_excel(f"./subsetting_results/{filename}")
+        )
+        nl_sql_results.to_excel(f"./nl_sql_results/{filename.replace("subsetting-", "nltosql-")}")
 
 
 

@@ -139,7 +139,7 @@ class NlSqlBenchmark:
             self, 
             benchmark_question: BenchmarkQuestion, 
             generated_query: str
-            ):
+            ) -> dict[bool, str]:
         gold_results = self.execute_query(
             query=benchmark_question.query,
             database=benchmark_question.schema.database
@@ -151,6 +151,7 @@ class NlSqlBenchmark:
         subset_check_result = semantic_compare.compare_gold_to_generated(
             gold_result=gold_results, generated_result=generated_results
         )
+        return subset_check_result
       
 
 
