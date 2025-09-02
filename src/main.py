@@ -111,6 +111,14 @@ def main():
             results_filename=results_filename, 
             benchmark=benchmark
             )
+        
+    elif nl_sql != None:
+        do_nl_to_sql(
+            result_file_substring=nl_sql, 
+            recover_previous=recover_previous
+            )
+        return
+
     else:
         print("Terminating program without generating or evaluating subsets.")
         return
@@ -132,8 +140,8 @@ def main():
             if response.lower() == "quit":
                 end_while = True
 
-    if nl_sql != None:
-        do_nl_to_sql(result_file_substring=nl_sql)
+        
+    
 
 
 
@@ -318,17 +326,33 @@ def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) 
 
 
 
-def do_nl_to_sql(result_file_substring: str):
-    evaluator = NlSqlEvaluator.NlSqlEvaluator()
+def do_nl_to_sql(result_file_substring: str, recover_previous: bool = False):
+    completed_nl_to_sql_files = [
+        f for f in os.listdir("./nl_sql_results")
+        if f.endswith(".xlsx")
+    ]
     subset_filenames = [
         f for f in os.listdir("./subsetting_results")
         if f.endswith(".xlsx") and result_file_substring in f
     ]
-    for filename in tqdm(subset_filenames, descr=f"Running nl to sql over results: {filename}"):
+    benchmark_factory = NlSqlBenchmarkFactory()
+    counter = 1
+    for filename in subset_filenames:
+        print(f"NL to SQL over: {filename} ({counter} of {len(subset_filenames)})")
+        counter += 1
+        nl_sql_filename = filename.replace("subsetting-", "nltosql-")
+        if nl_sql_filename in completed_nl_to_sql_files:
+            continue
+        v_print(filename)
+        benchmark_name = filename.split("-")[2]
+        evaluator = NlSqlEvaluator.NlSqlEvaluator(benchmark=benchmark_factory.build_benchmark(benchmark_name))
         nl_sql_results = evaluator.generate_sql_from_subset_df(
-            subset_df=pd.read_excel(f"./subsetting_results/{filename}")
+            subset_df=pd.read_excel(f"./subsetting_results/{filename}"),
+            source_filename=filename,
+            recover_previous=recover_previous
         )
-        nl_sql_results.to_excel(f"./nl_sql_results/{filename.replace("subsetting-", "nltosql-")}")
+        nl_sql_results.to_excel(f"./nl_sql_results/{nl_sql_filename}")
+        
 
 
 

@@ -45,17 +45,21 @@ class RslSqlSubsetter(SchemaSubsetter):
             **args
             ) -> dict:
         # Construct `ppl_dev.json`
+        print("RSLSQL calling _construct_ppl_dev")
         ppl_path, ppl_processing_times = self._construct_ppl_dev(
             filename_comments=filename_comments, 
             skip_already_processed=skip_already_processed
             )
         # Construct few-shot examples pairs
+        print("RSLSQL calling cqa.main")
         cqa.main()
         # Generate few-shot examples
+        print("RSLSQL loading ppl_path")
         input_data = json.load(open(ppl_path, 'r'))
         if not skip_already_processed or not os.path.exists(
             f"src/SchemaSubsetter/RSLSQL/src/information/{self.benchmark.name}_example.json"
             ):
+            print("RSLSQL calling run_sql_generation")
             sql_gen_processing_times = slg.run_sql_generation(
                 input_data=input_data,
                 out_file=f"src/SchemaSubsetter/RSLSQL/src/information/{self.benchmark.name}_example.json",
@@ -65,6 +69,7 @@ class RslSqlSubsetter(SchemaSubsetter):
             with open("src/SchemaSubsetter/RSLSQL/src/information/example.json", 'w') as dest_file:
                 dest_file.write(src_file.read())
         # add few-shot examples to ppl_dev.json
+        print("RSLSQL calling _add_example")
         self._add_example(ppl_path=ppl_path)
 
         processing_times = ppl_processing_times
@@ -168,8 +173,8 @@ class RslSqlSubsetter(SchemaSubsetter):
         for t_c in information["columns"]:
             if "." not in t_c:
                 continue
-            table = t_c.split(".")[0]
-            column = t_c.split(".")[1].replace("`", "")
+            table = ".".join(t_c.split(".")[:1])
+            column = t_c.split(".")[-1].replace("`", "")
             if table not in tables_in_subset.keys():
                 tables_in_subset[table] = SchemaTable(name=table, columns=[TableColumn(name=column)])
             else:
@@ -178,8 +183,8 @@ class RslSqlSubsetter(SchemaSubsetter):
                     tables_in_subset[table].columns.append(col_obj)
         # Add backward schema linking results to Schema subset
         for t_c in idents_from_sql:
-            table = t_c.split(".")[0]
-            column = t_c.split(".")[1].replace("`", "")
+            table = ".".join(t_c.split(".")[:1])
+            column = t_c.split(".")[-1].replace("`", "")
             if table not in tables_in_subset.keys():
                 tables_in_subset[table] = SchemaTable(name=table, columns=[TableColumn(name=column)])
             else:

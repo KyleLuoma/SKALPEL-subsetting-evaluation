@@ -1,6 +1,7 @@
 from SchemaSubsetter.DinSqlSubsetter import DinSqlSubsetter
 from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
+from NlSqlBenchmark.spider2.Spider2NlSqlBenchmark import Spider2NlSqlBenchmark
 from NlSqlBenchmark.SchemaObjects import (
     Schema,
     SchemaTable,
@@ -132,3 +133,9 @@ def get_schema_subset_test():
     question = bm.get_active_question()
     ss_result = din_ss.get_schema_subset(benchmark_question=question)
     return type(ss_result) == SchemaSubsetterResult
+
+
+# def get_spider2_subset_test():
+#     din_ss = DinSqlSubsetter(benchmark=Spider2NlSqlBenchmark())
+#     din_ss.get_schema_subset(benchmark_question=din_ss.benchmark.get_active_question())
+#     return False

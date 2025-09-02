@@ -189,14 +189,31 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         cur = con.cursor()
         try:
             res = cur.execute(query)
+            con.commit()
         except sqlite3.OperationalError as e:
+            con.commit()
             return QueryResult(
                 result_set=None,
                 database=None,
                 question=None,
                 error_message=str(e)
             )
+        except sqlite3.Warning as e:
+            con.commit()
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message=f"error: sqlite3.Warning {str(e)}, query: {query}"
+            )
         result_list = res.fetchall()
+        if not res.description:
+            return QueryResult(
+                result_set={},
+                database=database,
+                question=question,
+                error_message=None
+            )
         columns = [d[0] for d in res.description]
         result_set_dict = {}
         for i, c in enumerate(columns):

@@ -18,8 +18,8 @@ def compare_gold_to_generated(
         "reason": ""
     }
 
-    generated_results = pd.DataFrame(generated_result)
-    gold_results = pd.DataFrame(gold_result)
+    generated_results = pd.DataFrame(generated_result.result_set)
+    gold_results = pd.DataFrame(gold_result.result_set)
 
     # ------ Analyze semantic correctness (i.e. same results) ------
 
@@ -34,11 +34,23 @@ def compare_gold_to_generated(
     if generated_results.shape[1] < gold_results.shape[1]:
         result_dict['equivalent'] = False
         result_dict['reason'] = 'Insufficient number of columns in generated result set'
+        return result_dict
 
     # Check if result is an empty set (if empty, then tag as undetermined)
     if generated_results.shape[0] == 0 and gold_results.shape[0] == 0:
         result_dict['equivalent'] = False
         result_dict['reason'] = 'empty result set'
+        return result_dict
+    
+    if generated_results.shape[1] == 0:
+        result_dict['equivalent'] = False
+        result_dict['reason'] = 'no columns in generated result'
+        return result_dict
+    
+    if gold_results.shape[1] == 0:
+        result_dict['equivalent'] = False
+        result_dict['reason'] = 'no columns in gold result'
+        return result_dict
 
     # Compare every row of generated results to every row of gold results:
     # If any row of generated results does not match any row of gold results, then not semantically equivalent

@@ -8,7 +8,7 @@ class AbstractLLM:
 
 class OpenAIRequestLLM():
     REQUEST_URL = "https://wire.westpoint.edu/vllm/v1/chat/completions"
-    DEFAULT_MODEL = "'openai/gpt-oss-120b'"
+    DEFAULT_MODEL = "openai/gpt-oss-120b"
 
     def __init__(self, request_url: str = None):
         if not request_url:

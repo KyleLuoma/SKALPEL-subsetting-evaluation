@@ -77,15 +77,15 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
         for link in schema_links:
             if "." in link and "=" not in link: #indicates table.column pair
                 table_column_pairs.append(
-                    (link.split(".")[0].strip(), link.split(".")[1].strip())
+                    (".".join(link.split(".")[:-1]).strip(), link.split(".")[-1].strip())
                 )
             elif "=" in link: #indicates dependency constraint
                 left = link.split("=")[0].strip()
                 right = link.split("=")[1].strip()
                 if "." in left:
-                    table_column_pairs.append((left.split(".")[0].strip(), left.split(".")[1].strip()))
+                    table_column_pairs.append((".".join(left.split(".")[:-1]).strip(), left.split(".")[-1].strip()))
                 if "." in right:
-                    table_column_pairs.append((right.split(".")[0].strip(), right.split(".")[1].strip()))
+                    table_column_pairs.append((".".join(right.split(".")[:-1]).strip(), right.split(".")[-1].strip()))
                 
         for pair in table_column_pairs:
                 table = pair[0]

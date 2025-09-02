@@ -1,6 +1,7 @@
 import pandas as pd
 import json
 import argparse
+from tqdm import tqdm
 
 file_path = 'few_shot/train-00000-of-00001-fe8894d41b7815be.parquet'
 
@@ -12,7 +13,7 @@ def read_parquet(file_path):
     df = pd.read_parquet(file_path)
     answers = []
 
-    for row in df.iterrows():
+    for row in tqdm(df.iterrows()):
         answer = {}
         answer['question'] = row[1]['question']
         answer['sql'] = row[1]['SQL']

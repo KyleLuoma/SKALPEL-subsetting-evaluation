@@ -1,4 +1,5 @@
 from SchemaSubsetter.SchemaSubsetter import SchemaSubsetter
+from SchemaSubsetter.TaSqlSubsetter import TaSqlSubsetter
 from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
 from NlSqlBenchmark.SchemaObjects import (
     Schema, SchemaTable, TableColumn, ForeignKey
@@ -35,6 +36,7 @@ class SkalpelSubsetter(SchemaSubsetter):
         )
         self.logger = logging.getLogger(__name__)
         self.table_description_cache: dict[tuple[str, str], str] = {}
+        self.tasql = TaSqlSubsetter(benchmark=benchmark)
         
 
 
@@ -82,7 +84,8 @@ class SkalpelSubsetter(SchemaSubsetter):
 
     def get_schema_subset(
             self,
-            benchmark_question: BenchmarkQuestion
+            benchmark_question: BenchmarkQuestion,
+            use_tasql: bool = False
             ) -> SchemaSubsetterResult:
         table_scores, vector_search_tokens = self._do_vector_search_table_retrieval(
             benchmark_question=benchmark_question,
@@ -117,6 +120,51 @@ class SkalpelSubsetter(SchemaSubsetter):
             schema_subset=subset,
             prompt_tokens=vector_search_tokens + table_select_tokens + column_select_tokens
         )
+
+    
+
+    def _do_tasql_schema_subsetting(
+            self, 
+            benchmark_question: BenchmarkQuestion,
+            schema_partition_table_count: int = 500,
+            do_vector_search_sort: bool = True,
+            vector_search_schema_proportion=1.0
+            ) -> SchemaSubsetterResult:
+        final_subset: Schema = Schema(database=benchmark_question.schema.database, tables=[])
+        token_count = 0
+        if do_vector_search_sort:
+            table_scores, vector_search_tokens = self._do_vector_search_table_retrieval(
+                benchmark_question=benchmark_question,
+                distance_threshold=1.0,
+                schema_proportion=vector_search_schema_proportion,
+                chunk_level="whole"
+            )
+            sorted_tables = [benchmark_question.schema.get_table_by_name(t_name[0]) for t_name in table_scores]
+            benchmark_question.schema.tables = sorted_tables
+        for i in range(0, len(benchmark_question.schema.tables), schema_partition_table_count):
+            schema_partition = Schema(
+                database=benchmark_question.schema.database,
+                tables=benchmark_question.schema.tables[i:i+schema_partition_table_count]
+            )
+            for table in final_subset.tables:
+                if not schema_partition.table_exists(table.name):
+                    schema_partition.tables.append(table)
+            subset_results = self.tasql.get_schema_subset(BenchmarkQuestion(
+                question=benchmark_question.question,
+                query=benchmark_question.query,
+                question_number=benchmark_question.question_number,
+                schema=schema_partition
+            ))
+            token_count += subset_results.prompt_tokens
+            for table in subset_results.schema_subset.tables:
+                if not final_subset.table_exists(table.name):
+                    final_subset.tables.append(table)
+        return SchemaSubsetterResult(
+            schema_subset=final_subset,
+            prompt_tokens=token_count
+        )
+
+        
 
 
     def _do_llm_table_selection(

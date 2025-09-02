@@ -400,6 +400,13 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
                 question=None,
                 error_message=str(e)
             )
+        except sqlite_db_util.sqlite3.ProgrammingError as e:
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message=str(e)
+            )
         return QueryResult(
             result_set=result_set_dict,
             database=database,
