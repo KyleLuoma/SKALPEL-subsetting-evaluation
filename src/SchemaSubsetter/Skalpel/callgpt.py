@@ -55,6 +55,7 @@ def call_gpt(
     return response.choices[0].message.content, response.usage.total_tokens
 
 
+
 def get_decoded_token_list(
         input: str,
         model: str = "gpt-3.5-turbo-16k"

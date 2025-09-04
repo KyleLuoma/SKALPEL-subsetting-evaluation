@@ -198,6 +198,14 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
                 question=None,
                 error_message=str(e)
             )
+        except sqlite3.ProgrammingError as e:
+            con.commit()
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message=str(e)
+            )
         except sqlite3.Warning as e:
             con.commit()
             return QueryResult(

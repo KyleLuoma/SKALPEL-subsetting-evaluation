@@ -8,6 +8,7 @@ from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 
 from SchemaSubsetter.TASQL.src import conclude_meaning
 from SchemaSubsetter.TASQL.src.modules import TASL
+from SchemaSubsetter.TASQL.src.prompt_bank import dummy_sql_prompt
 
 import time
 import os
@@ -131,8 +132,10 @@ class TaSqlSubsetter(SchemaSubsetter):
         )
         schema, token_count = tasl.get_schema(question_id=self.question_id_lookup[(
             benchmark_question.schema.database,
-            benchmark_question.question_number
-        )])
+            benchmark_question.question_number,
+            )],
+            skalpel_schema=benchmark_question.schema
+        )
         added_tables: dict[str, SchemaTable] = {}
         for table_column in schema:
             table = table_column[0]
@@ -154,4 +157,23 @@ class TaSqlSubsetter(SchemaSubsetter):
             schema_subset=skalpel_schema,
             prompt_tokens=token_count 
         )
-        
+    
+
+
+    def generate_sample_schema_prompt(self, benchmark_question: BenchmarkQuestion) -> str:
+        tasl = TASL(
+            db_root_path=self.dummy_db_root_path,
+            mode="dev",
+            column_meaning_path=str(self.column_meaning_path / "column_meaning.json")
+        )        
+        db_prompt_dic = tasl._reconstruct_schema()
+        db_prompt = db_prompt_dic[benchmark_question.schema.database]
+        database_schema = tasl._generate_database_schema(db_prompt, skalpel_schema=None)
+        prompt = dummy_sql_prompt.format(
+            database_schema = database_schema, 
+            primary_key_dic = {}, 
+            foreign_key_dic = {}, 
+            question_prompt = benchmark_question.question, 
+            evidence = ""
+            )
+        return prompt

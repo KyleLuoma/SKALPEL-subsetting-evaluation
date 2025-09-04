@@ -2,6 +2,7 @@ import requests
 import json
 import time
 from SchemaSubsetter.Skalpel import callgpt
+from transformers import AutoTokenizer
 
 class AbstractLLM:
     pass
@@ -17,6 +18,7 @@ class OpenAIRequestLLM():
             self.request_url = request_url
         with open("./.local/openai.json", "r") as f:
             self.api_key = json.load(f).get("api_key")
+        self.tokenizer = AutoTokenizer.from_pretrained("openai-community/gpt2-xl")
 
 
 
@@ -121,3 +123,9 @@ Do your best to make the correction!
 """.format(bad_response=bad_response, error_message=error_message, expect_type=expected_type)
         repaired, tokens = self.call_llm(prompt=prompt, model=model)
         return repaired
+    
+
+
+    def get_prompt_token_count(self, prompt: str) -> int:
+        return len(self.tokenizer.encode(prompt))
+

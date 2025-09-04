@@ -5,6 +5,7 @@ import sqlite3
 import csv
 from SchemaSubsetter.TASQL.src.prompt_bank import dummy_sql_prompt, sr_examples, generate_sr, sr2sql
 from SchemaSubsetter.TASQL.src.llm import collect_response
+from NlSqlBenchmark.SchemaObjects import Schema
 
 class BaseModule():
     def __init__(self, db_root_path, mode):
@@ -125,9 +126,20 @@ class TASL(BaseModule):
             schema_item_dic[db_id][otn][ocn] = value
         return schema_item_dic
     
-    def _generate_database_schema(self, schema_for_db):
+    # Skalpel mod: added Schema object as argument to serve as filter for schema partitioning
+    def _generate_database_schema(
+            self, 
+            schema_for_db,
+            skalpel_schema: Schema = None
+            ):
         schema_prompt = '{\n '
+        if skalpel_schema != None:
+            table_filter = [t.name.lower() for t in skalpel_schema.tables]
+        else:
+            table_filter = []
         for table_name, cn_prompt in schema_for_db.items():
+            if skalpel_schema != None and table_name.lower() not in table_filter:
+                continue
             schema_prompt += f'{table_name}:\n  ' + '{\n\t'
             for cn, prompt in cn_prompt.items():
                 schema_prompt += f"{cn}: {prompt}" + '\n\t'
@@ -136,7 +148,12 @@ class TASL(BaseModule):
         schema_prompt += '}'
         return schema_prompt
     
-    def generate_dummy_sql(self, question_id):
+    # Skalpel mod: added Schema object as argument to serve as filter for schema partitioning
+    def generate_dummy_sql(
+            self, 
+            question_id,
+            skalpel_schema: Schema = None
+            ):
         question = self.question_json[question_id]
         db_id = question['db_id']
         q = question['question']
@@ -144,15 +161,20 @@ class TASL(BaseModule):
         pk_dict, fk_dict = self.generate_pk_fk(question_id)
         db_prompt_dic = self._reconstruct_schema()
         db_prompt = db_prompt_dic[db_id]
-        database_schema = self._generate_database_schema(db_prompt)
+        database_schema = self._generate_database_schema(db_prompt, skalpel_schema=skalpel_schema)
         prompt = dummy_sql_prompt.format(database_schema = database_schema, primary_key_dic = pk_dict, foreign_key_dic = fk_dict, question_prompt = q, evidence = evidence)
         dummy_sql, token_count = collect_response(prompt, stop = 'return SQL')
         return prompt, dummy_sql, token_count
         
-    def get_schema(self, question_id):
+    # Skalpel mod: added Schema object as argument to serve as filter for schema partitioning
+    def get_schema(
+            self, 
+            question_id,
+            skalpel_schema: Schema = None
+            ):
         question_info = self.question_json[question_id]
         db_id = question_info['db_id']
-        _, dummy_sql, token_count = self.generate_dummy_sql(question_id)
+        _, dummy_sql, token_count = self.generate_dummy_sql(question_id, skalpel_schema=skalpel_schema)
     
         #extract schema from dummy_sql
         table_info = [content for content in self.table_json if content['db_id'] == db_id][0]

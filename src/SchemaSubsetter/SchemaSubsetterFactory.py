@@ -25,7 +25,8 @@ class SchemaSubsetterFactory:
         "dtssql",
         "perfect_subsetter",
         "perfect_table_subsetter",
-        "skalpel"
+        "skalpel",
+        "skalpel-tasql"
     ]
 
     subsetter_build_dict = {
@@ -39,7 +40,8 @@ class SchemaSubsetterFactory:
         "dtssql": (DtsSubsetter, {}),
         "perfect_subsetter": (PerfectSchemaSubsetter, {}),
         "perfect_table_subsetter": (PerfectTableSchemaSubsetter, {}),
-        "skalpel": (SkalpelSubsetter, {})
+        "skalpel": (SkalpelSubsetter, {}),
+        "skalpel-tasql": (SkalpelSubsetter, {"use_tasql": True, "model": "gpt-4.1-nano"})
     }
        
 
@@ -47,7 +49,8 @@ class SchemaSubsetterFactory:
         assert subsetter_name in SchemaSubsetterFactory.subsetter_register
         subsetter_class, init_args = SchemaSubsetterFactory.subsetter_build_dict[subsetter_name]
         if subsetter_init_args != None:
-            init_args = subsetter_init_args
+            for k in subsetter_init_args:
+                init_args[k] = subsetter_init_args[k]
         if "device" in init_args.keys() and not subsetter_class.uses_gpu:
             warnings.warn("The 'device' parameter was passed but will not be used by the selected subsetter.")
             init_args.pop("device", None)

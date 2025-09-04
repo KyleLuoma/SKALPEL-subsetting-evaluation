@@ -20,15 +20,26 @@ class SkalpelSubsetter(SchemaSubsetter):
 
     name = "skalpel"
 
-    def __init__(self, benchmark: NlSqlBenchmark):
-        self.name = SkalpelSubsetter.name
+    def __init__(
+            self, 
+            benchmark: NlSqlBenchmark,
+            use_tasql: bool = False,
+            model: str = LLM.OpenAIRequestLLM.DEFAULT_MODEL
+            ):
+        self.use_tasql = use_tasql
+        if self.use_tasql:
+            self.name = SkalpelSubsetter.name + "-tasql"
+        else:
+            self.name = SkalpelSubsetter.name
         self.benchmark = benchmark
         self.llm = LLM.OpenAIRequestLLM(
-            # request_url="https://api.openai.com/v1/chat/completions"
-            request_url=LLM.OpenAIRequestLLM.REQUEST_URL
+            request_url="https://api.openai.com/v1/chat/completions"
+            # request_url=LLM.OpenAIRequestLLM.REQUEST_URL
             )
-        self.llm_model = "openai/gpt-oss-120b"
+        self.llm_model = model
+        # self.llm_model = "openai/gpt-oss-120b"
         # self.llm_model = "gpt-4.1"
+        # self.llm_model = "gpt-4.1-nano"
         # self.llm_model = LLM.OpenAIRequestLLM.DEFAULT_MODEL
         self.vector_search = VectorSearch(
             benchmark_name=self.benchmark.name,
@@ -37,6 +48,7 @@ class SkalpelSubsetter(SchemaSubsetter):
         self.logger = logging.getLogger(__name__)
         self.table_description_cache: dict[tuple[str, str], str] = {}
         self.tasql = TaSqlSubsetter(benchmark=benchmark)
+        self.db_table_partition_sizes = {}
         
 
 
@@ -85,8 +97,17 @@ class SkalpelSubsetter(SchemaSubsetter):
     def get_schema_subset(
             self,
             benchmark_question: BenchmarkQuestion,
-            use_tasql: bool = False
+            use_tasql: bool = None
             ) -> SchemaSubsetterResult:
+        if use_tasql == None:
+            use_tasql = self.use_tasql
+        if use_tasql:
+            return self._do_tasql_schema_subsetting(
+                benchmark_question=benchmark_question,
+                schema_partition_table_count=10,
+                do_vector_search_sort=True,
+                vector_search_schema_proportion=1.0
+            )
         table_scores, vector_search_tokens = self._do_vector_search_table_retrieval(
             benchmark_question=benchmark_question,
             distance_threshold=1.0,
@@ -121,6 +142,13 @@ class SkalpelSubsetter(SchemaSubsetter):
             prompt_tokens=vector_search_tokens + table_select_tokens + column_select_tokens
         )
 
+
+
+    def _estimate_table_partition(self, num_tables: int, prompt_tokens: int, max_tokens: int = 900000):
+        num_partitions = max(1, int(prompt_tokens / max_tokens))
+        partition_size = num_tables / num_partitions
+        return int(partition_size)
+
     
 
     def _do_tasql_schema_subsetting(
@@ -130,8 +158,21 @@ class SkalpelSubsetter(SchemaSubsetter):
             do_vector_search_sort: bool = True,
             vector_search_schema_proportion=1.0
             ) -> SchemaSubsetterResult:
+        warnings.filterwarnings("ignore")
         final_subset: Schema = Schema(database=benchmark_question.schema.database, tables=[])
         token_count = 0
+
+        if benchmark_question.schema.database not in self.db_table_partition_sizes:
+            schema_prompt = self.tasql.generate_sample_schema_prompt(benchmark_question=benchmark_question)
+            prompt_tokens = self.llm.get_prompt_token_count(schema_prompt)
+            schema_partition_table_count = self._estimate_table_partition(
+                num_tables=len(benchmark_question.schema.tables),
+                prompt_tokens=prompt_tokens,
+                max_tokens=600000
+            )
+        else:
+            schema_partition_table_count = self.db_table_partition_sizes[benchmark_question.schema.database]
+
         if do_vector_search_sort:
             table_scores, vector_search_tokens = self._do_vector_search_table_retrieval(
                 benchmark_question=benchmark_question,
@@ -139,7 +180,12 @@ class SkalpelSubsetter(SchemaSubsetter):
                 schema_proportion=vector_search_schema_proportion,
                 chunk_level="whole"
             )
-            sorted_tables = [benchmark_question.schema.get_table_by_name(t_name[0]) for t_name in table_scores]
+            token_count += vector_search_tokens
+            sorted_tables = [
+                (table_scores[t_name], benchmark_question.schema.get_table_by_name(t_name)) for t_name in table_scores
+                ]
+            sorted_tables.sort(key=lambda x: x[0])
+            sorted_tables = [t[1] for t in sorted_tables]
             benchmark_question.schema.tables = sorted_tables
         for i in range(0, len(benchmark_question.schema.tables), schema_partition_table_count):
             schema_partition = Schema(
@@ -152,6 +198,7 @@ class SkalpelSubsetter(SchemaSubsetter):
             subset_results = self.tasql.get_schema_subset(BenchmarkQuestion(
                 question=benchmark_question.question,
                 query=benchmark_question.query,
+                query_dialect=benchmark_question.query_dialect,
                 question_number=benchmark_question.question_number,
                 schema=schema_partition
             ))
