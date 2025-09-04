@@ -6,6 +6,8 @@ venv_linux/
 .vscode/
 .local/*
 .cache/*
+.nlsql_recovery/*
+.subsetting_recovery/*
 logs/
 ~*
 __pycache__/

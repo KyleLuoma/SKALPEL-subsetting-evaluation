@@ -143,6 +143,7 @@ python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename
 python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_llm_selected_gpt41
 
 python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments 60perc_retrieved_1000tpt_llm_selected_gpt41 --recover_previous
+python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments 60perc_retrieved_1000tpt_llm_selected_gpt41 --recover_previous
 ```
 
 ## Skalpel with GPT4.1 nano
@@ -156,6 +157,17 @@ retrieved - proportion of schema retrieved from semantic search
 ```bash
 python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_100tpt_llm_selected_gptoss120b --recover_previous
 python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments 60perc_retrieved_1000tpt_llm_selected_gptoss120b --recover_previous
+```
+
+## Skalpel-TASQL with GPT4.1 nano with Skalpel vector sorting
+```bash
+python ./src/main.py --subsetter_name skalpel-tasql --benchmark_name snails --filename_comments gpt41nano-vectorsort --recover_previous
+```
+
+# Do nl to sql evaluation
+
+```bash
+python ./src/main.py --nl_sql xlsx --no_subset_generation
 ```
 
 # Modifications made to subsetting methods

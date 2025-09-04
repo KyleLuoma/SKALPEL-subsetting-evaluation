@@ -1,0 +1,14 @@
+You are an expert SQL developer. Given a database schema and a natural language question, write a syntactically correct SQL query that answers the question.
+
+Instructions:
+1. Wrap the SQL query inside markdown code delimiters ```sql SELECT column FROM table```
+2. The query will be executed on the database. Do not include explanations or instructions. Only provide the SQL.
+3. Write the query using the {sql_syntax} syntax
+
+Use the tables and columns from the schema:
+{schema_representation}
+
+Answer the question:
+{natural_language_question}
+
+SQL Query:

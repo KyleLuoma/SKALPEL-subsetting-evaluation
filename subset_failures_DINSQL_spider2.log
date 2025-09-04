@@ -1,797 +1,331 @@
-##### CENSUS_BUREAU_ACS_2 - 0 #####
+##### PATENTSVIEW - 0 #####
 Error: Slicing error for the schema_linking module
-Prompt: Let's break down the question and map it to the schema step by step.
-
----
-
-## 1. **What is being asked?**
-
-- **Top five states** with the **greatest average difference in median income** between **2015 and 2018** at the **ZIP code level**.
-- For these states, **what is the corresponding average number of vulnerable employees** across the following industries in **2017**:
-    - Wholesale trade
-    - Natural resources and construction
-    - Arts and entertainment
-    - Information
-    - Retail trade
-
-- Data sources: **ACS Five-Year Estimates** and **ZIP code boundaries**.
-
----
-
-## 2. **Identify relevant tables and columns**
-
-### a. **Median Income by ZIP code and year**
-- Table: `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR` (for 2015)
-- Table: `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR` (for 2018)
-- Column: `median_income`
-- Column: `geo_id` or `zip_code` (for ZIP code)
-- To get state, need to join with ZIP code boundaries:
-    - Table: `CENSUS_BUREAU_ACS_2.GEO_US_BOUNDARIES.ZIP_CODES`
-    - Columns: `zip_code`, `state_code`, `state_name`
-
-### b. **Vulnerable employees by industry, ZIP code, and year**
-- Table: `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR`
-- Columns for industries (based on ACS variable names, may need to check actual column names, but likely):
-    - `employed_wholesale_trade`
-    - `employed_agriculture_forestry_fishing_hunting_mining` (for natural resources)
-    - `employed_construction`
-    - `employed_arts_entertainment_recreation_accommodation_food`
-    - `employed_information`
-    - `employed_retail_trade`
-- Column: `geo_id` or `zip_code`
-
-### c. **State mapping**
-- Table: `CENSUS_BUREAU_ACS_2.GEO_US_BOUNDARIES.ZIP_CODES`
-- Columns: `zip_code`, `state_code`, `state_name`
-
----
-
-## 3. **Foreign Keys / Joins**
-
-- `ZIP_CODES_2015_5YR.geo_id`/`ZIP_CODES_2018_5YR.geo_id`/`ZIP_CODES_2017_5YR.geo_id` <-> `GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
-- `GEO_US_BOUNDARIES.ZIP_CODES.state_code` or `state_name` for grouping by state
-
----
-
-## 4. **Cell values**
-
-- Years: 2015, 2017, 2018
-- Industries: wholesale trade, natural resources and construction, arts and entertainment, information, retail trade
-
----
-
-## 5. **Schema Links**
-
-### **For median income difference:**
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.median_income`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.median_income`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
-- `GEO_US_BOUNDARIES.ZIP_CODES.state_code` or `state_name`
-
-### **For vulnerable employees (2017):**
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_wholesale_trade`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_agriculture_forestry_fishing_hunting_mining`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_construction`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_arts_entertainment_recreation_accommodation_food`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_information`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_retail_trade`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
-- `GEO_US_BOUNDARIES.ZIP_CODES.state_code` or `state_name`
-
----
-
-## 6. **Possible cell values**
-- Years: 2015, 2017, 2018
-- Industries: wholesale trade, natural resources and construction, arts and entertainment, information, retail trade
-
----
-
-## 7. **Final Schema Links**
-
-**Schema_links:**
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.median_income`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.median_income`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_wholesale_trade`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_agriculture_forestry_fishing_hunting_mining`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_construction`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_arts_entertainment_recreation_accommodation_food`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_information`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_retail_trade`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
-- `CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code`
-- `GEO_US_BOUNDARIES.ZIP_CODES.state_code`
-- `GEO_US_BOUNDARIES.ZIP_CODES.state_name`
-- `2015`
-- `2017`
-- `2018`
-- `wholesale trade`
-- `natural resources and construction`
-- `arts and entertainment`
-- `information`
-- `retail trade`
-
----
-
-**Summary Table:**
-
-| Step | Table/Column | Purpose |
-|------|--------------|---------|
-| 1 | ZIP_CODES_2015_5YR.median_income | Median income in 2015 by ZIP |
-| 2 | ZIP_CODES_2018_5YR.median_income | Median income in 2018 by ZIP |
-| 3 | ZIP_CODES_2017_5YR.employed_wholesale_trade | Vulnerable employees (2017) |
-| 4 | ZIP_CODES_2017_5YR.employed_agriculture_forestry_fishing_hunting_mining | Vulnerable employees (2017) |
-| 5 | ZIP_CODES_2017_5YR.employed_construction | Vulnerable employees (2017) |
-| 6 | ZIP_CODES_2017_5YR.employed_arts_entertainment_recreation_accommodation_food | Vulnerable employees (2017) |
-| 7 | ZIP_CODES_2017_5YR.employed_information | Vulnerable employees (2017) |
-| 8 | ZIP_CODES_2017_5YR.employed_retail_trade | Vulnerable employees (2017) |
-| 9 | All ZIP_CODES tables .geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code | Join for state info |
-| 10 | GEO_US_BOUNDARIES.ZIP_CODES.state_code/state_name | State grouping |
-
----
-
-**Final Answer:**
-
-> **Schema_links:**
-> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.median_income
-> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.median_income
-> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_wholesale_trade
-> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_agriculture_forestry_fishing_hunting_mining
-> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_construction
-> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_arts_entertainment_recreation_accommodation_food
-> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_information
-> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.employed_retail_trade
-> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2015_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code
-> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2018_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code
-> - CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS.ZIP_CODES_2017_5YR.geo_id = GEO_US_BOUNDARIES.ZIP_CODES.zip_code
-> - GEO_US_BOUNDARIES.ZIP_CODES.state_code
-> - GEO_US_BOUNDARIES.ZIP_CODES.state_name
-> - 2015
-> - 2017
-> - 2018
-> - wholesale trade
-> - natural resources and construction
-> - arts and entertainment
-> - information
-> - retail trade
-
----
-
-**This set of schema links will allow you to generate the required SQL queries for the question.**
-  ## Question:
-    Which are the top five states with the greatest average difference in median income between 2015 and 2018 at the ZIP code level, and what is the corresponding average number of vulnerable employees across wholesale trade, natural resources and construction, arts and entertainment, information, and retail trade industries in 2017 according to the ACS Five-Year Estimates and ZIP code boundaries data?
-
-  ## Query:
-    WITH median_income_diff_by_zipcode AS (
-  WITH acs_2018 AS (
-    SELECT
-      "geo_id",
-      "median_income" AS "median_income_2018"
-    FROM
-      CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS."ZIP_CODES_2018_5YR"
-  ),
-  acs_2015 AS (
-    SELECT
-      "geo_id",
-      "median_income" AS "median_income_2015"
-    FROM
-      CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS."ZIP_CODES_2015_5YR"
-  ),
-  acs_diff AS (
-    SELECT
-      a18."geo_id",
-      (a18."median_income_2018" - a15."median_income_2015") AS "median_income_diff"
-    FROM
-      acs_2018 a18
-    JOIN
-      acs_2015 a15 ON a18."geo_id" = a15."geo_id"
-  )
-  SELECT
-    "geo_id",
-    AVG("median_income_diff") AS "avg_median_income_diff"
-  FROM
-    acs_diff
-  WHERE
-    "median_income_diff" IS NOT NULL
-  GROUP BY "geo_id"
-),
-base_census AS (
-  SELECT
-    geo."state_name",
-    AVG(i."avg_median_income_diff") AS "avg_median_income_diff",
-    AVG(
-      "employed_wholesale_trade" * 0.38423645320197042 +
-      "occupation_natural_resources_construction_maintenance" * 0.48071410777129553 +
-      "employed_arts_entertainment_recreation_accommodation_food" * 0.89455676291236841 +
-      "employed_information" * 0.31315240083507306 +
-      "employed_retail_trade" * 0.51
-    ) AS "avg_vulnerable"
-  FROM
-    CENSUS_BUREAU_ACS_2.CENSUS_BUREAU_ACS."ZIP_CODES_2017_5YR" AS census
-  JOIN
-    median_income_diff_by_zipcode i ON CAST(census."geo_id" AS STRING) = i."geo_id"
-  JOIN
-    CENSUS_BUREAU_ACS_2.GEO_US_BOUNDARIES."ZIP_CODES" geo ON census."geo_id" = geo."zip_code"
-  GROUP BY geo."state_name"
-)
-
-SELECT 
-  "state_name",
-  "avg_median_income_diff",
-  "avg_vulnerable"
-FROM 
-  base_census
-ORDER BY 
-  "avg_median_income_diff" DESC
-LIMIT 5;
-
-
-
-##### new_york_plus - 0 #####
-Error: Slicing error for the schema_linking module
-Prompt: Let’s break down the question and map it to the schema step by step:
+Prompt: Let’s break down the question and map it to the schema step by step.
 
 **Question:**  
-What is the average trip duration in minutes for all valid Yellow taxi trips that took place between February 1, 2016, and February 7, 2016 (inclusive), with a positive trip duration, more than three passengers, and a trip distance of at least ten miles, where both the pickup and dropoff locations are in Brooklyn?
+Retrieve the following information for U.S. patents filed between January 1, 2014, and February 1, 2014:
+- The patent title and abstract.
+- The publication date of the patent.
+- The number of backward citations for each patent (i.e., the number of patents cited by the current patent before its filing date).
+- The number of forward citations for each patent within the first 5 years of its publication (i.e., the number of patents that cited the current patent within 5 years after its publication).
+- For each patent, ensure the forward citations are counted only for citations within 5 years after the publication date, and backward citations are counted for citations before the filing date.
 
 ---
 
-### 1. **Identify the main table(s):**
-- The main table is `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2016` (Yellow taxi trips for 2016).
+### 1. "U.S. patents filed between January 1, 2014, and February 1, 2014"
 
-### 2. **Columns needed:**
-- **Trip duration:** Not directly present, but can be calculated as `dropoff_datetime - pickup_datetime`.
-- **pickup_datetime, dropoff_datetime:** For filtering by date and calculating duration.
-- **passenger_count:** For filtering trips with more than three passengers.
-- **trip_distance:** For filtering trips with at least ten miles.
-- **pickup_location_id, dropoff_location_id:** For filtering trips where both locations are in Brooklyn.
+- "filed" → filing date
+- Filing date is in `PATENTSVIEW.PATENTSVIEW.PATENT.date` (likely publication date), but actual filing date is in `PATENTSVIEW.PATENTSVIEW.APPLICATION.date` (since `APPLICATION` table has `date` and `patent_id`).
+- "U.S. patents" → `PATENTSVIEW.PATENTSVIEW.PATENT.country = 'US'`
 
-### 3. **Brooklyn locations:**
-- To check if a location is in Brooklyn, we need to join with `bigquery-public-data.new_york_taxi_trips.taxi_zone_geom`:
-    - `zone_id` in `taxi_zone_geom` matches `pickup_location_id` and `dropoff_location_id` in the trips table.
-    - The `borough` column in `taxi_zone_geom` should be 'Brooklyn'.
-
-### 4. **Filters/Values:**
-- **Date range:** pickup_datetime between '2016-02-01' and '2016-02-07' (inclusive).
-- **Positive trip duration:** dropoff_datetime > pickup_datetime.
-- **More than three passengers:** passenger_count > 3.
-- **Trip distance at least ten miles:** trip_distance >= 10.
-- **Both pickup and dropoff in Brooklyn:** Both corresponding `taxi_zone_geom.borough` = 'Brooklyn'.
-
-### 5. **Foreign Keys/Joins:**
-- `tlc_yellow_trips_2016.pickup_location_id = taxi_zone_geom.zone_id`
-- `tlc_yellow_trips_2016.dropoff_location_id = taxi_zone_geom.zone_id` (need two aliases for taxi_zone_geom: one for pickup, one for dropoff)
+**Schema links:**
+- `PATENTSVIEW.PATENTSVIEW.PATENT.id`
+- `PATENTSVIEW.PATENTSVIEW.PATENT.country`
+- `PATENTSVIEW.PATENTSVIEW.APPLICATION.patent_id = PATENTSVIEW.PATENTSVIEW.PATENT.id`
+- `PATENTSVIEW.PATENTSVIEW.APPLICATION.date`
+- `'US'`
+- `'2014-01-01'`
+- `'2014-02-01'`
 
 ---
 
-## **Schema Links**
+### 2. "The patent title and abstract"
 
-**Columns:**
-- `tlc_yellow_trips_2016.pickup_datetime`
-- `tlc_yellow_trips_2016.dropoff_datetime`
-- `tlc_yellow_trips_2016.passenger_count`
-- `tlc_yellow_trips_2016.trip_distance`
-- `tlc_yellow_trips_2016.pickup_location_id`
-- `tlc_yellow_trips_2016.dropoff_location_id`
-- `taxi_zone_geom.zone_id`
-- `taxi_zone_geom.borough`
-
-**Foreign Keys/Joins:**
-- `tlc_yellow_trips_2016.pickup_location_id = taxi_zone_geom.zone_id` (alias: pickup_zone)
-- `tlc_yellow_trips_2016.dropoff_location_id = taxi_zone_geom.zone_id` (alias: dropoff_zone)
-
-**Cell Values:**
-- '2016-02-01'
-- '2016-02-07'
-- 3
-- 10
-- 'Brooklyn'
-
-**Derived/Computed:**
-- trip duration in minutes: TIMESTAMP_DIFF(dropoff_datetime, pickup_datetime, MINUTE)
+- `PATENTSVIEW.PATENTSVIEW.PATENT.title`
+- `PATENTSVIEW.PATENTSVIEW.PATENT.abstract`
 
 ---
 
-### **Final Schema Links:**
+### 3. "The publication date of the patent"
 
-```plaintext
-Schema_links: [
-  tlc_yellow_trips_2016.pickup_datetime,
-  tlc_yellow_trips_2016.dropoff_datetime,
-  tlc_yellow_trips_2016.passenger_count,
-  tlc_yellow_trips_2016.trip_distance,
-  tlc_yellow_trips_2016.pickup_location_id,
-  tlc_yellow_trips_2016.dropoff_location_id,
-  taxi_zone_geom.zone_id (as pickup_zone),
-  taxi_zone_geom.zone_id (as dropoff_zone),
-  taxi_zone_geom.borough (as pickup_borough),
-  taxi_zone_geom.borough (as dropoff_borough),
-  tlc_yellow_trips_2016.pickup_location_id = pickup_zone.zone_id,
-  tlc_yellow_trips_2016.dropoff_location_id = dropoff_zone.zone_id,
-  '2016-02-01',
-  '2016-02-07',
-  3,
-  10,
-  'Brooklyn'
-]
-```
-
-**Or, more succinctly:**
-
-**Schema_links:**
-- tlc_yellow_trips_2016.pickup_datetime
-- tlc_yellow_trips_2016.dropoff_datetime
-- tlc_yellow_trips_2016.passenger_count
-- tlc_yellow_trips_2016.trip_distance
-- tlc_yellow_trips_2016.pickup_location_id = taxi_zone_geom.zone_id (as pickup_zone)
-- tlc_yellow_trips_2016.dropoff_location_id = taxi_zone_geom.zone_id (as dropoff_zone)
-- pickup_zone.borough
-- dropoff_zone.borough
-- '2016-02-01'
-- '2016-02-07'
-- 3
-- 10
-- 'Brooklyn'
+- `PATENTSVIEW.PATENTSVIEW.PATENT.date`
 
 ---
 
-**This set of schema links covers all the columns, joins, and values needed to generate the SQL for the question.**
-  ## Question:
-    What is the average trip duration in minutes for all valid Yellow taxi trips that took place between February 1, 2016, and February 7, 2016 (inclusive), with a positive trip duration, more than three passengers, and a trip distance of at least ten miles, where both the pickup and dropoff locations are in Brooklyn?
+### 4. "The number of backward citations for each patent (i.e., the number of patents cited by the current patent before its filing date)"
 
-  ## Query:
-    SELECT 
-    AVG(TIMESTAMP_DIFF(dropoff_datetime, pickup_datetime, SECOND) / 60.0) AS average_trip_duration_in_minutes
-FROM
-(
-    SELECT *
-    FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2016` t
-    WHERE 
-        pickup_datetime BETWEEN '2016-02-01' AND '2016-02-07' AND 
-        dropoff_datetime BETWEEN '2016-02-01' AND '2016-02-07' AND
-        TIMESTAMP_DIFF(dropoff_datetime, pickup_datetime, SECOND) > 0 AND 
-        passenger_count > 3 AND 
-        trip_distance >= 10
-) t
-INNER JOIN `bigquery-public-data.new_york_taxi_trips.taxi_zone_geom` tz
-ON t.pickup_location_id = tz.zone_id
-INNER JOIN `bigquery-public-data.new_york_taxi_trips.taxi_zone_geom` tz1
-ON t.dropoff_location_id = tz1.zone_id
-WHERE 
-    tz.borough = "Brooklyn" AND
-    tz1.borough = "Brooklyn";
+- "backward citations" = patents that the current patent cites
+- Citation table: `PATENTSVIEW.PATENTSVIEW.USPATENTCITATION` (has `patent_id` (citing), `citation_id` (cited), `date` (citation publication date))
+- Need to count citations where the cited patent's publication date is before the current patent's filing date.
 
-
-
-##### covid19_open_world_bank - 0 #####
-Error: Slicing error for the schema_linking module
-Prompt: Let’s break down the question and find the schema links step by step.
-
-**Question:**  
-"You need to calculate the percentage of each country's population that had been confirmed with COVID-19 by June 30, 2020. The population data for 2018 can be found in the World Bank dataset, and the cumulative COVID-19 confirmed cases data is available in the COVID-19 Open Data dataset. Calculate the percentage of each country's population, that was cumulatively confirmed to have COVID-19"
+**Schema links:**
+- `PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.patent_id = PATENTSVIEW.PATENTSVIEW.PATENT.id`
+- `PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.citation_id`
+- `PATENTSVIEW.PATENTSVIEW.PATENT.id`
+- `PATENTSVIEW.PATENTSVIEW.APPLICATION.date` (filing date)
+- `PATENTSVIEW.PATENTSVIEW.PATENT.date` (publication date of cited patent)
+- (For each citation, join `citation_id` to `PATENTSVIEW.PATENTSVIEW.PATENT.id` to get cited patent's publication date)
 
 ---
 
-### 1. **What is being asked?**
-- For each country, calculate:  
-  (Cumulative confirmed COVID-19 cases as of 2020-06-30) / (Population in 2018) * 100
+### 5. "The number of forward citations for each patent within the first 5 years of its publication (i.e., the number of patents that cited the current patent within 5 years after its publication)"
+
+- "forward citations" = patents that cite the current patent
+- In `USPATENTCITATION`, `citation_id` = current patent, `patent_id` = citing patent
+- Need to count citations where the citing patent's publication date is within 5 years after the current patent's publication date.
+
+**Schema links:**
+- `PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.citation_id = PATENTSVIEW.PATENTSVIEW.PATENT.id`
+- `PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.patent_id`
+- `PATENTSVIEW.PATENTSVIEW.PATENT.id`
+- `PATENTSVIEW.PATENTSVIEW.PATENT.date` (publication date of current patent)
+- `PATENTSVIEW.PATENTSVIEW.PATENT.date` (publication date of citing patent)
+- (For each citation, join `patent_id` to `PATENTSVIEW.PATENTSVIEW.PATENT.id` to get citing patent's publication date)
+- 5 years = 1825 days
 
 ---
 
-### 2. **Which columns/tables are needed?**
+### 6. "For each patent, ensure the forward citations are counted only for citations within 5 years after the publication date, and backward citations are counted for citations before the filing date."
 
-#### a. **COVID-19 confirmed cases as of 2020-06-30**
-- Table: `bigquery-public-data.covid19_open_data.covid19_open_data`
-- Columns:
-  - `country_code` or `country_name` (to identify country)
-  - `date` (to filter for '2020-06-30')
-  - `cumulative_confirmed` (the value we need)
-
-#### b. **Population in 2018**
-- Table: `bigquery-public-data.world_bank_global_population.population_by_country`
-- Columns:
-  - `country_code` or `country` (to identify country)
-  - `year_2018` (population in 2018)
-
-#### c. **Join condition**
-- Both tables have `country_code` (or similar) for joining.
-
----
-
-### 3. **Foreign Keys / Join Conditions**
-- `bigquery-public-data.covid19_open_data.covid19_open_data.country_code = bigquery-public-data.world_bank_global_population.population_by_country.country_code`
-
----
-
-### 4. **Possible cell values**
-- '2020-06-30' (for date filter)
-
----
-
-### 5. **Schema Links**
-
-**Columns:**
-- `bigquery-public-data.covid19_open_data.covid19_open_data.country_code`
-- `bigquery-public-data.covid19_open_data.covid19_open_data.date`
-- `bigquery-public-data.covid19_open_data.covid19_open_data.cumulative_confirmed`
-- `bigquery-public-data.world_bank_global_population.population_by_country.country_code`
-- `bigquery-public-data.world_bank_global_population.population_by_country.year_2018`
-
-**Foreign Key:**
-- `bigquery-public-data.covid19_open_data.covid19_open_data.country_code = bigquery-public-data.world_bank_global_population.population_by_country.country_code`
-
-**Cell Value:**
-- '2020-06-30'
+- Already covered in above logic.
 
 ---
 
 ## **Final Schema Links**
 
 **Schema_links:**
-- bigquery-public-data.covid19_open_data.covid19_open_data.country_code
-- bigquery-public-data.covid19_open_data.covid19_open_data.date
-- bigquery-public-data.covid19_open_data.covid19_open_data.cumulative_confirmed
-- bigquery-public-data.world_bank_global_population.population_by_country.country_code
-- bigquery-public-data.world_bank_global_population.population_by_country.year_2018
-- bigquery-public-data.covid19_open_data.covid19_open_data.country_code = bigquery-public-data.world_bank_global_population.population_by_country.country_code
-- '2020-06-30'
+- `PATENTSVIEW.PATENTSVIEW.PATENT.id`
+- `PATENTSVIEW.PATENTSVIEW.PATENT.title`
+- `PATENTSVIEW.PATENTSVIEW.PATENT.abstract`
+- `PATENTSVIEW.PATENTSVIEW.PATENT.date`
+- `PATENTSVIEW.PATENTSVIEW.PATENT.country`
+- `PATENTSVIEW.PATENTSVIEW.APPLICATION.patent_id = PATENTSVIEW.PATENTSVIEW.PATENT.id`
+- `PATENTSVIEW.PATENTSVIEW.APPLICATION.date`
+- `'US'`
+- `'2014-01-01'`
+- `'2014-02-01'`
+- `PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.patent_id`
+- `PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.citation_id`
+- `PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.citation_id = PATENTSVIEW.PATENTSVIEW.PATENT.id`
+- `PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.patent_id = PATENTSVIEW.PATENTSVIEW.PATENT.id`
+- (for backward) `PATENTSVIEW.PATENTSVIEW.PATENT.date < PATENTSVIEW.PATENTSVIEW.APPLICATION.date`
+- (for forward) `PATENTSVIEW.PATENTSVIEW.PATENT.date <= citing_patent.date <= PATENTSVIEW.PATENTSVIEW.PATENT.date + 5 years`
 
 ---
 
-**(You may also include `country_name` if you want to display the country names in the result.)**
-  ## Question:
-    You need to calculate the percentage of each country's population that had been confirmed with COVID-19 by June 30, 2020. The population data for 2018 can be found in the World Bank dataset, and the cumulative COVID-19 confirmed cases data is available in the COVID-19 Open Data dataset. Calculate the percentage of each country's population, that was cumulatively confirmed to have COVID-19
+### **Summary Table**
 
-  ## Query:
-    WITH
-  country_pop AS (
-  SELECT
-    country_code AS iso_3166_1_alpha_3,
-    year_2018 AS population_2018
-  FROM
-    `bigquery-public-data.world_bank_global_population.population_by_country`)
-SELECT
-  country_code,
-  country_name,
-  cumulative_confirmed AS june_confirmed_cases,
-  population_2018,
-  ROUND(cumulative_confirmed/population_2018 * 100,2) AS case_percent
-FROM
-  `bigquery-public-data.covid19_open_data.covid19_open_data`
-JOIN
-  country_pop
-USING
-  (iso_3166_1_alpha_3)
-WHERE
-  date = '2020-06-30'
-  AND aggregation_level = 0
-ORDER BY
-  case_percent DESC
-
-
-##### sdoh - 4 #####
-Error: Slicing error for the schema_linking module
-Prompt: Let’s break down the question:
-
-**Question:**  
-"Please list the average number of prenatal weeks in 2018 for counties in Wisconsin where more than 5% of the employed population had commutes of 45-59 minutes in 2017."
-
----
-
-### 1. Identify the relevant tables and columns
-
-#### For "average number of prenatal weeks in 2018 for counties in Wisconsin":
-- Table: `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality`
-  - Columns: `Year`, `County_of_Residence`, `Ave_Number_of_Prenatal_Wks`
-- Filter: `Year = 2018`
-- Filter: County in Wisconsin (need to match counties in Wisconsin)
-
-#### For "counties in Wisconsin where more than 5% of the employed population had commutes of 45-59 minutes in 2017":
-- Table: `bigquery-public-data.census_bureau_acs.county_2017_5yr`
-  - Columns: `geo_id`, `commute_45_59_mins`, `employed_pop`, `state_name` (or filter by FIPS for Wisconsin)
-- Need to compute: `commute_45_59_mins / employed_pop > 0.05`
-- Need to filter for Wisconsin counties (by FIPS or state name)
-
----
-
-### 2. Foreign Keys / Join Keys
-
-- County matching:  
-  - `county_natality.County_of_Residence_FIPS` ↔ `county_2017_5yr.geo_id` (FIPS code)
-- State filter:  
-  - Wisconsin FIPS code prefix is `55` (so FIPS codes starting with `55`)
-
----
-
-### 3. Cell Values
-
-- `Year = 2018` (for natality)
-- `Year = 2017` (for commute data)
-- `commute_45_59_mins / employed_pop > 0.05`
-- FIPS code starts with `55` (Wisconsin)
-
----
-
-### 4. Schema Links
-
-**Tables/Columns:**
-- `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Year`
-- `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS`
-- `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Ave_Number_of_Prenatal_Wks`
-- `bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id`
-- `bigquery-public-data.census_bureau_acs.county_2017_5yr.commute_45_59_mins`
-- `bigquery-public-data.census_bureau_acs.county_2017_5yr.employed_pop`
-
-**Foreign Keys:**
-- `county_natality.County_of_Residence_FIPS = county_2017_5yr.geo_id`
-
-**Cell Values:**
-- `2018`
-- `2017`
-- `0.05`
-- FIPS code starts with `55` (Wisconsin)
-
----
-
-### 5. Final Schema Links
-
-**Schema_links:**
-- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Year
-- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS
-- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Ave_Number_of_Prenatal_Wks
-- bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id
-- bigquery-public-data.census_bureau_acs.county_2017_5yr.commute_45_59_mins
-- bigquery-public-data.census_bureau_acs.county_2017_5yr.employed_pop
-- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS = bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id
-- 2018
-- 2017
-- 0.05
-- FIPS code starts with 55 (Wisconsin)
-
----
-
-**Summary Table:**
-
-| Table/Column                                                                 | Purpose/Reason                                                                 |
-|------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Year           | Filter for 2018                                                               |
-| bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS | Join key for county                                                           |
-| bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Ave_Number_of_Prenatal_Wks | The value to list                                                             |
-| bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id                | Join key for county                                                           |
-| bigquery-public-data.census_bureau_acs.county_2017_5yr.commute_45_59_mins    | Numerator for commute percentage                                              |
-| bigquery-public-data.census_bureau_acs.county_2017_5yr.employed_pop          | Denominator for commute percentage                                            |
-| bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS = bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id | Foreign key for join                                                          |
-| 2018                                                                         | Filter for natality year                                                      |
-| 2017                                                                         | Filter for commute data year                                                  |
-| 0.05                                                                         | Threshold for commute percentage                                              |
-| FIPS code starts with 55                                                     | Filter for Wisconsin counties                                                 |
+| Information Needed | Table/Column | Foreign Keys/Links | Cell Values |
+|--------------------|--------------|--------------------|-------------|
+| Patent title       | PATENT.title |                    |             |
+| Patent abstract    | PATENT.abstract |                  |             |
+| Publication date   | PATENT.date  |                    |             |
+| Filing date        | APPLICATION.date | APPLICATION.patent_id = PATENT.id | |
+| Country            | PATENT.country |                    | 'US'        |
+| Backward citations | USPATENTCITATION.patent_id = PATENT.id, USPATENTCITATION.citation_id = PATENT.id | | |
+| Forward citations  | USPATENTCITATION.citation_id = PATENT.id, USPATENTCITATION.patent_id = PATENT.id | | |
+| Date range         | APPLICATION.date |                    | '2014-01-01', '2014-02-01' |
+| Date comparisons   | PATENT.date, APPLICATION.date |        | 5 years   |
 
 ---
 
 ## **Final Answer**
 
 **Schema_links:**
-- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Year
-- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS
-- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.Ave_Number_of_Prenatal_Wks
-- bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id
-- bigquery-public-data.census_bureau_acs.county_2017_5yr.commute_45_59_mins
-- bigquery-public-data.census_bureau_acs.county_2017_5yr.employed_pop
-- bigquery-public-data.sdoh_cdc_wonder_natality.county_natality.County_of_Residence_FIPS = bigquery-public-data.census_bureau_acs.county_2017_5yr.geo_id
-- 2018
-- 2017
-- 0.05
-- FIPS code starts with 55
+- PATENTSVIEW.PATENTSVIEW.PATENT.id
+- PATENTSVIEW.PATENTSVIEW.PATENT.title
+- PATENTSVIEW.PATENTSVIEW.PATENT.abstract
+- PATENTSVIEW.PATENTSVIEW.PATENT.date
+- PATENTSVIEW.PATENTSVIEW.PATENT.country
+- PATENTSVIEW.PATENTSVIEW.APPLICATION.patent_id = PATENTSVIEW.PATENTSVIEW.PATENT.id
+- PATENTSVIEW.PATENTSVIEW.APPLICATION.date
+- 'US'
+- '2014-01-01'
+- '2014-02-01'
+- PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.patent_id
+- PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.citation_id
+- PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.citation_id = PATENTSVIEW.PATENTSVIEW.PATENT.id
+- PATENTSVIEW.PATENTSVIEW.USPATENTCITATION.patent_id = PATENTSVIEW.PATENTSVIEW.PATENT.id
+- (for backward) PATENTSVIEW.PATENTSVIEW.PATENT.date < PATENTSVIEW.PATENTSVIEW.APPLICATION.date
+- (for forward) PATENTSVIEW.PATENTSVIEW.PATENT.date <= citing_patent.date <= PATENTSVIEW.PATENTSVIEW.PATENT.date + 5 years
 
----
-
-**If you need the SQL, let me know!**
+**(You may also include the date arithmetic for the 5-year window as a cell value: 5 years, or 1825 days.)**
   ## Question:
-    Please list the average number of prenatal weeks in 2018 for counties in Wisconsin where more than 5% of the employed population had commutes of 45-59 minutes in 2017.
+    Retrieve the following information for U.S. patents filed between January 1, 2014, and February 1, 2014. The patent title and abstract. The publication date of the patent. The number of backward citations for each patent (i.e., the number of patents cited by the current patent before its filing date). The number of forward citations for each patent within the first 5 years of its publication (i.e., the number of patents that cited the current patent within 5 years after its publication). For each patent, ensure the forward citations are counted only for citations within 5 years after the publication date, and backward citations are counted for citations before the filing date.
 
   ## Query:
-    WITH natality_2018 AS (
-  SELECT County_of_Residence_FIPS AS FIPS, Ave_Number_of_Prenatal_Wks AS Vist_Ave, County_of_Residence
-  FROM `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality` 
-  WHERE SUBSTR(County_of_Residence_FIPS, 0, 2) = "55" AND Year = '2018-01-01'
-),
+    SELECT
+    patent."title",
+    patent."abstract",
+    app."date" AS publication_date,
+    filterData."bkwdCitations",
+    filterData."fwrdCitations_5"
+FROM
+    "PATENTSVIEW"."PATENTSVIEW"."PATENT" AS patent
+JOIN
+    "PATENTSVIEW"."PATENTSVIEW"."APPLICATION" AS app
+    ON app."patent_id" = patent."id"
+JOIN (
+    SELECT
+        DISTINCT cpc."patent_id",
+        IFNULL(citation_5."bkwdCitations", 0) AS "bkwdCitations",
+        IFNULL(citation_5."fwrdCitations_5", 0) AS "fwrdCitations_5"
+    FROM
+        "PATENTSVIEW"."PATENTSVIEW"."CPC_CURRENT" AS cpc
+    LEFT JOIN (
+        SELECT
+            b."patent_id",
+            b."bkwdCitations",
+            f."fwrdCitations_5"
+        FROM (
+            SELECT 
+                cited."citation_id" AS "patent_id",
+                IFNULL(COUNT(*), 0) AS "fwrdCitations_5"
+            FROM 
+                "PATENTSVIEW"."PATENTSVIEW"."USPATENTCITATION" AS cited
+            JOIN
+                "PATENTSVIEW"."PATENTSVIEW"."APPLICATION" AS apps
+                ON cited."citation_id" = apps."patent_id"
+            WHERE
+                apps."country" = 'US'
+                AND cited."date" >= apps."date"
+                AND TRY_CAST(cited."date" AS DATE) <= DATEADD(YEAR, 5, TRY_CAST(apps."date" AS DATE)) -- 5-year citation window
+            GROUP BY 
+                cited."citation_id"
+        ) AS f
+        JOIN (
+            SELECT 
+                cited."patent_id",
+                IFNULL(COUNT(*), 0) AS "bkwdCitations"
+            FROM 
+                "PATENTSVIEW"."PATENTSVIEW"."USPATENTCITATION" AS cited
+            JOIN
+                "PATENTSVIEW"."PATENTSVIEW"."APPLICATION" AS apps
+                ON cited."patent_id" = apps."patent_id"
+            WHERE
+                apps."country" = 'US'
+                AND cited."date" < apps."date" -- backward citation count
+            GROUP BY 
+                cited."patent_id"
+        ) AS b
+        ON b."patent_id" = f."patent_id"
+        WHERE
+            b."bkwdCitations" IS NOT NULL
+            AND f."fwrdCitations_5" IS NOT NULL
+    ) AS citation_5 
+    ON cpc."patent_id" = citation_5."patent_id"
+    WHERE 
+        cpc."subsection_id" IN ('C05', 'C06', 'C07', 'C08', 'C09', 'C10', 'C11', 'C12', 'C13')
+        OR cpc."group_id" IN ('A01G', 'A01H', 'A61K', 'A61P', 'A61Q', 'B01F', 'B01J', 'B81B', 'B82B', 'B82Y', 'G01N', 'G16H')
+) AS filterData
+ON app."patent_id" = filterData."patent_id"
+WHERE
+    TRY_CAST(app."date" AS DATE) < '2014-02-01' 
+    AND TRY_CAST(app."date" AS DATE) >= '2014-01-01';
 
-acs_2017 AS (
-  SELECT geo_id, commute_45_59_mins, employed_pop
-  FROM `bigquery-public-data.census_bureau_acs.county_2017_5yr`
-),
-
-corr_tbl AS (
-  SELECT
-    n.County_of_Residence,
-    ROUND((a.commute_45_59_mins / a.employed_pop) * 100, 2) AS percent_high_travel,
-    n.Vist_Ave
-  FROM acs_2017 a
-  JOIN natality_2018 n
-  ON a.geo_id = n.FIPS
-)
-
-SELECT County_of_Residence, Vist_Ave
-FROM corr_tbl
-WHERE percent_high_travel > 5
 
 
-
-##### stackoverflow - 9 #####
+##### covid19_symptom_search - 0 #####
 Error: Slicing error for the schema_linking module
-Prompt: Let’s break down the question and map it to the schema step by step:
+Prompt: Let’s break down the question step by step to find the schema_links:
 
 **Question:**  
-Retrieve the top 10 longest questions on Stack Overflow, measured by the length of their body text, where each question either has an accepted answer or has no accepted answer but has at least one answer with a score-to-view ratio exceeding 0.01. For each of these questions, include the reputation of the user who asked the question, the user's net votes (calculated as their total up_votes minus down_votes), and the total number of badges the user has earned.
+"Please calculate the overall percentage change in the average weekly search frequency for the symptom 'Anosmia' across the five New York City counties—Bronx County, Queens County, Kings County, New York County, and Richmond County—by comparing the combined data from January 1, 2019, through December 31, 2019, with the combined data from January 1, 2020, through December 31, 2020."
 
 ---
 
-### 1. "top 10 longest questions ... measured by the length of their body text"
-- Table: `bigquery-public-data.stackoverflow.posts_questions`
-- Columns: `body` (for length), `id` (question id)
-- Need to compute LENGTH(body) and order by it, limit 10.
+### 1. Identify the relevant table(s):
 
-### 2. "where each question either has an accepted answer"
-- Table: `posts_questions`
-- Column: `accepted_answer_id` (not null)
+- The question is about **weekly search frequency** for a symptom at the **county** level.
+- The most relevant table is:  
+  **bigquery-public-data.covid19_symptom_search.symptom_search_sub_region_2_weekly**
 
-### 3. "or has no accepted answer but has at least one answer with a score-to-view ratio exceeding 0.01"
-- Table: `posts_questions` (for questions)
-- Table: `posts_answers` (for answers)
-- Columns: `accepted_answer_id` (null), `id` (question id), `view_count` (from question), `score` (from answer), `parent_id` (answer's parent question id)
-- Need to join answers to questions where `posts_answers.parent_id = posts_questions.id`
-- Need to check: `score / view_count > 0.01`
+### 2. Identify the relevant columns:
 
-### 4. "For each of these questions, include the reputation of the user who asked the question"
-- Table: `users`
-- Columns: `reputation`
-- Join: `posts_questions.owner_user_id = users.id`
+- **Symptom:** 'Anosmia'  
+  → Column: `symptom_anosmia`
+- **Geography:** Five NYC counties  
+  → Column: `sub_region_2` (county name)
+- **State:** All are in New York  
+  → Column: `sub_region_1` (should be 'New York')
+- **Date range:**  
+  → Column: `date`
+- **Aggregation:** Need to average weekly values for each year, then compare.
 
-### 5. "the user's net votes (calculated as their total up_votes minus down_votes)"
-- Table: `users`
-- Columns: `up_votes`, `down_votes`
-- Compute: `up_votes - down_votes`
+### 3. Identify possible cell values:
 
-### 6. "and the total number of badges the user has earned"
-- Table: `badges`
-- Column: `user_id`
-- Need to count badges per user: `COUNT(badges.id)` where `badges.user_id = users.id`
+- `sub_region_2` values: 'Bronx County', 'Queens County', 'Kings County', 'New York County', 'Richmond County'
+- `sub_region_1`: 'New York'
+- `date`: between '2019-01-01' and '2019-12-31', and between '2020-01-01' and '2020-12-31'
+- `symptom_anosmia`: the metric to average
+
+### 4. Foreign keys:
+
+- There are no explicit foreign keys needed for this query, as all data is in a single table.
 
 ---
 
-## Foreign Keys / Joins Needed
-
-- `posts_questions.owner_user_id = users.id`
-- `badges.user_id = users.id`
-- `posts_answers.parent_id = posts_questions.id`
-
----
-
-## Cell Values
-
-- 0.01 (score-to-view ratio threshold)
-- 10 (top 10)
-
----
-
-## Schema Links
+### 5. Schema_links
 
 **Columns:**
-- posts_questions.id
-- posts_questions.body
-- posts_questions.accepted_answer_id
-- posts_questions.view_count
-- posts_questions.owner_user_id
-- users.id
-- users.reputation
-- users.up_votes
-- users.down_votes
-- badges.user_id
-- badges.id
-- posts_answers.parent_id
-- posts_answers.score
+- bigquery-public-data.covid19_symptom_search.symptom_search_sub_region_2_weekly.sub_region_2
+- bigquery-public-data.covid19_symptom_search.symptom_search_sub_region_2_weekly.sub_region_1
+- bigquery-public-data.covid19_symptom_search.symptom_search_sub_region_2_weekly.date
+- bigquery-public-data.covid19_symptom_search.symptom_search_sub_region_2_weekly.symptom_anosmia
 
-**Joins/Foreign Keys:**
-- posts_questions.owner_user_id = users.id
-- badges.user_id = users.id
-- posts_answers.parent_id = posts_questions.id
+**Cell values:**
+- 'Bronx County'
+- 'Queens County'
+- 'Kings County'
+- 'New York County'
+- 'Richmond County'
+- 'New York'
+- '2019-01-01'
+- '2019-12-31'
+- '2020-01-01'
+- '2020-12-31'
 
-**Cell Values:**
-- 0.01
-- 10
+**No foreign keys needed.**
 
 ---
 
-## Final Schema Links
+## Final Answer
 
 **Schema_links:**
-- posts_questions.id
-- posts_questions.body
-- posts_questions.accepted_answer_id
-- posts_questions.view_count
-- posts_questions.owner_user_id
-- users.id
-- users.reputation
-- users.up_votes
-- users.down_votes
-- badges.user_id
-- badges.id
-- posts_answers.parent_id
-- posts_answers.score
-- posts_questions.owner_user_id = users.id
-- badges.user_id = users.id
-- posts_answers.parent_id = posts_questions.id
-- 0.01
-- 10
-
----
-
-**(You may also include posts_answers.id if you want to reference the answer id, but it's not strictly needed for this query.)**
+- bigquery-public-data.covid19_symptom_search.symptom_search_sub_region_2_weekly.sub_region_2
+- bigquery-public-data.covid19_symptom_search.symptom_search_sub_region_2_weekly.sub_region_1
+- bigquery-public-data.covid19_symptom_search.symptom_search_sub_region_2_weekly.date
+- bigquery-public-data.covid19_symptom_search.symptom_search_sub_region_2_weekly.symptom_anosmia
+- 'Bronx County'
+- 'Queens County'
+- 'Kings County'
+- 'New York County'
+- 'Richmond County'
+- 'New York'
+- '2019-01-01'
+- '2019-12-31'
+- '2020-01-01'
+- '2020-12-31'
   ## Question:
-    Retrieve the top 10 longest questions on Stack Overflow, measured by the length of their body text, where each question either has an accepted answer or has no accepted answer but has at least one answer with a score-to-view ratio exceeding 0.01. For each of these questions, include the reputation of the user who asked the question, the user's net votes (calculated as their total up_votes minus down_votes), and the total number of badges the user has earned.
+    Please calculate the overall percentage change in the average weekly search frequency for the symptom 'Anosmia' across the five New York City counties—Bronx County, Queens County, Kings County, New York County, and Richmond County—by comparing the combined data from January 1, 2019, through December 31, 2019, with the combined data from January 1, 2020, through December 31, 2020.
 
   ## Query:
-    WITH badge_counts AS (
+    SELECT
+  table_2019.avg_symptom_Anosmia_2019,
+  table_2020.avg_symptom_Anosmia_2020,
+  ((table_2020.avg_symptom_Anosmia_2020 - table_2019.avg_symptom_Anosmia_2019) / table_2019.avg_symptom_Anosmia_2019) * 100 AS avg_increase
+FROM (
   SELECT
-    c.id,
-    COUNT(DISTINCT d.id) AS badge_number
+    AVG(SAFE_CAST(symptom_Anosmia AS FLOAT64)) AS avg_symptom_Anosmia_2020
   FROM
-    `bigquery-public-data.stackoverflow.users` AS c
-  JOIN
-    `bigquery-public-data.stackoverflow.badges` AS d
-  ON
-    c.id = d.user_id
-  GROUP BY
-    c.id
-),
-labeled_questions AS (
+    `bigquery-public-data.covid19_symptom_search.symptom_search_sub_region_2_weekly`
+  WHERE
+    sub_region_1 = "New York"
+    AND sub_region_2 IN ("Bronx County", "Queens County", "Kings County", "New York County", "Richmond County")
+    AND date >= '2020-01-01'
+    AND date < '2021-01-01'
+) AS table_2020,
+(
   SELECT
-    a.id,
-    IF(
-      a.id IN (
-        SELECT DISTINCT b.id
-        FROM
-          `bigquery-public-data.stackoverflow.posts_answers` AS a
-        JOIN
-          `bigquery-public-data.stackoverflow.posts_questions` AS b
-        ON
-          a.parent_id = b.id
-        WHERE
-          b.accepted_answer_id IS NULL
-          AND a.score / b.view_count > 0.01
-      ) OR accepted_answer_id IS NOT NULL,
-      1,
-      0
-    ) AS label,
-    a.owner_user_id,
-    LENGTH(a.body) AS body_length
+    AVG(SAFE_CAST(symptom_Anosmia AS FLOAT64)) AS avg_symptom_Anosmia_2019
   FROM
-    `bigquery-public-data.stackoverflow.posts_questions` AS a
-)
-SELECT
-  lq.id,
-  b.reputation,
-  b.up_votes - b.down_votes AS net_votes,
-  e.badge_number
-FROM
-  labeled_questions AS lq
-JOIN
-  `bigquery-public-data.stackoverflow.users` AS b
-ON
-  lq.owner_user_id = b.id
-JOIN
-  badge_counts AS e
-ON
-  b.id = e.id
-WHERE
-  lq.label = 1
-ORDER BY
-  lq.body_length DESC
-LIMIT
-  10;
-
-
+    `bigquery-public-data.covid19_symptom_search.symptom_search_sub_region_2_weekly`
+  WHERE
+    sub_region_1 = "New York"
+    AND sub_region_2 IN ("Bronx County", "Queens County", "Kings County", "New York County", "Richmond County")
+    AND date >= '2019-01-01'
+    AND date < '2020-01-01'
+) AS table_2019
 
 
 
@@ -799,54 +333,79 @@ LIMIT
 Error: Slicing error for the schema_linking module
 Prompt: Let’s break down the question and map the schema links step by step:
 
-**Step 1: Identify the main entities and requirements.**
-- **KRAS and TP53 gene mutations**: Need to find patients with mutations in these genes.
-- **Pancreatic adenocarcinoma (PAAD)**: Restrict to patients with PAAD.
-- **Clinical follow-up data**: Use clinical data to confirm diagnosis and patient status.
-- **High-quality mutation annotations**: Use filtered mutation data.
-- **Match patient records by unique identifiers**: Ensure correct joins.
-- **Calculate co-occurrence and independence**: Need to count patients with both, either, or neither mutation.
+**Step 1: Identify the main entities and requirements in the question.**
 
-**Step 2: Find relevant tables and columns.**
-- **Mutation data**: 
-  - `Filtered_MC3_MAF_V5_one_per_tumor_sample` (has `ParticipantBarcode`, `Study`, `Hugo_Symbol` (gene), `Variant_Classification`)
-- **Clinical data**: 
-  - `Filtered_clinical_PANCAN_patient_with_followup` (has `bcr_patient_barcode`, `acronym` (cancer type), etc.)
-- **Patient identifier**: 
-  - `ParticipantBarcode` in mutation table, `bcr_patient_barcode` in clinical table (likely the same, or can be mapped).
-- **Cancer type**: 
-  - `acronym` in clinical table (should be 'PAAD' for pancreatic adenocarcinoma).
+- **Goal:** Calculate the chi-squared statistic for association between KRAS and TP53 mutations in PAAD patients.
+- **Data needed:**
+  - Mutation status for KRAS and TP53 genes (per patient)
+  - Patient diagnosis (must be PAAD)
+  - High-quality mutation annotations
+  - Clinical follow-up data (to ensure correct patient matching and possibly for filtering)
+  - Unique patient identifiers for matching
 
-**Step 3: Foreign keys / joins.**
-- Join `Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode` = `Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode`
-- Filter `Filtered_clinical_PANCAN_patient_with_followup.acronym = 'PAAD'`
-- Filter `Filtered_MC3_MAF_V5_one_per_tumor_sample.Hugo_Symbol IN ('KRAS', 'TP53')`
+**Step 2: Map the question to relevant tables and columns.**
 
-**Step 4: Cell values.**
-- 'KRAS', 'TP53', 'PAAD'
+- **Mutation data:**  
+  - Table: `isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample`
+    - Columns: `ParticipantBarcode`, `Study`, `Hugo_Symbol`, `Variant_Classification`
+      - `Hugo_Symbol` = 'KRAS' or 'TP53'
+      - `Study` = 'PAAD'
+  - **High-quality annotation:**  
+    - The table is already "Filtered" and "one_per_tumor_sample", so it is curated for high-quality calls.
 
-**Step 5: Schema links summary.**
+- **Clinical follow-up data:**  
+  - Table: `isb-cgc-bq.pancancer_atlas.Filtered_clinical_PANCAN_patient_with_followup`
+    - Columns: `bcr_patient_barcode`, `acronym` (should be 'PAAD'), etc.
+
+- **Patient matching:**  
+  - Use `ParticipantBarcode` (mutation table) and `bcr_patient_barcode` (clinical table).
+  - These are the unique patient identifiers.
+
+**Step 3: Identify the schema links (columns, foreign keys, and cell values).**
+
+- **Columns:**
+  - `Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode`
+  - `Filtered_MC3_MAF_V5_one_per_tumor_sample.Study`
+  - `Filtered_MC3_MAF_V5_one_per_tumor_sample.Hugo_Symbol`
+  - `Filtered_MC3_MAF_V5_one_per_tumor_sample.Variant_Classification`
+  - `Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode`
+  - `Filtered_clinical_PANCAN_patient_with_followup.acronym`
+
+- **Foreign keys / Matching:**
+  - `Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode = Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode`
+
+- **Cell values:**
+  - `Hugo_Symbol` = 'KRAS'
+  - `Hugo_Symbol` = 'TP53'
+  - `Study` = 'PAAD'
+  - `acronym` = 'PAAD'
+
+**Step 4: List the schema links.**
 
 **Schema_links:**
-- `Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode = Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode`
-- `Filtered_clinical_PANCAN_patient_with_followup.acronym`
+- `Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode`
+- `Filtered_MC3_MAF_V5_one_per_tumor_sample.Study`
 - `Filtered_MC3_MAF_V5_one_per_tumor_sample.Hugo_Symbol`
 - `Filtered_MC3_MAF_V5_one_per_tumor_sample.Variant_Classification`
-- `Filtered_clinical_PANCAN_patient_with_followup.*` (for clinical follow-up data)
+- `Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode`
+- `Filtered_clinical_PANCAN_patient_with_followup.acronym`
+- `Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode = Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode`
 - `'KRAS'`
 - `'TP53'`
 - `'PAAD'`
 
-**Full answer:**
-
 ---
 
-**Schema_links:**
-- Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode = Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode
-- Filtered_clinical_PANCAN_patient_with_followup.acronym
-- Filtered_MC3_MAF_V5_one_per_tumor_sample.Hugo_Symbol
-- Filtered_MC3_MAF_V5_one_per_tumor_sample.Variant_Classification
-- Filtered_clinical_PANCAN_patient_with_followup.*
+**Final Answer:**
+
+Schema_links:
+- isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode
+- isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample.Study
+- isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample.Hugo_Symbol
+- isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample.Variant_Classification
+- isb-cgc-bq.pancancer_atlas.Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode
+- isb-cgc-bq.pancancer_atlas.Filtered_clinical_PANCAN_patient_with_followup.acronym
+- isb-cgc-bq.pancancer_atlas.Filtered_MC3_MAF_V5_one_per_tumor_sample.ParticipantBarcode = isb-cgc-bq.pancancer_atlas.Filtered_clinical_PANCAN_patient_with_followup.bcr_patient_barcode
 - 'KRAS'
 - 'TP53'
 - 'PAAD'
@@ -854,7 +413,14 @@ Prompt: Let’s break down the question and map the schema links step by step:
 ---
 
 **Explanation:**  
-You need to join the mutation and clinical tables on patient barcode, filter for PAAD patients, and select those with KRAS and/or TP53 mutations. Use the clinical follow-up data for additional filtering or annotation as needed. The relevant columns and values are listed above.
+These schema links allow you to:
+- Select only PAAD patients (using `Study` or `acronym`)
+- Identify which patients have KRAS and/or TP53 mutations
+- Ensure high-quality, patient-matched data
+- Use the correct unique identifiers for matching
+- Prepare the contingency table for the chi-squared test
+
+If you need to further restrict to only "pathogenic" or "nonsynonymous" mutations, you may also need to filter on `Variant_Classification` (e.g., missense, nonsense, etc.), but the above covers the core schema links for the question.
   ## Question:
     Using TCGA dataset, calculate the chi-squared statistic to evaluate the association between KRAS and TP53 gene mutations in patients diagnosed with pancreatic adenocarcinoma (PAAD). Incorporate clinical follow-up data and high-quality mutation annotations to accurately determine the frequency of patients with co-occurring KRAS and TP53 mutations compared to those with each mutation occurring independently. Ensure that patient records are meticulously matched based on unique identifiers to maintain data integrity. This analysis aims to identify and quantify potential correlations between KRAS and TP53 genetic alterations within the PAAD patient population.
 
@@ -934,108 +500,5 @@ SELECT
 FROM contingency_table
 WHERE a IS NOT NULL AND b IS NOT NULL AND c IS NOT NULL AND d IS NOT NULL;
 
-
-
-##### ebi_chembl - 0 #####
-Error: Slicing error for the schema_linking module
-Prompt: Let’s break down the question:
-
-**Question:**  
-"Using data from ChEMBL Release 23, retrieve all distinct molecules associated with the company 'SanofiAventis,' listing the trade name and the most recent approval date for each molecule. Make sure to keep only the latest approval date per molecule and ensure the company field precisely matches 'SanofiAventis' without relying on other fields."
-
----
-
-### 1. Identify the relevant tables and columns
-
-- **Molecule**:  
-  - Table: `bigquery-public-data.ebi_chembl.molecule_dictionary_23`  
-  - Key column: `molregno` (unique molecule identifier)
-
-- **Product/Trade Name/Approval Date**:  
-  - Table: `bigquery-public-data.ebi_chembl.products_23`  
-  - Columns: `trade_name`, `approval_date`, `product_id`, `innovator_company`
-
-- **Molecule ↔ Product mapping**:  
-  - Table: `bigquery-public-data.ebi_chembl.formulations_23`  
-  - Columns: `molregno`, `product_id`
-
-- **Company**:  
-  - Field: `innovator_company` in `products_23`  
-  - Must match exactly 'SanofiAventis'
-
----
-
-### 2. Foreign Keys / Joins
-
-- `formulations_23.molregno` = `molecule_dictionary_23.molregno`
-- `formulations_23.product_id` = `products_23.product_id`
-
----
-
-### 3. Columns needed
-
-- `molecule_dictionary_23.molregno` (distinct molecules)
-- `products_23.trade_name`
-- `products_23.approval_date`
-- `products_23.innovator_company` (for filtering)
-
----
-
-### 4. Cell values
-
-- 'SanofiAventis' (exact match for company)
-
----
-
-### 5. Aggregation
-
-- For each molecule, keep only the latest (`MAX(approval_date)`) approval date.
-
----
-
-### 6. Schema Links
-
-**Schema_links:**
-- `bigquery-public-data.ebi_chembl.molecule_dictionary_23.molregno`
-- `bigquery-public-data.ebi_chembl.formulations_23.molregno = bigquery-public-data.ebi_chembl.molecule_dictionary_23.molregno`
-- `bigquery-public-data.ebi_chembl.formulations_23.product_id = bigquery-public-data.ebi_chembl.products_23.product_id`
-- `bigquery-public-data.ebi_chembl.products_23.trade_name`
-- `bigquery-public-data.ebi_chembl.products_23.approval_date`
-- `bigquery-public-data.ebi_chembl.products_23.innovator_company`
-- `'SanofiAventis'`
-- `MAX(approval_date)`
-
----
-
-**Final Answer:**
-
-Schema_links:
-- bigquery-public-data.ebi_chembl.molecule_dictionary_23.molregno
-- bigquery-public-data.ebi_chembl.formulations_23.molregno = bigquery-public-data.ebi_chembl.molecule_dictionary_23.molregno
-- bigquery-public-data.ebi_chembl.formulations_23.product_id = bigquery-public-data.ebi_chembl.products_23.product_id
-- bigquery-public-data.ebi_chembl.products_23.trade_name
-- bigquery-public-data.ebi_chembl.products_23.approval_date
-- bigquery-public-data.ebi_chembl.products_23.innovator_company
-- 'SanofiAventis'
-- MAX(approval_date)
-  ## Question:
-    Using data from ChEMBL Release 23, retrieve all distinct molecules associated with the company 'SanofiAventis,' listing the trade name and the most recent approval date for each molecule. Make sure to keep only the latest approval date per molecule and ensure the company field precisely matches 'SanofiAventis' without relying on other fields.
-
-  ## Query:
-    SELECT *
-  FROM (
-  SELECT
-  molregno,
-  comp.company,
-  prod.trade_name,
-  prod.approval_date,
-  ROW_NUMBER() OVER(PARTITION BY molregno ORDER BY PARSE_DATE('%Y-%m-%d', prod.approval_date) DESC) rn
-  FROM bigquery-public-data.ebi_chembl.compound_records_23 AS cmpd_rec
-  JOIN bigquery-public-data.ebi_chembl.molecule_synonyms_23 AS ms USING (molregno)
-  JOIN bigquery-public-data.ebi_chembl.research_companies_23 AS comp USING (res_stem_id)
-  JOIN bigquery-public-data.ebi_chembl.formulations_23 AS form USING (molregno)
-  JOIN bigquery-public-data.ebi_chembl.products_23 AS prod USING (product_id)
-  ) as subq
- WHERE rn = 1 AND company = 'SanofiAventis'
 
 
