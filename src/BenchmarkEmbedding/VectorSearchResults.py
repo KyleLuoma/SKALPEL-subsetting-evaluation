@@ -50,8 +50,8 @@ class VectorSearchResults:
         self.search_word = search_word
         self.database_name = database_name
         self.distance_threshold = distance_threshold
-        self.columns = []
-        self.tables = []
+        self.columns: list[WordIdentifierDistance] = []
+        self.tables: list[WordIdentifierDistance] = []
 
 
     def __str__(self):
