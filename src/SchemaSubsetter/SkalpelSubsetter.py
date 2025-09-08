@@ -15,6 +15,7 @@ import SchemaSubsetter.Skalpel.LLM as LLM
 from SchemaSubsetter.Skalpel.VectorSearch import VectorSearch
 from SchemaSubsetter.Skalpel.SkalpelVectorSearchResults import VectorSearchResults, WordIdentifierDistance
 import logging
+import multiprocessing
 
 class SkalpelSubsetter(SchemaSubsetter):
 
@@ -28,7 +29,7 @@ class SkalpelSubsetter(SchemaSubsetter):
             ):
         self.use_tasql = use_tasql
         if self.use_tasql:
-            self.name = SkalpelSubsetter.name + "-tasql"
+            self.name = SkalpelSubsetter.name + "tasql"
         else:
             self.name = SkalpelSubsetter.name
         self.benchmark = benchmark
@@ -50,6 +51,9 @@ class SkalpelSubsetter(SchemaSubsetter):
         self.tasql = TaSqlSubsetter(benchmark=benchmark)
         self.db_table_partition_sizes = {}
         
+
+    def __del__(self):
+        del self.vector_search
 
 
     def preprocess_databases(
@@ -187,7 +191,9 @@ class SkalpelSubsetter(SchemaSubsetter):
             sorted_tables.sort(key=lambda x: x[0])
             sorted_tables = [t[1] for t in sorted_tables]
             benchmark_question.schema.tables = sorted_tables
-        for i in range(0, len(benchmark_question.schema.tables), schema_partition_table_count):
+        i = 0
+        # for i in range(0, len(benchmark_question.schema.tables), schema_partition_table_count):
+        while i < len(benchmark_question.schema.tables):
             schema_partition = Schema(
                 database=benchmark_question.schema.database,
                 tables=benchmark_question.schema.tables[i:i+schema_partition_table_count]
@@ -195,17 +201,29 @@ class SkalpelSubsetter(SchemaSubsetter):
             for table in final_subset.tables:
                 if not schema_partition.table_exists(table.name):
                     schema_partition.tables.append(table)
-            subset_results = self.tasql.get_schema_subset(BenchmarkQuestion(
+            temp_question = BenchmarkQuestion(
                 question=benchmark_question.question,
                 query=benchmark_question.query,
                 query_dialect=benchmark_question.query_dialect,
                 question_number=benchmark_question.question_number,
                 schema=schema_partition
-            ))
-            token_count += subset_results.prompt_tokens
-            for table in subset_results.schema_subset.tables:
-                if not final_subset.table_exists(table.name):
-                    final_subset.tables.append(table)
+            )
+            subset_results = self.tasql.get_schema_subset(temp_question)
+            if subset_results.prompt_tokens < 0: # Resize partition table count
+                schema_prompt = self.tasql.generate_sample_schema_prompt(temp_question)
+                prompt_tokens = self.llm.get_prompt_token_count(schema_prompt)
+                schema_partition_table_count = self._estimate_table_partition(
+                    num_tables=len(temp_question.schema.tables),
+                    prompt_tokens=prompt_tokens,
+                    max_tokens=800000
+                )
+                print("Resizing table size partition to", schema_partition_table_count)
+            else:
+                i += schema_partition_table_count
+                token_count += subset_results.prompt_tokens
+                for table in subset_results.schema_subset.tables:
+                    if not final_subset.table_exists(table.name):
+                        final_subset.tables.append(table)
         return SchemaSubsetterResult(
             schema_subset=final_subset,
             prompt_tokens=token_count

@@ -167,7 +167,7 @@ python ./src/main.py --subsetter_name skalpel-tasql --benchmark_name snails --fi
 # Do nl to sql evaluation
 
 ```bash
-python ./src/main.py --nl_sql xlsx --no_subset_generation
+python ./src/main.py --nl_sql xlsx --no_subset_generation --recover_previous
 ```
 
 # Modifications made to subsetting methods

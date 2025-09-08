@@ -161,7 +161,7 @@ class NlSqlBenchmark:
         sample_values = []
         query_params = [column_name, table_name, num_values]
         query = """
-SELECT ? FROM ? LIMIT ?
+SELECT DISTINCT ? FROM ? LIMIT ?
 """
         return sample_values
     

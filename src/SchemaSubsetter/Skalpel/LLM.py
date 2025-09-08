@@ -11,12 +11,16 @@ class OpenAIRequestLLM():
     REQUEST_URL = "https://wire.westpoint.edu/vllm/v1/chat/completions"
     DEFAULT_MODEL = "openai/gpt-oss-120b"
 
-    def __init__(self, request_url: str = None):
+    def __init__(
+            self, 
+            request_url: str = None,
+            api_config_file: str = "./.local/openai.json"
+            ):
         if not request_url:
             self.request_url = OpenAIRequestLLM.REQUEST_URL
         else:
             self.request_url = request_url
-        with open("./.local/openai.json", "r") as f:
+        with open(api_config_file, "r") as f:
             self.api_key = json.load(f).get("api_key")
         self.tokenizer = AutoTokenizer.from_pretrained("openai-community/gpt2-xl")
 

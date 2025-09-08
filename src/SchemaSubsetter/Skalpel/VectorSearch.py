@@ -29,6 +29,15 @@ class VectorSearch:
 
 
 
+    def __del__(self):
+        if hasattr(self, "embedding_model") and self.embedding_model is not None:
+            try:
+                self.embedding_model.to("cpu")
+                del self.embedding_model
+            except Exception:
+                pass
+
+
     def _init_pgvector_db(self) -> psycopg.connection.Connection:
         db_conn = psycopg.connect(
             f"user=postgres host={self.db_host} port=5432 password=skalpel"
@@ -159,7 +168,6 @@ LIMIT %s * (SELECT COUNT(*) FROM table_descriptions WHERE database_name = %s)
             ) for row in query_result.fetchall()
         ]
         return search_results
-    
 
 
     def get_table_description_from_db(

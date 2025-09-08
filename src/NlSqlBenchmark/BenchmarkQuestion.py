@@ -1,4 +1,5 @@
 from NlSqlBenchmark.SchemaObjects import Schema
+from copy import deepcopy
 
 class BenchmarkQuestion:
 
@@ -31,6 +32,17 @@ class BenchmarkQuestion:
             and self.schema == other.schema
             and self.schema_naturalness == other.schema_naturalness
             and self.query_filename == other.query_filename
+        )
+
+
+    def copy(self):
+        return BenchmarkQuestion(
+            question=deepcopy(self.question),
+            query=deepcopy(self.query),
+            query_dialect=deepcopy(self.query_dialect),
+            question_number=deepcopy(self.question_number),
+            schema=deepcopy(self.schema),
+            schema_naturalness=deepcopy(self.schema_naturalness)
         )
 
 

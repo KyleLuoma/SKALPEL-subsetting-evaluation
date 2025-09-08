@@ -439,7 +439,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
         if self.sql_dialect == "mssql":
             query = f"select top {num_values} [{column_name}] from [{table_name}]"
         elif self.sql_dialect == "sqlite":
-            query = f"select `{column_name}` from `{table_name}` limit {num_values}"
+            query = f"select distinct `{column_name}` from `{table_name}` limit {num_values}"
         result = self.execute_query(query=query, database=database)
         return result.result_set[column_name]
 

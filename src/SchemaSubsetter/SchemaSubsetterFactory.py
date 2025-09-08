@@ -26,7 +26,7 @@ class SchemaSubsetterFactory:
         "perfect_subsetter",
         "perfect_table_subsetter",
         "skalpel",
-        "skalpel-tasql"
+        "skalpeltasql"
     ]
 
     subsetter_build_dict = {
@@ -41,7 +41,7 @@ class SchemaSubsetterFactory:
         "perfect_subsetter": (PerfectSchemaSubsetter, {}),
         "perfect_table_subsetter": (PerfectTableSchemaSubsetter, {}),
         "skalpel": (SkalpelSubsetter, {}),
-        "skalpel-tasql": (SkalpelSubsetter, {"use_tasql": True, "model": "gpt-4.1-nano"})
+        "skalpeltasql": (SkalpelSubsetter, {"use_tasql": True, "model": "gpt-4.1-nano"})
     }
        
 
