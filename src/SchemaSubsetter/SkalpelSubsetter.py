@@ -25,7 +25,10 @@ class SkalpelSubsetter(SchemaSubsetter):
             self, 
             benchmark: NlSqlBenchmark,
             use_tasql: bool = False,
-            model: str = LLM.OpenAIRequestLLM.DEFAULT_MODEL
+            model: str = LLM.OpenAIRequestLLM.DEFAULT_MODEL,
+            request_url: str = "https://api.openai.com/v1/chat/completions",
+            vector_only: bool = False,
+            vector_distance_threshold: float = None
             ):
         self.use_tasql = use_tasql
         if self.use_tasql:
@@ -33,8 +36,11 @@ class SkalpelSubsetter(SchemaSubsetter):
         else:
             self.name = SkalpelSubsetter.name
         self.benchmark = benchmark
+        self.vector_only = vector_only
+        self.vector_distance_threshold = vector_distance_threshold
         self.llm = LLM.OpenAIRequestLLM(
-            request_url="https://api.openai.com/v1/chat/completions"
+            request_url=request_url
+            # request_url="https://api.openai.com/v1/chat/completions"
             # request_url=LLM.OpenAIRequestLLM.REQUEST_URL
             )
         self.llm_model = model
@@ -101,8 +107,12 @@ class SkalpelSubsetter(SchemaSubsetter):
     def get_schema_subset(
             self,
             benchmark_question: BenchmarkQuestion,
-            use_tasql: bool = None
+            use_tasql: bool = None,
+            distance_threshold: float = None,
+            schema_proportion: float = 1.0
             ) -> SchemaSubsetterResult:
+        if distance_threshold == None:
+            distance_threshold = self.vector_distance_threshold
         if use_tasql == None:
             use_tasql = self.use_tasql
         if use_tasql:
@@ -114,33 +124,34 @@ class SkalpelSubsetter(SchemaSubsetter):
             )
         table_scores, vector_search_tokens = self._do_vector_search_table_retrieval(
             benchmark_question=benchmark_question,
-            distance_threshold=1.0,
-            schema_proportion=0.6,
+            distance_threshold=distance_threshold,
+            schema_proportion=schema_proportion,
             chunk_level="whole"
         )
-        table_list, table_select_tokens = self._do_llm_table_selection(
-            benchmark_question=benchmark_question,
-            table_scores=table_scores,
-            max_tables_per_turn=800
-        )
         subset_tables = []
-        for table in table_list:
-            try:
-                subset_tables.append(benchmark_question.schema.get_table_by_name(table_name=table))
-            except KeyError as e:
-                subset_tables.append(SchemaTable(name=table))
-        subset = Schema(database=benchmark_question.schema.database, tables=subset_tables)
-        subset, column_select_tokens = self._do_llm_column_selection(
-            question=benchmark_question,
-            source_schema=subset,
-            max_tables_per_turn=800
-        )
-        with open("./src/SchemaSubsetter/Skalpel/logs/subsetting_log.log", "wt") as f:
-            f.write(
-                f"DB: {benchmark_question.schema.database}, Q: {benchmark_question.question_number} {benchmark_question.question}"
-                )
-            f.write(str(subset))
-            f.write(f"Tokens: {vector_search_tokens + table_select_tokens}\n\n\n")
+        if self.vector_only:
+            for table in table_scores.keys():
+                subset_tables.append(benchmark_question.schema.get_table_by_name(table))
+            subset = Schema(database=benchmark_question.schema.database, tables=subset_tables)
+            table_select_tokens = column_select_tokens = 0
+        else:
+            table_list, table_select_tokens = self._do_llm_table_selection(
+                benchmark_question=benchmark_question,
+                table_scores=table_scores,
+                max_tables_per_turn=800
+            )
+            for table in table_list:
+                try:
+                    subset_tables.append(benchmark_question.schema.get_table_by_name(table_name=table))
+                except KeyError as e:
+                    subset_tables.append(SchemaTable(name=table)) 
+            subset = Schema(database=benchmark_question.schema.database, tables=subset_tables)
+            subset, column_select_tokens = self._do_llm_column_selection(
+                question=benchmark_question,
+                source_schema=subset,
+                max_tables_per_turn=800
+            )
+        a=1   
         return SchemaSubsetterResult(
             schema_subset=subset,
             prompt_tokens=vector_search_tokens + table_select_tokens + column_select_tokens
@@ -318,6 +329,8 @@ class SkalpelSubsetter(SchemaSubsetter):
             schema_proportion: float,
             chunk_level: str # whole | sentence
         ) -> tuple[dict[str, float], int]:
+        if distance_threshold == None:
+            distance_threshold = 1.0
         schema_tables = {}
         question_breakdown_list, decompose_token_usage = self._decompose_question(benchmark_question)
         all_results = []

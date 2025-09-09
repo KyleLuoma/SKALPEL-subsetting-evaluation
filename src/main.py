@@ -47,6 +47,7 @@ def main():
     parser.add_argument("--results_filename", default=None, help="Load specified results and evaluate only (no re-subsetting).")
     parser.add_argument("--sleep", default=0, help="Time (seconds) to sleep between subsetting inferences.")
     parser.add_argument("--nl_sql", type=str, default=None, help="Run nl-to-sql over xlsx files in /subsetting_results. Use the argument to filter files to run. Argument is a substring of the filename. E.g., 'subsetting-tasql-bird' will run nl-to-sql on all filenames containing that substring")
+    parser.add_argument("--subsetter_args", type=str, default=None, help="Subsetter specific arguments, k:v ^ delimited. Example model:gpt-4.1^vector_threshold:0.575")
 
     args = parser.parse_args()
 
@@ -61,7 +62,19 @@ def main():
     max_col_count = args.max_col_count
     sleep_time = int(args.sleep)
     nl_sql = args.nl_sql
-
+    subsetter_args = {k.split(":")[0]: k.split(":")[1] for k in args.subsetter_args.split("%")}
+    for key in subsetter_args:
+        value: str = subsetter_args[key]
+        if value.isnumeric():
+            subsetter_args[key] = int(value)
+        elif value.lower() in ["true", "false"]:
+            subsetter_args[key] = {"true": True, "false": False}[value.lower()]
+        else:
+            try:
+                fp_val = float(value)
+                subsetter_args[key] = fp_val
+            except ValueError as e:
+                pass
 
     global v_print
     if verbose:
@@ -74,7 +87,8 @@ def main():
     bm_factory = NlSqlBenchmarkFactory()
     benchmark = bm_factory.build_benchmark(benchmark_name)
     subsetter_factory = SchemaSubsetterFactory()
-    subsetter_args = {}
+    if subsetter_args == None:
+        subsetter_args = {}
     if cuda_device != None:
         subsetter_args["device"] = cuda_device
     subsetter = subsetter_factory.build_subsetter(
