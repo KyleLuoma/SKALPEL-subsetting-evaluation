@@ -3,6 +3,7 @@ Class for evaluating a schema subset against the schema identifiers required for
 """
 
 from SchemaSubsetter.Perfect.PerfectSchemaSubsetter import PerfectSchemaSubsetter
+from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from SubsetEvaluator.SubsetEvaluation import SubsetEvaluation
 from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
@@ -40,7 +41,7 @@ class SchemaSubsetEvaluator:
             except FileNotFoundError as e:
                 pass
         
-        correct_subset = self.subsetter.get_schema_subset(benchmark_question=question)
+        correct_subset = self.subsetter.get_schema_subset(benchmark_question=question).schema_subset
 
         with open(
             f"./src/SubsetEvaluator/correct_subsets/{question.schema.database}-{question.schema_naturalness}-{question.question_number}-subset.pkl",

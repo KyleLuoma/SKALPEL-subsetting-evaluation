@@ -47,9 +47,26 @@ def main():
     parser.add_argument("--results_filename", default=None, help="Load specified results and evaluate only (no re-subsetting).")
     parser.add_argument("--sleep", default=0, help="Time (seconds) to sleep between subsetting inferences.")
     parser.add_argument("--nl_sql", type=str, default=None, help="Run nl-to-sql over xlsx files in /subsetting_results. Use the argument to filter files to run. Argument is a substring of the filename. E.g., 'subsetting-tasql-bird' will run nl-to-sql on all filenames containing that substring")
-    parser.add_argument("--subsetter_args", type=str, default=None, help="Subsetter specific arguments, k:v ^ delimited. Example model:gpt-4.1^vector_threshold:0.575")
+    parser.add_argument("--subsetter_args", type=str, default=None, help="Subsetter specific arguments, k:v ^ delimited. Example model:gpt-4.1%vector_threshold:0.575")
+    parser.add_argument("--nlsql_args", type=str, default=None, help="NL-to-SQL specific arguments, k:v % delimiter")
 
     args = parser.parse_args()
+
+    def extract_sub_args(arg_string: str) -> dict:
+        arg_dict = {k.split(":")[0]: k.split(":")[1] for k in arg_string.split("%")}
+        for key in arg_dict:
+            value: str = arg_dict[key]
+            if value.isnumeric():
+                arg_dict[key] = int(value)
+            elif value.lower() in ["true", "false"]:
+                arg_dict[key] = {"true": True, "false": False}[value.lower()]
+            else:
+                try:
+                    fp_val = float(value)
+                    arg_dict[key] = fp_val
+                except ValueError as e:
+                    pass
+        return arg_dict
 
     subsetter_name = args.subsetter_name
     benchmark_name = args.benchmark_name
@@ -62,19 +79,14 @@ def main():
     max_col_count = args.max_col_count
     sleep_time = int(args.sleep)
     nl_sql = args.nl_sql
-    subsetter_args = {k.split(":")[0]: k.split(":")[1] for k in args.subsetter_args.split("%")}
-    for key in subsetter_args:
-        value: str = subsetter_args[key]
-        if value.isnumeric():
-            subsetter_args[key] = int(value)
-        elif value.lower() in ["true", "false"]:
-            subsetter_args[key] = {"true": True, "false": False}[value.lower()]
-        else:
-            try:
-                fp_val = float(value)
-                subsetter_args[key] = fp_val
-            except ValueError as e:
-                pass
+    if args.subsetter_args:
+        subsetter_args = extract_sub_args(args.subsetter_args)
+    else:
+        subsetter_args = None
+    if args.nlsql_args:
+        nl_sql_args = extract_sub_args(args.nlsql_args)
+    else:
+        nl_sql_args = {}
 
     global v_print
     if verbose:
@@ -129,7 +141,8 @@ def main():
     elif nl_sql != None:
         do_nl_to_sql(
             result_file_substring=nl_sql, 
-            recover_previous=recover_previous
+            recover_previous=recover_previous,
+            **nl_sql_args
             )
         return
 
@@ -223,7 +236,7 @@ def generate_subsets(
             subset = result.schema_subset
         except UnboundLocalError as e:
             failures.append((question, str(e)))
-        if result.error_message != None:
+        if result.error_message is not None:
             failures.append((question, f"Error: {result.error_message}\nPrompt: {str(result.raw_llm_response)}"))
         t_end = time.perf_counter()
         v_print("Subsetting time:", str(t_end - t_start))
@@ -231,7 +244,7 @@ def generate_subsets(
         subsets_questions.append((subset, question))
         results["database"].append(question["schema"]["database"])
         results["question_number"].append(question["question_number"])
-        if question.query_filename != None:
+        if question.query_filename is not None:
             results["query_filename"].append(question.query_filename)
         else:
             results["query_filename"].append("")
@@ -340,7 +353,16 @@ def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) 
 
 
 
-def do_nl_to_sql(result_file_substring: str, recover_previous: bool = False):
+def do_nl_to_sql(
+        result_file_substring: str, 
+        recover_previous: bool = False, 
+        full_schema: bool = False,
+        model: str = None,
+        comment_model_filter: bool = True
+        ):
+    
+    if model == None:
+        model = NlSqlEvaluator.LLM.OpenAIRequestLLM.DEFAULT_MODEL
     completed_nl_to_sql_files = [
         f for f in os.listdir("./nl_sql_results")
         if f.endswith(".xlsx")
@@ -349,21 +371,56 @@ def do_nl_to_sql(result_file_substring: str, recover_previous: bool = False):
         f for f in os.listdir("./subsetting_results")
         if f.endswith(".xlsx") and result_file_substring in f
     ]
+    if comment_model_filter:
+        filter_map = {
+            "CodeS": "lambda1_sic_merged",
+            "DINSQL": "gpt41",
+            "chess": "gpt4o",
+            "crush4sql": "lambda1",
+            "dtssql": "lambda1",
+            "rslsql": "gpt41",
+            "tasql": "gpt41",
+            "skalpel": "vector_qdecomp_525th",
+            "skalpeltasql": "gpt41nano-vectorsort",
+            "perfect_subsetter": "oracle",
+            "perfect_table_subsetter": "oracle"
+        }
+        filtered_filenames = set()
+        for fn in subset_filenames:
+            fn_model = fn.split("-")[1]
+            fn_comment = fn.split("-")[4].replace(".xlsx", "")
+            if filter_map[fn_model] == fn_comment:
+                filtered_filenames.add(fn)
+        subset_filenames = list(filtered_filenames)
     benchmark_factory = NlSqlBenchmarkFactory()
+    if full_schema:
+        for bm_name in benchmark_factory.benchmark_register:
+            print(f"NL to SQL over full schema for benchmark: {bm_name}")
+            evaluator = NlSqlEvaluator.NlSqlEvaluator(benchmark=benchmark_factory.build_benchmark(bm_name))
+            nl_sql_results = evaluator.generate_sql_from_subset_df_or_benchmark(
+                subset_df=None,
+                llm_model=model,
+                source_filename="",
+                recover_previous=recover_previous
+            )
+            nl_sql_filename = f"nltosql-nosubset-{bm_name}-Native-fullschema-nlsqlmodel_{model.replace('/', '-')}.xlsx"
+            nl_sql_results.to_excel(f"./nl_sql_results/{nl_sql_filename}")
     counter = 1
     for filename in subset_filenames:
         print(f"NL to SQL over: {filename} ({counter} of {len(subset_filenames)})")
         counter += 1
         nl_sql_filename = filename.replace("subsetting-", "nltosql-")
+        nl_sql_filename = nl_sql_filename.replace(".xlsx", f"-nlsqlmodel_{model.replace('/', '-')}.xlsx")
         if nl_sql_filename in completed_nl_to_sql_files:
             continue
         v_print(filename)
         benchmark_name = filename.split("-")[2]
         evaluator = NlSqlEvaluator.NlSqlEvaluator(benchmark=benchmark_factory.build_benchmark(benchmark_name))
-        nl_sql_results = evaluator.generate_sql_from_subset_df(
+        nl_sql_results = evaluator.generate_sql_from_subset_df_or_benchmark(
             subset_df=pd.read_excel(f"./subsetting_results/{filename}"),
             source_filename=filename,
-            recover_previous=recover_previous
+            recover_previous=recover_previous,
+            llm_model=model
         )
         nl_sql_results.to_excel(f"./nl_sql_results/{nl_sql_filename}")
         

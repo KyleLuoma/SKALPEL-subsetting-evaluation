@@ -25,6 +25,7 @@ class NlSqlBenchmark:
         self.active_database = 0
         self.active_database_questions = []
         self.active_database_queries = []
+        self.active_database_question_evidence = []
         self.active_question_no = 0
         self.db_connection = None
         self.name = "abstract"
@@ -46,6 +47,7 @@ class NlSqlBenchmark:
             self.active_question_no = 0
             self.active_database_questions = self.__load_active_database_questions()
             self.active_database_queries = self.__load_active_database_queries()
+            self.active_database_question_evidence = self.__load_active_database_evidences()
         question = self.get_active_question()
         self.active_question_no += 1
         return question
@@ -64,10 +66,11 @@ class NlSqlBenchmark:
         return BenchmarkQuestion(
             question=self.active_database_questions[self.active_question_no],
             query=self.active_database_queries[self.active_question_no],
+            evidence=self.active_database_question_evidence[self.active_question_no],
             query_dialect=self.sql_dialect,
             question_number=self.active_question_no,
             schema=self.get_active_schema(),
-            schema_naturalness=self.naturalness
+            schema_naturalness=self.naturalness,
         )
 
     
@@ -119,6 +122,7 @@ class NlSqlBenchmark:
         self.active_database = schema_lookup[database_name]
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
+        self.active_database_question_evidence = self.__load_active_database_evidences()
     
     def execute_query(
             self, query: str, database: str = None, question: int = None
@@ -139,7 +143,7 @@ class NlSqlBenchmark:
             self, 
             benchmark_question: BenchmarkQuestion, 
             generated_query: str
-            ) -> dict[bool, str]:
+            ) -> tuple[dict[bool, str], QueryResult, QueryResult]:
         gold_results = self.execute_query(
             query=benchmark_question.query,
             database=benchmark_question.schema.database
@@ -151,7 +155,7 @@ class NlSqlBenchmark:
         subset_check_result = semantic_compare.compare_gold_to_generated(
             gold_result=gold_results, generated_result=generated_results
         )
-        return subset_check_result
+        return subset_check_result, gold_results, generated_results
       
 
 
@@ -223,6 +227,9 @@ SELECT DISTINCT ? FROM ? LIMIT ?
     def __load_active_database_queries(self) -> list:
         return self.active_database_queries
     
+    def __load_active_database_evidences(self) -> list[str]:
+        return self.active_database_question_evidence
+
     def __get_db_connection(self):
         pass
 

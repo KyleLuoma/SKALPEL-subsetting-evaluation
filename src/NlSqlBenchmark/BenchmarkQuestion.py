@@ -10,7 +10,8 @@ class BenchmarkQuestion:
             query_dialect: str,
             question_number: int,
             schema: Schema,
-            schema_naturalness: str = "Native"
+            schema_naturalness: str = "Native",
+            evidence: str = None,
             ):
         self.question = question
         self.query = query
@@ -19,6 +20,7 @@ class BenchmarkQuestion:
         self.schema = schema
         self.schema_naturalness = schema_naturalness
         self.query_filename = None
+        self.evidence = evidence
 
 
     def __eq__(self, other) -> bool:
@@ -32,6 +34,7 @@ class BenchmarkQuestion:
             and self.schema == other.schema
             and self.schema_naturalness == other.schema_naturalness
             and self.query_filename == other.query_filename
+            and self.evidence == other.evidence
         )
 
 
@@ -42,7 +45,8 @@ class BenchmarkQuestion:
             query_dialect=deepcopy(self.query_dialect),
             question_number=deepcopy(self.question_number),
             schema=deepcopy(self.schema),
-            schema_naturalness=deepcopy(self.schema_naturalness)
+            schema_naturalness=deepcopy(self.schema_naturalness),
+            evidence=deepcopy(self.evidence)
         )
 
 
@@ -61,5 +65,7 @@ class BenchmarkQuestion:
             return self.schema_naturalness
         if item_key == "query_filename":
             return self.query_filename
+        if item_key == "evidence":
+            return self.evidence
         raise KeyError(item_key)
     

@@ -57,7 +57,7 @@ def main():
     # diagnose_subsets(f"subsetting-rslsql-spider2-Native-gpt4o.xlsx")
     # return
     for filename in os.listdir(results_folder):
-        if ".xlsx" not in filename:
+        if ".xlsx" not in filename or "vector_qdecomp_525th" not in filename:
             continue
         diagnose_subsets(filename)
             

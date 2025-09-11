@@ -16,6 +16,7 @@ def iter_test():
         "SELECT B FROM TWO",
         "SELECT C FROM THREE"
     ]
+    bm.active_database_question_evidence = ["i", "ii", "iii"]
     results = []
     for i in bm:
         results.append((i["schema"]["database"], i["question_number"]))
@@ -28,6 +29,7 @@ def execute_query_test():
     bm = NlSqlBenchmark()
     bm.databases = ["one", "two", "three"]
     bm.active_database_questions = ["a", "b", "c"]
+    bm.active_database_question_evidence = ["i", "ii", "iii"]
     result = bm.execute_query(query="")
     return result == {"result_set": {}, "database": "one", "question": "a", "error_message": ""}
 
@@ -41,6 +43,7 @@ def get_active_question_test():
         "SELECT B FROM TWO",
         "SELECT C FROM THREE"
     ]
+    bm.active_database_question_evidence = ["i", "ii", "iii"]
     result = bm.get_active_question()
     return result == BenchmarkQuestion(
         question="a", 

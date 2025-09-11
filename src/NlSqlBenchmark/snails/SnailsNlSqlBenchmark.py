@@ -71,6 +71,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
         self.schema_cache = {}
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
+        self.active_database_question_evidence = self.__load_active_database_evidences()
         
 
     @staticmethod
@@ -103,6 +104,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
                 raise StopIteration
             self.active_database_questions = self.__load_active_database_questions()
             self.active_database_queries = self.__load_active_database_queries()
+            self.active_database_question_evidence = self.__load_active_database_evidences()
         question = self.get_active_question()
         self.active_question_no += 1
         return question
@@ -256,7 +258,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
         return pk_lookup, fk_lookup
 
 
-    def __load_active_database_questions(self) -> list:
+    def __load_active_database_questions(self) -> list[str]:
         db_name = self.databases[self.active_database]
         if "SBODemoUS" not in db_name:
             qnl_dict = load_nl_questions.load_nlq_into_df(
@@ -265,11 +267,11 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
                 )
             return qnl_dict["question"]
         else:
-            questions, queries = self._load_and_consolidate_sbodemo()
+            questions, queries, hints = self._load_and_consolidate_sbodemo()
             return questions
     
 
-    def __load_active_database_queries(self) -> list:
+    def __load_active_database_queries(self) -> list[str]:
         db_name = self.databases[self.active_database]
         if "SBODemoUS" not in db_name:
             qnl_dict = load_nl_questions.load_nlq_into_df(
@@ -278,8 +280,25 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
                 )
             return qnl_dict["query_gold"]
         else:
-            questions, queries = self._load_and_consolidate_sbodemo()
+            questions, queries, hints = self._load_and_consolidate_sbodemo()
             return queries
+        
+
+
+    def __load_active_database_evidences(self) -> list[str]:
+        db_name = self.databases[self.active_database]
+        if "SBODemoUS" not in db_name:
+            qnl_dict = load_nl_questions.load_nlq_into_df(
+                filename=f"{self.databases[self.active_database]}_{self.naturalness}.sql",
+                filepath=self.benchmark_folder + "/nlq_sql/tsql/"
+                )
+            hints = ["\n".join(hint_list) for hint_list in qnl_dict["hints"]]
+            return hints
+        else:
+            questions, queries, hints = self._load_and_consolidate_sbodemo()
+            if type(hints) == list:
+                hints = ["\n".join(hint_list) for hint_list in hints]
+            return hints
 
 
     def _load_and_consolidate_sbodemo(self) -> (list, list):
@@ -296,6 +315,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
         ]
         questions = []
         queries = []
+        hints = []
         for module in modules:
             qnl_dict = load_nl_questions.load_nlq_into_df(
                 filename=f"{module}_{self.naturalness}.sql",
@@ -303,7 +323,8 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
             )
             questions += qnl_dict["question"]
             queries += qnl_dict["query_gold"]
-        return questions, queries
+            hints += qnl_dict["hints"]
+        return questions, queries, hints
 
 
     def set_naturalness(self, naturalness: str) -> None:
@@ -339,6 +360,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
         self.active_database = schema_lookup[database_name]
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
+        self.active_database_question_evidence = self.__load_active_database_evidences()
     
 
 

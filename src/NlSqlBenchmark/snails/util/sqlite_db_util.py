@@ -105,6 +105,8 @@ def do_query(
         A dictionary where keys are column names and values are lists of column values.
     """
 
+    query = query.split(";")[0]
+
     with open(db_list_file, 'r') as f:
         db_list = json.load(f)
 
@@ -127,6 +129,9 @@ def do_query(
         print(f"Executing query: {query}")
 
     cursor.execute(query)
+    if not cursor.description:
+        return {}
+    
     columns = [description[0] for description in cursor.description]
 
     for i in range(len(columns)):
@@ -148,3 +153,25 @@ def do_query(
         print("Query execution completed.")
 
     return result_dict
+
+
+
+def index_nysed_db(db_list_file: str = ".local/sqlite_dbinfo.json"):
+    nysed_tables = get_tables_and_columns_from_sqlite_db(
+        db_name="NYSED_SRC2022", 
+        append_col_types=False,
+        db_list_file=db_list_file
+        )
+    for table in nysed_tables:
+        columns = nysed_tables[table]
+        for column in columns:
+            if not column.endswith(("_CD", "_CODE", "_ID")):
+                continue
+            index_query = f"""
+CREATE INDEX {table}_{column}_index 
+ON {table} ({column});
+""".strip()
+            try:
+                do_query(index_query, "NYSED_SRC2022", db_list_file=db_list_file)
+            except sqlite3.OperationalError as e:
+                pass

@@ -76,6 +76,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
                 self.databases.append(q["db"])
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
+        self.active_database_question_evidence = self.__load_active_database_evidences()
         self.sql_dialect = "sqlite" #sqlite syntax should cover use cases for bigquery and snowflake as well
         self.schema_cache = {}
 
@@ -124,6 +125,21 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             if inst_dict["instance_id"] in instance_ids:
                 questions.append(inst_dict)
         return questions
+    
+
+
+    @staticmethod
+    def _load_external_knowledge_document(benchmark_folder: str, filename: str) -> str:
+        try:
+            with open(
+                os.path.join(benchmark_folder, "spider2-lite/resource/documents", filename),
+                "r",
+                encoding="utf-8"
+            ) as f:
+                text = f.read()
+            return text
+        except FileNotFoundError:
+            return ""
     
 
     def _make_gold_query_lookup_by_instance_id(self) -> dict:
@@ -198,6 +214,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
                 raise StopIteration
             self.active_database_questions = self.__load_active_database_questions()
             self.active_database_queries = self.__load_active_database_queries()
+            self.active_database_question_evidence = self.__load_active_database_evidences()
         question = self.get_active_question()
         self.active_question_no += 1
         return question
@@ -221,6 +238,20 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             if q["db"] == self.databases[self.active_database]:
                 queries.append(self.gold_query_lookup[q["instance_id"]])
         return queries
+    
+
+    def __load_active_database_evidences(self):
+        evidences = []
+        for q in self.questions_list:
+            if q["db"] == self.databases[self.active_database]:
+                if q["external_knowledge"] != None:
+                    filename = q["external_knowledge"]
+                    evidence_text = Spider2NlSqlBenchmark._load_external_knowledge_document(self.benchmark_folder, filename)
+                    evidences.append(evidence_text)
+                else:
+                    evidences.append("")
+        return evidences
+
 
 
     def get_active_schema(self, database = None) -> Schema:
@@ -303,6 +334,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         self.active_database = schema_lookup[database_name]
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
+        self.active_database_question_evidence = self.__load_active_database_evidences()
 
 
     def get_active_question(self):

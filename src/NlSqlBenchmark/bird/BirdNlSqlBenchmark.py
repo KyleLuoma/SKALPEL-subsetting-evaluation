@@ -27,6 +27,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         self.schema_cache = {}
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
+        self.active_database_question_evidence = self.__load_active_database_evidences()
         self.name = "bird"
         self.sql_dialect = "sqlite"
 
@@ -49,6 +50,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
                 raise StopIteration
             self.active_database_questions = self.__load_active_database_questions()
             self.active_database_queries = self.__load_active_database_queries()
+            self.active_database_question_evidence = self.__load_active_database_evidences()
         question = self.get_active_question()
         self.active_question_no += 1
         return question
@@ -175,6 +177,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         self.active_database = schema_lookup[database_name]
         self.active_database_questions = self.__load_active_database_questions()
         self.active_database_queries = self.__load_active_database_queries()
+        self.active_database_question_evidence = self.__load_active_database_evidences()
     
 
 
@@ -332,6 +335,13 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
                 queries.append(q["SQL"])
         return queries
     
+
+    def __load_active_database_evidences(self) -> list[str]:
+        evidences = []
+        for q in self.questions_list:
+            if q["db_id"] == self.databases[self.active_database]:
+                evidences.append(q["evidence"])
+        return evidences
 
 
     def _load_database_description(self, db_name: str) -> dict[str, dict[str, str]]:
