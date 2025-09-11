@@ -11,6 +11,8 @@ psycopg[binary]
 pgvector
 openai
 nltk
+google_cloud_aiplatform
+google-generativeai
 # simcse
 
 #Spider2:

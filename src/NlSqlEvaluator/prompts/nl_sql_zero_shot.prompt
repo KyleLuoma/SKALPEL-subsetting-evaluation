@@ -5,8 +5,10 @@ Instructions:
 2. The query will be executed on the database. Do not include explanations or instructions. Only provide the SQL.
 3. Write the query using the {sql_syntax} syntax
 
-Use the tables and columns from the schema:
+Database schema DDL:
 {schema_representation}
+
+{optional_evidence_section}
 
 Answer the question:
 {natural_language_question}

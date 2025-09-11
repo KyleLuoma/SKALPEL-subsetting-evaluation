@@ -54,6 +54,13 @@ python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filenam
 
 # Do subsetting without preprocessing
 
+## Perfect subsetter
+```bash
+python ./src/main.py --subsetter_name perfect_subsetter --benchmark_name bird --filename_comments oracle
+python ./src/main.py --subsetter_name perfect_subsetter --benchmark_name snails --filename_comments oracle
+python ./src/main.py --subsetter_name perfect_subsetter --benchmark_name spider2 --filename_comments oracle
+```
+
 ## Crush4SQL on lambda1
 ```bash
 python ./src/main.py --subsetter_name crush4sql --benchmark_name bird --filename_comments lambda1
@@ -134,8 +141,8 @@ python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_
 ## Skalpel Vector Table Retrieval
 ```bash
 python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments vector_qdecomp_525th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
-python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments vector_qdecomp_525th --recover_previous
-python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments vector_qdecomp_525th --recover_previous
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments vector_qdecomp_525th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
+python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments vector_qdecomp_525th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
 ```
 
 ## Skalpel with Llama 4 Scout
@@ -174,7 +181,13 @@ python ./src/main.py --subsetter_name skalpel-tasql --benchmark_name snails --fi
 # Do nl to sql evaluation
 
 ```bash
-python ./src/main.py --nl_sql xlsx --no_subset_generation --recover_previous
+python ./src/main.py --nl_sql skalpel --no_subset_generation --nlsql_args model:openai/gpt-oss-120b --recover_previous
+python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gemini-2.0-flash-lite-001 --recover_previous
+python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gemini-2.0-flash-001 --recover_previous
+python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gemini-2.5-pro --recover_previous
+python ./src/main.py --nl_sql subsetting-perfect_subsetter-spider2-Native-oracle --no_subset_generation --nlsql_args model:gpt-4.1-nano --recover_previous
+python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gpt-4.1 --recover_previous
+python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:llama3.3 --recover_previous
 ```
 
 # Modifications made to subsetting methods

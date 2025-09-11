@@ -9,6 +9,8 @@ venv_linux/
 .nlsql_recovery/*
 .subsetting_recovery/*
 logs/
+log/
+*.log
 ~*
 __pycache__/
 skalpel_tmm_nfs/
