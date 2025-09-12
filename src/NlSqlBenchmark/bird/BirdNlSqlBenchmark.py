@@ -2,6 +2,8 @@ import json
 import sqlite3
 from os.path import dirname, abspath
 import os
+import asyncio
+import time
 
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from NlSqlBenchmark.QueryResult import QueryResult
@@ -181,7 +183,33 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
     
 
 
-    def execute_query(self, query: str, database: str = None, question: int = None) -> QueryResult:
+    def execute_query(self, query: str, database: str = None, question: int = None, query_timeout: int = None):
+        if query_timeout is None:
+            return self._execute_query(query, database, question)
+        else:
+            result = asyncio.run(self.execute_query_with_timeout(query=query, database=database, timeout=query_timeout))
+            return result
+        
+    
+
+    async def execute_query_with_timeout(self, query, database, timeout=5):
+        loop = asyncio.get_running_loop()
+        try:
+            result = await asyncio.wait_for(
+                loop.run_in_executor(None, self._execute_query, query, database),
+                timeout=timeout
+            )
+            return result
+        except asyncio.TimeoutError as e:
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message=f"Query execution time exceeded {timeout} second limit."
+            )
+
+
+    def _execute_query(self, query: str, database: str = None, question: int = None, query_timeout: int = None) -> QueryResult:
         if database == None:
             database = self.databases[self.active_database]
         if question == None:

@@ -6,12 +6,12 @@ Try to name test files to correspond to target modules, e.g. NlSqlBenchmarkTest.
 
 import tests
 # from tests import NlSqlBenchmarkTest
-# from tests import BirdNlSqlBenchmarkTest
+from tests import BirdNlSqlBenchmarkTest
 # from tests import SnailsNlSqlBenchmarkTest
 # from tests import SpiderNlSqlBenchmarkTest
 # from tests import Spider2NlSqlBenchmarkTest
 # from tests import NlSqlBenchmarkFactoryTest
-from tests import SchemaDDLGeneratorTest
+# from tests import SchemaDDLGeneratorTest
 
 # from tests import QueryResultTest
 # from tests import QueryProfilerTest

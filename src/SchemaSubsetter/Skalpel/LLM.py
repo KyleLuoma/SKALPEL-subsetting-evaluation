@@ -5,6 +5,7 @@ from SchemaSubsetter.Skalpel import callgpt
 from transformers import AutoTokenizer
 import google.generativeai as genai
 from google.generativeai.types import generation_types
+from google.api_core.exceptions import InternalServerError
 import json
 from google.cloud import aiplatform
 aiplatform.init(project='nl-to-sql-model-eval')
@@ -88,11 +89,11 @@ class VertexLLM(LLM):
         self.safety_settings = [
             {
                 "category": "HARM_CATEGORY_HARASSMENT",
-                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+                "threshold": "BLOCK_NONE"
             },
             {
                 "category": "HARM_CATEGORY_HATE_SPEECH",
-                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+                "threshold": "BLOCK_NONE"
             },
             {
                 "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
@@ -100,7 +101,7 @@ class VertexLLM(LLM):
             },
             {
                 "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+                "threshold": "BLOCK_NONE"
             },
         ]
 
@@ -115,14 +116,21 @@ class VertexLLM(LLM):
                                     generation_config=self.generation_config,
                                     safety_settings=self.safety_settings)
         
-        try:
-            result = model.generate_content(prompt)
-        except generation_types.StopCandidateException as e:
-            print(e)
-            if hasattr(e, 'message'):
-                return e.message
-            else:
-                return "Encountered exception without a message attribute."
+        try_again = True
+        num_tries = 0
+        while try_again and num_tries < 5:
+            try:
+                result = model.generate_content(prompt)
+                try_again = False
+            except generation_types.StopCandidateException as e:
+                print(e)
+                if hasattr(e, 'message'):
+                    return e.message
+                else:
+                    return "Encountered exception without a message attribute."
+            except InternalServerError as e:
+                time.sleep(3)
+            num_tries += 1
         return result.text, result.usage_metadata.total_token_count
 
 

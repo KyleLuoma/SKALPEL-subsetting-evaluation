@@ -350,7 +350,8 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             self, 
             query: str, 
             database: str = None, 
-            question: str = None, 
+            question: str = None,
+            query_timeout: int = None, 
             use_result_caching: bool = True, 
             simulate_exec_time_with_cache: bool = True
             ) -> QueryResult:
@@ -361,7 +362,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         dialect = self.database_type_lookup[database]
 
         if dialect == "sqlite":
-            result = self.query_sqlite(query=query, database=database)
+            result = self.query_sqlite(query=query, database=database, query_timeout=query_timeout)
         elif dialect == "bigquery":
             result = self.query_bigquery(
                 query=query, 
@@ -379,7 +380,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         result.question = question
         return result
     
-    def query_sqlite(self, query: str, database: str) -> QueryResult:
+    def query_sqlite(self, query: str, database: str, query_timeout: int = None) -> QueryResult:
         #benchmarks\spider2\spider2-lite\resource\databases\sqlite\local_sqlite\AdventureWorks.sqlite
         conn = sqlite3.connect(
             f"{self.benchmark_folder}/spider2-lite/resource/databases/sqlite/local_sqlite/{database}.sqlite"
@@ -387,6 +388,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         cur = conn.cursor()
         try:
             res = cur.execute(query)
+
         except sqlite3.OperationalError as e:
             return QueryResult(
                 result_set=None,
@@ -394,7 +396,15 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
                 question=None,
                 error_message=str(e)
             )
+
         result_list = res.fetchall()
+        if res.description is None:
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message="No result set"
+            )
         columns = [d[0] for d in res.description]
         result_set_dict = {}
         for i, c in enumerate(columns):
@@ -449,7 +459,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./.local/nl-to-sql-model-eval-80a8e87ec156.json"
         client = bigquery.Client()
         try:
-            query_job = client.query(query)
+            query_job = client.query(query, timeout=60, retry=None)
             results: pd.DataFrame = query_job.to_dataframe()
             query_result = QueryResult(
                 result_set=results.to_dict(orient="list"),

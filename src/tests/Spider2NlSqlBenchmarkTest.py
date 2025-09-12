@@ -168,3 +168,6 @@ def make_bigquery_schema_lookup_test():
     bm = Spider2NlSqlBenchmark()
     lookup = bm._make_bigquery_schema_lookup()
     return lookup["cms_data"] == {'cms_synthetic_patient_data_omop', 'cms_medicare'}
+
+
+

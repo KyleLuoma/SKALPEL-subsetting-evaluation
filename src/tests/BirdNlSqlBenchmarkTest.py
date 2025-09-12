@@ -176,3 +176,21 @@ def get_unique_values_test():
         database="debit_card_specializing"
     )
     return len(unique_values) == 529
+
+
+
+def execute_query_with_timeout_test():
+    bird = BirdNlSqlBenchmark()
+    query = "SELECT CharterNum, AvgScrWrite, RANK() OVER (ORDER BY AvgScrWrite DESC) AS WritingScoreRank FROM schools AS T1  INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrWrite > 499 AND CharterNum is not null LIMIT 3"
+    correct_result = QueryResult(
+        result_set={
+            "CharterNum": ["0210", "0890", "0290"], 
+            "AvgScrWrite": [630, 593, 582],
+            "WritingScoreRank": [1, 2, 3]
+            }, 
+        database="california_schools", 
+        question=0, 
+        error_message=None
+    )
+    res = bird.execute_query(query=query, database="california_schools", query_timeout=0.0000000000000000000000000000001)
+    return "Query execution time" in res.error_message
