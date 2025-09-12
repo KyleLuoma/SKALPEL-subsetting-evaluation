@@ -1,5 +1,6 @@
 from os.path import dirname, abspath
 import time
+import asyncio
 
 import docker
 import docker.errors
@@ -391,7 +392,7 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
         return schema 
 
 
-    def execute_query(self, query: str, database: str = None, question: int = None) -> QueryResult:
+    def execute_query(self, query: str, database: str = None, question: int = None, query_timeout: int = None) -> QueryResult:
         if database == None:
             database = self.databases[self.active_database]
         if self.sql_dialect == "mssql":
@@ -401,12 +402,37 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
                 question=question
             )
         elif self.sql_dialect == "sqlite":
-            return self._execute_sqlite_query(
-                query=query,
-                database=database,
-                question=question
-            )
+            if query_timeout is None:
+                return self._execute_sqlite_query(
+                    query=query,
+                    database=database,
+                    question=question
+                )
+            else:
+                result = asyncio.run(self.execute_query_with_timeout(
+                    query=query,
+                    database=database,
+                    timeout=query_timeout
+                ))
+                return result
     
+
+    async def execute_query_with_timeout(self, query, database, timeout=5):
+        loop = asyncio.get_running_loop()
+        try:
+            result = await asyncio.wait_for(
+                loop.run_in_executor(None, self._execute_sqlite_query, query, database),
+                timeout=timeout
+            )
+            return result
+        except asyncio.TimeoutError as e:
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message=f"Query execution time exceeded {timeout} second limit."
+            )
+
 
     def _execute_sqlite_query(self, query: str, database: str, question: int = None) -> QueryResult:
         try:

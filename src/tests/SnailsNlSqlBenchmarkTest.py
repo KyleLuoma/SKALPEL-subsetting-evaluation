@@ -132,3 +132,25 @@ def get_unique_values_test():
         database="ATBI"
     )
     return len(unique_values) == 6
+
+
+def execute_query_with_timeout_succeed_test():
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
+    query = "SELECT * from tlu_DecayStage WHERE TRUE"
+    result = snails.execute_query(
+        query=query,
+        database="ATBI",
+        query_timeout=5
+    )
+    return result.result_set["DecayStage_ID"] == ['1', '2', '2A', '3', '4', '5']
+
+
+def execute_query_with_timeout_fail_test():
+    snails = SnailsNlSqlBenchmark(db_host_profile=DB_HOST_PROFILE, kill_container_on_exit=False, sql_dialect=SQL_DIALECT)
+    query = "SELECT * from tlu_DecayStage WHERE TRUE"
+    result = snails.execute_query(
+        query=query,
+        database="ATBI",
+        query_timeout=0.0000000000000000000001
+    )
+    return result.error_message is not None and "time exceeded" in result.error_message

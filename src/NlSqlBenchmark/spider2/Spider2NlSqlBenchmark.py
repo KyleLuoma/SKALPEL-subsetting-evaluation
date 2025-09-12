@@ -5,6 +5,7 @@ import time
 import json
 import os
 import pickle
+import asyncio
 
 from os.path import dirname, abspath
 from NlSqlBenchmark.SchemaObjects import (
@@ -361,8 +362,12 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             question = self.active_question_no
         dialect = self.database_type_lookup[database]
 
-        if dialect == "sqlite":
+        if dialect == "sqlite" and query_timeout is None:
             result = self.query_sqlite(query=query, database=database, query_timeout=query_timeout)
+        elif dialect == "sqlite":
+            result = asyncio.run(self.execute_sqlite_query_with_timeout(
+                query=query, database=database, timeout=query_timeout
+                ))
         elif dialect == "bigquery":
             result = self.query_bigquery(
                 query=query, 
@@ -379,6 +384,24 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
                 )
         result.question = question
         return result
+    
+
+    async def execute_sqlite_query_with_timeout(self, query, database, timeout=5):
+        loop = asyncio.get_running_loop()
+        try:
+            result = await asyncio.wait_for(
+                loop.run_in_executor(None, self.query_sqlite, query, database),
+                timeout=timeout
+            )
+            return result
+        except asyncio.TimeoutError as e:
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message=f"Query execution time exceeded {timeout} second limit."
+            )
+
     
     def query_sqlite(self, query: str, database: str, query_timeout: int = None) -> QueryResult:
         #benchmarks\spider2\spider2-lite\resource\databases\sqlite\local_sqlite\AdventureWorks.sqlite
