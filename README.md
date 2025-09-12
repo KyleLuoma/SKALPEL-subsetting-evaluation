@@ -178,7 +178,7 @@ python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename
 python ./src/main.py --subsetter_name skalpel-tasql --benchmark_name snails --filename_comments gpt41nano-vectorsort --recover_previous
 ```
 
-# Do nl to sql evaluation
+# Do nl to sql evaluation with multiple models
 
 ```bash
 python ./src/main.py --nl_sql skalpel --no_subset_generation --nlsql_args model:openai/gpt-oss-120b --recover_previous
@@ -188,6 +188,17 @@ python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gem
 python ./src/main.py --nl_sql subsetting-perfect_subsetter-spider2-Native-oracle --no_subset_generation --nlsql_args model:gpt-4.1-nano --recover_previous
 python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gpt-4.1 --recover_previous
 python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:llama3.3 --recover_previous
+```
+
+# Do nl to sql over full schemas with multiple models
+```bash
+python ./src/main.py --nl_sql fullschema --no_subset_generation --nlsql_args model:openai/gpt-oss-120b%full_schema:True --recover_previous
+python ./src/main.py --nl_sql fullschema --no_subset_generation --nlsql_args model:gemini-2.0-flash-lite-001%full_schema:True --recover_previous
+python ./src/main.py --nl_sql fullschema --no_subset_generation --nlsql_args model:gemini-2.0-flash-001%full_schema:True --recover_previous
+python ./src/main.py --nl_sql fullschema --no_subset_generation --nlsql_args model:gemini-2.5-pro%full_schema:True --recover_previous
+python ./src/main.py --nl_sql subsetting-perfect_subsetter-spider2-Native-oracle --no_subset_generation --nlsql_args model:gpt-4.1-nano%full_schema:True --recover_previous
+python ./src/main.py --nl_sql fullschema --no_subset_generation --nlsql_args model:gpt-4.1%full_schema:True --recover_previous
+python ./src/main.py --nl_sql fullschema --no_subset_generation --nlsql_args model:llama3.3%full_schema:True --recover_previous
 ```
 
 # Modifications made to subsetting methods

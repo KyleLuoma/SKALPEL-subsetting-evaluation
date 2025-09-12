@@ -400,7 +400,7 @@ def do_nl_to_sql(
             nl_sql_results = evaluator.generate_sql_from_subset_df_or_benchmark(
                 subset_df=None,
                 llm_model=model,
-                source_filename="",
+                source_filename="fullschema",
                 recover_previous=recover_previous
             )
             nl_sql_filename = f"nltosql-nosubset-{bm_name}-Native-fullschema-nlsqlmodel_{model.replace('/', '-')}.xlsx"

@@ -38,10 +38,12 @@ class NlSqlEvaluator:
             source_filename: str = "",
             recover_previous: bool = False
             ) -> pd.DataFrame:
-        if type(subset_df) == None:
+        if subset_df is None:
             question_list = [q for q in self.benchmark]
         else:
             question_list = self._get_subsets_from_subset_df(subset_df)
+        database = []
+        question_number = []
         generated_queries = []
         gold_queries = []
         tokens = []
@@ -50,6 +52,8 @@ class NlSqlEvaluator:
         for question in tqdm(question_list, desc=f"Generating sql queries using {llm_model}."):
             filename_model = llm_model.replace(".", "") if llm_model else ""
             pickle_filename = f"./.nlsql_recovery/{source_filename.replace('.xlsx', '')}_{self.benchmark.name}_{question.schema.database}_{question.question_number}_{filename_model.replace('/', '-')}.pkl"
+            database.append(question.schema.database)
+            question_number.append(question.question_number)
             if recover_previous:
                 try:
                     with open(pickle_filename, "rb") as f:
@@ -98,8 +102,10 @@ class NlSqlEvaluator:
             with open(pickle_filename, "wb") as f:
                 pickle.dump(data_to_pickle, f)
 
-
-        sql_df = subset_df[["database", "question_number"]]
+        if subset_df is not None:
+            sql_df = subset_df[["database", "question_number"]]
+        else:
+            sql_df = pd.DataFrame({"database": database, "question_number": question_number})
         sql_df["nl_sql_model"] = llm_model
         sql_df["generated_query"] = generated_queries
         sql_df["gold_query"] = gold_queries

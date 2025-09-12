@@ -373,14 +373,16 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
                 query=query, 
                 database=database, 
                 use_result_caching=use_result_caching,
-                simulate_exec_time_on_cache_retrieval=simulate_exec_time_with_cache
+                simulate_exec_time_on_cache_retrieval=simulate_exec_time_with_cache,
+                timeout=query_timeout
                 )
         elif dialect == "snowflake":
             result = self.query_snowflake(
                 query=query, 
                 database=database, 
                 use_result_caching=use_result_caching,
-                simulate_exec_time_on_cache_retrieval=simulate_exec_time_with_cache
+                simulate_exec_time_on_cache_retrieval=simulate_exec_time_with_cache,
+                timeout=query_timeout
                 )
         result.question = question
         return result
@@ -472,7 +474,8 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             self, query: str, 
             database: str, 
             use_result_caching: bool = True,
-            simulate_exec_time_on_cache_retrieval: bool = True
+            simulate_exec_time_on_cache_retrieval: bool = True,
+            timeout=None
             ) -> QueryResult:
         if use_result_caching:
             cached_result = self._get_cached_result(query, database, simulate_exec_time=simulate_exec_time_on_cache_retrieval)
@@ -482,7 +485,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./.local/nl-to-sql-model-eval-80a8e87ec156.json"
         client = bigquery.Client()
         try:
-            query_job = client.query(query, timeout=60, retry=None)
+            query_job = client.query(query, timeout=timeout)
             results: pd.DataFrame = query_job.to_dataframe()
             query_result = QueryResult(
                 result_set=results.to_dict(orient="list"),
@@ -505,7 +508,8 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             query: str, 
             database: str, 
             use_result_caching: bool = True,
-            simulate_exec_time_on_cache_retrieval: bool = True
+            simulate_exec_time_on_cache_retrieval: bool = True,
+            timeout: int = None
             ) -> QueryResult:
         if use_result_caching:
             cached_result = self._get_cached_result(query, database, simulate_exec_time=simulate_exec_time_on_cache_retrieval)
@@ -520,7 +524,7 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         )
         cursor = conn.cursor()
         try:
-            cursor.execute(query)
+            cursor.execute(query, timeout=timeout)
             columns = [desc[0] for desc in cursor.description]
             result_set = {c: [] for c in columns}
             for row in cursor.fetchall():
