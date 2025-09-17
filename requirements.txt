@@ -13,6 +13,7 @@ openai
 nltk
 google_cloud_aiplatform
 google-generativeai
+aiosqlite
 # simcse
 
 #Spider2:

@@ -2,8 +2,8 @@ import json
 import sqlite3
 from os.path import dirname, abspath
 import os
-import asyncio
 import time
+import multiprocessing
 
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 from NlSqlBenchmark.QueryResult import QueryResult
@@ -187,26 +187,52 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
         if query_timeout is None:
             return self._execute_query(query, database, question)
         else:
-            result = asyncio.run(self.execute_query_with_timeout(query=query, database=database, timeout=query_timeout))
+            # result = asyncio.run(self.execute_query_with_timeout(query=query, database=database, timeout=query_timeout))
+            result = self.execute_query_with_timeout(database, query, query_timeout)
             return result
         
     
-
-    async def execute_query_with_timeout(self, query, database, timeout=5):
-        loop = asyncio.get_running_loop()
-        try:
-            result = await asyncio.wait_for(
-                loop.run_in_executor(None, self._execute_query, query, database),
-                timeout=timeout
-            )
-            return result
-        except asyncio.TimeoutError as e:
+    def run_query(self, database, query):
+            conn = sqlite3.connect(f"{self.benchmark_folder}/dev_databases/dev_databases/{database}/{database}.sqlite")
+            cur = conn.cursor()
+            cur.execute(query)
+            result_list = cur.fetchall()
+            conn.close()
+            if not cur.description:
+                return QueryResult(
+                    result_set={},
+                    database=database,
+                    question=None,
+                    error_message=None
+                )
+            columns = [d[0] for d in cur.description]
+            result_set_dict = {}
+            for i, c in enumerate(columns):
+                values = [t[i] for t in result_list]
+                result_set_dict[c] = values
             return QueryResult(
-                result_set=None,
-                database=None,
+                result_set=result_set_dict,
+                database=database,
                 question=None,
-                error_message=f"Query execution time exceeded {timeout} second limit."
+                error_message=None
             )
+
+
+    def execute_query_with_timeout(self, database, query, timeout=5):
+        
+        with multiprocessing.Pool(1) as pool:
+            async_result = pool.apply_async(self._execute_query, (query, database))
+            try:
+                return async_result.get(timeout)
+            except multiprocessing.TimeoutError:
+                pool.terminate()
+                return QueryResult(
+                    result_set=None,
+                    database=None,
+                    question=None,
+                    error_message=f"Query execution time exceeded timeout limit."
+                )
+
 
 
     def _execute_query(self, query: str, database: str = None, question: int = None, query_timeout: int = None) -> QueryResult:

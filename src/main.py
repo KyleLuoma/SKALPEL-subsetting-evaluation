@@ -30,27 +30,9 @@ test = False
 results_filename = "./subsetting_results/subsetting-CodeS-snails-NVIDIA_RTX_2000.xlsx"
 results_filename = None
 
-def main():
+def main(cl_args, **kwargs):
 
     # logging.basicConfig(filename='./logs/main_runner.log', level=logging.INFO)
-
-    parser = argparse.ArgumentParser(description="Run schema subsetting evaluation.")
-    parser.add_argument("--subsetter_name", type=str, default="abstract", help="Name of the subsetter to use.")
-    parser.add_argument("--benchmark_name", type=str, default="snails", help="Name of the benchmark to use.")
-    parser.add_argument("--recover_previous", action="store_true", default=False, help="Retrieve partial subsetting results for the provided configuration (Usefull if the process was interupted.)")
-    parser.add_argument("--filename_comments", type=str, default="", help="Comments to append to the filename.")
-    parser.add_argument("--cuda_device", type=int, default=None, help="CUDA device to use.")
-    parser.add_argument("--verbose", action="store_true", default=False, help="Enable verbose output.")
-    parser.add_argument("--subsetter_preprocessing", action="store_true", default=False, help="Enable subsetter preprocessing.")
-    parser.add_argument("--no_subset_generation", action="store_true", default=False, help="Set to True to skip subsetting (e.g., if you want to preprocess only).")
-    parser.add_argument("--max_col_count", type=int, default=None, help="Limit subset generation to schemas with fewer than this number of columns.")
-    parser.add_argument("--results_filename", default=None, help="Load specified results and evaluate only (no re-subsetting).")
-    parser.add_argument("--sleep", default=0, help="Time (seconds) to sleep between subsetting inferences.")
-    parser.add_argument("--nl_sql", type=str, default=None, help="Run nl-to-sql over xlsx files in /subsetting_results. Use the argument to filter files to run. Argument is a substring of the filename. E.g., 'subsetting-tasql-bird' will run nl-to-sql on all filenames containing that substring")
-    parser.add_argument("--subsetter_args", type=str, default=None, help="Subsetter specific arguments, k:v ^ delimited. Example model:gpt-4.1%vector_threshold:0.575")
-    parser.add_argument("--nlsql_args", type=str, default=None, help="NL-to-SQL specific arguments, k:v % delimiter")
-
-    args = parser.parse_args()
 
     def extract_sub_args(arg_string: str) -> dict:
         arg_dict = {k.split(":")[0]: k.split(":")[1] for k in arg_string.split("%")}
@@ -68,23 +50,24 @@ def main():
                     pass
         return arg_dict
 
-    subsetter_name = args.subsetter_name
-    benchmark_name = args.benchmark_name
-    recover_previous = args.recover_previous
-    filename_comments = args.filename_comments
-    cuda_device = args.cuda_device
-    verbose = args.verbose
-    subsetter_preprocessing = args.subsetter_preprocessing
-    subset_generation = not args.no_subset_generation
-    max_col_count = args.max_col_count
-    sleep_time = int(args.sleep)
-    nl_sql = args.nl_sql
-    if args.subsetter_args:
-        subsetter_args = extract_sub_args(args.subsetter_args)
+    results_filename = cl_args.results_filename
+    subsetter_name = cl_args.subsetter_name
+    benchmark_name = cl_args.benchmark_name
+    recover_previous = cl_args.recover_previous
+    filename_comments = cl_args.filename_comments
+    cuda_device = cl_args.cuda_device
+    verbose = cl_args.verbose
+    subsetter_preprocessing = cl_args.subsetter_preprocessing
+    subset_generation = not cl_args.no_subset_generation
+    max_col_count = cl_args.max_col_count
+    sleep_time = int(cl_args.sleep)
+    nl_sql = cl_args.nl_sql
+    if cl_args.subsetter_args:
+        subsetter_args = extract_sub_args(cl_args.subsetter_args)
     else:
         subsetter_args = None
     if args.nlsql_args:
-        nl_sql_args = extract_sub_args(args.nlsql_args)
+        nl_sql_args = extract_sub_args(cl_args.nlsql_args)
     else:
         nl_sql_args = {}
 
@@ -122,7 +105,7 @@ def main():
         with open(f"./subsetting_results/preprocessing_times/{subsetter.name}_{benchmark.name}_{filename_comments}_processing.json", "wt") as f:
             f.write(json.dumps(db_processing_times, indent=2))
 
-    if results_filename == None and subset_generation:
+    if results_filename is None and subset_generation:
         results, subsets_questions = generate_subsets(
             subsetter=subsetter, 
             benchmark=benchmark,
@@ -132,13 +115,15 @@ def main():
             max_col_count_to_generate=max_col_count,
             sleep=sleep_time
             )
-    elif results_filename != None:
+        save_filename = f"./subsetting_results/subsetting-{subsetter.name}-{benchmark.name}-{benchmark.naturalness}-{filename_comments}.xlsx"
+    elif results_filename is not None:
         results, subsets_questions = load_subsets_from_results(
             results_filename=results_filename, 
             benchmark=benchmark
             )
+        save_filename = results_filename
         
-    elif nl_sql != None:
+    elif nl_sql is not None:
         do_nl_to_sql(
             result_file_substring=nl_sql, 
             recover_previous=recover_previous,
@@ -156,7 +141,7 @@ def main():
     while not end_while:
         try:
             results_df.to_excel(
-                f"./subsetting_results/subsetting-{subsetter.name}-{benchmark.name}-{benchmark.naturalness}-{filename_comments}.xlsx",
+                save_filename,
                 index=False
             )
             end_while = True
@@ -329,14 +314,18 @@ def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) 
         correct_tables = StringObjectParser.string_to_python_object(row.correct_tables)
         correct_columns = StringObjectParser.string_to_python_object(row.correct_columns)
         extra_tables = StringObjectParser.string_to_python_object(row.extra_tables)
+        if type(extra_tables) == str and extra_tables[0] == "{":
+            extra_tables = set([t.strip().replace("'", "") for t in extra_tables[1:].split(",")])
         extra_columns = StringObjectParser.string_to_python_object(row.extra_columns)
+        if type(extra_columns) == str and extra_columns[0] == "{":
+            extra_columns = set([c.strip().replace("'", "") for c in extra_columns[1:].split(",")])
 
         table_items = []
         for table_name in correct_tables.union(extra_tables):
             column_items = []
             for table_column in correct_columns.union(extra_columns):
-                column_table = table_column.split(".")[0]
-                column_name = table_column.split(".")[1]
+                column_table = ".".join(table_column.split(".")[:-1])
+                column_name = table_column.split(".")[-1]
                 if column_table != table_name:
                     continue
                 table_column = TableColumn(name=column_name, data_type="")
@@ -347,6 +336,8 @@ def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) 
                 primary_keys=[],
                 foreign_keys=[]
                 ))
+        if "SBOD" in question.schema.database:
+            pause = True
         schema_subset = Schema(database=row.database, tables=table_items)
         subsets_questions.append((schema_subset, question))
     return results, subsets_questions
@@ -431,4 +422,32 @@ def do_nl_to_sql(
         
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Run schema subsetting evaluation.")
+    parser.add_argument("--subsetter_name", type=str, default="abstract", help="Name of the subsetter to use.")
+    parser.add_argument("--benchmark_name", type=str, default="snails", help="Name of the benchmark to use.")
+    parser.add_argument("--recover_previous", action="store_true", default=False, help="Retrieve partial subsetting results for the provided configuration (Usefull if the process was interupted.)")
+    parser.add_argument("--filename_comments", type=str, default="", help="Comments to append to the filename.")
+    parser.add_argument("--cuda_device", type=int, default=None, help="CUDA device to use.")
+    parser.add_argument("--verbose", action="store_true", default=False, help="Enable verbose output.")
+    parser.add_argument("--subsetter_preprocessing", action="store_true", default=False, help="Enable subsetter preprocessing.")
+    parser.add_argument("--no_subset_generation", action="store_true", default=False, help="Set to True to skip subsetting (e.g., if you want to preprocess only).")
+    parser.add_argument("--max_col_count", type=int, default=None, help="Limit subset generation to schemas with fewer than this number of columns.")
+    parser.add_argument("--results_filename", default=None, help="Load specified results and evaluate only (no re-subsetting).")
+    parser.add_argument("--sleep", default=0, help="Time (seconds) to sleep between subsetting inferences.")
+    parser.add_argument("--nl_sql", type=str, default=None, help="Run nl-to-sql over xlsx files in /subsetting_results. Use the argument to filter files to run. Argument is a substring of the filename. E.g., 'subsetting-tasql-bird' will run nl-to-sql on all filenames containing that substring")
+    parser.add_argument("--subsetter_args", type=str, default=None, help="Subsetter specific arguments, k:v ^ delimited. Example model:gpt-4.1%vector_threshold:0.575")
+    parser.add_argument("--nlsql_args", type=str, default=None, help="NL-to-SQL specific arguments, k:v % delimiter")
+    args = parser.parse_args()
+
+    if args.nl_sql is None:
+        snails_xlsx_files = [
+            f for f in os.listdir("./subsetting_results")
+            if f.endswith(".xlsx") and "snails" in f
+        ]
+        for f in snails_xlsx_files:
+            print(f)
+            args = parser.parse_args()
+            args.results_filename = "./subsetting_results/" + f
+            main(args)
+    else:
+        main(args)

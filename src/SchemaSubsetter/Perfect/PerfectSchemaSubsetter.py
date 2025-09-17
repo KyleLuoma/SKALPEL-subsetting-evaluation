@@ -14,6 +14,7 @@ from SchemaSubsetter.SchemaSubsetterResult import SchemaSubsetterResult
 from SubsetEvaluator.QueryProfiler import QueryProfiler
 
 import time
+import pickle
 
 class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
     """
@@ -23,13 +24,28 @@ class PerfectSchemaSubsetter(SchemaSubsetter.SchemaSubsetter):
     name = "perfect_subsetter"
 
     def __init__(self, benchmark: NlSqlBenchmark = None):
-        super().__init__()                                                                                                                                                                                                                                                                                                                                          
+        super().__init__()
         self.query_profiler = QueryProfiler()
         self.name = PerfectSchemaSubsetter.name
+        self.benchmark = benchmark
 
 
 
-    def get_schema_subset(self, benchmark_question: BenchmarkQuestion) -> SchemaSubsetterResult:
+    def get_schema_subset(self, benchmark_question: BenchmarkQuestion, load_from_cache: bool = False) -> SchemaSubsetterResult:
+        if load_from_cache:
+            recovery_filename = f"./.subsetting_recovery/{self.name}/subsetting_recovery_{self.name}_{self.benchmark.name}_{benchmark_question.schema_naturalness}_{benchmark_question.schema.database}_{benchmark_question.question_number}_oracle.pkl"
+            try:
+                with open(recovery_filename, "rb") as load_file:
+                    loaded_result: dict = pickle.loads(load_file.read())
+                    assert len(loaded_result["subset"].tables) > 0
+                    return loaded_result["subset"]
+            except FileNotFoundError as e:
+                print(recovery_filename, "does not exist.")
+                pass
+            except AssertionError as e:
+                print(e, recovery_filename, loaded_result["subset"])
+                print(benchmark_question.query_dialect, benchmark_question.query)
+                pass
         full_schema = benchmark_question.schema
         query_identifiers = self.query_profiler.get_identifiers_and_labels(
             query=benchmark_question.query,

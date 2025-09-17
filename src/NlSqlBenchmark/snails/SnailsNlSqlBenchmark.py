@@ -1,6 +1,6 @@
 from os.path import dirname, abspath
 import time
-import asyncio
+import multiprocessing
 
 import docker
 import docker.errors
@@ -261,10 +261,17 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
     def __load_active_database_questions(self) -> list[str]:
         db_name = self.databases[self.active_database]
+        subfolder = {
+            "sqlite": "sqlite",
+            "mssql": "tsql"
+        }[self.sql_dialect]
+        filename = f"{self.databases[self.active_database]}_{self.naturalness}.sql"
+        if self.sql_dialect == "sqlite":
+            filename = filename.replace(f"_{self.naturalness}", f"_sqlite_{self.naturalness}")
         if "SBODemoUS" not in db_name:
             qnl_dict = load_nl_questions.load_nlq_into_df(
-                filename=f"{self.databases[self.active_database]}_{self.naturalness}.sql",
-                filepath=self.benchmark_folder + "/nlq_sql/tsql/"
+                filename=filename,
+                filepath=self.benchmark_folder + f"/nlq_sql/{subfolder}/"
                 )
             return qnl_dict["question"]
         else:
@@ -274,10 +281,17 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
     def __load_active_database_queries(self) -> list[str]:
         db_name = self.databases[self.active_database]
+        subfolder = {
+            "sqlite": "sqlite",
+            "mssql": "tsql"
+        }[self.sql_dialect]
+        filename = f"{self.databases[self.active_database]}_{self.naturalness}.sql"
+        if self.sql_dialect == "sqlite":
+            filename = filename.replace(f"_{self.naturalness}", f"_sqlite_{self.naturalness}")
         if "SBODemoUS" not in db_name:
             qnl_dict = load_nl_questions.load_nlq_into_df(
-                filename=f"{self.databases[self.active_database]}_{self.naturalness}.sql",
-                filepath=self.benchmark_folder + "/nlq_sql/tsql/"
+                filename=filename,
+                filepath=self.benchmark_folder + f"/nlq_sql/{subfolder}/"
                 )
             return qnl_dict["query_gold"]
         else:
@@ -288,10 +302,17 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
 
     def __load_active_database_evidences(self) -> list[str]:
         db_name = self.databases[self.active_database]
+        subfolder = {
+            "sqlite": "sqlite",
+            "mssql": "tsql"
+        }[self.sql_dialect]
+        filename = f"{self.databases[self.active_database]}_{self.naturalness}.sql"
+        if self.sql_dialect == "sqlite":
+            filename = filename.replace(f"_{self.naturalness}", f"_sqlite_{self.naturalness}")
         if "SBODemoUS" not in db_name:
             qnl_dict = load_nl_questions.load_nlq_into_df(
-                filename=f"{self.databases[self.active_database]}_{self.naturalness}.sql",
-                filepath=self.benchmark_folder + "/nlq_sql/tsql/"
+                filename=filename,
+                filepath=self.benchmark_folder + f"/nlq_sql/{subfolder}/"
                 )
             hints = ["\n".join(hint_list) for hint_list in qnl_dict["hints"]]
             return hints
@@ -409,29 +430,27 @@ class SnailsNlSqlBenchmark(NlSqlBenchmark):
                     question=question
                 )
             else:
-                result = asyncio.run(self.execute_query_with_timeout(
+                result = self.execute_query_with_timeout(
                     query=query,
                     database=database,
                     timeout=query_timeout
-                ))
+                )
                 return result
     
 
-    async def execute_query_with_timeout(self, query, database, timeout=5):
-        loop = asyncio.get_running_loop()
-        try:
-            result = await asyncio.wait_for(
-                loop.run_in_executor(None, self._execute_sqlite_query, query, database),
-                timeout=timeout
-            )
-            return result
-        except asyncio.TimeoutError as e:
-            return QueryResult(
-                result_set=None,
-                database=None,
-                question=None,
-                error_message=f"Query execution time exceeded {timeout} second limit."
-            )
+    def execute_query_with_timeout(self, query, database, timeout=5):
+        with multiprocessing.Pool(1) as pool:
+            async_result = pool.apply_async(self._execute_sqlite_query, (query, database))
+            try:
+                return async_result.get(timeout)
+            except multiprocessing.TimeoutError:
+                pool.terminate()
+                return QueryResult(
+                    result_set=None,
+                    database=None,
+                    question=None,
+                    error_message=f"Query execution time exceeded timeout limit."
+                )
 
 
     def _execute_sqlite_query(self, query: str, database: str, question: int = None) -> QueryResult:

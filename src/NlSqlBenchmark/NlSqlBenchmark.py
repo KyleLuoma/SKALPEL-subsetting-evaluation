@@ -154,7 +154,7 @@ class NlSqlBenchmark:
         g_et = time.perf_counter()
 
         gen_timeout = int((g_et - g_st) * 2) + 1
-        gen_timeout = min(30, gen_timeout)
+        gen_timeout = max(30, gen_timeout)
         generated_results = self.execute_query(
             query=generated_query,
             database=benchmark_question.schema.database,

@@ -182,12 +182,12 @@ python ./src/main.py --subsetter_name skalpel-tasql --benchmark_name snails --fi
 
 ```bash
 python ./src/main.py --nl_sql skalpel --no_subset_generation --nlsql_args model:openai/gpt-oss-120b --recover_previous
-python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gemini-2.0-flash-lite-001 --recover_previous
-python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gemini-2.0-flash-001 --recover_previous
+python ./src/main.py --nl_sql perfect_subsetter-snails --no_subset_generation --nlsql_args model:gemini-2.0-flash-lite-001 --recover_previous
+python ./src/main.py --nl_sql perfect_subsetter-snails --no_subset_generation --nlsql_args model:gemini-2.0-flash-001 --recover_previous
 python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gemini-2.5-pro --recover_previous
-python ./src/main.py --nl_sql subsetting-perfect_subsetter-spider2-Native-oracle --no_subset_generation --nlsql_args model:gpt-4.1-nano --recover_previous
-python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gpt-4.1 --recover_previous
-python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:llama3.3 --recover_previous
+python ./src/main.py --nl_sql perfect_subsetter-snails --no_subset_generation --nlsql_args model:gpt-4.1-nano --recover_previous
+python ./src/main.py --nl_sql perfect_subsetter-snails --no_subset_generation --nlsql_args model:gpt-4.1 --recover_previous
+python ./src/main.py --nl_sql perfect_subsetter-snails --no_subset_generation --nlsql_args model:llama3.3 --recover_previous
 ```
 
 # Do nl to sql over full schemas with multiple models

@@ -5,7 +5,7 @@ from SchemaSubsetter.Skalpel import callgpt
 from transformers import AutoTokenizer
 import google.generativeai as genai
 from google.generativeai.types import generation_types
-from google.api_core.exceptions import InternalServerError
+from google.api_core.exceptions import InternalServerError, DeadlineExceeded
 import json
 from google.cloud import aiplatform
 aiplatform.init(project='nl-to-sql-model-eval')
@@ -129,6 +129,8 @@ class VertexLLM(LLM):
                 else:
                     return "Encountered exception without a message attribute."
             except InternalServerError as e:
+                time.sleep(3)
+            except DeadlineExceeded as e:
                 time.sleep(3)
             num_tries += 1
         return result.text, result.usage_metadata.total_token_count
@@ -262,6 +264,8 @@ class Llama3LLM(LLM):
             if response.status_code == 200:
                 rj = response.json()
                 return rj["response"], (rj["prompt_eval_count"] + rj["eval_count"])
+            elif response.status_code == 413 and response.reason == "Request Entity Too Large":
+                return "Token limited exceeded", -1
             time.sleep(5)
         response.raise_for_status()
 

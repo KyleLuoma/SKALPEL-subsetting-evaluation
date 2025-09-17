@@ -5,7 +5,7 @@ import time
 import json
 import os
 import pickle
-import asyncio
+import multiprocessing
 
 from os.path import dirname, abspath
 from NlSqlBenchmark.SchemaObjects import (
@@ -365,9 +365,9 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         if dialect == "sqlite" and query_timeout is None:
             result = self.query_sqlite(query=query, database=database, query_timeout=query_timeout)
         elif dialect == "sqlite":
-            result = asyncio.run(self.execute_sqlite_query_with_timeout(
+            result = self.execute_sqlite_query_with_timeout(
                 query=query, database=database, timeout=query_timeout
-                ))
+                )
         elif dialect == "bigquery":
             result = self.query_bigquery(
                 query=query, 
@@ -388,21 +388,21 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         return result
     
 
-    async def execute_sqlite_query_with_timeout(self, query, database, timeout=5):
-        loop = asyncio.get_running_loop()
-        try:
-            result = await asyncio.wait_for(
-                loop.run_in_executor(None, self.query_sqlite, query, database),
-                timeout=timeout
-            )
-            return result
-        except asyncio.TimeoutError as e:
-            return QueryResult(
-                result_set=None,
-                database=None,
-                question=None,
-                error_message=f"Query execution time exceeded {timeout} second limit."
-            )
+    def execute_sqlite_query_with_timeout(self, query, database, timeout=5):
+
+        with multiprocessing.Pool(1) as pool:
+            async_result = pool.apply_async(self.query_sqlite, (query, database))
+            try:
+                return async_result.get(timeout)
+            except multiprocessing.TimeoutError:
+                pool.terminate()
+                return QueryResult(
+                    result_set=None,
+                    database=None,
+                    question=None,
+                    error_message=f"Query execution time exceeded timeout limit."
+                )
+            
 
     
     def query_sqlite(self, query: str, database: str, query_timeout: int = None) -> QueryResult:
@@ -470,6 +470,40 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         return None
 
 
+
+    def _query_bigquery_kernel(
+            self,
+            query: str,
+            database: str
+            ) -> QueryResult:
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./.local/nl-to-sql-model-eval-80a8e87ec156.json"
+        client = bigquery.Client()
+        query_job = client.query(query)
+        results: pd.DataFrame = query_job.to_dataframe()
+        query_result = QueryResult(
+            result_set=results.to_dict(orient="list"),
+            database=database,
+            question=None
+        )
+        return query_result
+    
+
+    def execute_biquery_query_with_timeout(self, query: str, database: str, timeout: int = 5) -> QueryResult:
+
+        with multiprocessing.Pool(1) as pool:
+            async_result = pool.apply_async(self._query_bigquery_kernel, (query, database))
+            try:
+                return async_result.get(timeout)
+            except multiprocessing.TimeoutError:
+                pool.terminate()
+                return QueryResult(
+                    result_set=None,
+                    database=None,
+                    question=None,
+                    error_message=f"Query execution time exceeded timeout limit."
+                )
+
+
     def query_bigquery(
             self, query: str, 
             database: str, 
@@ -482,16 +516,11 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             if cached_result != None:
                 return cached_result
         s_time = time.perf_counter()
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./.local/nl-to-sql-model-eval-80a8e87ec156.json"
-        client = bigquery.Client()
         try:
-            query_job = client.query(query, timeout=timeout)
-            results: pd.DataFrame = query_job.to_dataframe()
-            query_result = QueryResult(
-                result_set=results.to_dict(orient="list"),
-                database=database,
-                question=None
-            )
+            if timeout is None:
+                query_result = self._query_bigquery_kernel(query=query, database=database)
+            else:
+                query_result = self.execute_biquery_query_with_timeout(query=query, database=database, timeout=timeout)
         except Exception as e:
             query_result = QueryResult(
                 result_set=None, database=database, question=None, error_message=str(e)
@@ -501,7 +530,46 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         self._cache_query_result(query, database, query_result, exec_time)
         return query_result
 
+
+
+    def _query_snowflake_kernel(self, query: str, database: str, timeout: int = None) -> QueryResult:
+        snowflake_credential = json.load(open('./.local/snowflake_credential.json'))
+        conn = snowflake.connector.connect(
+            **snowflake_credential
+        )
+        cursor = conn.cursor()
+        try:
+            cursor.execute(query, timeout=timeout)
+            columns = [desc[0] for desc in cursor.description]
+            result_set = {c: [] for c in columns}
+            for row in cursor.fetchall():
+                for ix, c in enumerate(columns):
+                    result_set[c].append(row[ix])
+            query_result = QueryResult(result_set=result_set, database=database, question=None)
+            return query_result
+        except snowflake.connector.errors.ProgrammingError as e:
+            return QueryResult(result_set=None, database=database, question=None, error_message=str(e))
+
     
+
+    def execute_snowflake_query_with_timeout(self, query: str, database: str, timeout: int = 5) -> QueryResult:
+
+        return self._query_snowflake_kernel(query=query, database=database, timeout=timeout)
+
+        # with multiprocessing.Pool(1) as pool:
+        #     async_result = pool.apply_async(self._query_snowflake_kernel, (query, database))
+        #     try:
+        #         return async_result.get(timeout)
+        #     except multiprocessing.TimeoutError:
+        #         pool.terminate()
+        #         return QueryResult(
+        #             result_set=None,
+        #             database=None,
+        #             question=None,
+        #             error_message=f"Query execution time exceeded timeout limit."
+        #         )
+
+
 
     def query_snowflake(
             self, 
@@ -518,21 +586,10 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
         if "`" in query:
             query = query.replace("`", '"')
         s_time = time.perf_counter()
-        snowflake_credential = json.load(open('./.local/snowflake_credential.json'))
-        conn = snowflake.connector.connect(
-            **snowflake_credential
-        )
-        cursor = conn.cursor()
-        try:
-            cursor.execute(query, timeout=timeout)
-            columns = [desc[0] for desc in cursor.description]
-            result_set = {c: [] for c in columns}
-            for row in cursor.fetchall():
-                for ix, c in enumerate(columns):
-                    result_set[c].append(row[ix])
-            query_result = QueryResult(result_set=result_set, database=database, question=None)
-        except Exception as e:
-            query_result = QueryResult(result_set=None, database=database, question=None, error_message=str(e))
+        if timeout is None:
+            query_result = self._query_snowflake_kernel(query=query, database=database)
+        else:
+            query_result = self.execute_snowflake_query_with_timeout(query=query, database=database, timeout=timeout)
         e_time = time.perf_counter()
         exec_time = e_time - s_time
         self._cache_query_result(query, database, query_result, exec_time)
