@@ -1,0 +1,19 @@
+\begin{table}
+\caption{Logistic regression coefficients, standard error, and significance (p value) for non-colinear parameters with execution accuracy as the dependent variable. n = 10,241, Pseudo R-squared = 0.122. Both table and column recall have the largest effect on execution accuracy. Table and column precision as well as column proportion do not significantly correlate with accuracy. We include the natural log of schema column count to control for schema size differences between databases. Execution accuracy is binary (1, 0) where 1 indicates a correct NL-to-SQL generation given a schema subset.}
+\label{tab:executionaccuracycorrelations}
+\begin{tabular}{lccc}
+\toprule
+ & Coef & StdErr & pValue \\
+metric &  &  &  \\
+\midrule
+Const & -4.411 & 0.158 & 0.000 \\
+TableRecall & 1.223 & 0.223 & 0.000 \\
+TablePrecision & 0.356 & 0.218 & 0.103 \\
+ColumnRecall & 0.926 & 0.184 & 0.000 \\
+ColumnPrecision & 0.401 & 0.218 & 0.066 \\
+SubsetTableProportion & -0.687 & 0.203 & 0.001 \\
+SubsetColumnProportion & 0.140 & 0.358 & 0.696 \\
+LogSchemaColumnCount & -0.478 & 0.079 & 0.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
