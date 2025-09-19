@@ -1,9 +1,10 @@
 import pandas as pd
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
+from NlSqlBenchmark.BenchmarkQuestion import BenchmarkQuestion
 from NlSqlBenchmark.SchemaObjects import Schema, SchemaTable, TableColumn
 from util.StringObjectParser import StringObjectParser 
 
-def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) -> tuple[dict, list]:
+def load_subsets_from_results(results_filename: str, benchmark: NlSqlBenchmark) -> tuple[dict, list[tuple[Schema, BenchmarkQuestion]]]:
     results_df = pd.read_excel(results_filename)
     results = {
         "database": [],

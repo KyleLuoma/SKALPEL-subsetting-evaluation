@@ -19,6 +19,10 @@ class LLM:
     def call_llm(self, prompt: str, model: str = None) -> tuple[str, int]:
         raise NotImplementedError
     
+
+    def get_prompt_token_count(self, prompt: str) -> int:
+        return len(self.tokenizer.encode(prompt))
+    
     def extract_json_from_response(
             self, 
             response: str, 
