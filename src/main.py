@@ -439,15 +439,15 @@ if __name__ == "__main__":
     parser.add_argument("--nlsql_args", type=str, default=None, help="NL-to-SQL specific arguments, k:v % delimiter")
     args = parser.parse_args()
 
-    if args.nl_sql is None:
-        snails_xlsx_files = [
-            f for f in os.listdir("./subsetting_results")
-            if f.endswith(".xlsx") and "snails" in f
-        ]
-        for f in snails_xlsx_files:
-            print(f)
-            args = parser.parse_args()
-            args.results_filename = "./subsetting_results/" + f
-            main(args)
-    else:
-        main(args)
+    # if args.nl_sql is None:
+    #     snails_xlsx_files = [
+    #         f for f in os.listdir("./subsetting_results")
+    #         if f.endswith(".xlsx") and "snails" in f
+    #     ]
+    #     for f in snails_xlsx_files:
+    #         print(f)
+    #         args = parser.parse_args()
+    #         args.results_filename = "./subsetting_results/" + f
+    #         main(args)
+    # else:
+    main(args)

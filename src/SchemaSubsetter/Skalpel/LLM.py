@@ -133,7 +133,10 @@ class VertexLLM(LLM):
             except DeadlineExceeded as e:
                 time.sleep(3)
             num_tries += 1
-        return result.text, result.usage_metadata.total_token_count
+        try:
+            return result.text, result.usage_metadata.total_token_count
+        except ValueError as e:
+            return str(e), -1
 
 
 
