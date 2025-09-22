@@ -19,6 +19,7 @@ from NlSqlBenchmark.SchemaObjects import (
 import pickle
 import os
 from datetime import datetime
+import time
 
 class NlSqlEvaluator:
 
@@ -75,6 +76,8 @@ class NlSqlEvaluator:
                     question=question,
                     model=llm_model
                 )
+                if "pro" in llm_model:
+                    time.sleep(30)
             generated_queries.append(sql)
             gold_queries.append(question.query)
             tokens.append(token_count)
