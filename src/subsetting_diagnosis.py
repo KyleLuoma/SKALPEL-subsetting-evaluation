@@ -57,7 +57,7 @@ def main():
     # diagnose_subsets(f"subsetting-rslsql-spider2-Native-gpt4o.xlsx")
     # return
     for filename in os.listdir(results_folder):
-        if ".xlsx" not in filename or "vector_qdecomp_525th" not in filename:
+        if ".xlsx" not in filename or "vector_qdecomp_525th" not in filename or "snails" in filename:
             continue
         diagnose_subsets(filename)
             
@@ -113,6 +113,12 @@ def diagnose_subsets(
             ] 
         if k in diagnosis_df.columns else [] for k in RESULTS_DICT_MASTER.keys() 
     }
+    for col in results_dict:
+        for ix, val in enumerate(results_dict[col]):
+            if type(val) == str and val[0] == "{":
+                val = set([s.strip() for s in val.replace("{", "").replace("}", "").split(".")])
+    # results_dict["hallucinated_extra_columns"] = []
+    # results_dict["hallucinated_extra_tables"] = []
     # results_dict["hallucinated_similar_missing_columns"] = []
     # results_dict["hallucinated_similar_missing_tables"] = []
     # results_dict["missing_similar_extra_columns"] = []
@@ -271,8 +277,15 @@ def diagnose_subsets(
             "hallucinated_extra_tables" not in diagnosis_df.columns 
             and "hallucinated_extra_columns" not in diagnosis_df.columns
             ):
+        # if True:
             extra_tables = set(sop.string_to_python_object(row.extra_tables if row.extra_tables != "set()" else "{}", use_eval=True))
-            extra_columns = set(sop.string_to_python_object(row.extra_columns if row.extra_columns != "set()" else "{}", use_eval=True))
+            extra_columns = sop.string_to_python_object(row.extra_columns if row.extra_columns != "set()" else "{}", use_eval=True)
+            if row.database == "SBODemoUS":
+                a=1
+                a=1
+            if type(extra_columns) == str:
+                extra_columns = [s.strip().replace("'", "") for s in extra_columns.replace("{", "").replace("}", "").split(",")]
+            extra_columns = set(extra_columns)
             schema = benchmark.get_active_schema(row.database)
             hallucinated_tables = set()
             for table in extra_tables:
