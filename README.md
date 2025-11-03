@@ -12,20 +12,26 @@ This repository contains:
     - NLSqlPromptBuilder: Converts the Schema object into a text representation of the schema.
 3. Experiment results data (see Experiment Data section below).
 4. Subsetting diagnosis (subsetting_diagnosis.py) for detecting value reference problem and hidden relation problems described in the paper.
+5. Our SKALPEL subsetter (Schema Knowledge Adjustments for LLM-based Performance Enhancements in Large-schema NL-to-SQL generation).
+- Offline preprocessing:
+    - Uses an LLM to describe tables in 2-3 sentences
+    - Stores descriptiong embeddings in a PGVector instance
+- Online subset generation
+    - Decomposes natural language question into multiple sentences describing objects and concepts in the question.
+    - Generates embeddings of each sentence and retrieves tables by matching question decomposition embeddings with table embeddings.
+
 
 # Experiment data:
 
 ## Subsetting results
-Subsetting results files: /subsetting_results/*.xlsx
-Subsetting results analysis notebook: /src/subsetting-results-analysis.ipynb
-The results analysis notebook produces the figures, tables, and statistics for experiment 1 in the publication document.
+- Subsetting results files: /subsetting_results/*.xlsx
+- Subsetting results analysis notebook: /src/subsetting-results-analysis.ipynb
+- The results analysis notebook produces the figures, tables, and statistics for experiment 1 in the publication document.
 
 ## NL-to-SQL results
-NL-to-SQL results files: /nl_sql_results/*.xlsx
-NL-to-SQL results analysis notebook: /src/nl_sql_results_analysis.ipynb
-The results analysis notebook produces the figures, tables, and statistics for experiment 2 in the publication document.
-
-
+- NL-to-SQL results files: /nl_sql_results/*.xlsx
+- NL-to-SQL results analysis notebook: /src/nl_sql_results_analysis.ipynb
+- The results analysis notebook produces the figures, tables, and statistics for experiment 2 in the publication document.
 
 # Experiment reproduction
 This is a list of command line arguments for each iteration of preprocessing, subset generation, and NL-to-SQL generation.
