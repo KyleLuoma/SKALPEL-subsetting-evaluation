@@ -1,6 +1,18 @@
 
 # A Comparative Evaluation of Schema Subsetting for LLM-based NL-to-SQL over Large-Schema Databases
 
+This repository contains:
+1. The Subsetting evaluation framework that consists of:
+    - NLSqlBenchmark: an abstract NL-to-SQL benchmark interface that we extend as concrete classes to the snails, spider2, and bird benchmarks.
+    - SchemaSubsetter: an abstract Schema Subsetter interface that we extend as concrete classes to the CHESS, CodeS, Crush4SQL, DINSQL, DTSSQL, RSLSQL, TASQL, SKALPEL, and an oracle (Perfect) subsetter.
+    - SubsetEvaluator: A concrete class that uses the oracle subsetter do generate subsetting statistics to evaluate the performance of the SchemaSubsetter classes.
+    - Various objects (e.g., Schema, SchemaTable, QueryResult, etc.) to standardize object representations within and between the framework modules.
+2. A lightweight NL-to-SQL generator and evaluator
+    - NLSqlEvaluator: Takes schemas (full or subset) and runs NL-to-SQL zero-shot inference.
+    - NLSqlPromptBuilder: Converts the Schema object into a text representation of the schema.
+3. Experiment results data (see Experiment Data section below).
+4. Subsetting diagnosis (subsetting_diagnosis.py) for detecting value reference problem and hidden relation problems described in the paper.
+
 # Experiment data:
 
 ## Subsetting results
