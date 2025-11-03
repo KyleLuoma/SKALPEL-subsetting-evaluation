@@ -1,4 +1,26 @@
 
+# A Comparative Evaluation of Schema Subsetting for LLM-based NL-to-SQL over Large-Schema Databases
+
+# Experiment data:
+
+## Subsetting results
+Subsetting results files: /subsetting_results/*.xlsx
+Subsetting results analysis notebook: /src/subsetting-results-analysis.ipynb
+The results analysis notebook produces the figures, tables, and statistics for experiment 1 in the publication document.
+
+## NL-to-SQL results
+NL-to-SQL results files: /nl_sql_results/*.xlsx
+NL-to-SQL results analysis notebook: /src/nl_sql_results_analysis.ipynb
+The results analysis notebook produces the figures, tables, and statistics for experiment 2 in the publication document.
+
+
+
+# Experiment reproduction
+This is a list of command line arguments for each iteration of preprocessing, subset generation, and NL-to-SQL generation.
+Follow the repository setup instructions in SETUP.md prior to running.
+
+All experiments were run in Ubuntu 20.04 LTS.
+
 # Do preprocessing without subsetting
 
 ## Example
