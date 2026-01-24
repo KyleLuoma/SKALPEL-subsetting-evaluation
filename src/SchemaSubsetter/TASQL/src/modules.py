@@ -93,35 +93,11 @@ class BaseModule():
         return pk_dict, fk_dict
 
 
-# Skalpel mod: patch to handle malformed json objects in TASL.__init__
-def repair_column_meaning(json_str: str) -> dict:
-    items = ["{" + i.strip() + "]}" for i in json_str.split("],\n")]
-    passed = {}
-    failed = []
-    for item in items:
-        try:
-            item_dict: dict[str, str] = json.loads(item)
-            passed[list(item_dict.keys())[0]] = item_dict[list(item_dict.keys())[0]]
-        except json.JSONDecodeError as e:
-            failed.append(item)
-            print(e)
-            print(item)
-            item = item.replace("]]", "]")
-            item = item.replace("{{", "{")
-            item = item.replace("}]}", "}")
-            try:
-                if len(item) > 10:
-                    item_dict: dict[str, str] = json.loads(item)
-                    passed[list(item_dict.keys())[0]] = item_dict[list(item_dict.keys())[0]]
-            except json.JSONDecodeError as e:
-                pass
-                
-    return passed
-
 
 class TASL(BaseModule):
     def __init__(self, db_root_path, mode, column_meaning_path):
         super().__init__(db_root_path, mode)
+        # Skalpel mod to handle very large schemas in column meaning files
         if "spider2" in column_meaning_path:
             self.column_meanings = {}
             filename_ix = 0
@@ -132,11 +108,8 @@ class TASL(BaseModule):
                 filename_ix += 1
                 filename = column_meaning_path.replace("meaning.json", f"meaning_{filename_ix}.json")
         else:
-            try:
-                self.column_meanings = json.load(open(column_meaning_path, 'r'))
-            #Skalpel mod / json parsing debug for bigbird
-            except json.JSONDecodeError as e:
-                self.column_meanings = repair_column_meaning(open(column_meaning_path, 'r').read())
+            self.column_meanings = json.load(open(column_meaning_path, 'r'))
+
         self.mode = mode
         self.schema_item_dic = self._reconstruct_schema()
         

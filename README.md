@@ -134,6 +134,8 @@ python ./src/main.py --subsetter_name CodeS --benchmark_name bigbird --filename_
 python ./src/main.py --subsetter_name dtssql --benchmark_name bird --filename_comments lambda1
 python ./src/main.py --subsetter_name dtssql --benchmark_name snails --filename_comments lambda1
 python ./src/main.py --subsetter_name dtssql --benchmark_name spider2 --filename_comments lambda1
+python ./src/main.py --subsetter_name dtssql --benchmark_name bigbird --filename_comments lambda1
+
 ```
 
 ## Chess with GPT4o
