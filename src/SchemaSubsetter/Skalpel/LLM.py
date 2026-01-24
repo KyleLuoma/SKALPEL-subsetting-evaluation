@@ -5,7 +5,7 @@ from SchemaSubsetter.Skalpel import callgpt
 from transformers import AutoTokenizer
 import google.generativeai as genai
 from google.generativeai.types import generation_types
-from google.api_core.exceptions import InternalServerError, DeadlineExceeded
+from google.api_core.exceptions import InternalServerError, DeadlineExceeded, ResourceExhausted
 import json
 from google.cloud import aiplatform
 aiplatform.init(project='nl-to-sql-model-eval')
@@ -135,6 +135,8 @@ class VertexLLM(LLM):
             except InternalServerError as e:
                 time.sleep(3)
             except DeadlineExceeded as e:
+                time.sleep(3)
+            except ResourceExhausted as e:
                 time.sleep(3)
             num_tries += 1
         try:

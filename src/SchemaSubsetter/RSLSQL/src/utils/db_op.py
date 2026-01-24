@@ -103,8 +103,15 @@ def get_foreign_key_infos(database_name):
         if not table.foreign_keys:
             continue
         for fk in table.foreign_keys:
-            foreign_one = f'{table.name}({",".join(fk.columns)}) references {fk.references[0]}({",".join(fk.references[1])})'
-            foreign_str += foreign_one + '\n# '
+            try:
+                foreign_one = f'{table.name}({",".join(fk.columns)}) references {fk.references[0]}({",".join(fk.references[1])})'
+                foreign_str += foreign_one + '\n# '
+            except TypeError as e:
+                pass
+            except KeyError as e:
+                pass
+            except IndexError as e:
+                pass
     return foreign_str
 
 

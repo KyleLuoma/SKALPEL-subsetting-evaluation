@@ -55,9 +55,9 @@ class SkalpelSubsetter(SchemaSubsetter):
         self.vector_only = vector_only
         self.vector_distance_threshold = vector_distance_threshold
         self.llm = LLM.OpenAIRequestLLM(
-            request_url=request_url
+            # request_url=request_url
             # request_url="https://api.openai.com/v1/chat/completions"
-            # request_url=LLM.OpenAIRequestLLM.REQUEST_URL
+            request_url=LLM.OpenAIRequestLLM.REQUEST_URL
             )
         self.llm_model = model
         # self.llm_model = "openai/gpt-oss-120b"
@@ -167,7 +167,10 @@ class SkalpelSubsetter(SchemaSubsetter):
                 source_schema=subset,
                 max_tables_per_turn=800
             )
-        a=1   
+        # For debugging breakpoint
+        if len(subset.tables) == 0:
+            a=1   
+
         return SchemaSubsetterResult(
             schema_subset=subset,
             prompt_tokens=vector_search_tokens + table_select_tokens + column_select_tokens
@@ -301,7 +304,7 @@ class SkalpelSubsetter(SchemaSubsetter):
             question: BenchmarkQuestion,
             source_schema: Schema,
             max_tables_per_turn: int = 50
-            ) -> Schema:
+            ) -> tuple[Schema, int]:
         with open("./src/SchemaSubsetter/Skalpel/prompts/select_columns_from_table_subsets.prompt") as f:
             prompt = f.read()
         already_selected_columns = set()
@@ -345,6 +348,9 @@ class SkalpelSubsetter(SchemaSubsetter):
             schema_proportion: float,
             chunk_level: str # whole | sentence
         ) -> tuple[dict[str, float], int]:
+        # Breakpoint for debug
+        if benchmark_question.question_number == 28:
+            a=1
         if distance_threshold == None:
             distance_threshold = 1.0
         schema_tables = {}

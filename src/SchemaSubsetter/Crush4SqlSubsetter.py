@@ -112,7 +112,8 @@ class Crush4SqlSubsetter(SchemaSubsetter):
             self, 
             exist_ok: bool = True, 
             filename_comments: str = "",
-            skip_already_processed: bool = False
+            skip_already_processed: bool = False,
+            **args
             ) -> dict[str, float]:
         processing_times = {}
         for db in self.benchmark.databases:

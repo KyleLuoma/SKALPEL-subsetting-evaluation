@@ -19,6 +19,7 @@ from NlSqlBenchmark.snails.SnailsNlSqlBenchmark import SnailsNlSqlBenchmark
 from NlSqlBenchmark.bird.BirdNlSqlBenchmark import BirdNlSqlBenchmark
 from NlSqlBenchmark.spider.SpiderNlSqlBenchmark import SpiderNlSqlBenchmark
 from NlSqlBenchmark.spider2.Spider2NlSqlBenchmark import Spider2NlSqlBenchmark
+from NlSqlBenchmark.bigbird.BigBirdNlSqlBenchmark import BigBirdNlSqlBenchmark
 from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 
 class NlSqlBenchmarkFactory:
@@ -28,6 +29,7 @@ class NlSqlBenchmarkFactory:
         # "spider",
         "spider2",
         "bird",
+        "bigbird",
         "abstract"
     ]
 
@@ -36,6 +38,7 @@ class NlSqlBenchmarkFactory:
         # "spider": (SpiderNlSqlBenchmark, {}),
         "spider2": (Spider2NlSqlBenchmark, {}),
         "bird": (BirdNlSqlBenchmark, {}),
+        "bigbird": (BigBirdNlSqlBenchmark, {}),
         "abstract": (NlSqlBenchmark, {})
     }
 

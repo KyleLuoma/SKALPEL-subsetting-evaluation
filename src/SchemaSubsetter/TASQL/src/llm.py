@@ -2,12 +2,15 @@ import os
 import time
 from tqdm import tqdm
 import openai
+import json
 
 # Modify your own openai config
 # openai.api_base = os.environ["OPENAI_API_BASE"]
 # openai.api_version = os.environ["OPENAI_API_VERSION"]
 # openai.api_key = os.environ["OPENAI_API_KEY"]
-openai.api_key = "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"
+
+with open("/data/kluoma/skalpel-subsetting-evaluation/.local/openai.json") as f:
+    openai.api_key = json.loads(f.read())["api_key"]
 
 # Skalpel mod: adding model selection
 model="gpt-4.1-nano"

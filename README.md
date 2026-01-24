@@ -69,6 +69,7 @@ tmux attach -t <session_name>
 python ./src/main.py --subsetter_name crush4sql --benchmark_name bird --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
 python ./src/main.py --subsetter_name crush4sql --benchmark_name snails --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
 python ./src/main.py --subsetter_name crush4sql --benchmark_name spider2 --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name crush4sql --benchmark_name bigbird --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
 ```
 
 ## rslsql on Lambda1
@@ -76,6 +77,7 @@ python ./src/main.py --subsetter_name crush4sql --benchmark_name spider2 --filen
 python ./src/main.py --subsetter_name rslsql --benchmark_name bird --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
 python ./src/main.py --subsetter_name rslsql --benchmark_name snails --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
 python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name rslsql --benchmark_name bigbird --filename_comments lambda1 --no_subset_generation --subsetter_preprocessing
 ```
 
 ## TaSQL with gpt-4.1-nano
@@ -83,6 +85,7 @@ python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename
 python ./src/main.py --subsetter_name tasql --benchmark_name bird --filename_comments gpt41nano --no_subset_generation --subsetter_preprocessing
 python ./src/main.py --subsetter_name tasql --benchmark_name snails --filename_comments gpt41nano --no_subset_generation --subsetter_preprocessing
 python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_comments gpt41nano --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name tasql --benchmark_name bigbird --filename_comments gpt41nano --no_subset_generation --subsetter_preprocessing
 ```
 
 ## skalpel with GPT-OSS-120b
@@ -90,6 +93,7 @@ python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_
 python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing
 python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing
 python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name skalpel --benchmark_name bigbird --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing
 ```
 
 # Do subsetting without preprocessing
@@ -99,6 +103,7 @@ python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filenam
 python ./src/main.py --subsetter_name perfect_subsetter --benchmark_name bird --filename_comments oracle
 python ./src/main.py --subsetter_name perfect_subsetter --benchmark_name snails --filename_comments oracle
 python ./src/main.py --subsetter_name perfect_subsetter --benchmark_name spider2 --filename_comments oracle
+python ./src/main.py --subsetter_name perfect_subsetter --benchmark_name bigbird --filename_comments oracle
 ```
 
 ## Crush4SQL on lambda1
@@ -106,6 +111,7 @@ python ./src/main.py --subsetter_name perfect_subsetter --benchmark_name spider2
 python ./src/main.py --subsetter_name crush4sql --benchmark_name bird --filename_comments lambda1
 python ./src/main.py --subsetter_name crush4sql --benchmark_name snails --filename_comments lambda1 --recover_previous
 python ./src/main.py --subsetter_name crush4sql --benchmark_name spider2 --filename_comments lambda1 --recover_previous
+python ./src/main.py --subsetter_name crush4sql --benchmark_name bigbird --filename_comments lambda1 --recover_previous
 ```
 
 ## CodeS on Lambda1 sic_bird
@@ -120,6 +126,7 @@ python ./src/main.py --subsetter_name CodeS --benchmark_name spider2 --filename_
 python ./src/main.py --subsetter_name CodeS --benchmark_name bird --filename_comments lambda1-sic-merged
 python ./src/main.py --subsetter_name CodeS --benchmark_name snails --filename_comments lambda1-sic-merged --recover_previous
 python ./src/main.py --subsetter_name CodeS --benchmark_name spider2 --filename_comments lambda1-sic-merged
+python ./src/main.py --subsetter_name CodeS --benchmark_name bigbird --filename_comments lambda1-sic-merged
 ```
 
 ## DTSSQL on Lambda1
@@ -134,6 +141,7 @@ python ./src/main.py --subsetter_name dtssql --benchmark_name spider2 --filename
 python ./src/main.py --subsetter_name chess --benchmark_name bird --filename_comments gpt4o --max_col_count 2500 --recover_previous
 python ./src/main.py --subsetter_name chess --benchmark_name snails --filename_comments gpt4o --max_col_count 2500 --recover_previous
 python ./src/main.py --subsetter_name chess --benchmark_name spider2 --filename_comments gpt4o --max_col_count 2500 --recover_previous
+python ./src/main.py --subsetter_name chess --benchmark_name bigbird --filename_comments gpt4o --max_col_count 2500 --recover_previous
 ```
 
 ## DINSQL with GPT4.1
@@ -141,6 +149,7 @@ python ./src/main.py --subsetter_name chess --benchmark_name spider2 --filename_
 python ./src/main.py --subsetter_name DINSQL --benchmark_name bird --filename_comments gpt41 --recover_previous
 python ./src/main.py --subsetter_name DINSQL --benchmark_name snails --filename_comments gpt41 --recover_previous
 python ./src/main.py --subsetter_name DINSQL --benchmark_name spider2 --filename_comments gpt41 --recover_previous
+python ./src/main.py --subsetter_name DINSQL --benchmark_name bigbird --filename_comments gpt41 --recover_previous
 ```
 
 ## RSSQL with GPT4.1 nano
@@ -162,6 +171,7 @@ python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename
 python ./src/main.py --subsetter_name rslsql --benchmark_name bird --filename_comments gpt41 --sleep 3 --recover_previous
 python ./src/main.py --subsetter_name rslsql --benchmark_name snails --filename_comments gpt41 --sleep 3 --recover_previous
 python ./src/main.py --subsetter_name rslsql --benchmark_name spider2 --filename_comments gpt41 --sleep 3 --recover_previous
+python ./src/main.py --subsetter_name rslsql --benchmark_name bigbird --filename_comments gpt41 --sleep 3 --recover_previous
 ```
 
 ## TASQL with GPT4.1 nano
@@ -176,6 +186,7 @@ python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_
 python ./src/main.py --subsetter_name tasql --benchmark_name bird --filename_comments gpt41 --recover_previous
 python ./src/main.py --subsetter_name tasql --benchmark_name snails --filename_comments gpt41 --recover_previous
 python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_comments gpt41 --recover_previous
+python ./src/main.py --subsetter_name tasql --benchmark_name bigbird --filename_comments gpt41 --recover_previous
 ```
 
 ## Skalpel Vector Table Retrieval
@@ -183,6 +194,7 @@ python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_
 python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments vector_qdecomp_525th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
 python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments vector_qdecomp_525th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
 python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments vector_qdecomp_525th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
+python ./src/main.py --subsetter_name skalpel --benchmark_name bigbird --filename_comments vector_qdecomp_525th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
 ```
 
 ```bash
@@ -227,7 +239,7 @@ python ./src/main.py --subsetter_name skalpel-tasql --benchmark_name snails --fi
 # Do nl to sql evaluation with multiple models
 
 ```bash
-python ./src/main.py --nl_sql perfect_table_subsetter-snails --no_subset_generation --nlsql_args model:openai/gpt-oss-120b --recover_previous
+python ./src/main.py --nl_sql skalpel-bigbird --no_subset_generation --nlsql_args model:openai/gpt-oss-120b --recover_previous
 python ./src/main.py --nl_sql perfect_table_subsetter-snails --no_subset_generation --nlsql_args model:gemini-2.0-flash-lite-001 --recover_previous
 python ./src/main.py --nl_sql perfect_table_subsetter-snails --no_subset_generation --nlsql_args model:gemini-2.0-flash-001 --recover_previous
 python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gemini-2.5-pro --recover_previous

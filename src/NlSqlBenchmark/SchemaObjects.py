@@ -299,8 +299,8 @@ class Schema:
             database: str,
             tables: list[SchemaTable],
             ):
-        self.database = database
-        self.tables = tables
+        self.database: str = database
+        self.tables: list[SchemaTable] = tables
 
 
     def __eq__(self, other):
@@ -393,10 +393,11 @@ class Schema:
                         references_col = fk.references[1][ix]
                     else:
                         references_col = fk.references[1]
-                    schema_dict["foreign_keys"].append([
-                        col_ix_lookup[(table.name, fk.columns[ix])],
-                        col_ix_lookup[(fk.references[0], references_col)]
-                    ])
+                    if (fk.references[0], references_col) in col_ix_lookup.keys():
+                        schema_dict["foreign_keys"].append([
+                            col_ix_lookup[(table.name, fk.columns[ix])],
+                            col_ix_lookup[(fk.references[0], references_col)]
+                        ])
         return schema_dict
 
 

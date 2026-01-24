@@ -131,9 +131,13 @@ class DinSqlSubsetter(SchemaSubsetter.SchemaSubsetter):
 
     def transform_dependencies_to_dinsql_format(self, schema: Schema) -> str:
         output = "["
-        for table in schema["tables"]:
-            for fk in table["foreign_keys"]:
-                output += f"{table['name']}.{fk['columns'][0]} = {fk['references'][0]}.{fk['references'][1][0]},"
+        for table in schema.tables:
+            if table.foreign_keys != None:
+                for fk in table.foreign_keys:
+                    try:
+                        output += f"{table['name']}.{fk['columns'][0]} = {fk['references'][0]}.{fk['references'][1][0]},"
+                    except TypeError as e:
+                        pass
         output = output[:-1] + "]"
         return output
     
