@@ -1,5 +1,6 @@
 import json
 import sqlite3
+import time
 from os.path import dirname, abspath
 import os
 
@@ -206,17 +207,46 @@ class BigBirdNlSqlBenchmark(NlSqlBenchmark):
         else:
             con = self.db_con
             cur = self.db_cur
+        progress_handler_installed = False
+        if query_timeout is not None:
+            start_time = time.monotonic()
+            def _progress_handler() -> int:
+                if (time.monotonic() - start_time) >= query_timeout:
+                    return 1
+                return 0
+            con.set_progress_handler(_progress_handler, 10000)
+            progress_handler_installed = True
         try:
             res = cur.execute(query)
         except sqlite3.OperationalError as e:
+            if progress_handler_installed and "interrupted" in str(e).lower():
+                return QueryResult(
+                    result_set=None,
+                    database=None,
+                    question=None,
+                    error_message=f"query exceeded timeout of {query_timeout} seconds."
+                )
             return QueryResult(
                 result_set=None,
                 database=None,
                 question=None,
                 error_message=str(e)
             )
+        except sqlite3.ProgrammingError as e:
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message=str(e)
+            )
+        finally:
+            if progress_handler_installed:
+                con.set_progress_handler(None, 0)
         result_list = res.fetchall()
-        columns = [d[0] for d in res.description]
+        if res.description != None:
+            columns = [d[0] for d in res.description]
+        else:
+            columns = []
         result_set_dict = {}
         for i, c in enumerate(columns):
             values = [t[i] for t in result_list]

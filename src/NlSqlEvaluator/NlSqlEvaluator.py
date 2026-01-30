@@ -80,6 +80,7 @@ class NlSqlEvaluator:
                     tokens.append(data["token_count"])
                     equivalent.append(data["evaluation"]["equivalent"])
                     non_eq_reason.append(data["evaluation"]["reason"])
+                    time.sleep(0.2) # To prevent halting due to some sort of filesystem latency
                     continue
                 except FileNotFoundError:
                     pass
