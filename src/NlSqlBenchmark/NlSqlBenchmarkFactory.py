@@ -25,11 +25,11 @@ from NlSqlBenchmark.NlSqlBenchmark import NlSqlBenchmark
 class NlSqlBenchmarkFactory:
     
     benchmark_register = [
+        "bigbird",
         "snails",
         # "spider",
         "spider2",
         "bird",
-        "bigbird",
         "abstract"
     ]
 

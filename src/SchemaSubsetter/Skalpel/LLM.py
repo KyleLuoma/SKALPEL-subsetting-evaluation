@@ -8,7 +8,10 @@ from google.generativeai.types import generation_types
 from google.api_core.exceptions import InternalServerError, DeadlineExceeded, ResourceExhausted
 import json
 from google.cloud import aiplatform
-aiplatform.init(project='nl-to-sql-model-eval')
+aiplatform.init(
+    project='nl-to-sql-model-eval',
+    api_endpoint="us-east1-aiplatform.googleapis.com"
+    )
 
 
 class LLM:
@@ -120,6 +123,8 @@ class VertexLLM(LLM):
                                     generation_config=self.generation_config,
                                     safety_settings=self.safety_settings)
         
+        wait_time = 15
+        
         try_again = True
         num_tries = 0
         while try_again and num_tries < 5:
@@ -133,11 +138,14 @@ class VertexLLM(LLM):
                 else:
                     return "Encountered exception without a message attribute."
             except InternalServerError as e:
-                time.sleep(3)
+                time.sleep(wait_time)
             except DeadlineExceeded as e:
-                time.sleep(3)
+                time.sleep(wait_time)
             except ResourceExhausted as e:
-                time.sleep(3)
+                print(e)
+                print(model)
+                time.sleep(wait_time)
+                wait_time *= 2
             num_tries += 1
         try:
             return result.text, result.usage_metadata.total_token_count
