@@ -44,7 +44,8 @@ class SkalpelSubsetter(SchemaSubsetter):
             model: str = LLM.OpenAIRequestLLM.DEFAULT_MODEL,
             request_url: str = "https://api.openai.com/v1/chat/completions",
             vector_only: bool = False,
-            vector_distance_threshold: float = None
+            vector_distance_threshold: float = None,
+            embedding_model_cuda_device: int = 0
             ):
         self.use_tasql = use_tasql
         if self.use_tasql:
@@ -66,7 +67,8 @@ class SkalpelSubsetter(SchemaSubsetter):
         # self.llm_model = LLM.OpenAIRequestLLM.DEFAULT_MODEL
         self.vector_search = VectorSearch(
             benchmark_name=self.benchmark.name,
-            db_host="cdas2"
+            db_host="cdas2",
+            cuda_device=embedding_model_cuda_device
         )
         self.logger = logging.getLogger(__name__)
         self.table_description_cache: dict[tuple[str, str], str] = {}
@@ -389,6 +391,8 @@ class SkalpelSubsetter(SchemaSubsetter):
         ) -> tuple[list[str], int]:
         question_breakdown, describe_token_usage = self._describe_objects_in_question(benchmark_question)
         question_breakdown_list = self.llm.extract_json_from_response(question_breakdown, model=self.llm_model)
+        if question_breakdown_list == None:
+            return [benchmark_question.question], describe_token_usage
         question_breakdown_list = [str(q) for q in question_breakdown_list]
         return question_breakdown_list, describe_token_usage
 

@@ -12,7 +12,8 @@ class VectorSearch:
             benchmark_name: str,
             model_name: str = None,
             vector_length: int = 1024,
-            db_host: str = "localhost"            
+            db_host: str = "localhost",
+            cuda_device: int = 0   
             ):
         self.db_host = db_host
         self.benchmark_name = benchmark_name
@@ -22,10 +23,14 @@ class VectorSearch:
             self.model_name = model_name
         else:
             self.model_name = "dunzhang/stella_en_1.5B_v5"
-        self.embedding_model = SentenceTransformer(self.model_name, trust_remote_code=True)
+        self.embedding_model = SentenceTransformer(
+            self.model_name,
+            trust_remote_code=True, 
+            device=f"cuda:{cuda_device}"
+            )
         self.embedding_model.max_seq_length = 8000
         self.embedding_model.tokenizer.padding_side="right"
-        self.embedding_model.to("cuda")
+        self.embedding_model.to(f"cuda:{cuda_device}")
 
 
 

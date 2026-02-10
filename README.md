@@ -191,7 +191,7 @@ python ./src/main.py --subsetter_name tasql --benchmark_name spider2 --filename_
 python ./src/main.py --subsetter_name tasql --benchmark_name bigbird --filename_comments gpt41 --recover_previous
 ```
 
-## Skalpel Vector Table Retrieval
+## Skalpel Vector Table Retrieval max f1 threshold 0.525
 ```bash
 python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments vector_qdecomp_525th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
 python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments vector_qdecomp_525th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
@@ -199,10 +199,20 @@ python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filenam
 python ./src/main.py --subsetter_name skalpel --benchmark_name bigbird --filename_comments vector_qdecomp_525th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
 ```
 
+## Skalpel Vector Table Retrieval higher recall threshold 0.575
 ```bash
-python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments vector_qdecomp_525th_v2 --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
-python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments vector_qdecomp_525th_v2 --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
-python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments vector_qdecomp_525th_v2 --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.525
+python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments vector_qdecomp_575th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.575
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments vector_qdecomp_575th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.575%embedding_model_cuda_device:1
+python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments vector_qdecomp_575th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.575%embedding_model_cuda_device:1
+python ./src/main.py --subsetter_name skalpel --benchmark_name bigbird --filename_comments vector_qdecomp_575th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.575%embedding_model_cuda_device:1
+```
+
+## Skalpel Vector Table Retrieval higher recall threshold 0.6
+```bash
+python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments vector_qdecomp_600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%embedding_model_cuda_device:1
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments vector_qdecomp_600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%embedding_model_cuda_device:3
+python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments vector_qdecomp_600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%embedding_model_cuda_device:3
+python ./src/main.py --subsetter_name skalpel --benchmark_name bigbird --filename_comments vector_qdecomp_600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%embedding_model_cuda_device:2
 ```
 
 ## Skalpel with Llama 4 Scout
