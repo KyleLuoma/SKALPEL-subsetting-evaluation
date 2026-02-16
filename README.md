@@ -90,9 +90,9 @@ python ./src/main.py --subsetter_name tasql --benchmark_name bigbird --filename_
 
 ## skalpel with GPT-OSS-120b
 ```bash
-python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing --subsetter_args embedding_model_cuda_device:3
 python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing
-python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing
+python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing --subsetter_args embedding_model_cuda_device:4
 python ./src/main.py --subsetter_name skalpel --benchmark_name bigbird --filename_comments gptoss120b --no_subset_generation --subsetter_preprocessing
 ```
 
@@ -201,9 +201,9 @@ python ./src/main.py --subsetter_name skalpel --benchmark_name bigbird --filenam
 
 ## Skalpel Vector Table Retrieval higher recall threshold 0.575
 ```bash
-python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments vector_qdecomp_575th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.575
+python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments vector_qdecomp_575th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.575%embedding_model_cuda_device:1
 python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments vector_qdecomp_575th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.575%embedding_model_cuda_device:1
-python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments vector_qdecomp_575th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.575%embedding_model_cuda_device:1
+python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments vector_qdecomp_575th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.575%embedding_model_cuda_device:6
 python ./src/main.py --subsetter_name skalpel --benchmark_name bigbird --filename_comments vector_qdecomp_575th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.575%embedding_model_cuda_device:1
 ```
 
@@ -211,8 +211,22 @@ python ./src/main.py --subsetter_name skalpel --benchmark_name bigbird --filenam
 ```bash
 python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments vector_qdecomp_600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%embedding_model_cuda_device:1
 python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments vector_qdecomp_600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%embedding_model_cuda_device:3
-python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments vector_qdecomp_600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%embedding_model_cuda_device:3
+python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments vector_qdecomp_600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%embedding_model_cuda_device:6
 python ./src/main.py --subsetter_name skalpel --benchmark_name bigbird --filename_comments vector_qdecomp_600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%embedding_model_cuda_device:2
+```
+
+## Skalpel Vector Table Retrieval (0.6), Vector Column Retrieval Default (0.5)
+```bash
+python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments vector_qdecomp_table_600th_col_0500th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%column_vector_distance_threshold:0.500%embedding_model_cuda_device:1
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments vector_qdecomp_table_600th_col_0500th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%column_vector_distance_threshold:0.500%embedding_model_cuda_device:2
+```
+## Skalpel Vector Table Retrieval (0.6), Vector Column Retrieval (0.6)
+```bash
+python ./src/main.py --subsetter_name skalpel --benchmark_name bird --filename_comments vector_qdecomp_table_600th_col_0600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%column_vector_distance_threshold:0.600%embedding_model_cuda_device:1
+python ./src/main.py --subsetter_name skalpel --benchmark_name snails --filename_comments vector_qdecomp_table_600th_col_0600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%column_vector_distance_threshold:0.600%embedding_model_cuda_device:2
+python ./src/main.py --subsetter_name skalpel --benchmark_name spider2 --filename_comments vector_qdecomp_table_600th_col_0600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%column_vector_distance_threshold:0.600%embedding_model_cuda_device:2
+python ./src/main.py --subsetter_name skalpel --benchmark_name bigbird --filename_comments vector_qdecomp_table_600th_col_0600th --subsetter_args model:gpt-4.1-nano%vector_only:True%vector_distance_threshold:0.600%column_vector_distance_threshold:0.600%embedding_model_cuda_device:2
+
 ```
 
 ## Skalpel with Llama 4 Scout
@@ -251,13 +265,13 @@ python ./src/main.py --subsetter_name skalpel-tasql --benchmark_name snails --fi
 # Do nl to sql evaluation with multiple models
 
 ```bash
-python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:openai/gpt-oss-120b --recover_previous
-python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gemini-2.0-flash-lite-001 --recover_previous
-python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gemini-2.0-flash-001 --recover_previous
-python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gemini-2.5-pro --recover_previous
-python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:gpt-4.1-nano --recover_previous
-python ./src/main.py --nl_sql perfect_table_subsetter-snails --no_subset_generation --nlsql_args model:gpt-4.1 --recover_previous
-python ./src/main.py --nl_sql xlsx --no_subset_generation --nlsql_args model:llama3.3 --recover_previous
+python ./src/main.py --nl_sql skalpel --no_subset_generation --nlsql_args model:openai/gpt-oss-120b --recover_previous
+python ./src/main.py --nl_sql skalpel --no_subset_generation --nlsql_args model:gemini-2.0-flash-lite-001 --recover_previous
+python ./src/main.py --nl_sql skalpel --no_subset_generation --nlsql_args model:gemini-2.0-flash-001 --recover_previous
+python ./src/main.py --nl_sql vector_qdecomp_600th --no_subset_generation --nlsql_args model:gemini-2.5-pro%use_ask_sage:False --recover_previous
+python ./src/main.py --nl_sql skalpel --no_subset_generation --nlsql_args model:gpt-4.1-nano --recover_previous
+python ./src/main.py --nl_sql skalpel --no_subset_generation --nlsql_args model:gpt-4.1 --recover_previous
+python ./src/main.py --nl_sql skalpel --no_subset_generation --nlsql_args model:llama3.3 --recover_previous
 ```
 
 # Do nl to sql over full schemas with multiple models

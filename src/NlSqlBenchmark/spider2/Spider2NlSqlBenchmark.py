@@ -549,7 +549,8 @@ class Spider2NlSqlBenchmark(NlSqlBenchmark):
             return query_result
         except snowflake.connector.errors.ProgrammingError as e:
             return QueryResult(result_set=None, database=database, question=None, error_message=str(e))
-
+        except TypeError as e:
+            return QueryResult(result_set=None, database=database, question=None, error_message=str(e))
     
 
     def execute_snowflake_query_with_timeout(self, query: str, database: str, timeout: int = 5) -> QueryResult:

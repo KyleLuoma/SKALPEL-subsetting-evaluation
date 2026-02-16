@@ -278,6 +278,13 @@ class SchemaTable:
             if column.name.lower() == column_name.lower():
                 return True
         return False
+    
+
+    def get_column_by_name(self, column_name: str) -> TableColumn:
+        for column in self.columns:
+            if column.name.lower() == column_name.lower():
+                return column
+        raise KeyError
 
 
 

@@ -191,15 +191,16 @@ class OpenAIRequestLLM(LLM):
 
 
 
-    def call_with_requests(self, prompt: str, model: str) -> tuple[str, int]:
+    def call_with_requests(self, prompt: str, model: str, api_key: str | None = None) -> tuple[str, int]:
         max_tries = 5
         num_tries = 0
         verify = "wire.westpoint.edu" not in self.request_url
         while num_tries < max_tries:
             headers = {
-                "Content-Type": "application/json",
-                # "Authorization": f"Bearer {self.api_key}"
+                "Content-Type": "application/json"
             }
+            if self.api_key:
+                headers["Authorization"] = f"Bearer {self.api_key}"
             response = requests.post(
                 self.request_url,
                 json = {
@@ -221,7 +222,16 @@ class OpenAIRequestLLM(LLM):
                 headers=headers
             )
             if response.status_code == 200:
-                return response.json()["choices"][0]["message"]["content"], response.json()["usage"]["total_tokens"]
+                response_text = response.json()["choices"][0]["message"]["content"]
+                if response.json().get("usage", False) and response.json()["usage"].get("total_tokens", False):
+                    response_tokens = response.json()["usage"]["total_tokens"]
+                else:
+                    response_tokens = self.get_prompt_token_count(
+                        "You are a data integration specialist evaluating a legacy system." 
+                        + prompt 
+                        + response_text
+                        )
+                return response_text, response_tokens
             num_tries += 1
             time.sleep(2)
         return "", -1
@@ -230,6 +240,16 @@ class OpenAIRequestLLM(LLM):
     def get_prompt_token_count(self, prompt: str) -> int:
         return len(self.tokenizer.encode(prompt))
     
+
+class AskSageLLM(OpenAIRequestLLM):
+    REQUEST_URL = "https://api.asksage.ai/server/v1/chat/completions"
+
+    def __init__(
+            self, 
+            request_url: str = "https://api.asksage.ai/server/v1/chat/completions", 
+            api_config_file: str = "./.local/asksage.json"
+            ):
+        super().__init__(request_url, api_config_file)
 
 
 class Llama3LLM(LLM):
@@ -292,13 +312,19 @@ class Llama3LLM(LLM):
 class LLMFactory:
 
     SUBSTRING_LLM_MAP = {
+        "asksage": AskSageLLM,
         "gemini": VertexLLM,
         "gpt": OpenAIRequestLLM,
         "llama3": Llama3LLM
     }
 
     @classmethod
-    def build_llm_for_model(llm_fact, model_name: str) -> LLM:
+    def build_llm_for_model(llm_fact, model_name: str, use_ask_sage: bool = False) -> LLM:
+        if use_ask_sage:
+            return AskSageLLM(
+                request_url = "https://api.asksage.ai/server/v1/chat/completions", 
+                api_config_file = "./.local/asksage.json"
+                )
         for k in llm_fact.SUBSTRING_LLM_MAP.keys():
             if k in model_name:
                 llm = llm_fact.SUBSTRING_LLM_MAP[k]

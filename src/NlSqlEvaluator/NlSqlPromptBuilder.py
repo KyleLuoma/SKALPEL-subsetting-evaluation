@@ -75,7 +75,8 @@ class NlSqlPromptBuilder:
         schema_knowledge = f"### Database: {schema.database}\n"
         schema_knowledge += f"## Tables with their columns\n"
         for table in schema.tables:
-            column_str = ", ".join(f"{c.name} {c.data_type}" for c in table.columns)
+            # column_str = ", ".join(f"{c.name} {c.data_type}" for c in table.columns)
+            column_str = ", ".join(f"{c.name}" for c in table.columns)
             schema_knowledge += f"# {table.name}: {column_str}\n"
             for c in table.columns:
                 if sample_values > 0:

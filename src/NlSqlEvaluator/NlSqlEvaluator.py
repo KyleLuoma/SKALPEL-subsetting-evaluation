@@ -53,7 +53,8 @@ class NlSqlEvaluator:
             subset_df: pd.DataFrame,
             llm_model: str = None,
             source_filename: str = "",
-            recover_previous: bool = False
+            recover_previous: bool = False,
+            use_ask_sage: bool = False
             ) -> pd.DataFrame:
         if subset_df is None:
             question_list = [q for q in self.benchmark]
@@ -74,14 +75,14 @@ class NlSqlEvaluator:
             if recover_previous:
                 try:
                     with open(pickle_filename, "rb") as f:
-                        data = pickle.load(f)
-                    generated_queries.append(data["sql"])
-                    gold_queries.append(question.query)
-                    tokens.append(data["token_count"])
-                    equivalent.append(data["evaluation"]["equivalent"])
-                    non_eq_reason.append(data["evaluation"]["reason"])
-                    time.sleep(0.2) # To prevent halting due to some sort of filesystem latency
-                    continue
+                        data: dict = pickle.load(f)
+                        generated_queries.append(data["sql"])
+                        gold_queries.append(question.query)
+                        tokens.append(data["token_count"])
+                        equivalent.append(data["evaluation"]["equivalent"])
+                        non_eq_reason.append(data["evaluation"]["reason"])
+                        time.sleep(0.2) # To prevent halting due to some sort of filesystem latency
+                        continue
                 except FileNotFoundError:
                     pass
             if len(question.schema.tables) == 0:
@@ -91,9 +92,10 @@ class NlSqlEvaluator:
             else:
                 sql, token_count, prompt = self._nl_to_sql(
                     question=question,
-                    model=llm_model
+                    model=llm_model,
+                    use_ask_sage=use_ask_sage
                 )
-                if "pro" in llm_model:
+                if "pro" in llm_model and not use_ask_sage:
                     time.sleep(30)
             generated_queries.append(sql)
             gold_queries.append(question.query)
@@ -106,7 +108,8 @@ class NlSqlEvaluator:
             data_to_pickle = {
                 "sql": sql,
                 "token_count": token_count,
-                "evaluation": evaluation
+                "evaluation": evaluation,
+                "version": 1
             }
             self._log_attempt(
                 question=question,
@@ -139,8 +142,9 @@ class NlSqlEvaluator:
     def _nl_to_sql(self, 
                   question: BenchmarkQuestion, 
                   model: str = None,
-                  prompt_file: str = "nl_sql_zero_shot.prompt"
-                  ) -> tuple[str, int]:
+                  prompt_file: str = "nl_sql_zero_shot.prompt",
+                  use_ask_sage: bool = False
+                  ) -> tuple[str, int, str]:
         prompt = self._create_prompt(
             question=question, 
             prompt_file=prompt_file,
@@ -152,11 +156,14 @@ class NlSqlEvaluator:
             pk_fk=True
             )
         if model != None:
-            llm = LLM.LLMFactory.build_llm_for_model(model)
+            llm = LLM.LLMFactory.build_llm_for_model(model, use_ask_sage=use_ask_sage)
         else:
             llm = self.llm
         sql, token_count = llm.call_llm(prompt=prompt, model=model)
-        sql = sql.split("```sql")[-1].replace("```", "").strip()
+        if sql != None:
+            sql = sql.split("```sql")[-1].replace("```", "").strip()
+        else:
+            sql = ""
         return sql, token_count, prompt
 
 
@@ -221,13 +228,19 @@ class NlSqlEvaluator:
 
 
 
-    def _get_subsets_from_subset_df(self, subset_df: pd.DataFrame) -> list[BenchmarkQuestion]:
+    def _get_subsets_from_subset_df(self, subset_df: pd.DataFrame, excel_df: bool = False) -> list[BenchmarkQuestion]:
         question_list = []
         for row in subset_df.itertuples():
-            correct_tables: set = StringObjectParser.string_to_python_object(row.correct_tables.lower(), True)
-            extra_tables: set = StringObjectParser.string_to_python_object(row.extra_tables.lower(), True)
-            correct_columns: set = StringObjectParser.string_to_python_object(row.correct_columns.lower(), True)
-            extra_columns: set = StringObjectParser.string_to_python_object(row.extra_columns.lower(), True)
+            if excel_df:
+                correct_tables: set = StringObjectParser.string_to_python_object(row.correct_tables.lower(), True)
+                extra_tables: set = StringObjectParser.string_to_python_object(row.extra_tables.lower(), True)
+                correct_columns: set = StringObjectParser.string_to_python_object(row.correct_columns.lower(), True)
+                extra_columns: set = StringObjectParser.string_to_python_object(row.extra_columns.lower(), True)
+            else:
+                correct_tables = set([t.lower() for t in row.correct_tables])
+                extra_tables = set([t.lower() for t in row.extra_tables])
+                correct_columns = set([c.lower() for c in row.correct_columns])
+                extra_columns = set([c.lower() for c in row.extra_columns])
             subset_tables = correct_tables.union(extra_tables)
             subset_columns = correct_columns.union(extra_columns)
 

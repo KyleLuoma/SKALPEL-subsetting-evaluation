@@ -31,6 +31,7 @@ class VectorSearch:
         self.embedding_model.max_seq_length = 8000
         self.embedding_model.tokenizer.padding_side="right"
         self.embedding_model.to(f"cuda:{cuda_device}")
+        self.embedding_cache: dict[str, numpy.ndarray] = {}
 
 
 
@@ -190,6 +191,94 @@ WHERE
             [db_name, table_name]
         )
         return query_result.fetchone()[0]
+    
+
+
+    def encode_column_name_into_db(
+            self, db_name: str, 
+            table_name: str, 
+            column_name: str,
+            column_naturalness: str | None = None
+            ):
+        emb = self.embedding_cache.get(column_name, self.encode_string(column_name))
+        self.embedding_cache[column_name] = emb
+        query = """
+        INSERT INTO column_names(database_name, table_name, column_name, column_name_embedding)
+        VALUES (%s, %s, %s, (%s));
+        """.strip()
+        cursor = self.db_conn.cursor()
+        try:
+            cursor.execute(
+                query=query,
+                params=[
+                    db_name,
+                    table_name,
+                    column_name,
+                    emb
+                ]
+            )
+        except psycopg.errors.UniqueViolation:
+            pass
+        if column_naturalness != None:
+            query = """
+            INSERT INTO column_name_naturalness(column_name, naturalness)
+            VALUES (%s, %s);
+            """.strip()
+            try:
+                cursor.execute(
+                    query=query,
+                    params=[
+                        column_name,
+                        column_naturalness
+                    ]
+                )
+            except psycopg.errors.UniqueViolation:
+                pass
+        self.db_conn.commit()
+
+
+    def get_similar_and_low_naturalness_column_names_from_db(
+        self,
+        db_name: str,
+        input_sequence: str,
+        distance_threshold: float = 0.75
+        ) -> VectorSearchResults:
+        description_embedding = self.encode_string(input_sequence)
+        search_query = """
+        SELECT column_name, column_name_embedding <=> (%s) as distance
+        FROM column_names_with_naturalness
+        WHERE
+            database_name ILIKE %s
+            AND (
+            naturalness in ('least', 'low') 
+            OR column_name_embedding <=> (%s) <= %s
+            OR (column_name ILIKE %s)
+            )
+        ORDER BY distance ASC
+        """.strip()
+        cursor = self.db_conn.cursor()
+        query_result = cursor.execute(
+            search_query,
+            [
+                description_embedding,
+                db_name,
+                description_embedding,
+                distance_threshold,
+                "%id"
+            ]
+        )
+        search_results = VectorSearchResults(
+            search_word=input_sequence,
+            database_name=db_name,
+            distance_threshold=distance_threshold
+        )
+        search_results.columns = [
+            WordIdentifierDistance(
+                search_word=input_sequence, database_identifier=row[0], distance=row[1]
+            ) for row in query_result.fetchall()
+        ]
+        return search_results
+
 
 
 

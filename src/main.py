@@ -161,6 +161,10 @@ def main(cl_args, **kwargs):
                 save_filename,
                 index=False
             )
+            results_df.to_parquet(
+                save_filename.replace(".xlsx", ".parquet"),
+                index=False
+            )
             end_while = True
         except Exception as e:
             print("Could not save dataframe due to exception:")
@@ -311,7 +315,8 @@ def do_nl_to_sql(
         recover_previous: bool = False, 
         full_schema: bool = False,
         model: str = None,
-        comment_model_filter: bool = True
+        comment_model_filter: bool = True,
+        use_ask_sage: bool = False
         ):
     
     if model == None:
@@ -322,7 +327,7 @@ def do_nl_to_sql(
     ]
     subset_filenames = [
         f for f in os.listdir("./subsetting_results")
-        if f.endswith(".xlsx") and result_file_substring in f
+        if f.endswith(".parquet") and result_file_substring in f
     ]
     if comment_model_filter:
         filter_map = {
@@ -333,7 +338,8 @@ def do_nl_to_sql(
             "dtssql": "lambda1",
             "rslsql": "gpt41",
             "tasql": "gpt41",
-            "skalpel": "vector_qdecomp_525th",
+            # "skalpel": "vector_qdecomp_525th",
+            "skalpel": "vector_qdecomp",
             "skalpeltasql": "gpt41nano-vectorsort",
             "perfect_subsetter": "oracle",
             "perfect_table_subsetter": "oracle"
@@ -341,8 +347,8 @@ def do_nl_to_sql(
         filtered_filenames = set()
         for fn in subset_filenames:
             fn_model = fn.split("-")[1]
-            fn_comment = fn.split("-")[4].replace(".xlsx", "")
-            if filter_map[fn_model] == fn_comment:
+            fn_comment = fn.split("-")[4].replace(".parquet", "")
+            if filter_map[fn_model] in fn_comment:
                 filtered_filenames.add(fn)
         subset_filenames = list(filtered_filenames)
     benchmark_factory = NlSqlBenchmarkFactory()
@@ -354,7 +360,8 @@ def do_nl_to_sql(
                 subset_df=None,
                 llm_model=model,
                 source_filename="fullschema",
-                recover_previous=recover_previous
+                recover_previous=recover_previous,
+                use_ask_sage=use_ask_sage
             )
             nl_sql_filename = f"nltosql-nosubset-{bm_name}-Native-fullschema-nlsqlmodel_{model.replace('/', '-')}.xlsx"
             nl_sql_results.to_excel(f"./nl_sql_results/{nl_sql_filename}")
@@ -363,17 +370,18 @@ def do_nl_to_sql(
         print(f"NL to SQL over: {filename} ({counter} of {len(subset_filenames)})")
         counter += 1
         nl_sql_filename = filename.replace("subsetting-", "nltosql-")
-        nl_sql_filename = nl_sql_filename.replace(".xlsx", f"-nlsqlmodel_{model.replace('/', '-')}.xlsx")
+        nl_sql_filename = nl_sql_filename.replace(".parquet", f"-nlsqlmodel_{model.replace('/', '-')}.xlsx")
         if nl_sql_filename in completed_nl_to_sql_files:
             continue
         v_print(filename)
         benchmark_name = filename.split("-")[2]
         evaluator = NlSqlEvaluator.NlSqlEvaluator(benchmark=benchmark_factory.build_benchmark(benchmark_name))
         nl_sql_results = evaluator.generate_sql_from_subset_df_or_benchmark(
-            subset_df=pd.read_excel(f"./subsetting_results/{filename}"),
+            subset_df=pd.read_parquet(f"./subsetting_results/{filename}"),
             source_filename=filename,
             recover_previous=recover_previous,
-            llm_model=model
+            llm_model=model,
+            use_ask_sage=use_ask_sage
         )
         nl_sql_results.to_excel(f"./nl_sql_results/{nl_sql_filename}")
         

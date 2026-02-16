@@ -19,7 +19,7 @@ import torch
 import pandas as pd
 import sqlite3
 from util import tokenprocessing as tp
-
+import os
 
 class CanineIdentifierClassifier:
     """
@@ -63,7 +63,10 @@ class CanineIdentifierClassifier:
             device=0
             )
         self.identifiers = identifiers
-        self.cache_folder = "./util/naturalness_cache"
+        if "/src" not in os.getcwd():
+            self.cache_folder = "./src/util/naturalness_cache"
+        else:
+            self.cache_folder = "./util/naturalness_cache"
         self.cache_db_conn = sqlite3.connect(f"{self.cache_folder}/cache_db.sqlite")
         self.init_cache_db()
 
@@ -90,7 +93,7 @@ class CanineIdentifierClassifier:
         self.cache_db_conn.commit()
 
 
-    def retrieve_level_from_cache_db(self, identifier: str) -> str:
+    def retrieve_level_from_cache_db(self, identifier: str) -> tuple[str, float]:
         retrieval_query = f"""
     SELECT label, score FROM identifier_naturalness WHERE identifier='{identifier}'
 """
@@ -136,7 +139,7 @@ class CanineIdentifierClassifier:
                 index=False
                 )
     
-    def classify_identifier(self, identifier: str, make_tag: bool = True):
+    def classify_identifier(self, identifier: str, make_tag: bool = True) -> list[dict[str, str]]:
         """
         Classifies the given identifier using the classifier.
         Args:

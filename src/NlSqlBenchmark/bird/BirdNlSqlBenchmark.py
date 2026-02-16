@@ -235,6 +235,7 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
 
 
 
+
     def _execute_query(self, query: str, database: str = None, question: int = None, query_timeout: int = None) -> QueryResult:
         if database == None:
             database = self.databases[self.active_database]
@@ -264,6 +265,14 @@ class BirdNlSqlBenchmark(NlSqlBenchmark):
                 error_message=str(e)
             )
         except sqlite3.Warning as e:
+            con.commit()
+            return QueryResult(
+                result_set=None,
+                database=None,
+                question=None,
+                error_message=f"error: sqlite3.Warning {str(e)}, query: {query}"
+            )
+        except sqlite3.IntegrityError as e:
             con.commit()
             return QueryResult(
                 result_set=None,

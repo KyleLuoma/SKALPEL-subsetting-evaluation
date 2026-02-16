@@ -34,7 +34,10 @@ def compare_gold_to_generated(
         "reason": ""
     }
 
-    generated_results = pd.DataFrame(generated_result.result_set)
+    try:
+        generated_results = pd.DataFrame(generated_result.result_set)
+    except ValueError as e:
+        generated_results = pd.DataFrame({"bad": []})
     gold_results = pd.DataFrame(gold_result.result_set)
 
     # ------ Analyze semantic correctness (i.e. same results) ------

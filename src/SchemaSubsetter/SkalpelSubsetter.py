@@ -33,6 +33,8 @@ from SchemaSubsetter.Skalpel.SkalpelVectorSearchResults import VectorSearchResul
 import logging
 import multiprocessing
 
+from util.snails_naturalness_classifier import CanineIdentifierClassifier
+
 class SkalpelSubsetter(SchemaSubsetter):
 
     name = "skalpel"
@@ -45,6 +47,7 @@ class SkalpelSubsetter(SchemaSubsetter):
             request_url: str = "https://api.openai.com/v1/chat/completions",
             vector_only: bool = False,
             vector_distance_threshold: float = None,
+            column_vector_distance_threshold: float = 0.5,
             embedding_model_cuda_device: int = 0
             ):
         self.use_tasql = use_tasql
@@ -55,6 +58,7 @@ class SkalpelSubsetter(SchemaSubsetter):
         self.benchmark = benchmark
         self.vector_only = vector_only
         self.vector_distance_threshold = vector_distance_threshold
+        self.column_vector_distance_threshold = column_vector_distance_threshold
         self.llm = LLM.OpenAIRequestLLM(
             # request_url=request_url
             # request_url="https://api.openai.com/v1/chat/completions"
@@ -83,12 +87,14 @@ class SkalpelSubsetter(SchemaSubsetter):
     def preprocess_databases(
             self,
             recreate_database: bool = True,
+            only_columns: bool = False,
             **args
         ) -> dict:
         warnings.filterwarnings("ignore")
         processing_times = {}
         if recreate_database:
             self.vector_search.recreate_db()
+        snails_classifier = CanineIdentifierClassifier()
         for db_name in self.benchmark.databases:
             s_time = time.perf_counter()
             self.benchmark.set_active_schema(db_name)
@@ -100,24 +106,41 @@ class SkalpelSubsetter(SchemaSubsetter):
             )
             already_processed_tables = [r[0] for r in already_processed_tables]
             for table in tqdm(schema.tables, desc=db_name):
-                if table.name in already_processed_tables:
+                if table.name in already_processed_tables and not only_columns:
                     continue
-                t_string = table.name + str(
-                    [f"name: {c.name}, type: {c.data_type}" 
-                     for c in table.columns
-                     ])
-                llm_response, token_count = self.llm.call_llm(
-                    prompt=f"Write a three sentence description of the table: {t_string}. You should describe it at a conceptual level in a way that communicates all of the semantic meaning of the table. Do not refer to the object as a table or database object. Instead, describe it as the real world object that it represents. Encase the description in a json object with the key 'description'. Start the json block with ```json and end it with ```",
-                    model=self.llm_model
-                    )
-                json_dict = self.llm.extract_json_from_response(llm_response)
-                description = json_dict["description"]                
-                self.vector_search.encode_table_description_into_db(
-                    db_name=db_name, table_name=table.name, table_description=description
-                    )
-                self.vector_search.encode_table_description_sentences_into_db(
-                    db_name=db_name, table_name=table.name, table_description=description
-                    )
+                if not only_columns:
+                    t_string = table.name + str(
+                        [f"name: {c.name}, type: {c.data_type}" 
+                        for c in table.columns
+                        ])
+                    llm_response, token_count = self.llm.call_llm(
+                        prompt=f"Write a three sentence description of the table: {t_string}. You should describe it at a conceptual level in a way that communicates all of the semantic meaning of the table. Do not refer to the object as a table or database object. Instead, describe it as the real world object that it represents. Encase the description in a json object with the key 'description'. Start the json block with ```json and end it with ```",
+                        model=self.llm_model
+                        )
+                    json_dict = self.llm.extract_json_from_response(llm_response)
+                    description = json_dict["description"]                
+                    self.vector_search.encode_table_description_into_db(
+                        db_name=db_name, table_name=table.name, table_description=description
+                        )
+                    self.vector_search.encode_table_description_sentences_into_db(
+                        db_name=db_name, table_name=table.name, table_description=description
+                        )
+                already_processed_columns = self.vector_search.query_vector_db(
+                    query="SELECT column_name FROM column_names WHERE database_name = %s and table_name ILIKE %s",
+                    params=[db_name, table.name]
+                )
+                already_processed_columns = [r[0] for r in already_processed_columns]
+                for column in table.columns:
+                    if column.name in already_processed_columns:
+                        continue
+                    pred = snails_classifier.classify_identifier(column.name)
+                    naturalness = {"N1": "regular", "N2": "low", "N3": "least"}.get(pred[0]["label"], "low")
+                    self.vector_search.encode_column_name_into_db(
+                        db_name,
+                        table.name, 
+                        column.name, 
+                        naturalness
+                        )
             processing_times[db_name] = time.perf_counter() - s_time
         return processing_times
                 
@@ -125,12 +148,16 @@ class SkalpelSubsetter(SchemaSubsetter):
     def get_schema_subset(
             self,
             benchmark_question: BenchmarkQuestion,
-            use_tasql: bool = None,
-            distance_threshold: float = None,
+            use_tasql: bool | None = None,
+            distance_threshold: float | None = None,
+            column_distance_threshold: float | None = None,
             schema_proportion: float = 1.0
             ) -> SchemaSubsetterResult:
+        benchmark_question = benchmark_question.copy()
         if distance_threshold == None:
             distance_threshold = self.vector_distance_threshold
+        if column_distance_threshold == None:
+            column_distance_threshold = self.column_vector_distance_threshold
         if use_tasql == None:
             use_tasql = self.use_tasql
         if use_tasql:
@@ -140,16 +167,25 @@ class SkalpelSubsetter(SchemaSubsetter):
                 do_vector_search_sort=True,
                 vector_search_schema_proportion=1.0
             )
-        table_scores, vector_search_tokens = self._do_vector_search_table_retrieval(
+        s_time = time.perf_counter()
+        table_scores, table_columns, vector_search_tokens = self._do_vector_search_table_retrieval(
             benchmark_question=benchmark_question,
             distance_threshold=distance_threshold,
             schema_proportion=schema_proportion,
-            chunk_level="whole"
+            chunk_level="whole",
+            column_distance_threshold=column_distance_threshold
         )
+        # print("get_schema_subset called _do_vector_search_table_retrieval", time.perf_counter() - s_time)
         subset_tables = []
         if self.vector_only:
             for table in table_scores.keys():
-                subset_tables.append(benchmark_question.schema.get_table_by_name(table))
+                add_table = benchmark_question.schema.get_table_by_name(table)
+                add_columns = [
+                    benchmark_question.schema.get_table_by_name(table).get_column_by_name(c) 
+                    for c in table_columns[table]
+                    ]
+                add_table.columns = add_columns
+                subset_tables.append(add_table)
             subset = Schema(database=benchmark_question.schema.database, tables=subset_tables)
             table_select_tokens = column_select_tokens = 0
         else:
@@ -348,16 +384,19 @@ class SkalpelSubsetter(SchemaSubsetter):
             benchmark_question: BenchmarkQuestion,
             distance_threshold: float,
             schema_proportion: float,
-            chunk_level: str # whole | sentence
-        ) -> tuple[dict[str, float], int]:
+            chunk_level: str, # whole | sentence,
+            column_distance_threshold: float = 0.5
+        ) -> tuple[dict[str, float], dict[str, set[str]], int]:
         # Breakpoint for debug
         if benchmark_question.question_number == 28:
             a=1
         if distance_threshold == None:
             distance_threshold = 1.0
         schema_tables = {}
+        table_columns: dict[str, set[str]] = {}
         question_breakdown_list, decompose_token_usage = self._decompose_question(benchmark_question)
         all_results = []
+        s_time = time.perf_counter()
         for item in question_breakdown_list:
             if chunk_level == "sentence":
                 table_descr_result = self.vector_search.get_similar_table_description_sentences_from_db(
@@ -375,13 +414,32 @@ class SkalpelSubsetter(SchemaSubsetter):
                     schema_proportion=schema_proportion
                 )
                 all_results.append(table_descr_result)
+            
         for table_descr_result in all_results:
             for wid in table_descr_result.tables:
                 if wid.database_identifier not in schema_tables.keys():
                     schema_tables[wid.database_identifier] = wid.distance
                 elif wid.distance < schema_tables[wid.database_identifier]:
                     schema_tables[wid.database_identifier] = wid.distance
-        return schema_tables, decompose_token_usage
+        # print("do_vector_search_table_retrieval completed table selection", time.perf_counter() - s_time)
+
+        s_time = time.perf_counter()
+        all_columns: set[str] = set()
+        for item in question_breakdown_list:
+            column_result = self.vector_search.get_similar_and_low_naturalness_column_names_from_db(
+                db_name=benchmark_question.schema.database,
+                input_sequence=item,
+                distance_threshold=column_distance_threshold
+            )
+            for c in column_result.columns:
+                all_columns.add(c.database_identifier)
+        for table in schema_tables:
+            schema_table = benchmark_question.schema.get_table_by_name(table)
+            table_columns[table] = all_columns.intersection(set([c.name for c in schema_table.columns]))
+            
+        # print("do_vector_search_table_retrieval completed column selection", time.perf_counter() - s_time)
+
+        return schema_tables, table_columns, decompose_token_usage
 
 
 
