@@ -23,6 +23,7 @@ This repository contains:
 # Paper and Citing
 
 Paper published in PLVDB 2026: https://dl.acm.org/doi/10.14778/3819518.3819531
+
 Technical Report: https://github.com/ADALabUCSD/ADALabUCSD.github.io/blob/master/papers/TR_2026_Schema_subsetting_eval.pdf
 
 Citing this work:
