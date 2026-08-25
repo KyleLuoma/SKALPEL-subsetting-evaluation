@@ -20,6 +20,30 @@ This repository contains:
     - Decomposes natural language question into multiple sentences describing objects and concepts in the question.
     - Generates embeddings of each sentence and retrieves tables by matching question decomposition embeddings with table embeddings.
 
+# Paper and Citing
+
+Paper published in PLVDB 2026: https://dl.acm.org/doi/10.14778/3819518.3819531
+Technical Report: https://github.com/ADALabUCSD/ADALabUCSD.github.io/blob/master/papers/TR_2026_Schema_subsetting_eval.pdf
+
+Citing this work:
+
+```
+@article{10.14778/3819518.3819531,
+    author = {Luoma, Kyle and Kumar, Arun},
+    title = {A Comparative Evaluation of Schema Subsetting for LLM-based NL-to-SQL over Large-Schema Databases},
+    year = {2026},
+    issue_date = {May 2026},
+    publisher = {VLDB Endowment},
+    volume = {19},
+    number = {9},
+    issn = {2150-8097},
+    url = {https://doi.org/10.14778/3819518.3819531},
+    doi = {10.14778/3819518.3819531},
+    month = aug,
+    pages = {2019–2031},
+    numpages = {13}
+}
+```
 
 # Experiment data:
 
